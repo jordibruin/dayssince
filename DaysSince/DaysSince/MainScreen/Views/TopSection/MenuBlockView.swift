@@ -53,17 +53,18 @@ struct MenuBlockView: View {
     var emoji: some View {
         Image(category.emoji)
             .resizable()
-            .frame(width: 36, height: 36)
+            .frame(width: 32, height: 32)
     }
     
     var nameText: some View {
         Text(category.name)
-            .font(.system(.title3, design: .rounded))
+            .font(.system(.headline, design: .rounded))
             .bold()
     }
     
     var itemCount: some View {
         Text("\(findItemCount()) events")
+            .font(.system(.caption, design: .rounded))
     }
     
     func findItemCount() -> Int {
