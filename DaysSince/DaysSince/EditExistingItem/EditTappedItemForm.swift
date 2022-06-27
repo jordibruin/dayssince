@@ -42,10 +42,10 @@ struct EditTappedItemForm: View {
     
     var reminderSection: some View {
         Section {
-            Toggle("Reminders?", isOn: $tappedItem.getReminders.animation())
+            Toggle("Reminders", isOn: $tappedItem.remindersEnabled.animation())
             
             // Select type of reminder
-            if tappedItem.getReminders {
+            if tappedItem.remindersEnabled {
                 Picker("Remind me", selection: $tappedItem.reminder) {
                     ForEach(DSItemReminders.allCases.filter({$0 != .none}), id: \.self) {
                         Text($0.name)

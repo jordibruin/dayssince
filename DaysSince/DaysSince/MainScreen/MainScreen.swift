@@ -63,7 +63,7 @@ struct MainScreen: View {
             })
         }
         .sheet(isPresented: $showAddItemSheet) {
-            AddItemSheet(selectedCategory: nil, getReminders: false, items: $items)
+            AddItemSheet(selectedCategory: nil, remindersEnabled: false, items: $items)
         }
     }
 

@@ -13,7 +13,7 @@ struct AddItemForm: View {
     @Binding var name: String
     @Binding var date: Date
     @Binding var category: CategoryDaysSinceItem?
-    @Binding var getReminders: Bool
+    @Binding var remindersEnabled: Bool
     
     let reminders = ["Daily", "Weekly", "Monthly"]
     
@@ -59,10 +59,10 @@ struct AddItemForm: View {
     
     var reminderSection: some View {
         Section {
-            Toggle("Reminders?", isOn: $getReminders.animation())
+            Toggle("Reminders", isOn: $remindersEnabled.animation())
             
             // Select type of reminder
-            if getReminders {
+            if remindersEnabled {
                 Picker("Remind me", selection: $selectedReminder) {
                     ForEach(DSItemReminders.allCases.filter({$0 != .none}), id: \.self) {
                         Text($0.name)

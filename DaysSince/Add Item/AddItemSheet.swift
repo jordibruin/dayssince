@@ -15,8 +15,8 @@ struct AddItemSheet: View {
     @State private var name: String = ""
     @State var date: Date = Date.now
     @State var selectedCategory: CategoryDaysSinceItem? = nil
-    @State var getReminders: Bool = false
-    @State var selectedReminder: DSItemReminders = .none
+    @State var remindersEnabled: Bool = false
+    @State var selectedReminder: DSItemReminders = .daily
     
     @FocusState private var nameIsFocused: Bool
     
@@ -29,7 +29,7 @@ struct AddItemSheet: View {
     var body: some View {
         
         NavigationView {
-            AddItemForm(items: $items, name: $name, date: $date, category: $selectedCategory, getReminders: $getReminders, selectedReminder: $selectedReminder, nameIsFocused: $nameIsFocused)
+            AddItemForm(items: $items, name: $name, date: $date, category: $selectedCategory, remindersEnabled: $remindersEnabled, selectedReminder: $selectedReminder, nameIsFocused: $nameIsFocused)
             .navigationTitle("New Event")
             .navigationBarTitleDisplayMode(.inline)
             .ignoresSafeArea(.keyboard, edges: .bottom)
@@ -53,20 +53,23 @@ struct AddItemSheet: View {
             
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
-                    items.append(
-                        DaysSinceItem(
-                            name: name,
-                            category: selectedCategory ?? .life,
-                            dateLastDone: date,
-                            getReminders: getReminders
-                        )
+                    let newItem = DaysSinceItem(
+                        name: name,
+                        category: selectedCategory ?? .life,
+                        dateLastDone: date,
+                        remindersEnabled: remindersEnabled
                     )
+                    
+                    items.append(newItem)
+                        
+                    if newItem.remindersEnabled {
+                        newItem.addReminder()
+                    }
+                    
+                    
                     print("➕ Added item. Now there are \(items.count) items!")
                     
                     if let itemAdded = items.last {
-                        if getReminders {
-                            itemAdded.addReminder()
-                        }
                     }
                     dismiss()
                 } label: {
@@ -76,37 +79,7 @@ struct AddItemSheet: View {
             }
         }
     }
-    
-//    var addEventButton: some View {
-//        Button {
-//
-//            items.append(DaysSinceItem(name: name, category: selectedCategory!, dateLastDone: date, getReminders: getReminders))
-//            print("➕ Added item. Now there are \(items.count) items!")
-//
-//            if let itemAdded = items.last {
-//                if getReminders {
-//                    itemAdded.addReminder()
-//                }
-//            }
-//            dismiss()
-//        } label: {
-//            Text("Add Event")
-//                .font(.system(.title, design: .rounded))
-//                .bold()
-//                .foregroundColor(.white)
-//        }
-//        .padding()
-//        .background(LinearGradient(
-//            gradient: .init(colors: [accentColor.opacity(0.8), accentColor]),
-//            startPoint: .init(x: 0.0, y: 0.5),
-//            endPoint: .init(x: 0, y: 1)))
-//        .clipShape(Capsule())
-//        .shadow(color: accentColor, radius: 10, x: 0, y: 5)
-//        .disabled(name.isEmpty)
-//        .disabled(selectedCategory == nil)
-//    }
-    
-    
+
 }
 
 struct AddItemSheet_Previews: PreviewProvider {

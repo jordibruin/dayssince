@@ -24,10 +24,10 @@ struct DaysSinceItem: Identifiable, Codable {
     var dateLastDone: Date
 
     // Whether the item sends reminders.
-    var getReminders: Bool
+    var remindersEnabled: Bool
     
     // What type of reminder (daily, weekly, monthly)
-    var reminder: DSItemReminders = .none
+    var reminder: DSItemReminders = .daily
     
     // Date when item was completed.
     var dateCompleted: Date = Date.now
@@ -50,16 +50,18 @@ struct DaysSinceItem: Identifiable, Codable {
     }
 
     static func placeholderItem() -> DaysSinceItem {
-        return DaysSinceItem(name: "Placeholder", category: CategoryDaysSinceItem.hobbies, dateLastDone: Date.now, getReminders: false)
+        return DaysSinceItem(name: "Placeholder", category: CategoryDaysSinceItem.hobbies, dateLastDone: Date.now, remindersEnabled: false)
     }
     
     func addReminder() {
         let center = UNUserNotificationCenter.current()
         
-        let addNotification = {
+
             let content = UNMutableNotificationContent()
             content.title = "\(self.name)"
-            content.subtitle = "It's been \(self.daysAgo) days!"
+//            content.subtitle = "It's been \(self.daysAgo) days since \(self.name)!"
+        
+            content.body = "It's been \(self.daysAgo) days since \(self.name)!"
             content.sound = UNNotificationSound.default
 
             var dateComponents = DateComponents()
@@ -80,23 +82,25 @@ struct DaysSinceItem: Identifiable, Codable {
                 dateComponents.minute = 0
             }
             
-            let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
+//            let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
             // For testing send trigger every 5 seconds.
-//            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
+            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
 
             let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
-            center.add(request)
-            print(dateComponents)
-        }
+            
+            
+        
 
         center.getNotificationSettings { settings in
             if settings.authorizationStatus == .authorized {
-                addNotification()
+//                addNotification()
+                center.add(request)
                 print("🔔 Added notification!")
             } else {
                 center.requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
                     if success {
-                        addNotification()
+//                        addNotification()
+                        center.add(request)
                         print("🔔 Added notification!")
                     } else {
                         print("Didn't authorize notifications")

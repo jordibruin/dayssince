@@ -44,7 +44,7 @@ struct CategoryFilteredView: View {
         .navigationTitle(category.name)
         .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $showAddItemSheet) {
-            AddItemSheet(selectedCategory: category, getReminders: false, items: $items)
+            AddItemSheet(selectedCategory: category, remindersEnabled: false, items: $items)
         }
         .sheet(isPresented: $editItemSheet) {
             EditTappedItemSheet(items: $items, completedItems: $completedItems, favoriteItems: $favoriteItems, tappedItem: $tappedItem, editItemSheet: $editItemSheet)
