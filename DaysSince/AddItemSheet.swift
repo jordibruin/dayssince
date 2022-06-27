@@ -15,7 +15,6 @@ struct AddItemSheet: View {
     @State var date = Date.now
     @State var color: colorDaysSinceItem
     @State var colorAccent = colorDaysSinceItem.work.color
-//    @FocusState private var nameIsFocused: Bool
     
     var body: some View {
         
