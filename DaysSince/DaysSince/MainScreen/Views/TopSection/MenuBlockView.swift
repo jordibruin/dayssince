@@ -9,20 +9,11 @@ import SwiftUI
 
 struct MenuBlockView: View {
     
-//    init(color: Color = .red, categoryName: String = "Category", emoji: String = "icons8-flag-in-hole-48", items: [DaysSinceItem] = []) {
-////        self.items = items
-//        self.color = color
-//        self.categoryName = categoryName
-//        self.emoji = emoji
-//        self.items = items
-//    }
-    
-    let category: categoryDaysSinceItem
+    let category: CategoryDaysSinceItem
     
     @Binding var items: [DaysSinceItem]
     @Binding var completedItems: [DaysSinceItem]
     @Binding var favoriteItems: [DaysSinceItem]
-    
     
     var body: some View {
         ZStack(alignment: .leading) {
@@ -30,17 +21,24 @@ struct MenuBlockView: View {
             content
         }
         .foregroundColor(.white)
-        .clipShape(RoundedRectangle(cornerRadius: 25))
-        .shadow(color: category.color, radius: 10, x: 0, y: 5)
+        .clipShape(RoundedRectangle(cornerRadius: 20))
+        .shadow(color: category.color.opacity(0.4), radius: 5, x: 0, y: 5)
     }
     
     var colorShape: some View {
         Rectangle()
-            .fill(LinearGradient(
-                gradient: .init(colors: [category.color.opacity(0.7), category.color]),
-                startPoint: .init(x: 0.0, y: 0),
-              endPoint: .init(x: 0.9, y: 0.8)
-            ))
+            .fill(
+                LinearGradient(
+                    gradient: .init(
+                        colors: [
+                            category.color.opacity(0.7),
+                            category.color
+                        ]
+                    ),
+                    startPoint: .init(x: 0.0, y: 0),
+                    endPoint: .init(x: 0.9, y: 0.8)
+                )
+            )
     }
     
     var content: some View {
@@ -54,7 +52,8 @@ struct MenuBlockView: View {
     
     var emoji: some View {
         Image(category.emoji)
-            .font(.largeTitle)
+            .resizable()
+            .frame(width: 36, height: 36)
     }
     
     var nameText: some View {

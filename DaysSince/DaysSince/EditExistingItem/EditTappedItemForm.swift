@@ -18,7 +18,7 @@ struct EditTappedItemForm: View {
     @Binding var editItemSheet: Bool
     
     
-    var category: categoryDaysSinceItem = categoryDaysSinceItem.hobbies
+    var category: CategoryDaysSinceItem = .hobbies
     
     @FocusState.Binding var nameIsFocused: Bool
     
@@ -26,8 +26,8 @@ struct EditTappedItemForm: View {
         Form {
             nameSection
             dateSection
+            newCategorySection
             reminderSection
-            categorySection
         }
     }
     
@@ -35,7 +35,8 @@ struct EditTappedItemForm: View {
         Section {
             TextField("Name", text: $tappedItem.name)
                 .focused($nameIsFocused)
-                .font(.system(.title2, design: .rounded))
+        } header: {
+            Text("Name")
         }
     }
     
@@ -52,6 +53,8 @@ struct EditTappedItemForm: View {
                 }
                 .pickerStyle(SegmentedPickerStyle())
             }
+        } header: {
+            Text("Reminders")
         }
     }
     
@@ -59,20 +62,48 @@ struct EditTappedItemForm: View {
     
     var dateSection: some View {
         Section {
-            DatePicker("Date", selection: $tappedItem.dateLastDone)
-                .font(.system(.title2, design: .rounded))
-                .foregroundColor(tappedItem.category.color)
+            DatePicker("Event Date", selection: $tappedItem.dateLastDone, in: ...Date.now, displayedComponents: .date)
+                .datePickerStyle(.graphical)
+        } header: {
+            Text("Date")
         }
     }
+    
+    var newCategorySection: some View {
+        Section {
+            ForEach(CategoryDaysSinceItem.allCases) { category in
+                Button {
+                    tappedItem.category = category
+                } label: {
+                    HStack {
+                        Image(category.emoji)
+                            .resizable()
+                            .frame(width: 32, height: 32)
+                        
+                        Text(category.name)
+                        Spacer()
+                        
+                        if tappedItem.category == category {
+                            Image(systemName: "checkmark.circle.fill")
+                        }
+                    }
+                }
+                .foregroundColor(.primary)
+            }
+        } header: {
+            Text("Category")
+        }
+    }
+    
     
     var categorySection: some View {
         Section {
             VStack {
                 VStack {
                     Text("Select Category")
-                        .font(.system(.title, design: .rounded))
                         .accessibilityAddTraits(.isHeader)
-                        .foregroundColor(tappedItem.category.color)
+//                        .foregroundColor(tappedItem.category.color)
+                        .foregroundColor(.primary)
                     
                     CategoriesGridView(selectedCategory: $tappedItem.category.optional, addItem: false)
                 }

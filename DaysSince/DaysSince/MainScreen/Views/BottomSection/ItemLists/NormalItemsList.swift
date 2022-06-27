@@ -14,21 +14,38 @@ struct NormalItemsList: View {
     @Binding var tappedItem: DaysSinceItem
     
     var isCategoryView: Bool = false
-    var category: categoryDaysSinceItem = .work
+    var category: CategoryDaysSinceItem = .work
     
     
     var body: some View {
         if isCategoryView {
-            ForEach(self.items, id: \.id) { item in
-                if item.category == category {
-                    IndividualItemView(item: item, editItemSheet: $editItemSheet, tappedItem: $tappedItem, colored: true, isFavorite: false)
-
-                }
-            }
+            categoryViewList
         } else {
-            ForEach(self.items, id: \.id) { item in
-                IndividualItemView(item: item, editItemSheet: $editItemSheet, tappedItem: $tappedItem, colored: false, isFavorite: false)
-            }
+            normalViewList
+        }
+    }
+    
+    var categoryViewList: some View {
+        ForEach(self.items.filter { $0.category == category } , id: \.id) { item in
+            IndividualItemView(
+                item: item,
+                editItemSheet: $editItemSheet,
+                tappedItem: $tappedItem,
+                colored: true,
+                isFavorite: false
+            )
+        }
+    }
+    
+    var normalViewList: some View {
+        ForEach(self.items, id: \.id) { item in
+            IndividualItemView(
+                item: item,
+                editItemSheet: $editItemSheet,
+                tappedItem: $tappedItem,
+                colored: false,
+                isFavorite: false
+            )
         }
     }
 }

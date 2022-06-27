@@ -8,10 +8,10 @@
 import Foundation
 import SwiftUI
 
-enum categoryDaysSinceItem: Codable, Identifiable, Equatable, CaseIterable, Hashable {
+enum CategoryDaysSinceItem: Codable, Identifiable, Equatable, CaseIterable, Hashable {
     
-    static var allCases: [categoryDaysSinceItem] = [
-        .work, .life, .hobbies, .health, .none
+    static var allCases: [CategoryDaysSinceItem] = [
+        .work, .life, .hobbies, .health
     ]
     
     case work
@@ -31,7 +31,7 @@ enum categoryDaysSinceItem: Codable, Identifiable, Equatable, CaseIterable, Hash
         case .hobbies:
             return "Hobbies"
         case .none:
-            return "No cattegory"
+            return "No category"
         }
     }
     
@@ -75,6 +75,21 @@ enum categoryDaysSinceItem: Codable, Identifiable, Equatable, CaseIterable, Hash
             return "healthCategoryIcon"
         case .hobbies:
             return "hobbiesCategoryIcon"
+        case .none:
+            return ""
+        }
+    }
+    
+    var sfSymbolName: String {
+        switch self {
+        case .work:
+            return "heart.fill"
+        case .life:
+            return "heart.fill"
+        case .health:
+            return "heart.fill"
+        case .hobbies:
+            return "heart.fill"
         case .none:
             return ""
         }

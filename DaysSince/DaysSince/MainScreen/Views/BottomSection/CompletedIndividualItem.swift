@@ -62,7 +62,7 @@ struct CompletedIndividualItem: View {
                     .bold()
                     .foregroundColor(item.category.color.opacity(0.7))
                 
-                Text("days ago")
+                Text("days")
                     .font(.system(.title2, design: .rounded))
                     .foregroundColor(item.category.color.opacity(0.7))
             } else {
@@ -71,7 +71,7 @@ struct CompletedIndividualItem: View {
                     .bold()
                     .foregroundColor(item.category.color.opacity(0.7))
                 
-                Text("days ago")
+                Text("days")
                     .font(.system(.title2, design: .rounded))
                     .foregroundColor(item.category.color.opacity(0.7))
             }

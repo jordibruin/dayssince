@@ -8,14 +8,14 @@
 import SwiftUI
 
 struct CategoryRectangleView: View {
-//    init(category: categoryDaysSinceItem = categoryDaysSinceItem.health, selectedCategory: categoryDaysSinceItem? = categoryDaysSinceItem.hobbies) {
+//    init(category: CategoryDaysSinceItem = CategoryDaysSinceItem.health, selectedCategory: CategoryDaysSinceItem? = CategoryDaysSinceItem.hobbies) {
 //        self.category = category
 //        self.selectedCategory = selectedCategory
 //    }
     
-    var category: categoryDaysSinceItem
+    var category: CategoryDaysSinceItem
     
-    var selectedCategory: categoryDaysSinceItem?
+    var selectedCategory: CategoryDaysSinceItem?
     
     var body: some View {
         ZStack(alignment: .leading) {

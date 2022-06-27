@@ -15,15 +15,11 @@ struct IndividualItemView: View {
     var isFavorite: Bool
     
     var body: some View {
-        Section {
-            ZStack(alignment: .topTrailing) {
-                Spacer()
-                itemBody
-                if isFavorite {
-                    favoriteSymbol
-                        .offset(x:-4, y: -4)
-                }
-                
+        ZStack(alignment: .topTrailing) {
+            itemBody
+            if isFavorite {
+                favoriteSymbol
+                    .offset(x:-4, y: -4)
             }
         }
     }
@@ -33,16 +29,20 @@ struct IndividualItemView: View {
             backgroundColor
             itemContent
         }
-        .clipShape(RoundedRectangle(cornerRadius: 25))
-        .overlay(RoundedRectangle(cornerRadius: 25).stroke(item.category.color, lineWidth: 5))
-        .padding(.horizontal, 12)
-        .padding(.vertical, 4)
+        .clipShape(RoundedRectangle(cornerRadius: 20))
+        .overlay(
+            RoundedRectangle(cornerRadius: 20)
+                .stroke(
+                    item.category.color,
+                    lineWidth: 3
+                )
+        )
+        .padding(.horizontal)
         .shadow(color: Color.black.opacity(0.05), radius: 20, x: 0, y: 0)
         .onTapGesture {
-                print("Tapped item \(item)")
-                editItemSheet = true
-                tappedItem = item
-            }
+            editItemSheet = true
+            tappedItem = item
+        }
     }
     
     var favoriteSymbol: some View {
@@ -57,7 +57,7 @@ struct IndividualItemView: View {
     
     var nameText: some View {
         Text(item.name)
-                .font(.system(.largeTitle, design: .rounded))
+                .font(.system(.title2, design: .rounded))
                 .bold()
                 .foregroundColor(colored ? .white : item.category.color)
     }
@@ -65,14 +65,15 @@ struct IndividualItemView: View {
     var daysAgoText: some View {
         VStack {
             Text("\(item.daysAgo)")
-                .font(.system(size:50, design: .rounded))
+                .font(.system(.title2, design: .rounded))
                 .bold()
                 .foregroundColor(colored ? .white : item.category.color)
             
-            Text("days ago")
-                .font(.system(.title2, design: .rounded))
+            Text(item.daysAgo > 1 ? "days" : "day")
+                .font(.system(.body, design: .rounded))
                 .foregroundColor(colored ? .white : item.category.color)
         }
+        .frame(width: 40)
     }
     
     @ViewBuilder
@@ -98,5 +99,6 @@ struct IndividualItemView: View {
 struct IndividualItemView_Preview: PreviewProvider {
     static var previews: some View {
         IndividualItemView(item: DaysSinceItem.placeholderItem(), editItemSheet: .constant(false), tappedItem: .constant(DaysSinceItem.placeholderItem()), colored: false, isFavorite: true)
+            .frame(height: 10)
     }
 }

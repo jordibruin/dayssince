@@ -9,7 +9,7 @@ import SwiftUI
 
 struct CategoriesGridView: View {
     
-    @Binding var selectedCategory: categoryDaysSinceItem?
+    @Binding var selectedCategory: CategoryDaysSinceItem?
     
     @State var addItem: Bool
     
@@ -41,6 +41,6 @@ struct CategoriesGridView: View {
 
 struct CategoriesGridView_Previews: PreviewProvider {
     static var previews: some View {
-        CategoriesGridView(selectedCategory: .constant(categoryDaysSinceItem.hobbies), addItem: true)
+        CategoriesGridView(selectedCategory: .constant(CategoryDaysSinceItem.hobbies), addItem: true)
     }
 }

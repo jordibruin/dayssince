@@ -12,7 +12,7 @@ struct AddItemForm: View {
     @Binding var items: [DaysSinceItem]
     @Binding var name: String
     @Binding var date: Date
-    @Binding var category: categoryDaysSinceItem?
+    @Binding var category: CategoryDaysSinceItem?
     @Binding var getReminders: Bool
     
     let reminders = ["Daily", "Weekly", "Monthly"]
@@ -29,8 +29,13 @@ struct AddItemForm: View {
         Form {
             nameSection
             dateSection
+            newCategorySection
             reminderSection
-            categorySection
+        }
+        .onAppear {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
+                nameIsFocused = true
+            }
         }
     }
     
@@ -38,15 +43,17 @@ struct AddItemForm: View {
         Section {
             TextField("Name your event", text: $name)
                 .focused($nameIsFocused)
-                .font(.system(.title2, design: .rounded))
+        } header: {
+            Text("Event Info")
         }
     }
     
     var dateSection: some View {
         Section {
-            DatePicker("Date", selection: $date, in: ...Date.now, displayedComponents: .date)
-                .font(.system(.title2, design: .rounded))
-                .foregroundColor(accentColor)
+            DatePicker("Event Date", selection: $date, in: ...Date.now, displayedComponents: .date)
+                .datePickerStyle(.graphical)
+        }header: {
+            Text("Date")
         }
     }
     
@@ -63,28 +70,42 @@ struct AddItemForm: View {
                 }
                 .pickerStyle(SegmentedPickerStyle())
             }
+        } header: {
+            Text("Reminders")
         }
     }
     
-    var categorySection: some View {
+    var newCategorySection: some View {
         Section {
-            VStack {
-                Text("Select Category")
-                    .font(.system(.title, design: .rounded))
-                    .accessibilityAddTraits(.isHeader)
-                    .foregroundColor(accentColor)
-                
-                CategoriesGridView(selectedCategory: $category, addItem: true)
+            ForEach(CategoryDaysSinceItem.allCases) { category in
+                Button {
+                    self.category = category
+                } label: {
+                    HStack {
+                        Image(category.emoji)
+                            .resizable()
+                            .frame(width: 32, height: 32)
+                        
+                        Text(category.name)
+                        Spacer()
+                        
+                        if self.category == category {
+                            Image(systemName: "checkmark.circle.fill")
+                        }
+                    }
+                }
+                .foregroundColor(.primary)
             }
+        } header: {
+            Text("Category")
         }
-        .padding(.vertical)
-        .listRowBackground(Color.clear)
     }
 }
 
 //struct AddItemForm_Previews: PreviewProvider {
 //    static var previews: some View {
-//        AddItemForm(items: .constant([]), name: .constant(""), date: .constant(Date.now), category: .constant(categoryDaysSinceItem.work), getReminders: .constant(true), selectedReminder: .constant("Daily"))
+//        AddItemForm(items: .constant([]), name: .cont, date: <#T##Binding<Date>#>, category: <#T##Binding<CategoryDaysSinceItem?>#>, getReminders: <#T##Binding<Bool>#>, selectedReminder: <#T##Binding<DSItemReminders>#>, nameIsFocused: <#T##FocusState<Bool>.Binding#>
+////        AddItemForm(items: .constant([]), name: .constant(""), date: .constant(Date.now), category: .constant(CategoryDaysSinceItem.work), getReminders: .constant(true), selectedReminder: .constant("Daily"))
 //    }
 //}
 

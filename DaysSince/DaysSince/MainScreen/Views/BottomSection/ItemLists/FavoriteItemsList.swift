@@ -16,7 +16,7 @@ struct FavoriteItemsList: View {
     
     var isCategoryView: Bool = false
     
-    var category: categoryDaysSinceItem = .work
+    var category: CategoryDaysSinceItem = .work
     
     
     var body: some View {

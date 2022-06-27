@@ -33,12 +33,6 @@ struct SortingMenuView: View {
                 }
                 Text("Category")
             }
-            Button (action: sortByEmoji){
-                if sortType == "emoji" {
-                    Image(systemName: image)
-                }
-                Text("Emoji")
-            }
         } label: {
             Image(systemName: "arrow.up.arrow.down.circle.fill")
         }
@@ -86,28 +80,6 @@ struct SortingMenuView: View {
                 $0.name < $1.name
             }
             sortType = "az"
-            image = "arrow.up"
-        }
-    }
-    
-    func sortByEmoji() {
-        
-        if sortType == "emoji" {
-            descending.toggle()
-        } else {
-            descending = false
-        }
-        if descending {
-            items.sort{
-                $0.emoji > $1.emoji
-            }
-            sortType = "emoji"
-            image = "arrow.down"
-        } else {
-            items.sort{
-                $0.emoji < $1.emoji
-            }
-            sortType = "emoji"
             image = "arrow.up"
         }
     }
