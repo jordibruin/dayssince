@@ -18,7 +18,7 @@ struct Provider: IntentTimelineProvider {
 
     func placeholder(in context: Context) -> WidgetContent {
 
-        let content = WidgetContent(date: Date(), name: "TEST EVENT", id: UUID())
+        let content = WidgetContent(date: Date(), name: "TEST EVENT", id: UUID(), color: .red, daysNumber: 2)
 
         return content
     }
@@ -28,7 +28,7 @@ struct Provider: IntentTimelineProvider {
         in context: Context,
         completion: @escaping (WidgetContent) -> Void
     ) {
-        let content = WidgetContent(date: Date(), name: "TEST EVENT", id: UUID())
+        let content = WidgetContent(date: Date(), name: "TEST EVENT", id: UUID(), color: .green, daysNumber: 4)
         completion(content)
     }
 
@@ -46,12 +46,12 @@ struct Provider: IntentTimelineProvider {
 //        let itemNames = items.map { "\($0.name + $0.id.uuidString)" }.joined(separator: "+")
 
         guard let matchingEvent = items.first(where: { $0.name == displayString }) else {
-            let content = WidgetContent(date: Date(), name: "NO events found", id: UUID())
+            let content = WidgetContent(date: Date(), name: "No events", id: UUID(), color: .green, daysNumber: 4)
             completion(Timeline(entries: [content], policy: .atEnd))
             return
         }
         
-        let content = WidgetContent(date: matchingEvent.dateLastDone, name: matchingEvent.name, id: matchingEvent.id)
+        let content = WidgetContent(item: matchingEvent)
 
         completion(Timeline(entries: [content], policy: .atEnd))
     }
@@ -72,7 +72,6 @@ struct SooseeWidget: Widget {
         }
         .configurationDisplayName(LocalizedStringKey("widget.title"))
         .description(LocalizedStringKey("widget.explanation"))
-
     }
 }
 
@@ -89,10 +88,10 @@ struct EventCardWidgetView: View {
             Color.white
             itemContent
         }
-        .clipShape(RoundedRectangle(cornerRadius: 20))
+        .clipShape(RoundedRectangle(cornerRadius: 23))
         .overlay(
-            RoundedRectangle(cornerRadius: 20)
-                .stroke(Color.red,lineWidth: 6)
+            RoundedRectangle(cornerRadius: 23)
+                .stroke(event.color, lineWidth: 6)
         )
         
         .shadow(color: Color.black.opacity(0.05), radius: 20, x: 0, y: 0)
@@ -102,19 +101,19 @@ struct EventCardWidgetView: View {
         Text(event.name)
             .font(.system(.title2, design: .rounded))
             .bold()
-            .foregroundColor(.red)
+            .foregroundColor(event.color)
     }
     
     var daysAgoText: some View {
         VStack {
-            Text("\(event.date)")
+            Text("\(event.daysNumber)")
                 .font(.system(.title2, design: .rounded))
                 .bold()
-                .foregroundColor(.red)
+                .foregroundColor(event.color)
             
             Text("days")
                 .font(.system(.body, design: .rounded))
-                .foregroundColor(.red)
+                .foregroundColor(event.color)
         }
         .frame(width: 40)
     }
@@ -122,8 +121,11 @@ struct EventCardWidgetView: View {
 
 
     var itemContent: some View {
-        VStack {
-            daysAgoText
+        VStack(alignment: .leading) {
+            if event.name != "No events" {
+                daysAgoText
+            }
+        
             Spacer()
             nameText
         }
@@ -142,10 +144,25 @@ struct WidgetContent: TimelineEntry {
     var date: Date
     let name: String
     let id: UUID
+
+    let color: Color
+    let daysNumber: Int
     
-    init(date: Date, name: String, id: UUID) {
+    init(date: Date, name: String, id: UUID, color: Color, daysNumber: Int) {
         self.date = date
         self.name = name
         self.id = id
+        self.color = color
+        self.daysNumber = daysNumber
+    }
+    
+    init(item: DaysSinceItem) {
+        self.date = item.dateLastDone
+        self.name = item.name
+        self.id = item.id
+        self.color = item.category.color
+        
+        let daysSince = Calendar.current.numberOfDaysBetween(item.dateLastDone, and: Date.now)
+        self.daysNumber = daysSince
     }
 }
