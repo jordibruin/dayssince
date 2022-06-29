@@ -52,6 +52,7 @@ struct AddItemForm: View {
         Section {
             DatePicker("Event Date", selection: $date, in: ...Date.now, displayedComponents: .date)
                 .datePickerStyle(.graphical)
+                .accentColor(self.category != nil ? self.category!.color : Color.blue)
         }header: {
             Text("Date")
         }
@@ -60,7 +61,7 @@ struct AddItemForm: View {
     var reminderSection: some View {
         Section {
             Toggle("Reminders", isOn: $remindersEnabled.animation())
-            
+                .tint(self.category != nil ? self.category!.color : Color.green)
             // Select type of reminder
             if remindersEnabled {
                 Picker("Remind me", selection: $selectedReminder) {
@@ -91,6 +92,8 @@ struct AddItemForm: View {
                         
                         if self.category == category {
                             Image(systemName: "checkmark.circle.fill")
+                                .imageScale(.large)
+                                .foregroundColor(self.category!.color)
                         }
                     }
                 }

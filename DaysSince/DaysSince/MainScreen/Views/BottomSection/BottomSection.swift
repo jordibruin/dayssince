@@ -29,8 +29,6 @@ struct BottomSection: View {
         // Add some space after the items for the button.
         Color(.clear)
             .frame(height: 100)
-        
-        
             .padding(.vertical,1)
     }
 }

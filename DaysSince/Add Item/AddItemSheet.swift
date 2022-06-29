@@ -48,7 +48,7 @@ struct AddItemSheet: View {
                     Image(systemName: "chevron.down.circle.fill")
                 }
                 .font(.title3)
-                .foregroundColor(.primary)
+                .foregroundColor(self.selectedCategory != nil ? self.selectedCategory!.color : .primary)
             }
             
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -75,7 +75,7 @@ struct AddItemSheet: View {
                 } label: {
                     Text("Save")
                 }
-                .foregroundColor(.primary)
+                .foregroundColor(self.selectedCategory != nil ? self.selectedCategory!.color : .primary)
             }
         }
     }

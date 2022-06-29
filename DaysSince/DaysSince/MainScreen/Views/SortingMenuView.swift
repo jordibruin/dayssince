@@ -35,8 +35,11 @@ struct SortingMenuView: View {
             }
         } label: {
             Image(systemName: "arrow.up.arrow.down.circle.fill")
+                .imageScale(.large)
+                .font(.title2)
         }
-        .foregroundColor(.black)
+        .foregroundColor(.primary)
+        .accessibilityLabel("Sorting Menu")
     }
     
     

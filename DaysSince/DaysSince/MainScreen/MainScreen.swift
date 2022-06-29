@@ -10,6 +10,7 @@ import SwiftUI
 struct MainScreen: View {
     
     @State var showAddItemSheet = false
+    @State var showSettings = false
     @State var editItemSheet = false
     @State var tappedItem = DaysSinceItem.placeholderItem()
     
@@ -57,16 +58,37 @@ struct MainScreen: View {
             .navigationBarTitleDisplayMode(.inline)
             
             .toolbar(content: {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    SortingMenuView(items: $items)
-                }
+                toolbarItems
             })
         }
         .sheet(isPresented: $showAddItemSheet) {
             AddItemSheet(selectedCategory: nil, remindersEnabled: false, items: $items)
         }
+        .sheet(isPresented: $showSettings) {
+            SettingsScreen()
+        }
+        
     }
 
+    var toolbarItems: some ToolbarContent {
+        Group {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button {
+                    showSettings = true
+                } label: {
+                    Image(systemName: "gearshape.fill")
+                        .foregroundColor(.primary)
+                        .imageScale(.large)
+                        .accessibilityLabel("Settings")
+                        .font(.title2)
+                }
+            }
+            
+            ToolbarItem(placement: .navigationBarTrailing) {
+                SortingMenuView(items: $items)
+            }
+        }
+    }
     
     var addNewEventButton: some View {
         Button {
@@ -82,7 +104,6 @@ struct MainScreen: View {
                     .foregroundColor(.white)
             }
             .padding()
-            // Using .opacity() makes the top of the button transparent but I don't know how to fix it.
             .background(LinearGradient(
                 gradient: .init(colors: [Color.workColor.opacity(0.85), Color.workColor]),
                 startPoint: .init(x: 0.0, y: 0.5),
