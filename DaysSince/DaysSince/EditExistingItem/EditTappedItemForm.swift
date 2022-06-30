@@ -113,8 +113,14 @@ struct EditTappedItemForm: View {
     var deleteItemButton: some View {
         Button {
             withAnimation{
-                print("Clicked on Delete button, There are \(items.count) items")
+                print("🗑 Delete event \(tappedItem.name)")
+                
+                var item_index = getItemIndex()
+                tappedItem.reminderNotificationID = items[item_index].reminderNotificationID
+                tappedItem.deleteReminders()
+                
                 items.remove(at: getItemIndex())
+                
                 editItemSheet = false
                 dismiss()
             }

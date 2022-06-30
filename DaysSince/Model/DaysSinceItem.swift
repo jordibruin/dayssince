@@ -37,6 +37,9 @@ struct DaysSinceItem: Identifiable, Codable {
         return category.emoji
     }
     
+    /// The ID of the repeating notification reminder.
+    var reminderNotificationID: String = UUID().uuidString
+        
 
     /// String for number of days since you did it.
     var daysAgo: Int {
@@ -56,57 +59,81 @@ struct DaysSinceItem: Identifiable, Codable {
     func addReminder() {
         let center = UNUserNotificationCenter.current()
         
-
-            let content = UNMutableNotificationContent()
-            content.title = "\(self.name)"
-//            content.subtitle = "It's been \(self.daysAgo) days since \(self.name)!"
+        let content = UNMutableNotificationContent()
         
-            content.body = "It's been \(self.daysAgo) days since \(self.name)!"
-            content.sound = UNNotificationSound.default
+        content.title = "\(self.name)"
+//            content.subtitle = "It's been \(self.daysAgo) days since \(self.name)!"
+        content.body = "It's been \(self.daysAgo) days since \(self.name)!"
+        content.sound = UNNotificationSound.default
 
-            var dateComponents = DateComponents()
-            if self.reminder == .none {
-                // FIX
-                return
-            }else if self.reminder == .daily {
-                dateComponents.hour = 10
-                dateComponents.minute = 0
-            } else if self.reminder == .weekly {
-                dateComponents.weekday = 1
-                dateComponents.hour = 10
-                dateComponents.second = 0
-            } else if self.reminder == .monthly {
-                dateComponents.day = 1
-                dateComponents.weekday = 1
-                dateComponents.hour = 10
-                dateComponents.minute = 0
-            }
+        
+        var dateComponents = DateComponents()
+        
+        if self.reminder == .none {
+            // FIX
+            return
+        }else if self.reminder == .daily {
+            dateComponents.hour = 10
+            dateComponents.minute = 0
+        } else if self.reminder == .weekly {
+            dateComponents.weekday = 1
+            dateComponents.hour = 10
+            dateComponents.second = 0
+        } else if self.reminder == .monthly {
+            dateComponents.day = 1
+            dateComponents.weekday = 1
+            dateComponents.hour = 10
+            dateComponents.minute = 0
+        }
             
 //            let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
-            // For testing send trigger every 5 seconds.
-            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
-
-            let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
-            
-            
+            // For testing send trigger every 60 seconds.
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 60, repeats: true)
         
-
+        print("Our ID is \(reminderNotificationID)")
+        let request = UNNotificationRequest(identifier: self.reminderNotificationID, content: content, trigger: trigger)
+        
         center.getNotificationSettings { settings in
             if settings.authorizationStatus == .authorized {
-//                addNotification()
                 center.add(request)
                 print("🔔 Added notification!")
+                print("the request is: \(request)")
             } else {
                 center.requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
                     if success {
-//                        addNotification()
                         center.add(request)
                         print("🔔 Added notification!")
+                        print("the request is: \(request)")
+
                     } else {
                         print("Didn't authorize notifications")
                     }
                 }
             }
+        }
+    }
+    
+    func deleteReminders() {
+        
+        let center = UNUserNotificationCenter.current()
+        
+//        center.removePendingNotificationRequests(withIdentifiers: [self.reminderNotificationID])
+        
+        center.getPendingNotificationRequests { (reqs) in
+
+           var ids =  [String]()
+
+           reqs.forEach {
+               print("0 identifier: \($0.identifier)")
+               print("Our notofication: \(self.reminderNotificationID)")
+               print($0.identifier == self.reminderNotificationID)
+               if $0.identifier == self.reminderNotificationID {
+                  ids.append($0.identifier)
+               }
+           }
+            print("List is \(ids)")
+            center
+                .removePendingNotificationRequests(withIdentifiers:ids)
         }
     }
     

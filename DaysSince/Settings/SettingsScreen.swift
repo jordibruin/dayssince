@@ -17,7 +17,7 @@ struct SettingsScreen: View {
         NavigationView {
             List {
                 daysSinceProSection
-                appIconsSection
+//                appIconsSection
                 
                 Section {
                     SettingsReviewButton()

@@ -40,7 +40,7 @@ struct SettingsReviewButton: View {
     
     var text: some View {
         Text("Review Days Since")
-            .font(.system(.title2, design: .rounded))
+            .font(.system(.body, design: .rounded))
     }
 }
 

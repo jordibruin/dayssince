@@ -18,7 +18,7 @@ struct Provider: IntentTimelineProvider {
 
     func placeholder(in context: Context) -> WidgetContent {
 
-        let content = WidgetContent(date: Date(), name: "TEST EVENT", id: UUID(), color: .red, daysNumber: 2)
+        let content = WidgetContent(date: Date(), name: "Adopted Leo 🐱", id: UUID(), color: Color.lifeColor, daysNumber: 237)
 
         return content
     }
@@ -28,7 +28,7 @@ struct Provider: IntentTimelineProvider {
         in context: Context,
         completion: @escaping (WidgetContent) -> Void
     ) {
-        let content = WidgetContent(date: Date(), name: "TEST EVENT", id: UUID(), color: .green, daysNumber: 4)
+        let content = WidgetContent(date: Date(), name: "Adopted Charlie 🐶", id: UUID(), color: .green, daysNumber: 45)
         completion(content)
     }
 
