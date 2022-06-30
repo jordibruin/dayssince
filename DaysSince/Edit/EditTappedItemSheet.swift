@@ -59,6 +59,7 @@ struct EditTappedItemSheet: View {
                     Text("Save")
                 }
                 .foregroundColor(tappedItem.category.color)
+                .disabled(tappedItem.name.isEmpty)
             }
                
             ToolbarItemGroup(placement: .keyboard){

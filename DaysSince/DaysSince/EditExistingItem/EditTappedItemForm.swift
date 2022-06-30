@@ -42,7 +42,7 @@ struct EditTappedItemForm: View {
     }
     
     var reminderSection: some View {
-        Section(header: Text("Reminders")) {
+        Section {
             Toggle("Reminders", isOn: $tappedItem.remindersEnabled.animation())
                 .tint(tappedItem.category.color)
             
@@ -55,6 +55,8 @@ struct EditTappedItemForm: View {
                 }
                 .pickerStyle(SegmentedPickerStyle())
             }
+        } header: {
+            Text("Reminders")
         }
     }
     

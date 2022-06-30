@@ -23,13 +23,24 @@ struct FavoriteItemsList: View {
         if isCategoryView {
             ForEach(self.favoriteItems, id: \.id) { item in
                 if item.category == category {
-                    IndividualItemView(item: item, editItemSheet: $editItemSheet, tappedItem: $tappedItem, colored: true, isFavorite: true)
-
+                    IndividualItemView(
+                        editItemSheet: $editItemSheet,
+                        tappedItem: $tappedItem,
+                        item: item,
+                        colored: true,
+                        isFavorite: false
+                    )
                 }
             }
         } else {
             ForEach(self.favoriteItems, id: \.id) { item in
-                IndividualItemView(item: item, editItemSheet: $editItemSheet, tappedItem: $tappedItem, colored: false, isFavorite: true)
+                IndividualItemView(
+                    editItemSheet: $editItemSheet,
+                    tappedItem: $tappedItem,
+                    item: item,
+                    colored: false,
+                    isFavorite: true
+                )
             }
         }
     }

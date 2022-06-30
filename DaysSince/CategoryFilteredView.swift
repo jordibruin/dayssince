@@ -9,6 +9,9 @@ import SwiftUI
 
 struct CategoryFilteredView: View {
     
+    @Environment(\.colorScheme) var colorScheme
+    
+    
     var category: CategoryDaysSinceItem
     
     @State var showAddItemSheet: Bool
@@ -51,13 +54,22 @@ struct CategoryFilteredView: View {
         }
     }
     
-    
+    @ViewBuilder
     var background: some View {
-        LinearGradient(
-            gradient: .init(colors: [category.color.opacity(0.1), category.color.opacity(0.2)]),
-            startPoint: .init(x: 1, y: 0),
-            endPoint: .init(x: 0.0001, y: 0))
-        .ignoresSafeArea()
+        if colorScheme == .dark {
+            LinearGradient(
+                gradient: .init(colors: [category.color.opacity(0.4).darker(by: 0.4), category.color.opacity(0.2).darker(by: 0.4)]),
+                startPoint: .init(x: 1, y: 0),
+                endPoint: .init(x: 0.0001, y: 0))
+            .ignoresSafeArea()
+            
+        } else {
+            LinearGradient(
+                gradient: .init(colors: [category.color.opacity(0.1), category.color.opacity(0.2)]),
+                startPoint: .init(x: 1, y: 0),
+                endPoint: .init(x: 0.0001, y: 0))
+            .ignoresSafeArea()
+        }
     }
     
     var addItemButton: some View {
@@ -87,6 +99,7 @@ struct CategoryFilteredView: View {
 struct CategoryFilteredView_Previews: PreviewProvider {
     static var previews: some View {
         CategoryFilteredView(category: .work, showAddItemSheet: false, editItemSheet: false, tappedItem: DaysSinceItem.placeholderItem(), items: .constant([DaysSinceItem.placeholderItem()]), completedItems: .constant([]), favoriteItems: .constant([]))
+            .preferredColorScheme(.dark)
     }
 }
 

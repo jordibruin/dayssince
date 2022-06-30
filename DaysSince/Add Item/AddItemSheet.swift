@@ -76,6 +76,7 @@ struct AddItemSheet: View {
                     Text("Save")
                 }
                 .foregroundColor(self.selectedCategory != nil ? self.selectedCategory!.color : .primary)
+                .disabled(name.isEmpty)
             }
         }
     }

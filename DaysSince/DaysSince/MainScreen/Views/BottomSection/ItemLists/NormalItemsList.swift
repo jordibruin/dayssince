@@ -28,9 +28,9 @@ struct NormalItemsList: View {
     var categoryViewList: some View {
         ForEach(self.items.filter { $0.category == category } , id: \.id) { item in
             IndividualItemView(
-                item: item,
                 editItemSheet: $editItemSheet,
                 tappedItem: $tappedItem,
+                item: item,
                 colored: true,
                 isFavorite: false
             )
@@ -40,9 +40,9 @@ struct NormalItemsList: View {
     var normalViewList: some View {
         ForEach(self.items, id: \.id) { item in
             IndividualItemView(
-                item: item,
                 editItemSheet: $editItemSheet,
                 tappedItem: $tappedItem,
+                item: item,
                 colored: false,
                 isFavorite: false
             )

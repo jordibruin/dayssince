@@ -81,17 +81,22 @@ struct EventCardWidgetView: View {
     let event: WidgetContent
 
     @Environment(\.widgetFamily) var family
+    @Environment(\.colorScheme) var colorScheme
 
     @ViewBuilder
     var body: some View {
         ZStack(alignment: .leading) {
-            Color.white
+            if colorScheme == .dark {
+                event.color.lighter(by: 0.04)
+            } else {
+                Color.white
+            }
             itemContent
         }
         .clipShape(RoundedRectangle(cornerRadius: 23))
         .overlay(
             RoundedRectangle(cornerRadius: 23)
-                .stroke(event.color, lineWidth: 6)
+                .stroke(colorScheme == .dark ? event.color.darker(): event.color, lineWidth: 6)
         )
         
         .shadow(color: Color.black.opacity(0.05), radius: 20, x: 0, y: 0)
@@ -101,21 +106,21 @@ struct EventCardWidgetView: View {
         Text(event.name)
             .font(.system(.title2, design: .rounded))
             .bold()
-            .foregroundColor(event.color)
+            .foregroundColor(colorScheme == .dark ? .primary : event.color)
     }
     
     var daysAgoText: some View {
-        VStack {
+        VStack(alignment: .leading) {
             Text("\(event.daysNumber)")
                 .font(.system(.title2, design: .rounded))
                 .bold()
-                .foregroundColor(event.color)
+                .foregroundColor(colorScheme == .dark ? .primary : event.color)
             
             Text("days")
                 .font(.system(.body, design: .rounded))
-                .foregroundColor(event.color)
+                .foregroundColor(colorScheme == .dark ? .primary : event.color)
         }
-        .frame(width: 40)
+        .frame(width: event.daysNumber > 999 ? 70 : event.daysNumber > 99 ? 50 : 40)
     }
     
 

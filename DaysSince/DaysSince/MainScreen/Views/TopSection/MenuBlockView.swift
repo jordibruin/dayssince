@@ -9,6 +9,8 @@ import SwiftUI
 
 struct MenuBlockView: View {
     
+    @Environment(\.colorScheme) var colorScheme
+    
     let category: CategoryDaysSinceItem
     
     @Binding var items: [DaysSinceItem]
@@ -25,20 +27,39 @@ struct MenuBlockView: View {
         .shadow(color: category.color.opacity(0.4), radius: 5, x: 0, y: 5)
     }
     
+    
+    @ViewBuilder
     var colorShape: some View {
-        Rectangle()
-            .fill(
-                LinearGradient(
-                    gradient: .init(
-                        colors: [
-                            category.color.opacity(0.7),
-                            category.color
-                        ]
-                    ),
-                    startPoint: .init(x: 0.0, y: 0),
-                    endPoint: .init(x: 0.9, y: 0.8)
+        if colorScheme == .dark {
+            Rectangle()
+                .fill(
+                    LinearGradient(
+                        gradient: .init(
+                            colors: [
+                                category.color.opacity(0.84).darker( ),
+                                category.color.darker()
+                            ]
+                        ),
+                        startPoint: .init(x: 0.0, y: 0),
+                        endPoint: .init(x: 0.9, y: 0.8)
+                    )
                 )
-            )
+        } else {
+            Rectangle()
+                .fill(
+                    LinearGradient(
+                        gradient: .init(
+                            colors: [
+                                category.color.opacity(0.7),
+                                category.color
+                            ]
+                        ),
+                        startPoint: .init(x: 0.0, y: 0),
+                        endPoint: .init(x: 0.9, y: 0.8)
+                    )
+                )
+        }
+        
     }
     
     var content: some View {
@@ -77,5 +98,6 @@ struct MenuBlockView: View {
 struct MenuBlockView_Previews: PreviewProvider {
     static var previews: some View {
         MenuBlockView(category: .work, items: .constant([]), completedItems: .constant([]), favoriteItems: .constant([]))
+            .preferredColorScheme(.dark)
     }
 }
