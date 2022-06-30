@@ -50,11 +50,23 @@ struct EditTappedItemSheet: View {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
                     var item_index = getItemIndex()
-                               items[item_index].name = tappedItem.name
-                               items[item_index].dateLastDone = tappedItem.dateLastDone
-                               items[item_index].category = tappedItem.category
-                               editItemSheet = false
-                               dismiss()
+                    items[item_index].name = tappedItem.name
+                    items[item_index].dateLastDone = tappedItem.dateLastDone
+                    items[item_index].category = tappedItem.category
+                    
+                    items[item_index].remindersEnabled = tappedItem.remindersEnabled
+                    if !items[item_index].remindersEnabled {
+                        items[item_index].deleteReminders()
+                    }
+                    
+                    if items[item_index].reminder != tappedItem.reminder {
+                        items[item_index].deleteReminders()
+                        
+                        items[item_index].reminder = tappedItem.reminder
+                        items[item_index].addReminder()
+                    }
+                    editItemSheet = false
+                    dismiss()
                 } label: {
                     Text("Save")
                 }
@@ -68,6 +80,15 @@ struct EditTappedItemSheet: View {
                 }
             }
         }
+    }
+    
+    func updateNotificationReminder() {
+        var item_ = items[getItemIndex()]
+        
+        item_.deleteReminders()
+        item_.addReminder()
+        
+        
     }
     
     func getItemIndex() -> Int {

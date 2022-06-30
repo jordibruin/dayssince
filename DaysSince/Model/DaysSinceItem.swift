@@ -124,9 +124,6 @@ struct DaysSinceItem: Identifiable, Codable {
            var ids =  [String]()
 
            reqs.forEach {
-               print("0 identifier: \($0.identifier)")
-               print("Our notofication: \(self.reminderNotificationID)")
-               print($0.identifier == self.reminderNotificationID)
                if $0.identifier == self.reminderNotificationID {
                   ids.append($0.identifier)
                }
