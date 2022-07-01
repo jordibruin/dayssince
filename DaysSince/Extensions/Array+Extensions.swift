@@ -28,7 +28,7 @@ extension Array: RawRepresentable where Element: Codable {
         else {
             return "[]"
         }
-        print("Returning \(result)")
+//        print("Returning \(result)")
         return result
     }
 }

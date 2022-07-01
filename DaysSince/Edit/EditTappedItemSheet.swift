@@ -22,14 +22,16 @@ struct EditTappedItemSheet: View {
     
     var body: some View {
         NavigationView {
-            EditTappedItemForm(items: $items, completedItems: $completedItems, favoriteItems: $favoriteItems, tappedItem: $tappedItem, editItemSheet: $editItemSheet, nameIsFocused: $nameIsFocused)
-            .ignoresSafeArea(.keyboard, edges: .bottom)
-
-            .navigationTitle("Edit Event")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar(content: {
-                toolbarItems
-            })
+            ZStack {
+                EditTappedItemForm(items: $items, completedItems: $completedItems, favoriteItems: $favoriteItems, tappedItem: $tappedItem, editItemSheet: $editItemSheet, nameIsFocused: $nameIsFocused)
+                .ignoresSafeArea(.keyboard, edges: .bottom)
+                .navigationTitle("Edit Event")
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar(content: {
+                    toolbarItems
+                })
+                
+            }
         }
     }
     
@@ -48,27 +50,30 @@ struct EditTappedItemSheet: View {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
                     var item_index = getItemIndex()
-                               items[item_index].name = tappedItem.name
-                               /// FIX
-                   //            items[item_index].emoji = tappedItem.emoji
-                               items[item_index].dateLastDone = tappedItem.dateLastDone
-                               items[item_index].category = tappedItem.category
-                               editItemSheet = false
-                               dismiss()
+                    items[item_index].name = tappedItem.name
+                    items[item_index].dateLastDone = tappedItem.dateLastDone
+                    items[item_index].category = tappedItem.category
+                    
+                    items[item_index].remindersEnabled = tappedItem.remindersEnabled
+                    if !items[item_index].remindersEnabled {
+                        items[item_index].deleteReminders()
+                    }
+                    
+                    if items[item_index].reminder != tappedItem.reminder {
+                        items[item_index].deleteReminders()
+                        
+                        items[item_index].reminder = tappedItem.reminder
+                        items[item_index].addReminder()
+                    }
+                    editItemSheet = false
+                    dismiss()
                 } label: {
                     Text("Save")
                 }
                 .foregroundColor(tappedItem.category.color)
+                .disabled(tappedItem.name.isEmpty)
             }
                
-//            ToolbarItem(placement: .principal) { // <3>
-//                Text("\(tappedItem.name)")
-//                    .font(.system(.largeTitle, design: .rounded))
-//                    .bold()
-//                    .accessibilityAddTraits(.isHeader)
-//                    .foregroundColor(tappedItem.category.color)
-//            }
-//
             ToolbarItemGroup(placement: .keyboard){
                 Button("Done") {
                     nameIsFocused = false
@@ -77,34 +82,18 @@ struct EditTappedItemSheet: View {
         }
     }
     
+    func updateNotificationReminder() {
+        var item_ = items[getItemIndex()]
+        
+        item_.deleteReminders()
+        item_.addReminder()
+        
+        
+    }
+    
     func getItemIndex() -> Int {
         return items.firstIndex(where: {$0.id == tappedItem.id})!
     }
-    
-//    var saveButton: some View {
-//        Button {
-//            var item_index = getItemIndex()
-//            items[item_index].name = tappedItem.name
-//            /// FIX
-////            items[item_index].emoji = tappedItem.emoji
-//            items[item_index].dateLastDone = tappedItem.dateLastDone
-//            items[item_index].category = tappedItem.category
-//            editItemSheet = false
-//            dismiss()
-//        } label: {
-//            Text("Save")
-//                .font(.system(.title, design: .rounded))
-//                .bold()
-//                .foregroundColor(.white)
-//        }
-//        .padding()
-//        .background(LinearGradient(
-//            gradient: .init(colors: [tappedItem.category.color.opacity(0.8), tappedItem.category.color]),
-//            startPoint: .init(x: 0.0, y: 0.5),
-//            endPoint: .init(x: 0, y: 1)))
-//        .clipShape(Capsule())
-//        .shadow(color: tappedItem.category.color, radius: 10, x: 0, y: 5)
-//    }
 }
 
 struct EditTappedItemSheet_Previews: PreviewProvider {

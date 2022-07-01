@@ -9,7 +9,10 @@ import SwiftUI
 
 struct MainScreen: View {
     
+    @Environment(\.colorScheme) var colorScheme
+    
     @State var showAddItemSheet = false
+    @State var showSettings = false
     @State var editItemSheet = false
     @State var tappedItem = DaysSinceItem.placeholderItem()
     
@@ -29,6 +32,7 @@ struct MainScreen: View {
                         completedItems: $completedItems,
                         favoriteItems: $favoriteItems
                     )
+                    .padding(.bottom, 16)
                     
                     BottomSection(
                         items: $items,
@@ -57,16 +61,37 @@ struct MainScreen: View {
             .navigationBarTitleDisplayMode(.inline)
             
             .toolbar(content: {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    SortingMenuView(items: $items)
-                }
+                toolbarItems
             })
         }
         .sheet(isPresented: $showAddItemSheet) {
             AddItemSheet(selectedCategory: nil, remindersEnabled: false, items: $items)
         }
+        .sheet(isPresented: $showSettings) {
+            SettingsScreen()
+        }
+        
     }
 
+    var toolbarItems: some ToolbarContent {
+        Group {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button {
+                    showSettings = true
+                } label: {
+                    Image(systemName: "gearshape.fill")
+                        .foregroundColor(.primary)
+                        .imageScale(.large)
+                        .accessibilityLabel("Settings")
+                        .font(.title2)
+                }
+            }
+            
+            ToolbarItem(placement: .navigationBarTrailing) {
+                SortingMenuView(items: $items)
+            }
+        }
+    }
     
     var addNewEventButton: some View {
         Button {
@@ -82,12 +107,11 @@ struct MainScreen: View {
                     .foregroundColor(.white)
             }
             .padding()
-            // Using .opacity() makes the top of the button transparent but I don't know how to fix it.
             .background(LinearGradient(
-                gradient: .init(colors: [Color.workColor.opacity(0.85), Color.workColor]),
+                gradient: .init(colors: [colorScheme == .dark ? Color.workColor.opacity(0.85).darker(by: 0.1): Color.workColor.opacity(0.85), colorScheme == .dark ? Color.workColor.darker(by: 0.2): Color.workColor]),
                 startPoint: .init(x: 0.0, y: 0.5),
                 endPoint: .init(x: 0, y: 1)))
-            .background(Color.white)
+            .background(colorScheme == .dark ? Color.black : Color.white)
             .clipShape(Capsule())
             .shadow(color: Color.workColor, radius: 10, x: 0, y: 5)
         }
@@ -98,5 +122,6 @@ struct MainScreen: View {
 struct MainScreen_Previews: PreviewProvider {
     static var previews: some View {
         MainScreen(items: .constant([.placeholderItem()]), completedItems: .constant([]), favoriteItems: .constant([]))
+            .preferredColorScheme(.dark)
     }
 }

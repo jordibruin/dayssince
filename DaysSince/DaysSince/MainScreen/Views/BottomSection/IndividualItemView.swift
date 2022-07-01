@@ -8,11 +8,17 @@
 import SwiftUI
 
 struct IndividualItemView: View {
-    var item: DaysSinceItem
+    
+    @Environment(\.colorScheme) var colorScheme
+    
+    
     @Binding var editItemSheet: Bool
     @Binding var tappedItem: DaysSinceItem
+    
+    var item: DaysSinceItem
     var colored: Bool
     var isFavorite: Bool
+    
     
     var body: some View {
         ZStack(alignment: .topTrailing) {
@@ -33,7 +39,7 @@ struct IndividualItemView: View {
         .overlay(
             RoundedRectangle(cornerRadius: 20)
                 .stroke(
-                    item.category.color,
+                    colorScheme == .dark ? item.category.color.darker() : item.category.color,
                     lineWidth: 3
                 )
         )
@@ -59,7 +65,7 @@ struct IndividualItemView: View {
         Text(item.name)
                 .font(.system(.title2, design: .rounded))
                 .bold()
-                .foregroundColor(colored ? .white : item.category.color)
+                .foregroundColor(colored || colorScheme == .dark ? .white : item.category.color)
     }
     
     var daysAgoText: some View {
@@ -67,18 +73,20 @@ struct IndividualItemView: View {
             Text("\(item.daysAgo)")
                 .font(.system(.title2, design: .rounded))
                 .bold()
-                .foregroundColor(colored ? .white : item.category.color)
+                .foregroundColor(colored || colorScheme == .dark ? .white : item.category.color)
             
             Text(item.daysAgo > 1 ? "days" : "day")
                 .font(.system(.body, design: .rounded))
-                .foregroundColor(colored ? .white : item.category.color)
+                .foregroundColor(colored || colorScheme == .dark ? .white : item.category.color)
         }
-        .frame(width: 40)
-    }
+        .frame(minWidth: 0)
+    }                                                                                                                                                                                         
     
     @ViewBuilder
     var backgroundColor: some View {
-        if colored {
+        if colorScheme == .dark{
+            item.category.color.lighter(by: 0.04)
+        } else if colored {
             item.category.color
         } else {
             Color.white
@@ -96,9 +104,9 @@ struct IndividualItemView: View {
     
 }
 
-struct IndividualItemView_Preview: PreviewProvider {
-    static var previews: some View {
-        IndividualItemView(item: DaysSinceItem.placeholderItem(), editItemSheet: .constant(false), tappedItem: .constant(DaysSinceItem.placeholderItem()), colored: false, isFavorite: true)
-            .frame(height: 10)
-    }
-}
+//struct IndividualItemView_Preview: PreviewProvider {
+//    static var previews: some View {
+//        IndividualItemView(colorScheme: DaysSinceItem.placeholderItem(), editItemSheet: .constant(false), tappedItem: .constant(DaysSinceItem.placeholderItem()), item: false, colored: true, isFavorite: <#Bool#>)
+//            .frame(height: 10)
+//    }
+//}
