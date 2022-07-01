@@ -17,7 +17,7 @@ enum SupportLocale: CaseIterable {
     var url: URL {
         switch self {
         case .english:
-            return URL(string: "https://simplejsoncms.com/api/3ka5qwc538a")!
+            return URL(string: "https://simplejsoncms.com/api/59cq27p0jp8")!
 //        case .dutch:
 //            return URL(string: "https://simplejsoncms.com/api/kpav6tkbns")!
         }

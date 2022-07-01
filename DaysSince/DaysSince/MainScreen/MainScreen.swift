@@ -51,6 +51,7 @@ struct MainScreen: View {
                         
                         ForEach(notificationManager.pendingNotifications, id: \.self) { notification in
                             Text(notification.content.title)
+                            
                         }
 
                         //

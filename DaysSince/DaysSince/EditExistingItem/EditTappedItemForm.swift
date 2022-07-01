@@ -56,6 +56,21 @@ struct EditTappedItemForm: View {
         Section {
             Toggle("Reminders", isOn: $tappedItem.remindersEnabled.animation())
                 .tint(tappedItem.category.color)
+//                .onChange(of: tappedItem.remindersEnabled) { remindersEnabled in
+//                    
+//                    if remindersEnabled {
+//                        notificationManager.center.getNotificationSettings { settings in
+//                            if settings.authorizationStatus == .notDetermined {
+//                                
+//                            } else if settings.authorizationStatus == .authorized {
+//                                
+//                            } else {
+//                                print("USER HAS NOT GIVEN PERMISSION")
+//                                print("NOW WE NEED TO PUSH SOMEONE TO SETTINGS")
+//                            }
+//                        }
+//                    }
+//                }
             
             // Select type of reminder
             if tappedItem.remindersEnabled {
@@ -66,6 +81,15 @@ struct EditTappedItemForm: View {
                 }
                 .pickerStyle(SegmentedPickerStyle())
             }
+            
+//            if notificationManager.notificationPermissionGiven {
+//                Button {
+//                 OPEN THE SETTINGS IMMEDIATLY
+//                } label: {
+//                    Text("Open settings")
+//                }
+//            }
+            
         } header: {
             Text("Reminders")
         }

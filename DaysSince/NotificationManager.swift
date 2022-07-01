@@ -39,6 +39,19 @@ class NotificationManager: ObservableObject {
         }
     }
     
+    @Published var notificationPermissionGiven = true
+    
+    func checkPermission() {
+        center.getNotificationSettings { settings in
+            if settings.authorizationStatus == .authorized {
+                self.notificationPermissionGiven = true
+            } else {
+                print("USER HAS NOT GIVEN PERMISSION")
+                self.notificationPermissionGiven = false
+            }
+        }
+    }
+    
     func addReminderFor(item: DaysSinceItem) {
         let content = UNMutableNotificationContent()
         

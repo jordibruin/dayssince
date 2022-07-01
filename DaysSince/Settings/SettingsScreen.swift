@@ -16,7 +16,7 @@ struct SettingsScreen: View {
     var body: some View {
         NavigationView {
             List {
-                daysSinceProSection
+//                daysSinceProSection
 //                appIconsSection
                 
                 Section {
