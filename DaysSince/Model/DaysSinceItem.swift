@@ -69,26 +69,34 @@ struct DaysSinceItem: Identifiable, Codable {
         
         var dateComponents = DateComponents()
         
+        // For testing change the time interval for the trigger.
+        var timeInterval: Double = 0
         if self.reminder == .none {
             // FIX
             return
         }else if self.reminder == .daily {
             dateComponents.hour = 10
             dateComponents.minute = 0
+            
+            timeInterval = 60
         } else if self.reminder == .weekly {
             dateComponents.weekday = 1
             dateComponents.hour = 10
             dateComponents.second = 0
+            
+            timeInterval = 90
         } else if self.reminder == .monthly {
             dateComponents.day = 1
             dateComponents.weekday = 1
             dateComponents.hour = 10
             dateComponents.minute = 0
+            
+            timeInterval = 120
         }
             
 //            let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
             // For testing send trigger every 60 seconds.
-        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 60, repeats: true)
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: timeInterval, repeats: true)
         
         print("Our ID is \(reminderNotificationID)")
         let request = UNNotificationRequest(identifier: self.reminderNotificationID, content: content, trigger: trigger)
