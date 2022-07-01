@@ -12,6 +12,8 @@ import UserNotifications
 struct AddItemSheet: View {
     @Environment(\.dismiss) var dismiss
     
+    @EnvironmentObject var notificationManager: NotificationManager
+    
     @State private var name: String = ""
     @State var date: Date = Date.now
     @State var selectedCategory: CategoryDaysSinceItem? = nil
@@ -63,7 +65,7 @@ struct AddItemSheet: View {
                     items.append(newItem)
                         
                     if newItem.remindersEnabled {
-                        newItem.addReminder()
+                        notificationManager.addReminderFor(item: newItem)
                     }
                     
                     

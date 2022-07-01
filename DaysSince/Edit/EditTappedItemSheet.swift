@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct EditTappedItemSheet: View {
+    
+    @EnvironmentObject var notificationManager: NotificationManager
+    
     @Binding var items: [DaysSinceItem]
     @Binding var completedItems: [DaysSinceItem]
     @Binding var favoriteItems: [DaysSinceItem]
@@ -49,21 +52,28 @@ struct EditTappedItemSheet: View {
             
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
-                    var item_index = getItemIndex()
-                    items[item_index].name = tappedItem.name
-                    items[item_index].dateLastDone = tappedItem.dateLastDone
-                    items[item_index].category = tappedItem.category
                     
-                    items[item_index].remindersEnabled = tappedItem.remindersEnabled
-                    if !items[item_index].remindersEnabled {
-                        items[item_index].deleteReminders()
+                    guard let itemIndex = items.firstIndex(where: {$0.id == tappedItem.id}) else {
+                        print("no matching index found")
+                        // show an alert to the users
+                        return
                     }
                     
-                    if items[item_index].reminder != tappedItem.reminder {
-                        items[item_index].deleteReminders()
-                        
-                        items[item_index].reminder = tappedItem.reminder
-                        items[item_index].addReminder()
+//                    var realItem = items[itemIndex]
+                    
+                    items[itemIndex].name = tappedItem.name
+                    items[itemIndex].dateLastDone = tappedItem.dateLastDone
+                    items[itemIndex].category = tappedItem.category
+                    
+                    items[itemIndex].remindersEnabled = tappedItem.remindersEnabled
+                    if !items[itemIndex].remindersEnabled {
+                        notificationManager.deleteReminderFor(item: items[itemIndex])
+                    }
+                    
+                    if items[itemIndex].reminder != tappedItem.reminder {
+                        notificationManager.deleteReminderFor(item: items[itemIndex])
+                        items[itemIndex].reminder = tappedItem.reminder
+                        notificationManager.addReminderFor(item: items[itemIndex])
                     }
                     editItemSheet = false
                     dismiss()
@@ -83,12 +93,10 @@ struct EditTappedItemSheet: View {
     }
     
     func updateNotificationReminder() {
-        var item_ = items[getItemIndex()]
+        let realItem = items[getItemIndex()]
         
-        item_.deleteReminders()
-        item_.addReminder()
-        
-        
+        notificationManager.deleteReminderFor(item: realItem)
+        notificationManager.addReminderFor(item: realItem)
     }
     
     func getItemIndex() -> Int {

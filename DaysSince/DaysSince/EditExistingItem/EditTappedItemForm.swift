@@ -8,7 +8,10 @@
 import SwiftUI
 
 struct EditTappedItemForm: View {
+    
     @Environment(\.dismiss) var dismiss
+    
+    @EnvironmentObject var notificationManager: NotificationManager
     
     @Binding var items: [DaysSinceItem]
     @Binding var completedItems: [DaysSinceItem]
@@ -17,10 +20,10 @@ struct EditTappedItemForm: View {
     @Binding var tappedItem: DaysSinceItem
     @Binding var editItemSheet: Bool
     
-    
     var category: CategoryDaysSinceItem = .hobbies
     
     @FocusState.Binding var nameIsFocused: Bool
+    @State var showConfirmDelete = false
     
     var body: some View {
         Form {
@@ -29,6 +32,14 @@ struct EditTappedItemForm: View {
             newCategorySection
             reminderSection
             deleteButtonSection
+        }
+        .confirmationDialog("Delete Event", isPresented: $showConfirmDelete) {
+            Button("Delete", role: .destructive) {
+                deleteEvent()
+            }
+            Button("Cancel", role: .cancel) { }
+        } message: {
+            Text("Are you sure you want to delete this event?")
         }
     }
     
@@ -105,35 +116,41 @@ struct EditTappedItemForm: View {
     
     var deleteButtonSection: some View {
         Section {
-            deleteItemButton
-                .buttonStyle(BorderlessButtonStyle())
+            Button {
+                showConfirmDelete = true
+            } label: {
+                HStack {
+                    Spacer()
+                    Label("Delete Event", systemImage: "trash")
+                        .foregroundColor(Color.red)
+                    Spacer()
+                }
+            }
+            .buttonStyle(BorderlessButtonStyle())
         }
     }
     
-    var deleteItemButton: some View {
-        Button {
-            withAnimation{
-                print("🗑 Delete event \(tappedItem.name)")
-                
-                var item_index = getItemIndex()
-                tappedItem.reminderNotificationID = items[item_index].reminderNotificationID
-                tappedItem.deleteReminders()
-                
-                items.remove(at: getItemIndex())
-                
-                editItemSheet = false
-                dismiss()
-            }
-        } label: {
-            HStack {
-                Spacer()
-                Label("Delete Event", systemImage: "trash")
-                    .foregroundColor(Color.red)
-                Spacer()
-            }
+    func deleteEvent() {
+        withAnimation{
+            print("🗑 Delete event \(tappedItem.name)")
+            
+            let item_index = getItemIndex()
+            
+            tappedItem.reminderNotificationID = items[item_index].reminderNotificationID
+            
+            // Notification Manager
+            
+            notificationManager.deleteReminderFor(item: tappedItem)
+            
+            
+//            tappedItem.deleteReminders()
+            
+            items.remove(at: getItemIndex())
+            
+            editItemSheet = false
+            dismiss()
         }
     }
-    
     
     // Haven't deleted these in case we keep the favorite items.
     

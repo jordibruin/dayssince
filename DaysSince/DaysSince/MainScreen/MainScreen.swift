@@ -20,6 +20,7 @@ struct MainScreen: View {
     @Binding var completedItems: [DaysSinceItem]
     @Binding var favoriteItems: [DaysSinceItem]
     
+    @EnvironmentObject var notificationManager: NotificationManager
     
     var body: some View {
         NavigationView {
@@ -33,6 +34,31 @@ struct MainScreen: View {
                         favoriteItems: $favoriteItems
                     )
                     .padding(.bottom, 16)
+                    
+                    VStack(alignment: .leading) {
+                        HStack {
+                            Text("Notification Testing Center")
+                                .bold()
+                            Spacer()
+                        }
+                        
+                        Button {
+                            notificationManager.getPendingNotification()
+                        } label: {
+                            Text("Check notifications")
+                        }
+                        .buttonStyle(.borderedProminent)
+                        
+                        ForEach(notificationManager.pendingNotifications, id: \.self) { notification in
+                            Text(notification.content.title)
+                        }
+
+                        //
+                    }
+                    .padding(.horizontal)
+                    .onAppear {
+                        notificationManager.getPendingNotification()
+                    }
                     
                     BottomSection(
                         items: $items,

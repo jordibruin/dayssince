@@ -9,9 +9,13 @@ import SwiftUI
 
 @main
 struct DaysSinceApp: App {
+    
+    @StateObject var notificationManager = NotificationManager()
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(notificationManager)
         }
     }
 }
