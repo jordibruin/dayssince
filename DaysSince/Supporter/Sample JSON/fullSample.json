@@ -1,0 +1,24 @@
+{
+  "contactSections": [
+    {
+      "id": 0,
+      "title": "Feedback",
+      "items": [
+        {
+          "id": 0,
+          "title": "Contact Jordi on Twitter",
+          "url": "https://www.twitter.com/jordibruin",
+          "imageName": "message.fill",
+          "color": 0
+        },
+        {
+          "id": 1,
+          "title": "Contact us",
+          "url": "mailto:jordi@goodsnooze.com",
+          "imageName": "message.fill",
+          "color": 0
+        }
+      ]
+    }
+  ]
+}

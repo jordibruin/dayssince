@@ -1,0 +1,154 @@
+{
+    "highlightedSections": [
+        {
+            "id": 0,
+            "title": "Section 1",
+            "items": [
+                {
+                    "id": 0,
+                    "title": "Change accent colors",
+                    "subtitle": "",
+                    "imageName": "icloud.circle.fill",
+                    "emoji": "🎨",
+                    "color": 1,
+                    "supportPages": [
+                        {
+                            "id": 0,
+                            "title": "SupportColors",
+                            "subtitle": "Set your apps colors in SupportColors and use the Int associated with the color in your JSON to customize what icons and headers look like.",
+                            "imageURL": "https://jordibruin.github.io/navi-support/images/howtoenablesubtitles/en/subtitles-03-en.jpg",
+                            "darkImageURL": "https://jordibruin.github.io/navi-support/images/howtoenablesubtitles/en/subtitles-03-en-dark.jpg"
+                        },
+                        {
+                            "id": 0,
+                            "title": "SupportColors",
+                            "subtitle": "Set your apps colors in SupportColors and use the Int associated with the color in your JSON to customize what icons and headers look like.",
+                            "imageURL": "https://jordibruin.github.io/navi-support/images/howtoenablesubtitles/en/subtitles-03-en.jpg",
+                            "darkImageURL": "https://jordibruin.github.io/navi-support/images/howtoenablesubtitles/en/subtitles-03-en-dark.jpg"
+                        }
+                    ]
+                },
+                {
+                    "id": 1,
+                    "title": "List and cell background",
+                    "subtitle": "",
+                    "imageName": "arrow.up.heart.fill",
+                    "emoji": "🥳",
+                    "color": 0,
+                    "supportPages": [{
+                        "id": 0,
+                        "title": "Page 1",
+                        "subtitle": "Open the Design file and change the colors however you like. Changing the background requires you to uncomment the init in SupportScreen, which might have issues for other parts of your app if they use Lists as well.",
+                        "imageURL": "https://jordibruin.github.io/navi-support/images/howtoenablesubtitles/en/subtitles-03-en.jpg",
+                        "darkImageURL": "https://jordibruin.github.io/navi-support/images/howtoenablesubtitles/en/subtitles-03-en-dark.jpg"
+                    }]
+                },
+                {
+                    "id": 2,
+                    "title": "Titles and subtitles",
+                    "subtitle": "",
+                    "imageName": "moon.circle.fill",
+                    "emoji": "🚌",
+                    "color": 2,
+                    "supportPages": [{
+                        "id": 0,
+                        "title": "Page 1",
+                        "subtitle": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+                        "imageURL": "https://jordibruin.github.io/navi-support/images/howtoenablesubtitles/en/subtitles-03-en.jpg",
+                        "darkImageURL": "https://jordibruin.github.io/navi-support/images/howtoenablesubtitles/en/subtitles-03-en-dark.jpg"
+                    }]
+                },
+                {
+                    "id": 3,
+                    "title": "Highlighted items have detail pages",
+                    "subtitle": "",
+                    "imageName": "arrow.counterclockwise.icloud.fill",
+                    "emoji": "🗳",
+                    "color": 0,
+                    "supportPages": [{
+                        "id": 0,
+                        "title": "Page 1",
+                        "subtitle": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+                        "imageURL": "https://jordibruin.github.io/navi-support/images/howtoenablesubtitles/en/subtitles-03-en.jpg",
+                        "darkImageURL": "https://jordibruin.github.io/navi-support/images/howtoenablesubtitles/en/subtitles-03-en-dark.jpg"
+                    }]
+                }
+            ]
+        },
+            {
+                "id": 1,
+                "title": "Emoji",
+                "items": [
+                    {
+                        "id": 0,
+                        "title": "Change accent colors",
+                        "subtitle": "",
+                        "imageName": "icloud.circle.fill",
+                        "emoji": "🎨",
+                        "color": 1,
+                        "supportPages": [
+                            {
+                                "id": 0,
+                                "title": "SupportColors",
+                                "subtitle": "Set your apps colors in SupportColors and use the Int associated with the color in your JSON to customize what icons and headers look like.",
+                                "imageURL": "https://jordibruin.github.io/navi-support/images/howtoenablesubtitles/en/subtitles-03-en.jpg",
+                                "darkImageURL": "https://jordibruin.github.io/navi-support/images/howtoenablesubtitles/en/subtitles-03-en-dark.jpg"
+                            },
+                            {
+                                "id": 0,
+                                "title": "SupportColors",
+                                "subtitle": "Set your apps colors in SupportColors and use the Int associated with the color in your JSON to customize what icons and headers look like.",
+                                "imageURL": "https://jordibruin.github.io/navi-support/images/howtoenablesubtitles/en/subtitles-03-en.jpg",
+                                "darkImageURL": "https://jordibruin.github.io/navi-support/images/howtoenablesubtitles/en/subtitles-03-en-dark.jpg"
+                            },
+                        ]
+                    },
+                    {
+                        "id": 1,
+                        "title": "List and cell background",
+                        "subtitle": "",
+                        "imageName": "arrow.up.heart.fill",
+                        "emoji": "🥳",
+                        "color": 0,
+                        "supportPages": [{
+                            "id": 0,
+                            "title": "Page 1",
+                            "subtitle": "Open the Design file and change the colors however you like. Changing the background requires you to uncomment the init in SupportScreen, which might have issues for other parts of your app if they use Lists as well.",
+                            "imageURL": "https://jordibruin.github.io/navi-support/images/howtoenablesubtitles/en/subtitles-03-en.jpg",
+                            "darkImageURL": "https://jordibruin.github.io/navi-support/images/howtoenablesubtitles/en/subtitles-03-en-dark.jpg"
+                        }]
+                    },
+                    {
+                        "id": 2,
+                        "title": "Titles and subtitles",
+                        "subtitle": "",
+                        "imageName": "moon.circle.fill",
+                        "emoji": "🚌",
+                        "color": 2,
+                        "supportPages": [{
+                            "id": 0,
+                            "title": "Page 1",
+                            "subtitle": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+                            "imageURL": "https://jordibruin.github.io/navi-support/images/howtoenablesubtitles/en/subtitles-03-en.jpg",
+                            "darkImageURL": "https://jordibruin.github.io/navi-support/images/howtoenablesubtitles/en/subtitles-03-en-dark.jpg"
+                        }]
+                    },
+                    {
+                        "id": 3,
+                        "title": "Highlighted items have detail pages",
+                        "subtitle": "",
+                        "imageName": "arrow.counterclockwise.icloud.fill",
+                        "emoji": "🗳",
+                        "color": 0,
+                        "supportPages": [{
+                            "id": 0,
+                            "title": "Page 1",
+                            "subtitle": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+                            "imageURL": "https://jordibruin.github.io/navi-support/images/howtoenablesubtitles/en/subtitles-03-en.jpg",
+                            "darkImageURL": "https://jordibruin.github.io/navi-support/images/howtoenablesubtitles/en/subtitles-03-en-dark.jpg"
+                        }]
+                    }
+                ]
+            }
+        ]
+}

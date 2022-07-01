@@ -1,0 +1,139 @@
+{
+    "faqSections": [
+        {
+            "id": 0,
+            "title": "Grouped FAQ",
+            "hasDetailPage": true,
+            "viewAllText": "View all",
+            "items": [
+                {
+                    "id": 5,
+                    "title": "Add questions with short answers directly on the page",
+                    "text": "Users can quickly toggle the answers they want to read."
+                },
+                {
+                    "id": 6,
+                    "title": "Local JSON or load it remotely",
+                    "text": "Fallback to a local JSON file in your project, or load localized support data from the web."
+                },
+                {
+                    "id": 7,
+                    "title": "How many questions can go on a page?",
+                    "text": "Fallback to a local JSON file in your project, or load localized support data from the web."
+                },
+                {
+                    "id": 8,
+                    "title": "Can I have multiple pages?",
+                    "text": "Fallback to a local JSON file in your project, or load localized support data from the web."
+                },
+                {
+                    "id": 9,
+                    "title": "How did you come up with the name 'Supporter'?",
+                    "text": "Fallback to a local JSON file in your project, or load localized support data from the web."
+                },
+                {
+                    "id": 10,
+                    "title": "What is the meaning of life?",
+                    "text": "Fallback to a local JSON file in your project, or load localized support data from the web."
+                },
+                {
+                    "id": 11,
+                    "title": "Are lifetime updates really included for Supporter?",
+                    "text": "Fallback to a local JSON file in your project, or load localized support data from the web."
+                },
+                {
+                    "id": 12,
+                    "title": "How many reviews is too many reviews?",
+                    "text": "Fallback to a local JSON file in your project, or load localized support data from the web."
+                },
+                {
+                    "id": 13,
+                    "title": "How many questions is too many questions?",
+                    "text": "Fallback to a local JSON file in your project, or load localized support data from the web."
+                },
+                {
+                    "id": 14,
+                    "title": "Where should I go on holiday this year?",
+                    "text": "Fallback to a local JSON file in your project, or load localized support data from the web."
+                },
+                {
+                    "id": 15,
+                    "title": "Do you know a good work location in Amsterdam?",
+                    "text": "Fallback to a local JSON file in your project, or load localized support data from the web."
+                },
+                {
+                    "id": 16,
+                    "title": "Should I go to bed?",
+                    "text": "Fallback to a local JSON file in your project, or load localized support data from the web."
+                }
+            ]
+        },
+        {
+            "id": 1,
+            "title": "Ungrouped FAQ",
+            "hasDetailPage": false,
+            "items": [
+                {
+                    "id": 5,
+                    "title": "Add questions with short answers directly on the page",
+                    "text": "Users can quickly toggle the answers they want to read."
+                },
+                {
+                    "id": 6,
+                    "title": "Local JSON or load it remotely",
+                    "text": "Fallback to a local JSON file in your project, or load localized support data from the web."
+                },
+                {
+                    "id": 7,
+                    "title": "How many questions can go on a page?",
+                    "text": "Fallback to a local JSON file in your project, or load localized support data from the web."
+                },
+                {
+                    "id": 8,
+                    "title": "Can I have multiple pages?",
+                    "text": "Fallback to a local JSON file in your project, or load localized support data from the web."
+                },
+                {
+                    "id": 9,
+                    "title": "How did you come up with the name 'Supporter'?",
+                    "text": "Fallback to a local JSON file in your project, or load localized support data from the web."
+                },
+                {
+                    "id": 10,
+                    "title": "What is the meaning of life?",
+                    "text": "Fallback to a local JSON file in your project, or load localized support data from the web."
+                },
+                {
+                    "id": 11,
+                    "title": "Are lifetime updates really included for Supporter?",
+                    "text": "Fallback to a local JSON file in your project, or load localized support data from the web."
+                },
+                {
+                    "id": 12,
+                    "title": "How many reviews is too many reviews?",
+                    "text": "Fallback to a local JSON file in your project, or load localized support data from the web."
+                },
+                {
+                    "id": 13,
+                    "title": "How many questions is too many questions?",
+                    "text": "Fallback to a local JSON file in your project, or load localized support data from the web."
+                },
+                {
+                    "id": 14,
+                    "title": "Where should I go on holiday this year?",
+                    "text": "Fallback to a local JSON file in your project, or load localized support data from the web."
+                },
+                {
+                    "id": 15,
+                    "title": "Do you know a good work location in Amsterdam?",
+                    "text": "Fallback to a local JSON file in your project, or load localized support data from the web."
+                },
+                {
+                    "id": 16,
+                    "title": "Should I go to bed?",
+                    "text": "Fallback to a local JSON file in your project, or load localized support data from the web."
+                }
+            ]
+        }
+    ]
+}
