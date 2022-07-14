@@ -34,7 +34,7 @@ struct DaysSinceItem: Identifiable, Codable {
     
     /// The emoji of the item.
     var emoji: String {
-        return category.emoji
+        return category.sfSymbolName
     }
     
     /// The ID of the repeating notification reminder.

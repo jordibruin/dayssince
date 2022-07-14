@@ -60,13 +60,13 @@ class NotificationManager: ObservableObject {
         content.sound = UNNotificationSound.default
         
         // For testing change the time interval for the trigger.
-        let timeInterval: Double = 40
+//        let timeInterval: Double = 60
         
         // For testing send trigger every 60 seconds.
-        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: timeInterval, repeats: false)
+//        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: timeInterval, repeats: true)
         
-        //        let dateComponents = getDateComponentsFor(item: item)
-        //         let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
+        let dateComponents = getDateComponentsFor(item: item)
+        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
         
         print("Our ID is \(item.reminderNotificationID)")
         let request = UNNotificationRequest(identifier: item.reminderNotificationID, content: content, trigger: trigger)

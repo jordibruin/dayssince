@@ -66,15 +66,23 @@ struct EditTappedItemSheet: View {
                     items[itemIndex].category = tappedItem.category
                     
                     items[itemIndex].remindersEnabled = tappedItem.remindersEnabled
+                    
+                    // IF reminders are disabled, remove all future notifications.
                     if !items[itemIndex].remindersEnabled {
                         notificationManager.deleteReminderFor(item: items[itemIndex])
-                    }
-                    
-                    if items[itemIndex].reminder != tappedItem.reminder {
+                    } else {
+                        // If the user changed the frequency update the trigger.
+//                        if items[itemIndex].reminder != tappedItem.reminder {
+//                            notificationManager.deleteReminderFor(item: items[itemIndex])
+//                            items[itemIndex].reminder = tappedItem.reminder
+//                            notificationManager.addReminderFor(item: items[itemIndex])
+//                        }   
                         notificationManager.deleteReminderFor(item: items[itemIndex])
                         items[itemIndex].reminder = tappedItem.reminder
                         notificationManager.addReminderFor(item: items[itemIndex])
                     }
+                    
+                    
                     editItemSheet = false
                     dismiss()
                 } label: {

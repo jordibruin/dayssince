@@ -71,10 +71,11 @@ struct MenuBlockView: View {
         .padding(12)
     }
     
+    @ViewBuilder
     var emoji: some View {
-        Image(category.emoji)
-            .resizable()
-            .frame(width: 32, height: 32)
+        Image(systemName: category.sfSymbolName)
+            .imageScale(.large)
+            .foregroundColor(.white)
     }
     
     var nameText: some View {

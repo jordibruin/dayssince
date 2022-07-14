@@ -21,7 +21,7 @@
       "size" : "29x29"
     },
     {
-      "filename" : "DaysSince_Icon-40@2x.png",
+      "filename" : "80.png",
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "40x40"
@@ -32,25 +32,22 @@
       "size" : "40x40"
     },
     {
-      "filename" : "DaysSince_Icon-60@2x.png",
+      "filename" : "120.png",
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "60x60"
     },
     {
-      "filename" : "DaysSince_Icon-60@3x.png",
       "idiom" : "iphone",
       "scale" : "3x",
       "size" : "60x60"
     },
     {
-      "filename" : "DaysSince_Icon-20.png",
       "idiom" : "ipad",
       "scale" : "1x",
       "size" : "20x20"
     },
     {
-      "filename" : "DaysSince_Icon-40.png",
       "idiom" : "ipad",
       "scale" : "2x",
       "size" : "20x20"
@@ -91,7 +88,7 @@
       "size" : "83.5x83.5"
     },
     {
-      "filename" : "DaysSince_Icon-1024.png",
+      "filename" : "appstore.png",
       "idiom" : "ios-marketing",
       "scale" : "1x",
       "size" : "1024x1024"

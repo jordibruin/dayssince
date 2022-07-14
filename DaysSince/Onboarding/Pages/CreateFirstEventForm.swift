@@ -1,19 +1,23 @@
 //
-//  AddItemForm.swift
+//  CreateFirstEventForm.swift
 //  DaysSince
 //
-//  Created by Vicki Minerva on 5/25/22.
+//  Created by Vicki Minerva on 7/14/22.
 //
 
 import SwiftUI
 
-struct AddItemForm: View {
+struct CreateFirstEventForm: View {
+    @Environment(\.dismiss) var dismiss
+    @EnvironmentObject var notificationManager: NotificationManager
     
     @Binding var items: [DaysSinceItem]
     @Binding var name: String
     @Binding var date: Date
     @Binding var category: CategoryDaysSinceItem?
     @Binding var remindersEnabled: Bool
+    @Binding var hasSeenOnboarding: Bool
+    @Binding var selectedCategory: CategoryDaysSinceItem?
     
     let reminders = ["Daily", "Weekly", "Monthly"]
     
@@ -31,7 +35,7 @@ struct AddItemForm: View {
             dateSection
             newCategorySection
             reminderSection
-            
+            saveButtonSection
         }
         .onAppear {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
@@ -104,12 +108,54 @@ struct AddItemForm: View {
             Text("Category")
         }
     }
+    
+    var saveButtonSection: some View {
+        Section {
+            Button {
+                // Finish onboarding
+                print("Set onboarding to true")
+                
+                let generator = UIImpactFeedbackGenerator(style: .medium)
+                generator.impactOccurred()
+                
+                hasSeenOnboarding = true
+                
+                // Add new item.
+                let newItem = DaysSinceItem(
+                    name: name,
+                    category: selectedCategory ?? .life,
+                    dateLastDone: date,
+                    remindersEnabled: remindersEnabled
+                )
+                
+                items.append(newItem)
+                    
+                if newItem.remindersEnabled {
+                    notificationManager.addReminderFor(item: newItem)
+                }
+                
+                
+                print("➕ Added item. Now there are \(items.count) items!")
+                
+                if let itemAdded = items.last {
+                }
+                
+                dismiss()
+            } label: {
+                HStack {
+                    Spacer()
+                    Label("Create First Event", systemImage: "plus")
+                        .foregroundColor(Color.red)
+                    Spacer()
+                }
+            }
+            .buttonStyle(BorderlessButtonStyle())
+        }
+    }
 }
 
-//struct AddItemForm_Previews: PreviewProvider {
+//struct CreateFirstEventForm_Previews: PreviewProvider {
 //    static var previews: some View {
-//        AddItemForm(items: .constant([]), name: .cont, date: <#T##Binding<Date>#>, category: <#T##Binding<CategoryDaysSinceItem?>#>, getReminders: <#T##Binding<Bool>#>, selectedReminder: <#T##Binding<DSItemReminders>#>, nameIsFocused: <#T##FocusState<Bool>.Binding#>
-////        AddItemForm(items: .constant([]), name: .constant(""), date: .constant(Date.now), category: .constant(CategoryDaysSinceItem.work), getReminders: .constant(true), selectedReminder: .constant("Daily"))
+//        CreateFirstEventForm()
 //    }
 //}
-

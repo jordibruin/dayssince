@@ -22,6 +22,11 @@
 		7A65AB00286CF818002D6DCA /* ShareButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A65AAFF286CF818002D6DCA /* ShareButton.swift */; };
 		7A65AB02286CFC53002D6DCA /* SupportButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A65AB01286CFC53002D6DCA /* SupportButton.swift */; };
 		7A67C6E0280061FA0095675F /* Color+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A67C6DF280061FA0095675F /* Color+Extensions.swift */; };
+		7A7CD90C287F20F70001C64F /* OnboardingScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A7CD90B287F20F70001C64F /* OnboardingScreen.swift */; };
+		7A7CD90F287F21890001C64F /* Introduction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A7CD90E287F21890001C64F /* Introduction.swift */; };
+		7A7CD911287F22E90001C64F /* AnimateText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A7CD910287F22E90001C64F /* AnimateText.swift */; };
+		7A7CD913287F2E760001C64F /* CreateFirstEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A7CD912287F2E760001C64F /* CreateFirstEvent.swift */; };
+		7A7CD91528803A010001C64F /* CreateFirstEventForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A7CD91428803A000001C64F /* CreateFirstEventForm.swift */; };
 		7AAB507227FF84210086A5A8 /* EventListItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AAB507127FF84210086A5A8 /* EventListItemView.swift */; };
 		7AAB507727FF86CC0086A5A8 /* Defaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AAB507627FF86CC0086A5A8 /* Defaults.swift */; };
 		7AB598372804830300A1BD3A /* CategorySelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB598362804830300A1BD3A /* CategorySelectionView.swift */; };
@@ -167,6 +172,11 @@
 		7A65AAFF286CF818002D6DCA /* ShareButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareButton.swift; sourceTree = "<group>"; };
 		7A65AB01286CFC53002D6DCA /* SupportButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportButton.swift; sourceTree = "<group>"; };
 		7A67C6DF280061FA0095675F /* Color+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Extensions.swift"; sourceTree = "<group>"; };
+		7A7CD90B287F20F70001C64F /* OnboardingScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingScreen.swift; sourceTree = "<group>"; };
+		7A7CD90E287F21890001C64F /* Introduction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Introduction.swift; sourceTree = "<group>"; };
+		7A7CD910287F22E90001C64F /* AnimateText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimateText.swift; sourceTree = "<group>"; };
+		7A7CD912287F2E760001C64F /* CreateFirstEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateFirstEvent.swift; sourceTree = "<group>"; };
+		7A7CD91428803A000001C64F /* CreateFirstEventForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateFirstEventForm.swift; sourceTree = "<group>"; };
 		7AAB507127FF84210086A5A8 /* EventListItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventListItemView.swift; sourceTree = "<group>"; };
 		7AAB507327FF860C0086A5A8 /* Defaults */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Defaults; path = "../../../../../Library/Developer/Xcode/DerivedData/Posture_Pal-baxwxadtvwjgulhdvdslumckelkv/SourcePackages/checkouts/Defaults"; sourceTree = "<group>"; };
 		7AAB507627FF86CC0086A5A8 /* Defaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Defaults.swift; sourceTree = "<group>"; };
@@ -362,9 +372,30 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
+		7A7CD90A287F20E20001C64F /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				7A7CD90B287F20F70001C64F /* OnboardingScreen.swift */,
+				7A7CD90D287F21750001C64F /* Pages */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		7A7CD90D287F21750001C64F /* Pages */ = {
+			isa = PBXGroup;
+			children = (
+				7A7CD90E287F21890001C64F /* Introduction.swift */,
+				7A7CD910287F22E90001C64F /* AnimateText.swift */,
+				7A7CD912287F2E760001C64F /* CreateFirstEvent.swift */,
+				7A7CD91428803A000001C64F /* CreateFirstEventForm.swift */,
+			);
+			path = Pages;
+			sourceTree = "<group>";
+		};
 		7AAB507027FF83CC0086A5A8 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				7A7CD90A287F20E20001C64F /* Onboarding */,
 				7AF56A99286F32CD0068B467 /* Supporter */,
 				7AE8E363286C944500538521 /* AppIcons */,
 				7AE8E360286C91EB00538521 /* Settings */,
@@ -854,6 +885,7 @@
 				7A2A76F427F2446E006F0470 /* DaysSinceApp.swift in Sources */,
 				7AF56AD7286F32CD0068B467 /* HooliganVideoPlayerController.swift in Sources */,
 				7A65AAFE286CF5FD002D6DCA /* SettingsReviewButton.swift in Sources */,
+				7A7CD90F287F21890001C64F /* Introduction.swift in Sources */,
 				7AE2946727F4B0AF006A7E01 /* Calendar+Extensions.swift in Sources */,
 				7AF56AEF286F32CD0068B467 /* SupportLocale.swift in Sources */,
 				7AF56ADE286F32CD0068B467 /* SupportScreen.swift in Sources */,
@@ -863,9 +895,11 @@
 				7AF56AE8286F32CD0068B467 /* SupportItems.swift in Sources */,
 				7AF56AFF286F32CD0068B467 /* SupportHeaderSection.swift in Sources */,
 				7AF56AD8286F32CD0068B467 /* Deeplink.swift in Sources */,
+				7A7CD911287F22E90001C64F /* AnimateText.swift in Sources */,
 				7AF56AE4286F32CD0068B467 /* SupportFetcher.swift in Sources */,
 				C2B53D982869CACA00407F40 /* SortingMenuView.swift in Sources */,
 				C2B53D942869CACA00407F40 /* CompletedItemsList.swift in Sources */,
+				7A7CD90C287F20F70001C64F /* OnboardingScreen.swift in Sources */,
 				C2B53D922869CACA00407F40 /* IndividualItemView.swift in Sources */,
 				7AF56AF8286F32CD0068B467 /* HighlightedItemView.swift in Sources */,
 				7A1C7AE327F4BA23004EE78E /* DaysSinceItem.swift in Sources */,
@@ -884,11 +918,13 @@
 				7AF56AF0286F32CD0068B467 /* SupportItemPage.swift in Sources */,
 				7AAB507227FF84210086A5A8 /* EventListItemView.swift in Sources */,
 				7A21765927FB2E3E006B106B /* EditTappedItemSheet.swift in Sources */,
+				7A7CD91528803A010001C64F /* CreateFirstEventForm.swift in Sources */,
 				7AF56AE2286F32CD0068B467 /* BackPortedAsyncImage.swift in Sources */,
 				7AE8E362286C921200538521 /* SettingsScreen.swift in Sources */,
 				7AF56AF1286F32CD0068B467 /* SupportColor.swift in Sources */,
 				7AF56AE9286F32CD0068B467 /* SupportContactItem.swift in Sources */,
 				7AF56AF7286F32CD0068B467 /* SupportHighlightedSection.swift in Sources */,
+				7A7CD913287F2E760001C64F /* CreateFirstEvent.swift in Sources */,
 				C2B53D7A2869CA3B00407F40 /* AddItemForm.swift in Sources */,
 				C2B53D7E2869CA8300407F40 /* CategoryRectangleView.swift in Sources */,
 				7A21765D27FB544D006B106B /* RootView.swift in Sources */,

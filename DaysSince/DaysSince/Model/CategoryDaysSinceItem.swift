@@ -83,13 +83,13 @@ enum CategoryDaysSinceItem: Codable, Identifiable, Equatable, CaseIterable, Hash
     var sfSymbolName: String {
         switch self {
         case .work:
-            return "heart.fill"
+            return "lightbulb"
         case .life:
-            return "heart.fill"
+            return "leaf"
         case .health:
-            return "heart.fill"
+            return "heart.text.square"
         case .hobbies:
-            return "heart.fill"
+            return "gamecontroller"
         case .none:
             return ""
         }
