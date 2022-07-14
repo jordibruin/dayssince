@@ -42,17 +42,6 @@ struct Introduction: View {
                 
                 
                 LinearGradient(colors: [colors[currentIndex].opacity(0.1), colors[currentIndex].opacity(0.6)], startPoint: .top, endPoint: .bottom)
-//                ForEach(0...2, id: \.self) { index in
-//
-////                    withAnimation(.easeInOut(duration: 1)) {
-//                        LinearGradient(colors: [colors[index].opacity(currentIndex == (index) ? 0.1 : 0), colors[index].opacity(currentIndex == (index) ? 0.5 : 0)], startPoint: .top, endPoint: .bottom)
-//                        .animation(.easeIn)
-////                    }
-//
-//
-//                }
-                
-//                LinearGradient(colors: [.clear, Color.workColor.opacity(0.5)], startPoint: .top, endPoint: .bottom)
             }
             .ignoresSafeArea()
             
@@ -70,7 +59,7 @@ struct Introduction: View {
                 
                 Text(subTitles[currentIndex])
                     .opacity(0.7)
-                    .offset(y: !subTitleAnimation ? 80 : 0)
+                    .offset(y: !subTitleAnimation ? 64 : 0)
                     .offset(y: endAnimation ? -100 : 0)
                     .opacity(endAnimation ? 0 :1)
                 

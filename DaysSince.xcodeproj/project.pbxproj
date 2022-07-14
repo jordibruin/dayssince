@@ -26,7 +26,6 @@
 		7A7CD90F287F21890001C64F /* Introduction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A7CD90E287F21890001C64F /* Introduction.swift */; };
 		7A7CD911287F22E90001C64F /* AnimateText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A7CD910287F22E90001C64F /* AnimateText.swift */; };
 		7A7CD913287F2E760001C64F /* CreateFirstEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A7CD912287F2E760001C64F /* CreateFirstEvent.swift */; };
-		7A7CD91528803A010001C64F /* CreateFirstEventForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A7CD91428803A000001C64F /* CreateFirstEventForm.swift */; };
 		7AAB507227FF84210086A5A8 /* EventListItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AAB507127FF84210086A5A8 /* EventListItemView.swift */; };
 		7AAB507727FF86CC0086A5A8 /* Defaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AAB507627FF86CC0086A5A8 /* Defaults.swift */; };
 		7AB598372804830300A1BD3A /* CategorySelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB598362804830300A1BD3A /* CategorySelectionView.swift */; };
@@ -176,7 +175,6 @@
 		7A7CD90E287F21890001C64F /* Introduction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Introduction.swift; sourceTree = "<group>"; };
 		7A7CD910287F22E90001C64F /* AnimateText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimateText.swift; sourceTree = "<group>"; };
 		7A7CD912287F2E760001C64F /* CreateFirstEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateFirstEvent.swift; sourceTree = "<group>"; };
-		7A7CD91428803A000001C64F /* CreateFirstEventForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateFirstEventForm.swift; sourceTree = "<group>"; };
 		7AAB507127FF84210086A5A8 /* EventListItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventListItemView.swift; sourceTree = "<group>"; };
 		7AAB507327FF860C0086A5A8 /* Defaults */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Defaults; path = "../../../../../Library/Developer/Xcode/DerivedData/Posture_Pal-baxwxadtvwjgulhdvdslumckelkv/SourcePackages/checkouts/Defaults"; sourceTree = "<group>"; };
 		7AAB507627FF86CC0086A5A8 /* Defaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Defaults.swift; sourceTree = "<group>"; };
@@ -387,7 +385,6 @@
 				7A7CD90E287F21890001C64F /* Introduction.swift */,
 				7A7CD910287F22E90001C64F /* AnimateText.swift */,
 				7A7CD912287F2E760001C64F /* CreateFirstEvent.swift */,
-				7A7CD91428803A000001C64F /* CreateFirstEventForm.swift */,
 			);
 			path = Pages;
 			sourceTree = "<group>";
@@ -918,7 +915,6 @@
 				7AF56AF0286F32CD0068B467 /* SupportItemPage.swift in Sources */,
 				7AAB507227FF84210086A5A8 /* EventListItemView.swift in Sources */,
 				7A21765927FB2E3E006B106B /* EditTappedItemSheet.swift in Sources */,
-				7A7CD91528803A010001C64F /* CreateFirstEventForm.swift in Sources */,
 				7AF56AE2286F32CD0068B467 /* BackPortedAsyncImage.swift in Sources */,
 				7AE8E362286C921200538521 /* SettingsScreen.swift in Sources */,
 				7AF56AF1286F32CD0068B467 /* SupportColor.swift in Sources */,
