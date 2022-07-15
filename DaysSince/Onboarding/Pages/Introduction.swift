@@ -74,11 +74,11 @@ struct Introduction: View {
         .onChange(of: currentIndex) { newValue in
             getSpilitedText(text: titles[currentIndex]) {
                 
-                withAnimation(.easeInOut(duration: 1.3)) {
+                withAnimation(.easeInOut(duration: 1.8)) {
                     endAnimation.toggle()
                 }
                 
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.9) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.4) {
                     titleText.removeAll()
                     subTitleAnimation.toggle()
                     endAnimation.toggle()
