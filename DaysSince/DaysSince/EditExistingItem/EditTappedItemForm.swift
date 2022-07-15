@@ -112,9 +112,8 @@ struct EditTappedItemForm: View {
                     tappedItem.category = category
                 } label: {
                     HStack {
-                        Image(category.emoji)
-                            .resizable()
-                            .frame(width: 32, height: 32)
+                        Image(systemName: category.sfSymbolName)
+                            .foregroundColor(tappedItem.category == category ? tappedItem.category.color : .black)
                         
                         Text(category.name)
                         Spacer()

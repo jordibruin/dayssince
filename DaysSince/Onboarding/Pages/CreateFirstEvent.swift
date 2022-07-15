@@ -90,9 +90,8 @@ struct CreateFirstEvent: View {
                     selectedCategory = category
                 } label: {
                     HStack {
-                        Image(category.emoji)
-                            .resizable()
-                            .frame(width: 32, height: 32)
+                        Image(systemName: category.sfSymbolName)
+                            .foregroundColor(selectedCategory == category ? selectedCategory!.color : .black)
                         
                         Text(category.name)
                         Spacer()
