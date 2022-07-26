@@ -9,14 +9,18 @@ import SwiftUI
 
 
 struct ContentView: View {
-    
+    @AppStorage("hasSeenOnboarding") var hasSeenOnboarding: Bool = false
     
     @AppStorage("items", store: UserDefaults(suiteName: "group.goodsnooze.dayssince")) var items: [DaysSinceItem] = []
     @AppStorage("completedItems") var completedItems = [DaysSinceItem]()
     @AppStorage("favoriteItems") var favoriteItems = [DaysSinceItem]()
     
     var body: some View {
-        MainScreen(items: $items, completedItems: $completedItems, favoriteItems: $favoriteItems)
+        if hasSeenOnboarding {
+            MainScreen(items: $items, completedItems: $completedItems, favoriteItems: $favoriteItems)
+        } else {
+            OnboardingScreen(hasSeenOnboarding: $hasSeenOnboarding, items: $items)
+        }
     }
 }
 

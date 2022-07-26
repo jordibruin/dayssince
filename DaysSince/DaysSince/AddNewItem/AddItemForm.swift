@@ -31,6 +31,7 @@ struct AddItemForm: View {
             dateSection
             newCategorySection
             reminderSection
+            
         }
         .onAppear {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
@@ -83,9 +84,8 @@ struct AddItemForm: View {
                     self.category = category
                 } label: {
                     HStack {
-                        Image(category.emoji)
-                            .resizable()
-                            .frame(width: 32, height: 32)
+                        Image(systemName: category.sfSymbolName)
+                            .foregroundColor(self.category == category ? self.category!.color : .black)
                         
                         Text(category.name)
                         Spacer()

@@ -25,7 +25,7 @@
       "size" : "29x29"
     },
     {
-      "filename" : "spotlight80.png",
+      "filename" : "80.png",
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "40x40"
@@ -37,7 +37,7 @@
       "size" : "40x40"
     },
     {
-      "filename" : "iphone120.png",
+      "filename" : "120.png",
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "60x60"
@@ -85,13 +85,13 @@
       "size" : "40x40"
     },
     {
-      "filename" : "ipad76.png",
+      "filename" : "76.png",
       "idiom" : "ipad",
       "scale" : "1x",
       "size" : "76x76"
     },
     {
-      "filename" : "ipad152.png",
+      "filename" : "152.png",
       "idiom" : "ipad",
       "scale" : "2x",
       "size" : "76x76"
@@ -103,7 +103,7 @@
       "size" : "83.5x83.5"
     },
     {
-      "filename" : "appstore1024.png",
+      "filename" : "appstore.png",
       "idiom" : "ios-marketing",
       "scale" : "1x",
       "size" : "1024x1024"
