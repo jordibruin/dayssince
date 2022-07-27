@@ -7,31 +7,74 @@
 
 import SwiftUI
 
+enum SortType: String, CaseIterable, Identifiable {
+    
+    case alphabeticallyAscending
+    case alphabeticallyDescending
+    case daysAscending
+    case daysDescending
+    case category
+    case created
+    
+    var id: String { self.rawValue }
+    
+    var name: String {
+        switch self {
+        case .alphabeticallyAscending:
+            return "Alphabetical (A-Z)"
+        case .alphabeticallyDescending:
+            return "Alphabetical (Z-A)"
+        case .daysAscending:
+            return "Days (Old-New)"
+        case .daysDescending:
+            return "Days (New-Old)"
+        case .category:
+            return "Category"
+        case .created:
+            return "Created"
+        }
+    }
+        
+    func sort(itemOne: DaysSinceItem, itemTwo: DaysSinceItem) -> Bool {
+        switch self {
+        case .alphabeticallyAscending:
+            return itemOne.name < itemTwo.name
+        case .alphabeticallyDescending:
+            return itemOne.name < itemTwo.name
+        case .daysAscending:
+            return itemOne.daysAgo < itemTwo.daysAgo
+        case .daysDescending:
+            return itemOne.daysAgo > itemTwo.daysAgo
+        case .category:
+            return itemOne.category.name > itemTwo.category.name
+        case .created:
+            return true
+        }
+    }
+
+}
+
+
 struct SortingMenuView: View {
     @Binding var items: [DaysSinceItem]
     @State var sortType = "none"
     @State var descending = true
     @State var image = "arrow.down"
+    
+    @AppStorage("selectedSortType") var selectedSortType: SortType = .daysAscending
+    
     var body: some View {
-        
         Menu {
-            Button (action: sortAlphabetically){
-                if sortType == "az" {
-                    Image(systemName: image)
+            ForEach(SortType.allCases) { type in
+                Button {
+                    selectedSortType = type
+                } label: {
+                    Label(
+                        type.name,
+                        systemImage:
+                            type == selectedSortType ? "checkmark.circle.fill" : ""
+                    )
                 }
-                Text("Name")
-            }
-            Button (action: sortByDays){
-                if sortType == "days" {
-                    Image(systemName: image)
-                }
-                Text("Days Ago")
-            }
-            Button (action: sortByColor){
-                if sortType == "color" {
-                    Image(systemName: image)
-                }
-                Text("Category")
             }
         } label: {
             Image(systemName: "arrow.up.arrow.down.circle.fill")
@@ -40,73 +83,6 @@ struct SortingMenuView: View {
         }
         .foregroundColor(.primary)
         .accessibilityLabel("Sorting Menu")
-    }
-    
-    
-    func sortByDays () {
-        
-        if sortType == "days" {
-            descending.toggle()
-        } else {
-            descending = true
-        }
-        if descending {
-            items.sort{
-                $0.daysAgo > $1.daysAgo
-            }
-            sortType = "days"
-            image = "arrow.down"
-        } else {
-            items.sort{
-                $0.daysAgo < $1.daysAgo
-            }
-            sortType = "days"
-            image = "arrow.up"
-        }
-    }
-    
-    func sortAlphabetically() {
-        
-        if sortType == "az" {
-            descending.toggle()
-        } else {
-            descending = false
-        }
-        if descending {
-            items.sort{
-                $0.name > $1.name
-            }
-            sortType = "az"
-            image = "arrow.down"
-        } else {
-            items.sort{
-                $0.name < $1.name
-            }
-            sortType = "az"
-            image = "arrow.up"
-        }
-    }
-    
-    func sortByColor() {
-        
-        if sortType == "color" {
-            descending.toggle()
-        } else {
-            descending = false
-        }
-        if descending {
-            items.sort{
-                $0.category.name > $1.category.name
-            }
-            sortType = "color"
-            image = "arrow.down"
-        } else {
-            items.sort{
-                $0.category.name < $1.category.name
-            }
-            sortType = "color"
-            image = "arrow.up"
-        }
     }
 }
 

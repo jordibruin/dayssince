@@ -12,7 +12,7 @@ import UserNotifications
 
 struct DaysSinceItem: Identifiable, Codable {
     
-    let id: UUID = UUID()
+    let id: UUID
     
     /// The name of the item.
     var name: String
@@ -53,7 +53,7 @@ struct DaysSinceItem: Identifiable, Codable {
     }
     
     static func placeholderItem() -> DaysSinceItem {
-        return DaysSinceItem(name: "Placeholder", category: CategoryDaysSinceItem.hobbies, dateLastDone: Date.now, remindersEnabled: false)
+        return DaysSinceItem(id: UUID(), name: "Placeholder", category: CategoryDaysSinceItem.hobbies, dateLastDone: Date.now, remindersEnabled: false)
     }
     
     

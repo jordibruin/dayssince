@@ -56,6 +56,7 @@ struct AddItemSheet: View {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
                     let newItem = DaysSinceItem(
+                        id: UUID(),
                         name: name,
                         category: selectedCategory ?? .life,
                         dateLastDone: date,

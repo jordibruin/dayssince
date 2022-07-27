@@ -11,7 +11,6 @@ struct IndividualItemView: View {
     
     @Environment(\.colorScheme) var colorScheme
     
-    
     @Binding var editItemSheet: Bool
     @Binding var tappedItem: DaysSinceItem
     
@@ -43,6 +42,13 @@ struct IndividualItemView: View {
                     lineWidth: 3
                 )
         )
+//        .contextMenu {
+//            Button {
+//                
+//            } label: {
+//                Text("Delete")
+//            }
+//        }
         .padding(.horizontal)
         .shadow(color: Color.black.opacity(0.05), radius: 20, x: 0, y: 0)
         .onTapGesture {
