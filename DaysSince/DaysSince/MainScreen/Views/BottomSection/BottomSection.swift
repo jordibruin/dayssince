@@ -8,12 +8,14 @@
 import SwiftUI
 
 struct BottomSection: View {
+    
     @Binding var items: [DaysSinceItem]
     @Binding var completedItems: [DaysSinceItem]
     @Binding var favoriteItems: [DaysSinceItem]
     
     @Binding var editItemSheet: Bool
     @Binding var tappedItem: DaysSinceItem
+    @Binding var isDaysDisplayModeDetailed: Bool
     
     
     var body: some View {
@@ -21,10 +23,9 @@ struct BottomSection: View {
         NormalItemsList(
             items: $items,
             editItemSheet: $editItemSheet,
-            tappedItem: $tappedItem
+            tappedItem: $tappedItem,
+            isDaysDisplayModeDetailed: $isDaysDisplayModeDetailed
         )
-        
-        CompletedItemsList(completedItems: $completedItems)
         
         // Add some space after the items for the button.
         Color(.clear)
@@ -33,8 +34,8 @@ struct BottomSection: View {
     }
 }
 
-//struct BottomSection_Previews: PreviewProvider {
-//    static var previews: some View {
-//        BottomSection(items: .constant([.placeholderItem()]), completedItems: .constant([.placeholderItem()]), favoriteItems: .constant([.placeholderItem()]), editItemSheet: .constant(false), tappedItem: .constant(DaysSinceItem.placeholderItem()))
-//    }
-//}
+struct BottomSection_Previews: PreviewProvider {
+    static var previews: some View {
+        BottomSection(items: .constant([.placeholderItem()]), completedItems: .constant([.placeholderItem()]), favoriteItems: .constant([.placeholderItem()]), editItemSheet: .constant(false), tappedItem: .constant(DaysSinceItem.placeholderItem()), isDaysDisplayModeDetailed: .constant(false))
+    }
+}

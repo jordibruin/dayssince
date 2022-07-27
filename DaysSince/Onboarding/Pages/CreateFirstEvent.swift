@@ -91,7 +91,8 @@ struct CreateFirstEvent: View {
                 } label: {
                     HStack {
                         Image(systemName: category.sfSymbolName)
-                            .foregroundColor(selectedCategory == category ? selectedCategory!.color : .black)
+                            .foregroundColor(selectedCategory == category ? selectedCategory!.color : .primary)
+                            .frame(width: 40)
                         
                         Text(category.name)
                         Spacer()
@@ -145,7 +146,7 @@ struct CreateFirstEvent: View {
             } label: {
                 HStack {
                     Spacer()
-                    Label("Add Event", systemImage: "plus")
+                    Label("Save Event", systemImage: "note.text.badge.plus")
                         .foregroundColor(self.selectedCategory != nil ? self.selectedCategory!.color : .primary)
                         .disabled(name.isEmpty)
                     Spacer()
@@ -161,5 +162,6 @@ struct CreateFirstEvent: View {
 struct CreateFirstEvent_Previews: PreviewProvider {
     static var previews: some View {
         CreateFirstEvent(hasSeenOnboarding: .constant(false), selectedPage: .constant(1), items: .constant([]))
+            .preferredColorScheme(.light)
     }
 }

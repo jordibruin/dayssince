@@ -13,6 +13,7 @@ struct FavoriteItemsList: View {
     @Binding var favoriteItems: [DaysSinceItem]
     @Binding var editItemSheet: Bool
     @Binding var tappedItem: DaysSinceItem
+    @Binding var isDaysDisplayModeDetailed: Bool
     
     var isCategoryView: Bool = false
     
@@ -26,6 +27,7 @@ struct FavoriteItemsList: View {
                     IndividualItemView(
                         editItemSheet: $editItemSheet,
                         tappedItem: $tappedItem,
+                        isDaysDisplayModeDetailed: $isDaysDisplayModeDetailed,
                         item: item,
                         colored: true,
                         isFavorite: false
@@ -37,6 +39,7 @@ struct FavoriteItemsList: View {
                 IndividualItemView(
                     editItemSheet: $editItemSheet,
                     tappedItem: $tappedItem,
+                    isDaysDisplayModeDetailed: $isDaysDisplayModeDetailed,
                     item: item,
                     colored: false,
                     isFavorite: true
@@ -48,6 +51,6 @@ struct FavoriteItemsList: View {
 
 struct FavoriteItemsList_Previews: PreviewProvider {
     static var previews: some View {
-        FavoriteItemsList(favoriteItems: .constant([]), editItemSheet: .constant(false), tappedItem: .constant(DaysSinceItem.placeholderItem()))
+        FavoriteItemsList(favoriteItems: .constant([]), editItemSheet: .constant(false), tappedItem: .constant(DaysSinceItem.placeholderItem()), isDaysDisplayModeDetailed: .constant(false))
     }
 }

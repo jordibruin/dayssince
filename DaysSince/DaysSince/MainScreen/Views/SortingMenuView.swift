@@ -8,10 +8,17 @@
 import SwiftUI
 
 struct SortingMenuView: View {
+    
+    @Environment(\.colorScheme) var colorScheme
+    
+    
     @Binding var items: [DaysSinceItem]
+    
     @State var sortType = "none"
     @State var descending = true
     @State var image = "arrow.down"
+    
+    
     var body: some View {
         
         Menu {
@@ -37,6 +44,7 @@ struct SortingMenuView: View {
             Image(systemName: "arrow.up.arrow.down.circle.fill")
                 .imageScale(.large)
                 .font(.title2)
+                .foregroundColor(colorScheme == .dark ? .primary : .workColor.opacity(0.8))
         }
         .foregroundColor(.primary)
         .accessibilityLabel("Sorting Menu")

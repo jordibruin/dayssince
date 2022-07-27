@@ -14,6 +14,13 @@ class NotificationManager: ObservableObject {
     
     @Published var pendingNotifications: [UNNotificationRequest] = []
     
+    
+    init() {
+        // refresh notifications
+    }
+    
+    
+    
     func getPendingNotification() {
         center.getPendingNotificationRequests { requests in
             
@@ -102,12 +109,12 @@ class NotificationManager: ObservableObject {
             dateComponents.hour = 10
             dateComponents.minute = 0
         } else if item.reminder == .weekly {
-            dateComponents.weekday = 1
+            dateComponents.weekday = Calendar.current.dateComponents([.day], from: item.dateLastDone).weekday
             dateComponents.hour = 10
             dateComponents.second = 0
         } else if item.reminder == .monthly {
-            dateComponents.day = 1
-            dateComponents.weekday = 1
+            dateComponents.day = Calendar.current.dateComponents([.day], from: item.dateLastDone).day
+            dateComponents.weekday = Calendar.current.dateComponents([.day], from: item.dateLastDone).weekday
             dateComponents.hour = 10
             dateComponents.minute = 0
         }

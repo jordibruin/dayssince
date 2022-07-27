@@ -19,6 +19,7 @@ struct MainScreen: View {
     @Binding var items: [DaysSinceItem]
     @Binding var completedItems: [DaysSinceItem]
     @Binding var favoriteItems: [DaysSinceItem]
+    @Binding var isDaysDisplayModeDetailed: Bool
     
     @EnvironmentObject var notificationManager: NotificationManager
     
@@ -31,9 +32,10 @@ struct MainScreen: View {
                     TopSection(
                         items: $items,
                         completedItems: $completedItems,
-                        favoriteItems: $favoriteItems
+                        favoriteItems: $favoriteItems,
+                        isDaysDisplayModeDetailed: $isDaysDisplayModeDetailed
                     )
-                    .padding(.bottom, 16)
+                    .padding([.top, .bottom], 16)
                     
 //                     Code to test notifications. 
 //                    VStack(alignment: .leading) {
@@ -68,7 +70,8 @@ struct MainScreen: View {
                         completedItems: $completedItems,
                         favoriteItems: $favoriteItems,
                         editItemSheet: $editItemSheet,
-                        tappedItem: $tappedItem
+                        tappedItem: $tappedItem,
+                        isDaysDisplayModeDetailed: $isDaysDisplayModeDetailed
                     )
                 }
                 .sheet(isPresented: $editItemSheet) {
@@ -97,7 +100,7 @@ struct MainScreen: View {
             AddItemSheet(selectedCategory: nil, remindersEnabled: false, items: $items)
         }
         .sheet(isPresented: $showSettings) {
-            SettingsScreen()
+            SettingsScreen(isDaysDisplayModeDetailed: $isDaysDisplayModeDetailed)
         }
         
     }
@@ -109,7 +112,7 @@ struct MainScreen: View {
                     showSettings = true
                 } label: {
                     Image(systemName: "gearshape.fill")
-                        .foregroundColor(.primary)
+                        .foregroundColor(colorScheme == .dark ? .primary : .workColor.opacity(0.8))
                         .imageScale(.large)
                         .accessibilityLabel("Settings")
                         .font(.title2)
@@ -145,12 +148,13 @@ struct MainScreen: View {
             .shadow(color: Color.workColor, radius: 10, x: 0, y: 5)
         }
         .buttonStyle(PlainButtonStyle())
+        .padding(.bottom, 16)
     }
 }
 
 struct MainScreen_Previews: PreviewProvider {
     static var previews: some View {
-        MainScreen(items: .constant([.placeholderItem()]), completedItems: .constant([]), favoriteItems: .constant([]))
-            .preferredColorScheme(.dark)
+        MainScreen(items: .constant([.placeholderItem()]), completedItems: .constant([]), favoriteItems: .constant([]), isDaysDisplayModeDetailed: .constant(false))
+            .preferredColorScheme(.light)
     }
 }

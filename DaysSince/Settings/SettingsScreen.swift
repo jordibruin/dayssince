@@ -11,6 +11,7 @@ struct SettingsScreen: View {
     
     @Environment(\.dismiss) var dismiss
     
+    @Binding var isDaysDisplayModeDetailed: Bool
     
     
     var body: some View {
@@ -19,6 +20,8 @@ struct SettingsScreen: View {
 //                daysSinceProSection
 //                appIconsSection
                 
+                DetailedTimeDisplayModeCell(isDaysDisplayModeDetailed: $isDaysDisplayModeDetailed)
+                    
                 Section {
                     SettingsReviewButton()
                     ShareButton()
@@ -127,6 +130,6 @@ struct SettingsScreen: View {
 
 struct SettingsScreen_Previews: PreviewProvider {
     static var previews: some View {
-        SettingsScreen()
+        SettingsScreen(isDaysDisplayModeDetailed: .constant(false))
     }
 }

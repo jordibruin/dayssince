@@ -12,6 +12,7 @@ struct NormalItemsList: View {
     @Binding var items: [DaysSinceItem]
     @Binding var editItemSheet: Bool
     @Binding var tappedItem: DaysSinceItem
+    @Binding var isDaysDisplayModeDetailed: Bool
     
     var isCategoryView: Bool = false
     var category: CategoryDaysSinceItem = .work
@@ -30,6 +31,7 @@ struct NormalItemsList: View {
             IndividualItemView(
                 editItemSheet: $editItemSheet,
                 tappedItem: $tappedItem,
+                isDaysDisplayModeDetailed: $isDaysDisplayModeDetailed,
                 item: item,
                 colored: true,
                 isFavorite: false
@@ -42,6 +44,7 @@ struct NormalItemsList: View {
             IndividualItemView(
                 editItemSheet: $editItemSheet,
                 tappedItem: $tappedItem,
+                isDaysDisplayModeDetailed: $isDaysDisplayModeDetailed,
                 item: item,
                 colored: false,
                 isFavorite: false
@@ -52,6 +55,6 @@ struct NormalItemsList: View {
 
 struct NormalItemsList_Previews: PreviewProvider {
     static var previews: some View {
-        NormalItemsList(items: .constant([]), editItemSheet: .constant(false), tappedItem: .constant( .placeholderItem()))
+        NormalItemsList(items: .constant([]), editItemSheet: .constant(false), tappedItem: .constant( .placeholderItem()), isDaysDisplayModeDetailed: .constant(false))
     }
 }

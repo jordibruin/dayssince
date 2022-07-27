@@ -13,11 +13,26 @@ struct TopSection: View {
     @Binding var completedItems: [DaysSinceItem]
     @Binding var favoriteItems: [DaysSinceItem]
     
+    @Binding var isDaysDisplayModeDetailed: Bool
+    
     var body: some View {
         HStack {
             VStack {
-                NavigationLink(destination: CategoryFilteredView(category: CategoryDaysSinceItem.work, showAddItemSheet: false, editItemSheet: false, items: $items, completedItems: $completedItems, favoriteItems: $favoriteItems))
-                {MenuBlockView(category: .work, items: $items, completedItems: $completedItems, favoriteItems: $favoriteItems)}
+                NavigationLink(
+                    destination: CategoryFilteredView(
+                        category: CategoryDaysSinceItem.work,
+                        showAddItemSheet: false,
+                        editItemSheet: false,
+                        items: $items,
+                        completedItems: $completedItems,
+                        favoriteItems: $favoriteItems,
+                        isDaysDisplayModeDetailed: $isDaysDisplayModeDetailed)
+                ) {
+                    MenuBlockView(
+                        category: .work,
+                        items: $items,
+                        completedItems: $completedItems,
+                        favoriteItems: $favoriteItems)}
                 
                 
                 NavigationLink(
@@ -27,7 +42,8 @@ struct TopSection: View {
                         editItemSheet: false,
                         items: $items,
                         completedItems: $completedItems,
-                        favoriteItems: $favoriteItems
+                        favoriteItems: $favoriteItems,
+                        isDaysDisplayModeDetailed: $isDaysDisplayModeDetailed
                     )
                 ) {
                     MenuBlockView(
@@ -40,10 +56,41 @@ struct TopSection: View {
             }
             
             VStack {
-                NavigationLink(destination: CategoryFilteredView(category: CategoryDaysSinceItem.health, showAddItemSheet: false, editItemSheet: false, items: $items, completedItems: $completedItems, favoriteItems: $favoriteItems))
-                {MenuBlockView(category: .health, items: $items, completedItems: $completedItems, favoriteItems: $favoriteItems)}
-                NavigationLink(destination: CategoryFilteredView(category: CategoryDaysSinceItem.hobbies, showAddItemSheet: false, editItemSheet: false, items: $items, completedItems: $completedItems, favoriteItems: $favoriteItems))
-                    {MenuBlockView(category: .hobbies, items: $items, completedItems: $completedItems, favoriteItems: $favoriteItems)}
+                NavigationLink(
+                    destination: CategoryFilteredView(
+                        category: CategoryDaysSinceItem.health,
+                        showAddItemSheet: false,
+                        editItemSheet: false,
+                        items: $items,
+                        completedItems: $completedItems,
+                        favoriteItems: $favoriteItems,
+                        isDaysDisplayModeDetailed: $isDaysDisplayModeDetailed)
+                ) {
+                    MenuBlockView(
+                        category: .health,
+                        items: $items,
+                        completedItems: $completedItems,
+                        favoriteItems: $favoriteItems
+                    )
+                }
+                
+                NavigationLink(
+                    destination: CategoryFilteredView(
+                        category: CategoryDaysSinceItem.hobbies,
+                        showAddItemSheet: false,
+                        editItemSheet: false,
+                        items: $items,
+                        completedItems: $completedItems,
+                        favoriteItems: $favoriteItems,
+                        isDaysDisplayModeDetailed: $isDaysDisplayModeDetailed)
+                ) {
+                    MenuBlockView(
+                        category: .hobbies,
+                        items: $items,
+                        completedItems: $completedItems,
+                        favoriteItems: $favoriteItems
+                    )
+                }
             }
         }
         .padding(.horizontal)
@@ -52,6 +99,6 @@ struct TopSection: View {
 
 struct TopSection_Previews: PreviewProvider {
     static var previews: some View {
-        TopSection(items: .constant([]), completedItems: .constant([]), favoriteItems: .constant([]))
+        TopSection(items: .constant([]), completedItems: .constant([]), favoriteItems: .constant([]), isDaysDisplayModeDetailed: .constant(false))
     }
 }
