@@ -85,7 +85,8 @@ struct AddItemForm: View {
                 } label: {
                     HStack {
                         Image(systemName: category.sfSymbolName)
-                            .foregroundColor(self.category == category ? self.category!.color : .black)
+                            .foregroundColor(self.category == category ? self.category!.color : .primary)
+                            .frame(width: 40)
                         
                         Text(category.name)
                         Spacer()

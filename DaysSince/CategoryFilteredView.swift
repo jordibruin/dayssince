@@ -22,6 +22,8 @@ struct CategoryFilteredView: View {
     @Binding var completedItems: [DaysSinceItem]
     @Binding var favoriteItems: [DaysSinceItem]
     
+    @Binding var isDaysDisplayModeDetailed: Bool
+    
     var body: some View {
         
         ZStack {
@@ -29,9 +31,13 @@ struct CategoryFilteredView: View {
             
             ScrollView {
                 
-                FavoriteItemsList(favoriteItems: $favoriteItems, editItemSheet: $editItemSheet, tappedItem: $tappedItem, isCategoryView: true, category: category)
-                
-                NormalItemsList(items: $items, editItemSheet: $editItemSheet, tappedItem: $tappedItem, isCategoryView: true, category: category)
+                NormalItemsList(
+                    items: $items,
+                    editItemSheet: $editItemSheet,
+                    tappedItem: $tappedItem,
+                    isDaysDisplayModeDetailed: $isDaysDisplayModeDetailed,
+                    isCategoryView: true,
+                    category: category)
                 
                 
                 CompletedItemsList(completedItems: $completedItems, isCategoryView: true, category: category)
@@ -98,7 +104,7 @@ struct CategoryFilteredView: View {
 
 struct CategoryFilteredView_Previews: PreviewProvider {
     static var previews: some View {
-        CategoryFilteredView(category: .work, showAddItemSheet: false, editItemSheet: false, tappedItem: DaysSinceItem.placeholderItem(), items: .constant([DaysSinceItem.placeholderItem()]), completedItems: .constant([]), favoriteItems: .constant([]))
+        CategoryFilteredView(category: .work, showAddItemSheet: false, editItemSheet: false, tappedItem: DaysSinceItem.placeholderItem(), items: .constant([DaysSinceItem.placeholderItem()]), completedItems: .constant([]), favoriteItems: .constant([]), isDaysDisplayModeDetailed: .constant(false))
             .preferredColorScheme(.dark)
     }
 }

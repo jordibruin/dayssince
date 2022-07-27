@@ -29,7 +29,8 @@ struct DaysSinceItem: Identifiable, Codable {
     // What type of reminder (daily, weekly, monthly)
     var reminder: DSItemReminders = .daily
     
-    // Date when item was completed.
+    // We're no longer using this.
+    // Date when item was completed (it was over). 
     var dateCompleted: Date = Date.now
     
     /// The emoji of the item.

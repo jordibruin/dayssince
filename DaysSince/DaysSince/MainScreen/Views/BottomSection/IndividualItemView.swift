@@ -13,6 +13,7 @@ struct IndividualItemView: View {
     
     @Binding var editItemSheet: Bool
     @Binding var tappedItem: DaysSinceItem
+    @Binding var isDaysDisplayModeDetailed: Bool
     
     var item: DaysSinceItem
     var colored: Bool
@@ -74,19 +75,121 @@ struct IndividualItemView: View {
                 .foregroundColor(colored || colorScheme == .dark ? .white : item.category.color)
     }
     
+    @ViewBuilder
     var daysAgoText: some View {
-        VStack {
-            Text("\(item.daysAgo)")
-                .font(.system(.title2, design: .rounded))
-                .bold()
-                .foregroundColor(colored || colorScheme == .dark ? .white : item.category.color)
-            
-            Text(item.daysAgo > 1 ? "days" : "day")
-                .font(.system(.body, design: .rounded))
-                .foregroundColor(colored || colorScheme == .dark ? .white : item.category.color)
-        }
-        .frame(minWidth: 0)
-    }                                                                                                                                                                                         
+        
+            if isDaysDisplayModeDetailed {
+                
+                // Show years, months and days
+                if item.daysAgo >= 365 {
+                    let years = item.daysAgo / 365
+                    let months = (item.daysAgo - years*365) / 30
+                    let days = item.daysAgo - years*365 - months*30
+                    
+                    HStack {
+                        VStack {
+                            Text("\(years)")
+                                .font(.system(.title3, design: .rounded))
+                                .bold()
+                                .foregroundColor(colored || colorScheme == .dark ? .white : item.category.color)
+                            
+                            Text(years > 1 ? "years" : "year")
+                                .font(.system(.caption, design: .rounded))
+                                .foregroundColor(colored || colorScheme == .dark ? .white : item.category.color)
+                            
+                        }
+                        
+                        VStack {
+                            Text("\(months)")
+                                .font(.system(.title3, design: .rounded))
+                                .bold()
+                                .foregroundColor(colored || colorScheme == .dark ? .white : item.category.color)
+                            
+                            Text(months > 1 ? "months" : "month")
+                                .font(.system(.caption, design: .rounded))
+                                .foregroundColor(colored || colorScheme == .dark ? .white : item.category.color)
+                            
+                        }
+                        VStack {
+                            Text("\(days)")
+                                .font(.system(.title3, design: .rounded))
+                                .bold()
+                                .foregroundColor(colored || colorScheme == .dark ? .white : item.category.color)
+                            
+                            Text(days > 1 ? "days" : "day")
+                                .font(.system(.caption, design: .rounded))
+                                .foregroundColor(colored || colorScheme == .dark ? .white : item.category.color)
+                        }
+                    }
+                    .frame(minWidth: 0)
+                    
+                    
+                // Show months and days
+                } else if item.daysAgo >= 30 {
+                    
+                    
+                    let months = item.daysAgo / 30
+                    let days = item.daysAgo - months*30
+                    
+                    HStack {
+                        VStack {
+                            Text("\(months)")
+                                .font(.system(.title3, design: .rounded))
+                                .bold()
+                                .foregroundColor(colored || colorScheme == .dark ? .white : item.category.color)
+                            
+                            Text(months > 1 ? "months" : "month")
+                                .font(.system(.caption, design: .rounded))
+                                .foregroundColor(colored || colorScheme == .dark ? .white : item.category.color)
+                            
+                        }
+                        VStack {
+                            Text("\(days)")
+                                .font(.system(.title3, design: .rounded))
+                                .bold()
+                                .foregroundColor(colored || colorScheme == .dark ? .white : item.category.color)
+                            
+                            Text(days > 1 ? "days" : "day")
+                                .font(.system(.caption, design: .rounded))
+                                .foregroundColor(colored || colorScheme == .dark ? .white : item.category.color)
+                        }
+                    }
+                    .frame(minWidth: 0)
+                    
+                // Only show the days if it's been less than a month.
+                } else {
+                    
+                    VStack {
+                        Text("\(item.daysAgo)")
+                            .font(.system(.title2, design: .rounded))
+                            .bold()
+                            .foregroundColor(colored || colorScheme == .dark ? .white : item.category.color)
+                        
+                        Text(item.daysAgo > 1 ? "days" : "day")
+                            .font(.system(.body, design: .rounded))
+                            .foregroundColor(colored || colorScheme == .dark ? .white : item.category.color)
+                    }
+                    .frame(minWidth: 0)
+                    
+                }
+                
+            // If user just wants to see the days.
+            } else {
+                
+                VStack {
+                    Text("\(item.daysAgo)")
+                        .font(.system(.title2, design: .rounded))
+                        .bold()
+                        .foregroundColor(colored || colorScheme == .dark ? .white : item.category.color)
+                    
+                    Text(item.daysAgo > 1 ? "days" : "day")
+                        .font(.system(.body, design: .rounded))
+                        .foregroundColor(colored || colorScheme == .dark ? .white : item.category.color)
+                }
+                .frame(minWidth: 0)
+                
+            }
+        }                                                                                                                                                                                         
     
     @ViewBuilder
     var backgroundColor: some View {
@@ -104,6 +207,11 @@ struct IndividualItemView: View {
             nameText
             Spacer()
             daysAgoText
+                .onTapGesture {
+                    withAnimation {
+                        isDaysDisplayModeDetailed.toggle()                        
+                    }
+                }
         }
         .padding()
     }

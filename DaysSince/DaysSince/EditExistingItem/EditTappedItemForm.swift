@@ -111,11 +111,14 @@ struct EditTappedItemForm: View {
                 Button {
                     tappedItem.category = category
                 } label: {
-                    HStack {
-                        Image(systemName: category.sfSymbolName)
-                            .foregroundColor(tappedItem.category == category ? tappedItem.category.color : .black)
+                    HStack() {
                         
+                        Image(systemName: category.sfSymbolName)
+                            .foregroundColor(tappedItem.category == category ? tappedItem.category.color : .primary)
+                            .frame(width: 40)
+                            
                         Text(category.name)
+                        
                         Spacer()
                         
                         if tappedItem.category == category {
