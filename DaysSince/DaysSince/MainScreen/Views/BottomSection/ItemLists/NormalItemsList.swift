@@ -39,8 +39,12 @@ struct NormalItemsList: View {
         }
     }
     
+    
+    @AppStorage("selectedSortType") var selectedSortType: SortType = .daysAscending
+    
     var normalViewList: some View {
-        ForEach(self.items, id: \.id) { item in
+        ForEach(self.items.sorted { selectedSortType.sort(itemOne: $0, itemTwo: $1) }) { item in
+            
             IndividualItemView(
                 editItemSheet: $editItemSheet,
                 tappedItem: $tappedItem,
@@ -49,6 +53,7 @@ struct NormalItemsList: View {
                 colored: false,
                 isFavorite: false
             )
+            
         }
     }
 }

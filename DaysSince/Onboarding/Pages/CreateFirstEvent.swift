@@ -124,6 +124,7 @@ struct CreateFirstEvent: View {
                 
                 // Add new item.
                 let newItem = DaysSinceItem(
+                    id: UUID(),
                     name: name,
                     category: selectedCategory ?? .life,
                     dateLastDone: date,
