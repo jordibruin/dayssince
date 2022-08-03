@@ -91,7 +91,7 @@ class NotificationManager: ObservableObject {
                 content.body = "It's been \(item.daysAgo + i) days since \(item.name)!"
                 content.sound = UNNotificationSound.default
                 
-                let dateComponents = getDateComponentsFor(item: item, extraDays: i)
+                let dateComponents = getDateComponentsFor(item: item, extraDays: Double(i))
                 let trigger = UNCalendarNotificationTrigger(
                     dateMatching: dateComponents,
                     repeats: false
@@ -111,7 +111,7 @@ class NotificationManager: ObservableObject {
                 content.body = "It's been \(item.daysAgo + (i * 7)) days since \(item.name)!"
                 content.sound = UNNotificationSound.default
                 
-                let dateComponents = getDateComponentsFor(item: item, extraDays: (i * 7))
+                let dateComponents = getDateComponentsFor(item: item, extraDays: (Double(i) * 7))
                 let trigger = UNCalendarNotificationTrigger(
                     dateMatching: dateComponents,
                     repeats: false
@@ -131,7 +131,7 @@ class NotificationManager: ObservableObject {
                 content.body = "It's been \(item.daysAgo + (i * 30)) days since \(item.name)!"
                 content.sound = UNNotificationSound.default
                 
-                let dateComponents = getDateComponentsFor(item: item, extraDays: (i * 30))
+                let dateComponents = getDateComponentsFor(item: item, extraDays: (Double(i) * 30))
                 let trigger = UNCalendarNotificationTrigger(
                     dateMatching: dateComponents,
                     repeats: false
@@ -193,23 +193,24 @@ class NotificationManager: ObservableObject {
     }
     
     
-    func getDateComponentsFor(item: DaysSinceItem, extraDays: Int) -> DateComponents {
+    func getDateComponentsFor(item: DaysSinceItem, extraDays: Double) -> DateComponents {
         var dateComponents = DateComponents()
         
         if item.reminder == .none {
             // FIX
             return DateComponents()
         }else if item.reminder == .daily {
+            dateComponents.day = Calendar.current.dateComponents([.day], from: item.dateLastDone.addingTimeInterval(extraDays * 86400)).day
             dateComponents.hour = 10
             dateComponents.minute = 0
         } else if item.reminder == .weekly {
-            dateComponents.weekday = Calendar.current.dateComponents([.day], from: item.dateLastDone).weekday
+            dateComponents.weekday = Calendar.current.dateComponents([.day], from: item.dateLastDone.addingTimeInterval(extraDays * 86400)).weekday
             dateComponents.hour = 10
             dateComponents.second = 0
         } else if item.reminder == .monthly {
-            dateComponents.day = Calendar.current.dateComponents([.day], from: item.dateLastDone).day
+            dateComponents.day = Calendar.current.dateComponents([.day], from: item.dateLastDone.addingTimeInterval(extraDays * 86400)).day
             
-            dateComponents.weekday = Calendar.current.dateComponents([.day], from: item.dateLastDone).weekday
+            dateComponents.weekday = Calendar.current.dateComponents([.day], from: item.dateLastDone.addingTimeInterval(extraDays * 86400)).weekday
             
             dateComponents.hour = 10
             dateComponents.minute = 0
