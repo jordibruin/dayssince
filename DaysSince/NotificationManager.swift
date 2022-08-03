@@ -7,6 +7,8 @@
 
 import Foundation
 import UserNotifications
+import SwiftUI
+
 
 class NotificationManager: ObservableObject {
     
@@ -14,11 +16,27 @@ class NotificationManager: ObservableObject {
     
     @Published var pendingNotifications: [UNNotificationRequest] = []
     
+    @AppStorage("items", store: UserDefaults(suiteName: "group.goodsnooze.dayssince")) var items: [DaysSinceItem] = []
     
     init() {
         // refresh notifications
+        refreshNotifications()
     }
     
+    func refreshNotifications() {
+        print("refresh notifications")
+        // Remove all old pending requests to generate new ones
+        center.removeAllPendingNotificationRequests()
+        
+        // iterate over all items
+        for item in items {
+            if item.remindersEnabled {
+                addReminderFor(item: item)
+            }
+        }
+        
+        getPendingNotification()
+    }
     
     
     func getPendingNotification() {
@@ -60,11 +78,78 @@ class NotificationManager: ObservableObject {
     }
     
     func addReminderFor(item: DaysSinceItem) {
-        let content = UNMutableNotificationContent()
         
-        content.title = "\(item.name)"
-        content.body = "It's been \(item.daysAgo) days since \(item.name)!"
-        content.sound = UNNotificationSound.default
+//        var notificationsContent: [UNMutableNotificationContent]
+        
+        var requests: [UNNotificationRequest] = []
+        
+        switch item.reminder {
+        case .daily:
+            for i in 0...6 {
+                let content = UNMutableNotificationContent()
+                content.title = "\(item.name)"
+                content.body = "It's been \(item.daysAgo + i) days since \(item.name)!"
+                content.sound = UNNotificationSound.default
+                
+                let dateComponents = getDateComponentsFor(item: item, extraDays: i)
+                let trigger = UNCalendarNotificationTrigger(
+                    dateMatching: dateComponents,
+                    repeats: false
+                )
+                
+                let request = UNNotificationRequest(
+                    identifier: "\(item.reminderNotificationID)\(i)",
+                    content: content,
+                    trigger: trigger
+                )
+                requests.append(request)
+            }
+        case .weekly:
+            for i in 0...3 {
+                let content = UNMutableNotificationContent()
+                content.title = "\(item.name)"
+                content.body = "It's been \(item.daysAgo + (i * 7)) days since \(item.name)!"
+                content.sound = UNNotificationSound.default
+                
+                let dateComponents = getDateComponentsFor(item: item, extraDays: (i * 7))
+                let trigger = UNCalendarNotificationTrigger(
+                    dateMatching: dateComponents,
+                    repeats: false
+                )
+                
+                let request = UNNotificationRequest(
+                    identifier: "\(item.reminderNotificationID)\(i)",
+                    content: content,
+                    trigger: trigger
+                )
+                requests.append(request)
+            }
+        case .monthly:
+            for i in 0...3 {
+                let content = UNMutableNotificationContent()
+                content.title = "\(item.name)"
+                content.body = "It's been \(item.daysAgo + (i * 30)) days since \(item.name)!"
+                content.sound = UNNotificationSound.default
+                
+                let dateComponents = getDateComponentsFor(item: item, extraDays: (i * 30))
+                let trigger = UNCalendarNotificationTrigger(
+                    dateMatching: dateComponents,
+                    repeats: false
+                )
+                
+                let request = UNNotificationRequest(
+                    identifier: "\(item.reminderNotificationID)\(i)",
+                    content: content,
+                    trigger: trigger
+                )
+                requests.append(request)
+            }
+        default:
+            return
+        }
+        
+        
+
         
         // For testing change the time interval for the trigger.
 //        let timeInterval: Double = 60
@@ -72,34 +157,43 @@ class NotificationManager: ObservableObject {
         // For testing send trigger every 60 seconds.
 //        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: timeInterval, repeats: true)
         
-        let dateComponents = getDateComponentsFor(item: item)
-        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
-        
-        print("Our ID is \(item.reminderNotificationID)")
-        let request = UNNotificationRequest(identifier: item.reminderNotificationID, content: content, trigger: trigger)
-        
+//        let dateComponents = getDateComponentsFor(item: item, extraDays: <#T##Int#>)
+//        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
+//
+//        print("Our ID is \(item.reminderNotificationID)")
+//        let request = UNNotificationRequest(
+//            identifier: item.reminderNotificationID,
+//            content: content,
+//            trigger: trigger
+//        )
+//
         center.getNotificationSettings { settings in
             if settings.authorizationStatus == .authorized {
-                self.center.add(request)
-                print("🔔 Added notification!")
-                print("the request is: \(request)")
+                for request in requests {
+                    self.center.add(request)
+                    print("🔔 Added notification!")
+                    print("the request is: \(request)")
+                }
             } else {
                 self.center.requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
                     if success {
-                        self.center.add(request)
-                        print("🔔 Added notification!")
-                        print("the request is: \(request)")
+                        for request in requests {
+                            self.center.add(request)
+                            print("🔔 Added notification!")
+                            print("the request is: \(request)")
+                        }
 
                     } else {
                         print("Didn't authorize notifications")
                     }
                 }
             }
+            self.getPendingNotification()
         }
     }
     
     
-    func getDateComponentsFor(item: DaysSinceItem) -> DateComponents {
+    func getDateComponentsFor(item: DaysSinceItem, extraDays: Int) -> DateComponents {
         var dateComponents = DateComponents()
         
         if item.reminder == .none {
@@ -114,7 +208,9 @@ class NotificationManager: ObservableObject {
             dateComponents.second = 0
         } else if item.reminder == .monthly {
             dateComponents.day = Calendar.current.dateComponents([.day], from: item.dateLastDone).day
+            
             dateComponents.weekday = Calendar.current.dateComponents([.day], from: item.dateLastDone).weekday
+            
             dateComponents.hour = 10
             dateComponents.minute = 0
         }
