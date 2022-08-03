@@ -78,6 +78,9 @@
 		7AF56AFF286F32CD0068B467 /* SupportHeaderSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF56AD3286F32CD0068B467 /* SupportHeaderSection.swift */; };
 		7AF56B00286F32CD0068B467 /* Analytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF56AD5286F32CD0068B467 /* Analytics.swift */; };
 		C21BDC58286F355200B2FDCC /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C21BDC57286F355200B2FDCC /* NotificationManager.swift */; };
+		C255EB67289A725100282E7B /* Widget.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = C255EB6B289A725100282E7B /* Widget.intentdefinition */; };
+		C255EB68289A725100282E7B /* Widget.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = C255EB6B289A725100282E7B /* Widget.intentdefinition */; };
+		C255EB69289A725100282E7B /* Widget.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = C255EB6B289A725100282E7B /* Widget.intentdefinition */; };
 		C2B53D752869CA1000407F40 /* CategoryDaysSinceItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B53D742869CA1000407F40 /* CategoryDaysSinceItem.swift */; };
 		C2B53D772869CA1F00407F40 /* DSItemReminders.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B53D762869CA1F00407F40 /* DSItemReminders.swift */; };
 		C2B53D7A2869CA3B00407F40 /* AddItemForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B53D792869CA3B00407F40 /* AddItemForm.swift */; };
@@ -100,8 +103,6 @@
 		C2B53DB12869F0CE00407F40 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C2B53DB02869F0CE00407F40 /* SwiftUI.framework */; };
 		C2B53DB42869F0CE00407F40 /* Widget.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B53DB32869F0CE00407F40 /* Widget.swift */; };
 		C2B53DB72869F0CF00407F40 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C2B53DB62869F0CF00407F40 /* Assets.xcassets */; };
-		C2B53DB92869F0CF00407F40 /* Widget.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = C2B53DB52869F0CE00407F40 /* Widget.intentdefinition */; };
-		C2B53DBA2869F0CF00407F40 /* Widget.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = C2B53DB52869F0CE00407F40 /* Widget.intentdefinition */; };
 		C2B53DBD2869F0CF00407F40 /* WidgetExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = C2B53DAC2869F0CE00407F40 /* WidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		C2B53DC22869F1AA00407F40 /* DaysSinceItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1C7AE227F4BA23004EE78E /* DaysSinceItem.swift */; };
 		C2B53DC32869F35600407F40 /* CategoryDaysSinceItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B53D742869CA1000407F40 /* CategoryDaysSinceItem.swift */; };
@@ -118,7 +119,6 @@
 		C2B53DDC2869F72900407F40 /* Calendar+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE2946627F4B0AF006A7E01 /* Calendar+Extensions.swift */; };
 		C2B53DDD2869F74100407F40 /* Array+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2A770C27F26E2B006F0470 /* Array+Extensions.swift */; };
 		C2B53DDE2869F74100407F40 /* Array+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2A770C27F26E2B006F0470 /* Array+Extensions.swift */; };
-		C2B53DDF2869F83A00407F40 /* Widget.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = C2B53DB52869F0CE00407F40 /* Widget.intentdefinition */; };
 		C2B53DE2286A080900407F40 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7A2A76F727F24470006F0470 /* Assets.xcassets */; };
 		C2B53DE3286A080A00407F40 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7A2A76F727F24470006F0470 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
@@ -229,6 +229,8 @@
 		7AF56AD3286F32CD0068B467 /* SupportHeaderSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SupportHeaderSection.swift; sourceTree = "<group>"; };
 		7AF56AD5286F32CD0068B467 /* Analytics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Analytics.swift; sourceTree = "<group>"; };
 		C21BDC57286F355200B2FDCC /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
+		C255EB6A289A725100282E7B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; name = Base; path = Base.lproj/Widget.intentdefinition; sourceTree = "<group>"; };
+		C255EB6D289A725300282E7B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Widget.strings; sourceTree = "<group>"; };
 		C2B53D742869CA1000407F40 /* CategoryDaysSinceItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CategoryDaysSinceItem.swift; path = DaysSince/DaysSince/Model/CategoryDaysSinceItem.swift; sourceTree = SOURCE_ROOT; };
 		C2B53D762869CA1F00407F40 /* DSItemReminders.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DSItemReminders.swift; path = DaysSince/DaysSince/Model/DSItemReminders.swift; sourceTree = SOURCE_ROOT; };
 		C2B53D792869CA3B00407F40 /* AddItemForm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AddItemForm.swift; path = DaysSince/DaysSince/AddNewItem/AddItemForm.swift; sourceTree = SOURCE_ROOT; };
@@ -253,7 +255,6 @@
 		C2B53DAE2869F0CE00407F40 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		C2B53DB02869F0CE00407F40 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		C2B53DB32869F0CE00407F40 /* Widget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Widget.swift; sourceTree = "<group>"; };
-		C2B53DB52869F0CE00407F40 /* Widget.intentdefinition */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; path = Widget.intentdefinition; sourceTree = "<group>"; };
 		C2B53DB62869F0CF00407F40 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C2B53DB82869F0CF00407F40 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C2B53DCB2869F6F200407F40 /* WidgetIntents.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = WidgetIntents.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -700,7 +701,7 @@
 			isa = PBXGroup;
 			children = (
 				C2B53DB32869F0CE00407F40 /* Widget.swift */,
-				C2B53DB52869F0CE00407F40 /* Widget.intentdefinition */,
+				C255EB6B289A725100282E7B /* Widget.intentdefinition */,
 				C2B53DB62869F0CF00407F40 /* Assets.xcassets */,
 				C2B53DB82869F0CF00407F40 /* Info.plist */,
 			);
@@ -867,7 +868,7 @@
 				7AB598372804830300A1BD3A /* CategorySelectionView.swift in Sources */,
 				7AF56AFC286F32CD0068B467 /* NewUpdateBanner.swift in Sources */,
 				7AF56AD6286F32CD0068B467 /* Design.swift in Sources */,
-				C2B53DBA2869F0CF00407F40 /* Widget.intentdefinition in Sources */,
+				C255EB67289A725100282E7B /* Widget.intentdefinition in Sources */,
 				7AF56AE0286F32CD0068B467 /* HooliganColor+Extensions.swift in Sources */,
 				7A67C6E0280061FA0095675F /* Color+Extensions.swift in Sources */,
 				7AF56B00286F32CD0068B467 /* Analytics.swift in Sources */,
@@ -944,7 +945,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C2B53DB92869F0CF00407F40 /* Widget.intentdefinition in Sources */,
+				C255EB68289A725100282E7B /* Widget.intentdefinition in Sources */,
 				C2B53DB42869F0CE00407F40 /* Widget.swift in Sources */,
 				C2B53DC42869F35B00407F40 /* DSItemReminders.swift in Sources */,
 				C2B53DDD2869F74100407F40 /* Array+Extensions.swift in Sources */,
@@ -963,7 +964,7 @@
 				C2B53DD92869F71300407F40 /* CategoryDaysSinceItem.swift in Sources */,
 				C2B53DDB2869F72400407F40 /* DSItemReminders.swift in Sources */,
 				C2B53DDE2869F74100407F40 /* Array+Extensions.swift in Sources */,
-				C2B53DDF2869F83A00407F40 /* Widget.intentdefinition in Sources */,
+				C255EB69289A725100282E7B /* Widget.intentdefinition in Sources */,
 				C2B53DD02869F6F200407F40 /* IntentHandler.swift in Sources */,
 				C2B53DDA2869F71D00407F40 /* Color+Extensions.swift in Sources */,
 				C2B53DDC2869F72900407F40 /* Calendar+Extensions.swift in Sources */,
@@ -984,6 +985,18 @@
 			targetProxy = C2B53DD22869F6F200407F40 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		C255EB6B289A725100282E7B /* Widget.intentdefinition */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C255EB6A289A725100282E7B /* Base */,
+				C255EB6D289A725300282E7B /* en */,
+			);
+			name = Widget.intentdefinition;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		7A2A76FC27F24470006F0470 /* Debug */ = {
@@ -1110,7 +1123,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = DaysSince/DaysSince.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_ASSET_PATHS = "\"DaysSince/Preview Content\"";
 				DEVELOPMENT_TEAM = 8Q7TMPA46J;
 				ENABLE_PREVIEWS = YES;
@@ -1142,7 +1155,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = DaysSince/DaysSince.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_ASSET_PATHS = "\"DaysSince/Preview Content\"";
 				DEVELOPMENT_TEAM = 8Q7TMPA46J;
 				ENABLE_PREVIEWS = YES;
@@ -1173,7 +1186,7 @@
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CODE_SIGN_ENTITLEMENTS = WidgetExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = 8Q7TMPA46J;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Widget/Info.plist;
@@ -1202,7 +1215,7 @@
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CODE_SIGN_ENTITLEMENTS = WidgetExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = 8Q7TMPA46J;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Widget/Info.plist;
@@ -1229,7 +1242,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = WidgetIntents/WidgetIntents.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = 8Q7TMPA46J;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = WidgetIntents/Info.plist;
@@ -1256,7 +1269,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = WidgetIntents/WidgetIntents.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = 8Q7TMPA46J;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = WidgetIntents/Info.plist;
