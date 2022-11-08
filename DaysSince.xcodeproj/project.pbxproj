@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4C169EBA291A97D700E2BBC1 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4C169EB9291A97D700E2BBC1 /* Localizable.strings */; };
+		4C169EBB291A97DB00E2BBC1 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4C169EB9291A97D700E2BBC1 /* Localizable.strings */; };
 		7A007CB72800885700985108 /* CategoryFilteredView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A007CB62800885700985108 /* CategoryFilteredView.swift */; };
 		7A1C7AE327F4BA23004EE78E /* DaysSinceItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1C7AE227F4BA23004EE78E /* DaysSinceItem.swift */; };
 		7A21765927FB2E3E006B106B /* EditTappedItemSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A21765827FB2E3E006B106B /* EditTappedItemSheet.swift */; };
@@ -156,6 +158,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4C169EB9291A97D700E2BBC1 /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		7A007CB62800885700985108 /* CategoryFilteredView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryFilteredView.swift; sourceTree = "<group>"; };
 		7A1C7AE227F4BA23004EE78E /* DaysSinceItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaysSinceItem.swift; sourceTree = "<group>"; };
 		7A21765827FB2E3E006B106B /* EditTappedItemSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTappedItemSheet.swift; sourceTree = "<group>"; };
@@ -337,6 +340,7 @@
 				7AAB507027FF83CC0086A5A8 /* Screens */,
 				7A2A76F727F24470006F0470 /* Assets.xcassets */,
 				7A2A76F927F24470006F0470 /* Preview Content */,
+				4C169EB9291A97D700E2BBC1 /* Localizable.strings */,
 			);
 			path = DaysSince;
 			sourceTree = "<group>";
@@ -826,6 +830,7 @@
 				7AF56ADC286F32CD0068B467 /* fullSample.json in Resources */,
 				7AF56ADF286F32CD0068B467 /* README.md in Resources */,
 				7AF56AD9286F32CD0068B467 /* CHANGELOG.md in Resources */,
+				4C169EBA291A97D700E2BBC1 /* Localizable.strings in Resources */,
 				7AF56ADA286F32CD0068B467 /* FAQOnly.json in Resources */,
 				7A2A76F827F24470006F0470 /* Assets.xcassets in Resources */,
 			);
@@ -836,6 +841,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C2B53DE2286A080900407F40 /* Assets.xcassets in Resources */,
+				4C169EBB291A97DB00E2BBC1 /* Localizable.strings in Resources */,
 				C2B53DB72869F0CF00407F40 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
