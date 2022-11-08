@@ -38,22 +38,15 @@ struct Provider: IntentTimelineProvider {
         completion: @escaping (Timeline<WidgetContent>) -> Void
     ) {
         
-        
-        let id = configuration.event?.displayString ?? "No id"
-        let displayString = configuration.event?.displayString ?? "No displaystring"
-        
-        // array of all the names of the items
-//        let itemNames = items.map { "\($0.name + $0.id.uuidString)" }.joined(separator: "+")
-
-        guard let matchingEvent = items.first(where: { $0.name == displayString }) else {
-            let content = WidgetContent(date: Date(), name: "No events", id: UUID(), color: .green, daysNumber: 4)
-            completion(Timeline(entries: [content], policy: .atEnd))
-            return
+        let eventId = configuration.event?.identifier ?? ""
+      
+        if let matchingEvent = items.first(where: { $0.id.uuidString == eventId }) {
+          let content = WidgetContent(item: matchingEvent)
+          completion(Timeline(entries: [content], policy: .atEnd))
+        } else {
+          let content = WidgetContent(date: Date(), name: "No events", id: UUID(), color: .green, daysNumber: 4)
+          completion(Timeline(entries: [content], policy: .atEnd))
         }
-        
-        let content = WidgetContent(item: matchingEvent)
-
-        completion(Timeline(entries: [content], policy: .atEnd))
     }
 }
 
