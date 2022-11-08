@@ -120,7 +120,7 @@ struct SettingsScreen: View {
     var footer: some View {
         HStack {
             Spacer()
-            Text("Thank you for testing Days Since!")
+            Text("Thank you for using Days Since! ❤️")
             Spacer()
         }
         .padding(.top, 0)
