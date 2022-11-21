@@ -1,0 +1,10 @@
+/* 
+  Localizable.strings
+  DaysSince
+
+  Created by Michael Tigas on 9/11/2022.
+  
+*/
+
+"widget.title" = "Event Widget";
+"widget.explanation" = "Display the details of an event.";
