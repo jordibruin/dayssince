@@ -7,6 +7,7 @@
 
 import Intents
 import SwiftUI
+
 class IntentHandler: INExtension, SelectEventIntentHandling {
     
     @AppStorage("items", store: UserDefaults(suiteName: "group.goodsnooze.dayssince")) var items: [DaysSinceItem] = []

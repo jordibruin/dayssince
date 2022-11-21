@@ -9,11 +9,11 @@
 	<key>INIntentDefinitionNamespace</key>
 	<string>88xZPY</string>
 	<key>INIntentDefinitionSystemVersion</key>
-	<string>21F79</string>
+	<string>22A380</string>
 	<key>INIntentDefinitionToolsBuildVersion</key>
-	<string>13E113</string>
+	<string>14B47</string>
 	<key>INIntentDefinitionToolsVersion</key>
-	<string>13.3</string>
+	<string>14.1</string>
 	<key>INIntents</key>
 	<array>
 		<dict>
@@ -21,6 +21,8 @@
 			<string>information</string>
 			<key>INIntentConfigurable</key>
 			<true/>
+			<key>INIntentDescription</key>
+			<string>Select an event from your list</string>
 			<key>INIntentDescriptionID</key>
 			<string>tVvJ9c</string>
 			<key>INIntentEligibleForWidgets</key>
