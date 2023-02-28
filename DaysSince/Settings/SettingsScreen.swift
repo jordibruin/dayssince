@@ -18,7 +18,7 @@ struct SettingsScreen: View {
         NavigationView {
             List {
 //                daysSinceProSection
-//                appIconsSection
+                appIconsSection
                 
                 DetailedTimeDisplayModeCell(isDaysDisplayModeDetailed: $isDaysDisplayModeDetailed)
                     
@@ -108,7 +108,7 @@ struct SettingsScreen: View {
                 .aspectRatio(contentMode: .fit)
                 .grayscale(0)
         } else {
-            Image("basic-image")
+            Image("calendar-purple-image")
                 .resizable()
                 .frame(width: 100, height: 100)
                 .cornerRadius(12)
