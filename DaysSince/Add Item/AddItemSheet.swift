@@ -29,7 +29,8 @@ struct AddItemSheet: View {
     }
 
     var body: some View {
-        
+                    
+        // Form
         NavigationView {
             AddItemForm(items: $items, name: $name, date: $date, category: $selectedCategory, remindersEnabled: $remindersEnabled, selectedReminder: $selectedReminder, nameIsFocused: $nameIsFocused)
             .navigationTitle("New Event")
@@ -78,12 +79,23 @@ struct AddItemSheet: View {
                 } label: {
                     Text("Save")
                 }
-                .foregroundColor(self.selectedCategory != nil ? self.selectedCategory!.color : .primary)
+                .foregroundColor(name.isEmpty ? Color.gray : self.selectedCategory != nil ? self.selectedCategory!.color : .primary)
                 .disabled(name.isEmpty)
             }
+            
+            ToolbarItem(placement: .navigationBarTrailing) {
+                if nameIsFocused {
+                    Button {
+                        nameIsFocused = false
+                    } label: {
+                        Text("Done")
+                    }
+                    .foregroundColor(self.selectedCategory != nil ? self.selectedCategory!.color : .primary)
+                }
+            }
+            
         }
     }
-
 }
 
 struct AddItemSheet_Previews: PreviewProvider {

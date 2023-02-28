@@ -31,8 +31,10 @@ struct AddItemForm: View {
             dateSection
             newCategorySection
             reminderSection
-            
         }
+        
+        // Focus name field when the sheet is opened.
+        // On older iOS versions it didn't work if you immediatly focused it so it had to have a slight delay.
         .onAppear {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
                 nameIsFocused = true
