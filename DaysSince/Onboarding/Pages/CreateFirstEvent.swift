@@ -50,6 +50,7 @@ struct CreateFirstEvent: View {
         Section {
             TextField("Name your event", text: $name)
                 .focused($nameIsFocused)
+                .submitLabel(.done)
         } header: {
             Text("Event Info")
         }
