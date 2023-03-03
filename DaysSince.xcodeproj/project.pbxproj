@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		14CAC90829B26ED900DF3C24 /* UIApplication+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14CAC90729B26ED900DF3C24 /* UIApplication+Extensions.swift */; };
 		4C169EBA291A97D700E2BBC1 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4C169EB9291A97D700E2BBC1 /* Localizable.strings */; };
 		4C169EBB291A97DB00E2BBC1 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4C169EB9291A97D700E2BBC1 /* Localizable.strings */; };
 		7A007CB72800885700985108 /* CategoryFilteredView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A007CB62800885700985108 /* CategoryFilteredView.swift */; };
@@ -158,6 +159,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		14CAC90729B26ED900DF3C24 /* UIApplication+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+Extensions.swift"; sourceTree = "<group>"; };
 		4C169EB9291A97D700E2BBC1 /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		7A007CB62800885700985108 /* CategoryFilteredView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryFilteredView.swift; sourceTree = "<group>"; };
 		7A1C7AE227F4BA23004EE78E /* DaysSinceItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaysSinceItem.swift; sourceTree = "<group>"; };
@@ -373,6 +375,7 @@
 				C2B53D9C2869CB0200407F40 /* Binding+Extensions.swift */,
 				7AE2946627F4B0AF006A7E01 /* Calendar+Extensions.swift */,
 				7A67C6DF280061FA0095675F /* Color+Extensions.swift */,
+				14CAC90729B26ED900DF3C24 /* UIApplication+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -875,6 +878,7 @@
 				7AF56AFC286F32CD0068B467 /* NewUpdateBanner.swift in Sources */,
 				7AF56AD6286F32CD0068B467 /* Design.swift in Sources */,
 				C255EB67289A725100282E7B /* Widget.intentdefinition in Sources */,
+				14CAC90829B26ED900DF3C24 /* UIApplication+Extensions.swift in Sources */,
 				7AF56AE0286F32CD0068B467 /* HooliganColor+Extensions.swift in Sources */,
 				7A67C6E0280061FA0095675F /* Color+Extensions.swift in Sources */,
 				7AF56B00286F32CD0068B467 /* Analytics.swift in Sources */,
