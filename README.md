@@ -11,4 +11,7 @@ With DaysSince you can:
   - Customize your events into categories with different colors. 
 
 
+You can find it on the App Store 👇:
 https://apps.apple.com/us/app/days-since-track-memories/id1634218216
+
+

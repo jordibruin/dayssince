@@ -20,7 +20,11 @@ struct AppIcons: View {
     ]
     
     var alternativeIcons: [AlternativeIcon] = [
-        AlternativeIcon(name: "basic-image", iconName: "basic-image", premium: false, original: true),
+        AlternativeIcon(name: "calendar-purple-image", iconName: "calendar-purple", premium: false, original: true),
+        AlternativeIcon(name: "calendar-pink-image", iconName: "calendar-pink", premium: false, original: false),
+        AlternativeIcon(name: "calendar-orange-image", iconName: "calendar-orange", premium: false, original: false),
+        AlternativeIcon(name: "calendar-blue-image", iconName: "calendar-blue", premium: false, original: false),
+        AlternativeIcon(name: "AppIcon-image", iconName: "AppIcon", premium: false, original: false)
     ]
     
     @State var showPayWall = false
@@ -68,6 +72,7 @@ struct AppIcons: View {
                 }
                 UIApplication.shared.setAlternateIconName(icon.iconName) { error in
                     if let error = error {
+                        print("ERROR IS HERE")
                         print(error.localizedDescription)
                         return
                     }

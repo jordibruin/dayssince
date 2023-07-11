@@ -88,14 +88,24 @@ struct EditTappedItemSheet: View {
                 } label: {
                     Text("Save")
                 }
-                .foregroundColor(tappedItem.category.color)
+                .foregroundColor(tappedItem.name.isEmpty ? Color.gray : tappedItem.category.color)
                 .disabled(tappedItem.name.isEmpty)
             }
                
-            ToolbarItemGroup(placement: .keyboard){
-                Button("Done") {
-                    nameIsFocused = false
+            // Add a button to close the keyboard
+            ToolbarItem(placement: .navigationBarTrailing) {
+                if nameIsFocused {
+                    Button {
+                        withAnimation {
+                            nameIsFocused = false
+                        }
+                        
+                    } label: {
+                        Text("Done")
+                    }
+                    .foregroundColor(tappedItem.category.color)
                 }
+
             }
         }
     }
