@@ -26,18 +26,44 @@ struct AddItemForm: View {
     @FocusState.Binding var nameIsFocused: Bool
     
     var body: some View {
-        Form {
-            nameSection
-            dateSection
-            newCategorySection
-            reminderSection
-        }
-        
-        // Focus name field when the sheet is opened.
-        // On older iOS versions it didn't work if you immediatly focused it so it had to have a slight delay.
-        .onAppear {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
-                nameIsFocused = true
+        if #available(iOS 16.0, *) {
+            Background {
+                Form {
+                    nameSection
+                    dateSection
+                    newCategorySection
+                    reminderSection
+                }
+                .scrollDismissesKeyboard(.immediately)  // Only available for iOS 16+
+                .onAppear {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
+                        nameIsFocused = true
+                    }
+                }
+            }
+            .onTapGesture {
+                UIApplication.shared.endEditing()
+            }
+        } else {
+            // Fallback on earlier versions
+            // TODO: As iOS versions advance, this section should be removed.
+            Background {
+                Form {
+                    nameSection
+                    dateSection
+                    newCategorySection
+                    reminderSection
+                }
+              // Focus name field when the sheet is opened.
+              // On older iOS versions it didn't work if you immediatly focused it so it had to have a slight delay.
+                .onAppear {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
+                        nameIsFocused = true
+                    }
+                }
+            }
+            .onTapGesture {
+                UIApplication.shared.endEditing()
             }
         }
     }
@@ -46,6 +72,7 @@ struct AddItemForm: View {
         Section {
             TextField("Name your event", text: $name)
                 .focused($nameIsFocused)
+                .submitLabel(.done)
         } header: {
             Text("Event Info")
         }
@@ -105,6 +132,20 @@ struct AddItemForm: View {
         } header: {
             Text("Category")
         }
+    }
+}
+
+struct Background<Content: View>: View {
+    private var content: Content
+
+    init(@ViewBuilder content: @escaping () -> Content) {
+        self.content = content()
+    }
+
+    var body: some View {
+        Color.white
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .overlay(content)
     }
 }
 
