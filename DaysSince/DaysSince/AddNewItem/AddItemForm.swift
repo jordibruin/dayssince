@@ -41,29 +41,21 @@ struct AddItemForm: View {
                     }
                 }
             }
-            .onTapGesture {
-                UIApplication.shared.endEditing()
-            }
         } else {
             // Fallback on earlier versions
             // TODO: As iOS versions advance, this section should be removed.
-            Background {
-                Form {
-                    nameSection
-                    dateSection
-                    newCategorySection
-                    reminderSection
-                }
-              // Focus name field when the sheet is opened.
-              // On older iOS versions it didn't work if you immediatly focused it so it had to have a slight delay.
-                .onAppear {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
-                        nameIsFocused = true
-                    }
-                }
+            Form {
+                nameSection
+                dateSection
+                newCategorySection
+                reminderSection
             }
-            .onTapGesture {
-                UIApplication.shared.endEditing()
+          // Focus name field when the sheet is opened.
+          // On older iOS versions it didn't work if you immediatly focused it so it had to have a slight delay.
+            .onAppear {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
+                    nameIsFocused = true
+                }
             }
         }
     }

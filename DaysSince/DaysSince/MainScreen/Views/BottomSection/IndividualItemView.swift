@@ -80,98 +80,57 @@ struct IndividualItemView: View {
         
             if isDaysDisplayModeDetailed {
                 
+                let currentDate = Date()
+                let calendar = Calendar.current
+                
+                let dateComponents = calendar.dateComponents([.year, .month, .day], from: item.dateLastDone, to: currentDate)
+
+                let years = dateComponents.year ?? 0
+                let months = dateComponents.month ?? 0
+                let days = dateComponents.day ?? 0
+                
                 // Show years, months and days
-                if item.daysAgo >= 365 {
-                    let years = item.daysAgo / 365
-                    let months = (item.daysAgo - years*365) / 30
-                    let days = item.daysAgo - years*365 - months*30
-                    
                     HStack {
-                        VStack {
-                            Text("\(years)")
-                                .font(.system(.title3, design: .rounded))
-                                .bold()
-                                .foregroundColor(colored || colorScheme == .dark ? .white : item.category.color)
-                            
-                            Text(years > 1 ? "years" : "year")
-                                .font(.system(.caption, design: .rounded))
-                                .foregroundColor(colored || colorScheme == .dark ? .white : item.category.color)
-                            
+                        if years > 0 {
+                            VStack {
+                                Text("\(years)")
+                                    .font(.system(.title3, design: .rounded))
+                                    .bold()
+                                    .foregroundColor(colored || colorScheme == .dark ? .white : item.category.color)
+                                
+                                Text(years > 1 ? "years" : "year")
+                                    .font(.system(.caption, design: .rounded))
+                                    .foregroundColor(colored || colorScheme == .dark ? .white : item.category.color)
+                                
+                            }
+                        }
+                        
+                        if months > 0 || years > 0 {
+                            VStack {
+                                Text("\(months)")
+                                    .font(.system(.title3, design: .rounded))
+                                    .bold()
+                                    .foregroundColor(colored || colorScheme == .dark ? .white : item.category.color)
+                                
+                                Text(months > 1 ? "months" : "month")
+                                    .font(.system(.caption, design: .rounded))
+                                    .foregroundColor(colored || colorScheme == .dark ? .white : item.category.color)
+                                
+                            }
                         }
                         
                         VStack {
-                            Text("\(months)")
-                                .font(.system(.title3, design: .rounded))
-                                .bold()
-                                .foregroundColor(colored || colorScheme == .dark ? .white : item.category.color)
-                            
-                            Text(months > 1 ? "months" : "month")
-                                .font(.system(.caption, design: .rounded))
-                                .foregroundColor(colored || colorScheme == .dark ? .white : item.category.color)
-                            
-                        }
-                        VStack {
                             Text("\(days)")
-                                .font(.system(.title3, design: .rounded))
+                                .font(.system(months > 0 || years > 0 ? .title3 : .title2, design: .rounded))
                                 .bold()
                                 .foregroundColor(colored || colorScheme == .dark ? .white : item.category.color)
                             
                             Text(days > 1 ? "days" : "day")
-                                .font(.system(.caption, design: .rounded))
+                                .font(.system(months > 0 || years > 0 ? .caption : .body, design: .rounded))
                                 .foregroundColor(colored || colorScheme == .dark ? .white : item.category.color)
                         }
                     }
                     .frame(minWidth: 0)
-                    
-                    
-                // Show months and days
-                } else if item.daysAgo >= 30 {
-                    
-                    
-                    let months = item.daysAgo / 30
-                    let days = item.daysAgo - months*30
-                    
-                    HStack {
-                        VStack {
-                            Text("\(months)")
-                                .font(.system(.title3, design: .rounded))
-                                .bold()
-                                .foregroundColor(colored || colorScheme == .dark ? .white : item.category.color)
-                            
-                            Text(months > 1 ? "months" : "month")
-                                .font(.system(.caption, design: .rounded))
-                                .foregroundColor(colored || colorScheme == .dark ? .white : item.category.color)
-                            
-                        }
-                        VStack {
-                            Text("\(days)")
-                                .font(.system(.title3, design: .rounded))
-                                .bold()
-                                .foregroundColor(colored || colorScheme == .dark ? .white : item.category.color)
-                            
-                            Text(days > 1 ? "days" : "day")
-                                .font(.system(.caption, design: .rounded))
-                                .foregroundColor(colored || colorScheme == .dark ? .white : item.category.color)
-                        }
-                    }
-                    .frame(minWidth: 0)
-                    
-                // Only show the days if it's been less than a month.
-                } else {
-                    
-                    VStack {
-                        Text("\(item.daysAgo)")
-                            .font(.system(.title2, design: .rounded))
-                            .bold()
-                            .foregroundColor(colored || colorScheme == .dark ? .white : item.category.color)
-                        
-                        Text(item.daysAgo > 1 ? "days" : "day")
-                            .font(.system(.body, design: .rounded))
-                            .foregroundColor(colored || colorScheme == .dark ? .white : item.category.color)
-                    }
-                    .frame(minWidth: 0)
-                    
-                }
                 
             // If user just wants to see the days.
             } else {

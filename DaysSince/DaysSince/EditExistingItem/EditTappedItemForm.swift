@@ -26,30 +26,52 @@ struct EditTappedItemForm: View {
     @State var showConfirmDelete = false
     
     var body: some View {
-        Form {
-            nameSection
-            dateSection
-            newCategorySection
-            reminderSection
-            deleteButtonSection
-        }
-        .confirmationDialog("Delete Event", isPresented: $showConfirmDelete) {
-            Button("Delete", role: .destructive) {
-                deleteEvent()
+        if #available(iOS 16.0, *) {
+            Form {
+                nameSection
+                dateSection
+                newCategorySection
+                reminderSection
+                deleteButtonSection
             }
-            Button("Cancel", role: .cancel) { }
-        } message: {
-            Text("Are you sure you want to delete this event?")
+            .scrollDismissesKeyboard(.immediately)  // Only available for iOS 16+
+            .confirmationDialog("Delete Event", isPresented: $showConfirmDelete) {
+                Button("Delete", role: .destructive) {
+                    deleteEvent()
+                }
+                Button("Cancel", role: .cancel) { }
+            } message: {
+                Text("Are you sure you want to delete this event?")
+            }
+        } else {
+            Form {
+                nameSection
+                dateSection
+                newCategorySection
+                reminderSection
+                deleteButtonSection
+            }
+            .confirmationDialog("Delete Event", isPresented: $showConfirmDelete) {
+                Button("Delete", role: .destructive) {
+                    deleteEvent()
+                }
+                Button("Cancel", role: .cancel) { }
+            } message: {
+                Text("Are you sure you want to delete this event?")
+            }
         }
     }
     
     var nameSection: some View {
         Section {
-            TextField("Name", text: $tappedItem.name)
-                .focused($nameIsFocused)
+            TextField("Name", text: $tappedItem.name){
+                UIApplication.shared.endEditing()
+            }
+            .focused($nameIsFocused)
         } header: {
             Text("Name")
         }
+        
     }
     
     var reminderSection: some View {
