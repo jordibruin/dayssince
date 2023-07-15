@@ -15,20 +15,8 @@ struct DetailedTimeDisplayModeCell: View {
         
         Section {
             HStack {
-                LinearGradient(colors: [Color.workColor, Color.workColor.lighter()], startPoint: .topLeading, endPoint: .bottomTrailing)
-                    .frame(width: 30, height: 30)
-                    .cornerRadius(8)
-                    .overlay(
-                        Image(systemName: "rectangle.and.pencil.and.ellipsis")
-                            .symbolRenderingMode(.hierarchical)
-                            .foregroundColor(.white)
-                    )
-                    .padding(.leading, -10)
-                
-                // Current wording is poor.
-                Text("Detailed Time Display Mode")
-                    .font(.system(.body, design: .rounded))
-                
+                buttonImage
+                buttonText
                 Spacer()
                 toggle
             }
@@ -38,6 +26,24 @@ struct DetailedTimeDisplayModeCell: View {
                 .fixedSize(horizontal: false, vertical: true)
                 .padding(.leading, -8)
         }
+    }
+    
+    var buttonImage: some View {
+        LinearGradient(colors: [Color.workColor, Color.workColor.lighter()], startPoint: .topLeading, endPoint: .bottomTrailing)
+            .frame(width: 30, height: 30)
+            .cornerRadius(8)
+            .overlay(
+                Image(systemName: "rectangle.and.pencil.and.ellipsis")
+                    .symbolRenderingMode(.hierarchical)
+                    .foregroundColor(.white)
+            )
+            .padding(.leading, -10)
+    }
+    
+    var buttonText: some View {
+        // ToDo: Current wording is poor.
+        Text("Detailed Time Display Mode")
+            .font(.system(.body, design: .rounded))
     }
     
     var toggle: some View {

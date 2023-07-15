@@ -16,13 +16,13 @@ struct AddItemSheet: View {
     
     @State private var name: String = ""
     @State var date: Date = Date.now
-    @State var selectedCategory: CategoryDaysSinceItem? = nil
+    @State var selectedCategory: CategoryDSItem? = nil
     @State var remindersEnabled: Bool = false
     @State var selectedReminder: DSItemReminders = .daily
     
     @FocusState private var nameIsFocused: Bool
     
-    @Binding var items: [DaysSinceItem]
+    @Binding var items: [DSItem]
     
     var accentColor: Color {
         selectedCategory == nil ? Color.black : selectedCategory?.color as! Color
@@ -56,7 +56,7 @@ struct AddItemSheet: View {
             
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
-                    let newItem = DaysSinceItem(
+                    let newItem = DSItem(
                         id: UUID(),
                         name: name,
                         category: selectedCategory ?? .life,
@@ -100,7 +100,7 @@ struct AddItemSheet: View {
 
 struct AddItemSheet_Previews: PreviewProvider {
     static var previews: some View {
-        AddItemSheet(selectedCategory: CategoryDaysSinceItem.work, items: .constant([]))
+        AddItemSheet(selectedCategory: CategoryDSItem.work, items: .constant([]))
     }
 }
 

@@ -13,14 +13,12 @@ struct EditTappedItemForm: View {
     
     @EnvironmentObject var notificationManager: NotificationManager
     
-    @Binding var items: [DaysSinceItem]
-    @Binding var completedItems: [DaysSinceItem]
-    @Binding var favoriteItems: [DaysSinceItem]
+    @Binding var items: [DSItem]
     
-    @Binding var tappedItem: DaysSinceItem
+    @Binding var tappedItem: DSItem
     @Binding var editItemSheet: Bool
     
-    var category: CategoryDaysSinceItem = .hobbies
+    var category: CategoryDSItem = .hobbies
     
     @FocusState.Binding var nameIsFocused: Bool
     @State var showConfirmDelete = false
@@ -129,7 +127,7 @@ struct EditTappedItemForm: View {
     
     var newCategorySection: some View {
         Section {
-            ForEach(CategoryDaysSinceItem.allCases) { category in
+            ForEach(CategoryDSItem.allCases) { category in
                 Button {
                     tappedItem.category = category
                 } label: {
@@ -199,68 +197,6 @@ struct EditTappedItemForm: View {
             dismiss()
         }
     }
-    
-    // Haven't deleted these in case we keep the favorite items.
-    
-//    var completeItemButton: some View {
-//        Button {
-//            withAnimation{
-//                // Update when the item was completed.
-//                tappedItem.dateCompleted = Date.now
-//                // Add item to completed items.
-//                completedItems.append(tappedItem)
-//                // Remove from ongoing items.
-//                var item_index = getItemIndex()
-//                items.remove(at: item_index)
-//                // Close the sheet
-//                editItemSheet = false
-//                dismiss()
-//            }
-//        } label: {
-//            Text("Complete Event")
-//                .font(.system(.title, design: .rounded))
-//                .bold()
-//                .foregroundColor(tappedItem.category.color)
-//                .padding()
-//        }
-//        .padding([.top, .bottom], 10)
-//        .background(.white)
-//        .foregroundColor(tappedItem.category.color)
-//        .cornerRadius(25)
-//        .overlay(
-//            RoundedRectangle(cornerRadius: 25)
-//                .stroke(tappedItem.category.color, lineWidth: 1)
-//        )
-//    }
-    
-//    var favoriteItemButton: some View {
-//        Button {
-//            withAnimation{
-//                // Add item to favorite items.
-//                favoriteItems.append(tappedItem)
-//                // Remove from ongoing items.
-//                var item_index = getItemIndex()
-//                items.remove(at: item_index)
-//                // Close the sheet
-//                editItemSheet = false
-//                dismiss()
-//            }
-//        } label: {
-//            Text("Add to Favorite")
-//                .font(.system(.title, design: .rounded))
-//                .bold()
-//                .foregroundColor(tappedItem.category.color)
-//                .padding()
-//        }
-//        .padding([.top, .bottom], 10)
-//        .background(.white)
-//        .foregroundColor(tappedItem.category.color)
-//        .cornerRadius(25)
-//        .overlay(
-//            RoundedRectangle(cornerRadius: 25)
-//                .stroke(tappedItem.category.color, lineWidth: 1)
-//        )
-//    }
 }
 
 //struct EditTappedItemForm_Previews: PreviewProvider {

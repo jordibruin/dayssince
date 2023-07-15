@@ -8,9 +8,9 @@
 import Foundation
 import SwiftUI
 
-enum CategoryDaysSinceItem: Codable, Identifiable, Equatable, CaseIterable, Hashable {
+enum CategoryDSItem: Codable, Identifiable, Equatable, CaseIterable, Hashable {
     
-    static var allCases: [CategoryDaysSinceItem] = [
+    static var allCases: [CategoryDSItem] = [
         .work, .life, .hobbies, .health
     ]
     

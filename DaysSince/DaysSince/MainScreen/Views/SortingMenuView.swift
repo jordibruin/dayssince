@@ -35,7 +35,7 @@ enum SortType: String, CaseIterable, Identifiable {
         }
     }
         
-    func sort(itemOne: DaysSinceItem, itemTwo: DaysSinceItem) -> Bool {
+    func sort(itemOne: DSItem, itemTwo: DSItem) -> Bool {
         switch self {
         case .alphabeticallyAscending:
             return itemOne.name < itemTwo.name
@@ -60,7 +60,7 @@ struct SortingMenuView: View {
     @Environment(\.colorScheme) var colorScheme
     
     
-    @Binding var items: [DaysSinceItem]
+    @Binding var items: [DSItem]
     
     @State var sortType = "none"
     @State var descending = true

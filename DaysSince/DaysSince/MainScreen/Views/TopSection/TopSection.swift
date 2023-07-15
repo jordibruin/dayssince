@@ -9,9 +9,7 @@ import SwiftUI
 
 struct TopSection: View {
     
-    @Binding var items: [DaysSinceItem]
-    @Binding var completedItems: [DaysSinceItem]
-    @Binding var favoriteItems: [DaysSinceItem]
+    @Binding var items: [DSItem]
     
     @Binding var isDaysDisplayModeDetailed: Bool
     
@@ -20,37 +18,29 @@ struct TopSection: View {
             VStack {
                 NavigationLink(
                     destination: CategoryFilteredView(
-                        category: CategoryDaysSinceItem.work,
+                        category: CategoryDSItem.work,
                         showAddItemSheet: false,
                         editItemSheet: false,
                         items: $items,
-                        completedItems: $completedItems,
-                        favoriteItems: $favoriteItems,
                         isDaysDisplayModeDetailed: $isDaysDisplayModeDetailed)
                 ) {
                     MenuBlockView(
                         category: .work,
-                        items: $items,
-                        completedItems: $completedItems,
-                        favoriteItems: $favoriteItems)}
+                        items: $items)}
                 
                 
                 NavigationLink(
                     destination: CategoryFilteredView(
-                        category: CategoryDaysSinceItem.life,
+                        category: CategoryDSItem.life,
                         showAddItemSheet: false,
                         editItemSheet: false,
                         items: $items,
-                        completedItems: $completedItems,
-                        favoriteItems: $favoriteItems,
                         isDaysDisplayModeDetailed: $isDaysDisplayModeDetailed
                     )
                 ) {
                     MenuBlockView(
                         category: .life,
-                        items: $items,
-                        completedItems: $completedItems,
-                        favoriteItems: $favoriteItems
+                        items: $items
                     )
                 }
             }
@@ -58,37 +48,29 @@ struct TopSection: View {
             VStack {
                 NavigationLink(
                     destination: CategoryFilteredView(
-                        category: CategoryDaysSinceItem.health,
+                        category: CategoryDSItem.health,
                         showAddItemSheet: false,
                         editItemSheet: false,
                         items: $items,
-                        completedItems: $completedItems,
-                        favoriteItems: $favoriteItems,
                         isDaysDisplayModeDetailed: $isDaysDisplayModeDetailed)
                 ) {
                     MenuBlockView(
                         category: .health,
-                        items: $items,
-                        completedItems: $completedItems,
-                        favoriteItems: $favoriteItems
+                        items: $items
                     )
                 }
                 
                 NavigationLink(
                     destination: CategoryFilteredView(
-                        category: CategoryDaysSinceItem.hobbies,
+                        category: CategoryDSItem.hobbies,
                         showAddItemSheet: false,
                         editItemSheet: false,
                         items: $items,
-                        completedItems: $completedItems,
-                        favoriteItems: $favoriteItems,
                         isDaysDisplayModeDetailed: $isDaysDisplayModeDetailed)
                 ) {
                     MenuBlockView(
                         category: .hobbies,
-                        items: $items,
-                        completedItems: $completedItems,
-                        favoriteItems: $favoriteItems
+                        items: $items
                     )
                 }
             }
@@ -99,6 +81,6 @@ struct TopSection: View {
 
 struct TopSection_Previews: PreviewProvider {
     static var previews: some View {
-        TopSection(items: .constant([]), completedItems: .constant([]), favoriteItems: .constant([]), isDaysDisplayModeDetailed: .constant(false))
+        TopSection(items: .constant([]), isDaysDisplayModeDetailed: .constant(false))
     }
 }

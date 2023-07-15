@@ -10,7 +10,7 @@ import SwiftUI
 struct OnboardingScreen: View {
     
     @Binding var hasSeenOnboarding: Bool
-    @Binding var items: [DaysSinceItem]
+    @Binding var items: [DSItem]
     
     @State var selectedPage = 0
     
@@ -20,10 +20,10 @@ struct OnboardingScreen: View {
         TabView(selection: $selectedPage) {
             Introduction(selectedPage: $selectedPage).tag(0)
                 .simultaneousGesture(DragGesture())
-//
+
             CreateFirstEvent(hasSeenOnboarding: $hasSeenOnboarding, selectedPage: $selectedPage, items: $items).tag(1)
                 .simultaneousGesture(DragGesture())
-//
+
 //            PurchasesView(inOnboarding: true, selectedPage: $selectedPage).tag(2)
 //                .clipped()
 //                .simultaneousGesture(DragGesture())

@@ -11,11 +11,9 @@ struct MenuBlockView: View {
     
     @Environment(\.colorScheme) var colorScheme
     
-    let category: CategoryDaysSinceItem
+    let category: CategoryDSItem
     
-    @Binding var items: [DaysSinceItem]
-    @Binding var completedItems: [DaysSinceItem]
-    @Binding var favoriteItems: [DaysSinceItem]
+    @Binding var items: [DSItem]
     
     var body: some View {
         ZStack(alignment: .leading) {
@@ -90,7 +88,7 @@ struct MenuBlockView: View {
     }
     
     func findItemCount() -> Int {
-        return items.filter{ $0.category == category}.count + completedItems.filter{ $0.category == category}.count + favoriteItems.filter{ $0.category == category}.count
+        return items.filter{ $0.category == category}.count
         
     }
 }
@@ -98,7 +96,7 @@ struct MenuBlockView: View {
 
 struct MenuBlockView_Previews: PreviewProvider {
     static var previews: some View {
-        MenuBlockView(category: .work, items: .constant([]), completedItems: .constant([]), favoriteItems: .constant([]))
+        MenuBlockView(category: .work, items: .constant([]))
             .preferredColorScheme(.dark)
     }
 }

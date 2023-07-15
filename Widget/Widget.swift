@@ -12,7 +12,7 @@ import SwiftUI
 
 struct Provider: IntentTimelineProvider {
 
-    @AppStorage("items", store: UserDefaults(suiteName: "group.goodsnooze.dayssince")) var items: [DaysSinceItem] = []
+    @AppStorage("items", store: UserDefaults(suiteName: "group.goodsnooze.dayssince")) var items: [DSItem] = []
     
 //    var travelCardsManager = TravelCardsManager.shared
 
@@ -154,7 +154,7 @@ struct WidgetContent: TimelineEntry {
         self.daysNumber = daysNumber
     }
     
-    init(item: DaysSinceItem) {
+    init(item: DSItem) {
         self.date = item.dateLastDone
         self.name = item.name
         self.id = item.id

@@ -16,7 +16,7 @@ class NotificationManager: ObservableObject {
     
     @Published var pendingNotifications: [UNNotificationRequest] = []
     
-    @AppStorage("items", store: UserDefaults(suiteName: "group.goodsnooze.dayssince")) var items: [DaysSinceItem] = []
+    @AppStorage("items", store: UserDefaults(suiteName: "group.goodsnooze.dayssince")) var items: [DSItem] = []
     
     init() {
         // refresh notifications
@@ -77,7 +77,7 @@ class NotificationManager: ObservableObject {
         }
     }
     
-    func addReminderFor(item: DaysSinceItem) {
+    func addReminderFor(item: DSItem) {
         
 //        var notificationsContent: [UNMutableNotificationContent]
         
@@ -193,7 +193,7 @@ class NotificationManager: ObservableObject {
     }
     
     
-    func getDateComponentsFor(item: DaysSinceItem, extraDays: Double) -> DateComponents {
+    func getDateComponentsFor(item: DSItem, extraDays: Double) -> DateComponents {
         var dateComponents = DateComponents()
         
         if item.reminder == .none {
@@ -219,7 +219,7 @@ class NotificationManager: ObservableObject {
         return dateComponents
     }
     
-    func deleteReminderFor(item: DaysSinceItem) {
+    func deleteReminderFor(item: DSItem) {
         center.getPendingNotificationRequests { notifications in
             self.center.removePendingNotificationRequests(withIdentifiers: [item.reminderNotificationID])
         }

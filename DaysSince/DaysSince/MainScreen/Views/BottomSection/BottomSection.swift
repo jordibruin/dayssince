@@ -9,18 +9,16 @@ import SwiftUI
 
 struct BottomSection: View {
     
-    @Binding var items: [DaysSinceItem]
-    @Binding var completedItems: [DaysSinceItem]
-    @Binding var favoriteItems: [DaysSinceItem]
+    @Binding var items: [DSItem]
     
     @Binding var editItemSheet: Bool
-    @Binding var tappedItem: DaysSinceItem
+    @Binding var tappedItem: DSItem
     @Binding var isDaysDisplayModeDetailed: Bool
     
     
     var body: some View {
         
-        NormalItemsList(
+        DSItemListView(
             items: $items,
             editItemSheet: $editItemSheet,
             tappedItem: $tappedItem,
@@ -36,6 +34,6 @@ struct BottomSection: View {
 
 struct BottomSection_Previews: PreviewProvider {
     static var previews: some View {
-        BottomSection(items: .constant([.placeholderItem()]), completedItems: .constant([.placeholderItem()]), favoriteItems: .constant([.placeholderItem()]), editItemSheet: .constant(false), tappedItem: .constant(DaysSinceItem.placeholderItem()), isDaysDisplayModeDetailed: .constant(false))
+        BottomSection(items: .constant([.placeholderItem()]), editItemSheet: .constant(false), tappedItem: .constant(DSItem.placeholderItem()), isDaysDisplayModeDetailed: .constant(false))
     }
 }

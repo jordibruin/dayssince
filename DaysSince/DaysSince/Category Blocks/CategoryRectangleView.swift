@@ -13,9 +13,9 @@ struct CategoryRectangleView: View {
 //        self.selectedCategory = selectedCategory
 //    }
     
-    var category: CategoryDaysSinceItem
+    var category: CategoryDSItem
     
-    var selectedCategory: CategoryDaysSinceItem?
+    var selectedCategory: CategoryDSItem?
     
     var body: some View {
         ZStack(alignment: .leading) {

@@ -11,11 +11,9 @@ struct EditTappedItemSheet: View {
     
     @EnvironmentObject var notificationManager: NotificationManager
     
-    @Binding var items: [DaysSinceItem]
-    @Binding var completedItems: [DaysSinceItem]
-    @Binding var favoriteItems: [DaysSinceItem]
+    @Binding var items: [DSItem]
     
-    @Binding var tappedItem: DaysSinceItem
+    @Binding var tappedItem: DSItem
     @Binding var editItemSheet: Bool
     
     @Environment(\.dismiss) var dismiss
@@ -26,7 +24,7 @@ struct EditTappedItemSheet: View {
     var body: some View {
         NavigationView {
             ZStack {
-                EditTappedItemForm(items: $items, completedItems: $completedItems, favoriteItems: $favoriteItems, tappedItem: $tappedItem, editItemSheet: $editItemSheet, nameIsFocused: $nameIsFocused)
+                EditTappedItemForm(items: $items, tappedItem: $tappedItem, editItemSheet: $editItemSheet, nameIsFocused: $nameIsFocused)
                 .ignoresSafeArea(.keyboard, edges: .bottom)
                 .navigationTitle("Edit Event")
                 .navigationBarTitleDisplayMode(.inline)
@@ -124,6 +122,6 @@ struct EditTappedItemSheet: View {
 
 struct EditTappedItemSheet_Previews: PreviewProvider {
     static var previews: some View {
-        EditTappedItemSheet(items: .constant([]), completedItems: .constant([]), favoriteItems:    .constant([]), tappedItem: .constant(DaysSinceItem.placeholderItem()), editItemSheet: .constant(false))
+        EditTappedItemSheet(items: .constant([]), tappedItem: .constant(DSItem.placeholderItem()), editItemSheet: .constant(false))
     }
 }
