@@ -228,8 +228,8 @@
 		C2B53D742869CA1000407F40 /* CategoryDSItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CategoryDSItem.swift; path = DaysSince/DaysSince/Model/CategoryDSItem.swift; sourceTree = SOURCE_ROOT; };
 		C2B53D762869CA1F00407F40 /* DSItemReminders.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DSItemReminders.swift; path = DaysSince/DaysSince/Model/DSItemReminders.swift; sourceTree = SOURCE_ROOT; };
 		C2B53D792869CA3B00407F40 /* AddItemForm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AddItemForm.swift; path = DaysSince/DaysSince/AddNewItem/AddItemForm.swift; sourceTree = SOURCE_ROOT; };
-		C2B53D7B2869CA5800407F40 /* CategoriesGridView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CategoriesGridView.swift; path = "DaysSince/Category Blocks/CategoriesGridView.swift"; sourceTree = "<group>"; };
-		C2B53D7D2869CA8300407F40 /* CategoryRectangleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CategoryRectangleView.swift; path = "DaysSince/Category Blocks/CategoryRectangleView.swift"; sourceTree = "<group>"; };
+		C2B53D7B2869CA5800407F40 /* CategoriesGridView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoriesGridView.swift; sourceTree = "<group>"; };
+		C2B53D7D2869CA8300407F40 /* CategoryRectangleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoryRectangleView.swift; sourceTree = "<group>"; };
 		C2B53D802869CAC100407F40 /* MainScreen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MainScreen.swift; path = DaysSince/DaysSince/MainScreen/MainScreen.swift; sourceTree = SOURCE_ROOT; };
 		C2B53D832869CACA00407F40 /* MainBackgroundView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainBackgroundView.swift; sourceTree = "<group>"; };
 		C2B53D852869CACA00407F40 /* DSItemView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DSItemView.swift; sourceTree = "<group>"; };
@@ -376,12 +376,26 @@
 			path = Pages;
 			sourceTree = "<group>";
 		};
+		7A8EE6B12ABDAAC10074B690 /* CategoriesViews */ = {
+			isa = PBXGroup;
+			children = (
+				C2B53D7D2869CA8300407F40 /* CategoryRectangleView.swift */,
+				C2B53D7B2869CA5800407F40 /* CategoriesGridView.swift */,
+				7A007CB62800885700985108 /* CategoryFilteredView.swift */,
+			);
+			path = CategoriesViews;
+			sourceTree = "<group>";
+		};
 		7AAB507027FF83CC0086A5A8 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				C2B53D7F2869CAB700407F40 /* Main */,
+				7AE8E360286C91EB00538521 /* Settings */,
 				7A7CD90A287F20E20001C64F /* Onboarding */,
+				7A8EE6B12ABDAAC10074B690 /* CategoriesViews */,
 				7AF56A99286F32CD0068B467 /* Supporter */,
 				7AE8E363286C944500538521 /* AppIcons */,
+<<<<<<< refs/remotes/origin/refactor-codebase
 				7AE8E360286C91EB00538521 /* Settings */,
 				C2B53D782869CA2900407F40 /* Add Item */,
 				C2B53D7F2869CAB700407F40 /* Main */,
@@ -389,6 +403,10 @@
 				C2B53D7D2869CA8300407F40 /* CategoryRectangleView.swift */,
 				7A007CB62800885700985108 /* CategoryFilteredView.swift */,
 				C2B53D9E2869CD3000407F40 /* Edit */,
+=======
+				C2B53D782869CA2900407F40 /* AddItemViews */,
+				C2B53D9E2869CD3000407F40 /* EditItemViews */,
+>>>>>>> Improved code readability, deleted unused code, refactored poor variable names, added some docstrings, and fixed the bug with the notifications for the event reminders. This effort is not finished yet but I have gone through a substantial part of the project.
 			);
 			name = Screens;
 			sourceTree = "<group>";
@@ -599,13 +617,13 @@
 			path = Analytics;
 			sourceTree = "<group>";
 		};
-		C2B53D782869CA2900407F40 /* Add Item */ = {
+		C2B53D782869CA2900407F40 /* AddItemViews */ = {
 			isa = PBXGroup;
 			children = (
 				7A2A770827F2592D006F0470 /* AddItemSheet.swift */,
 				C2B53D792869CA3B00407F40 /* AddItemForm.swift */,
 			);
-			path = "Add Item";
+			path = AddItemViews;
 			sourceTree = "<group>";
 		};
 		C2B53D7F2869CAB700407F40 /* Main */ = {
@@ -656,13 +674,13 @@
 			path = TopSection;
 			sourceTree = "<group>";
 		};
-		C2B53D9E2869CD3000407F40 /* Edit */ = {
+		C2B53D9E2869CD3000407F40 /* EditItemViews */ = {
 			isa = PBXGroup;
 			children = (
 				C2B53D9F2869CD3C00407F40 /* EditTappedItemForm.swift */,
 				7A21765827FB2E3E006B106B /* EditTappedItemSheet.swift */,
 			);
-			path = Edit;
+			path = EditItemViews;
 			sourceTree = "<group>";
 		};
 		C2B53DAD2869F0CE00407F40 /* Frameworks */ = {

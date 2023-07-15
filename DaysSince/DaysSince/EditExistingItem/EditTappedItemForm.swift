@@ -185,11 +185,7 @@ struct EditTappedItemForm: View {
             tappedItem.reminderNotificationID = items[item_index].reminderNotificationID
             
             // Notification Manager
-            
             notificationManager.deleteReminderFor(item: tappedItem)
-            
-            
-//            tappedItem.deleteReminders()
             
             items.remove(at: getItemIndex())
             

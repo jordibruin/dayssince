@@ -33,7 +33,7 @@ struct MainScreen: View {
                     )
                     .padding([.top, .bottom], 16)
                     
-//                     Code to test notifications. 
+//                    Code is used to test the notifications.
 //                    VStack(alignment: .leading) {
 //                        HStack {
 //                            Text("Notification Testing Center")
@@ -52,13 +52,10 @@ struct MainScreen: View {
 //                            Text(notification.content.title)
 //                            Text("\(notification.trigger!)")
 //                        }
-//
-//                        //
 //                    }
 //                    .padding(.horizontal)
 //                    .onAppear {
 //                        notificationManager.getPendingNotification()
-//
 //                    }
                     
                     BottomSection(

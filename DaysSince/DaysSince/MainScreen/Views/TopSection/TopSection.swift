@@ -7,6 +7,10 @@
 
 import SwiftUI
 
+/**
+   The top section of the main screen contains the grid with the categories for the events.
+   By clicking on any of the categories it will lead you to a filtered view with events only from that category. 
+*/
 struct TopSection: View {
     
     @Binding var items: [DSItem]

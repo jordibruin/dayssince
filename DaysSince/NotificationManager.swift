@@ -9,7 +9,18 @@ import Foundation
 import UserNotifications
 import SwiftUI
 
-
+/**
+    This class is responsible for managing the notifications for the reminders of different events.
+    Methods:
+    * refreshNotifications
+    * getPendingNotifications
+    * checkPermission: Checks whether the user has given permission to receive notification
+    * addReminderFor
+    * addReminderFor: Create notifications for an event
+    * deleteReminderFor: Deletes existing notifications for an event
+    * getDateComponentsFor:
+        
+*/
 class NotificationManager: ObservableObject {
     
     let center = UNUserNotificationCenter.current()
@@ -19,7 +30,7 @@ class NotificationManager: ObservableObject {
     @AppStorage("items", store: UserDefaults(suiteName: "group.goodsnooze.dayssince")) var items: [DSItem] = []
     
     init() {
-        // refresh notifications
+        // Refresh notifications
         refreshNotifications()
     }
     
@@ -54,19 +65,18 @@ class NotificationManager: ObservableObject {
                 print("Notification requests open")
             })
             
-            // how do we print each request in requests ?
-            
+            // Used for observability purposes when testing.
             for request in requests {
-                print(request.identifier)
-                print(request.content.title)
-                print(request.content.body)
+                print("Request.identifier", request.identifier)
+                print("Request.content.title",request.content.title)
+                print("Request.content.body",request.content.body)
             }
         }
     }
     
     @Published var notificationPermissionGiven = true
     
-    func checkPermission() {
+    private func checkPermission() {
         center.getNotificationSettings { settings in
             if settings.authorizationStatus == .authorized {
                 self.notificationPermissionGiven = true
@@ -148,9 +158,6 @@ class NotificationManager: ObservableObject {
             return
         }
         
-        
-
-        
         // For testing change the time interval for the trigger.
 //        let timeInterval: Double = 60
         
@@ -172,7 +179,7 @@ class NotificationManager: ObservableObject {
                 for request in requests {
                     self.center.add(request)
                     print("🔔 Added notification!")
-                    print("the request is: \(request)")
+                    print("The request is: \(request)")
                 }
             } else {
                 self.center.requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
@@ -180,7 +187,7 @@ class NotificationManager: ObservableObject {
                         for request in requests {
                             self.center.add(request)
                             print("🔔 Added notification!")
-                            print("the request is: \(request)")
+                            print("The request is: \(request)")
                         }
 
                     } else {
@@ -192,25 +199,26 @@ class NotificationManager: ObservableObject {
         }
     }
     
-    
-    func getDateComponentsFor(item: DSItem, extraDays: Double) -> DateComponents {
+    /// Create the date for a reminder notification of a Days Since Item
+    private func getDateComponentsFor(item: DSItem, extraDays: Double) -> DateComponents {
         var dateComponents = DateComponents()
+        var startDate = Calendar.current.startOfDay(for: Date())
         
         if item.reminder == .none {
             // FIX
             return DateComponents()
         }else if item.reminder == .daily {
-            dateComponents.day = Calendar.current.dateComponents([.day], from: item.dateLastDone.addingTimeInterval(extraDays * 86400)).day
+            dateComponents.day = Calendar.current.dateComponents([.day], from: startDate.addingTimeInterval(extraDays * 86400)).day
             dateComponents.hour = 10
             dateComponents.minute = 0
         } else if item.reminder == .weekly {
-            dateComponents.weekday = Calendar.current.dateComponents([.day], from: item.dateLastDone.addingTimeInterval(extraDays * 86400)).weekday
+            dateComponents.weekday = Calendar.current.dateComponents([.day], from: startDate.addingTimeInterval(extraDays * 86400)).weekday
             dateComponents.hour = 10
             dateComponents.second = 0
         } else if item.reminder == .monthly {
-            dateComponents.day = Calendar.current.dateComponents([.day], from: item.dateLastDone.addingTimeInterval(extraDays * 86400)).day
+            dateComponents.day = Calendar.current.dateComponents([.day], from: startDate.addingTimeInterval(extraDays * 86400)).day
             
-            dateComponents.weekday = Calendar.current.dateComponents([.day], from: item.dateLastDone.addingTimeInterval(extraDays * 86400)).weekday
+            dateComponents.weekday = Calendar.current.dateComponents([.day], from: startDate.addingTimeInterval(extraDays * 86400)).weekday
             
             dateComponents.hour = 10
             dateComponents.minute = 0
@@ -219,10 +227,22 @@ class NotificationManager: ObservableObject {
         return dateComponents
     }
     
+    /// Delete the reminder notifications for a Days Since item.
     func deleteReminderFor(item: DSItem) {
+        /*
+         The notification IDs have the following format: reminderNotificationIDX, where X is an integer starting from 0.
+         That is why we find the mathcing IDs that begind with reminderNotificationID and delete them.
+        */
         center.getPendingNotificationRequests { notifications in
-            self.center.removePendingNotificationRequests(withIdentifiers: [item.reminderNotificationID])
+            let matchingIdentifiers = notifications.compactMap { request in
+                if request.identifier.starts(with: item.reminderNotificationID) {
+                    return request.identifier
+                }
+                return nil
+            }
+            if matchingIdentifiers != nil {
+                self.center.removePendingNotificationRequests(withIdentifiers: matchingIdentifiers)
+            }
         }
     }
-    
 }
