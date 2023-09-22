@@ -10,7 +10,7 @@ import SwiftUI
 
 class IntentHandler: INExtension, SelectEventIntentHandling {
     
-    @AppStorage("items", store: UserDefaults(suiteName: "group.goodsnooze.dayssince")) var items: [DaysSinceItem] = []
+    @AppStorage("items", store: UserDefaults(suiteName: "group.goodsnooze.dayssince")) var items: [DSItem] = []
     
     func provideEventOptionsCollection(for intent: SelectEventIntent) async throws -> INObjectCollection<WidgetDaysSinceEvent> {
         let events = items.map { WidgetDaysSinceEvent(identifier: $0.id.uuidString, display: $0.name)}

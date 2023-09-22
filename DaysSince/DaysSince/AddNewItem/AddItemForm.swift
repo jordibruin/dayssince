@@ -9,10 +9,10 @@ import SwiftUI
 
 struct AddItemForm: View {
     
-    @Binding var items: [DaysSinceItem]
+    @Binding var items: [DSItem]
     @Binding var name: String
     @Binding var date: Date
-    @Binding var category: CategoryDaysSinceItem?
+    @Binding var category: CategoryDSItem?
     @Binding var remindersEnabled: Bool
     
     let reminders = ["Daily", "Weekly", "Monthly"]
@@ -100,7 +100,7 @@ struct AddItemForm: View {
     
     var newCategorySection: some View {
         Section {
-            ForEach(CategoryDaysSinceItem.allCases) { category in
+            ForEach(CategoryDSItem.allCases) { category in
                 Button {
                     self.category = category
                 } label: {
@@ -141,10 +141,17 @@ struct Background<Content: View>: View {
     }
 }
 
+// ToDo: fix the preview
 //struct AddItemForm_Previews: PreviewProvider {
+//    
 //    static var previews: some View {
-//        AddItemForm(items: .constant([]), name: .cont, date: <#T##Binding<Date>#>, category: <#T##Binding<CategoryDaysSinceItem?>#>, getReminders: <#T##Binding<Bool>#>, selectedReminder: <#T##Binding<DSItemReminders>#>, nameIsFocused: <#T##FocusState<Bool>.Binding#>
-////        AddItemForm(items: .constant([]), name: .constant(""), date: .constant(Date.now), category: .constant(CategoryDaysSinceItem.work), getReminders: .constant(true), selectedReminder: .constant("Daily"))
+//        AddItemForm(items: .constant([]),
+//                    name: .constant(""),
+//                    date: .constant(Date.now),
+//                    category: .constant(CategoryDSItem.work),
+//                    remindersEnabled: .constant(true),
+//                    selectedReminder: .constant(DSItemReminders.daily),
+//                    nameIsFocused: .constant(false))
 //    }
 //}
 

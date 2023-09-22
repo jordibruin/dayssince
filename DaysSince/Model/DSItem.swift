@@ -10,7 +10,7 @@ import SwiftUI
 import UserNotifications
 
 
-struct DaysSinceItem: Identifiable, Codable {
+struct DSItem: Identifiable, Codable {
     
     let id: UUID
     
@@ -18,7 +18,7 @@ struct DaysSinceItem: Identifiable, Codable {
     var name: String
     
     /// Category of the item.
-    var category = CategoryDaysSinceItem.work
+    var category = CategoryDSItem.work
     
     /// Day last done.
     var dateLastDone: Date
@@ -53,8 +53,8 @@ struct DaysSinceItem: Identifiable, Codable {
         return abs(daysSince)
     }
     
-    static func placeholderItem() -> DaysSinceItem {
-        return DaysSinceItem(id: UUID(), name: "Placeholder", category: CategoryDaysSinceItem.hobbies, dateLastDone: Date.now, remindersEnabled: false)
+    static func placeholderItem() -> DSItem {
+        return DSItem(id: UUID(), name: "Placeholder", category: CategoryDSItem.hobbies, dateLastDone: Date.now, remindersEnabled: false)
     }
     
     

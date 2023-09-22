@@ -14,12 +14,12 @@ struct CreateFirstEvent: View {
     
     @Binding var hasSeenOnboarding: Bool
     @Binding var selectedPage: Int
-    @Binding var items: [DaysSinceItem]
+    @Binding var items: [DSItem]
     
     
     @State private var name: String = ""
     @State var date: Date = Date.now
-    @State var selectedCategory: CategoryDaysSinceItem? = nil
+    @State var selectedCategory: CategoryDSItem? = nil
     @State var remindersEnabled: Bool = false
     @State var selectedReminder: DSItemReminders = .daily
     
@@ -86,7 +86,7 @@ struct CreateFirstEvent: View {
     
     var newCategorySection: some View {
         Section {
-            ForEach(CategoryDaysSinceItem.allCases) { category in
+            ForEach(CategoryDSItem.allCases) { category in
                 Button {
                     selectedCategory = category
                 } label: {
@@ -124,7 +124,7 @@ struct CreateFirstEvent: View {
                 hasSeenOnboarding = true
                 
                 // Add new item.
-                let newItem = DaysSinceItem(
+                let newItem = DSItem(
                     id: UUID(),
                     name: name,
                     category: selectedCategory ?? .life,

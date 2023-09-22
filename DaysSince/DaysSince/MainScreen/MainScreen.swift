@@ -14,11 +14,9 @@ struct MainScreen: View {
     @State var showAddItemSheet = false
     @State var showSettings = false
     @State var editItemSheet = false
-    @State var tappedItem = DaysSinceItem.placeholderItem()
+    @State var tappedItem = DSItem.placeholderItem()
     
-    @Binding var items: [DaysSinceItem]
-    @Binding var completedItems: [DaysSinceItem]
-    @Binding var favoriteItems: [DaysSinceItem]
+    @Binding var items: [DSItem]
     @Binding var isDaysDisplayModeDetailed: Bool
     
     @EnvironmentObject var notificationManager: NotificationManager
@@ -31,13 +29,11 @@ struct MainScreen: View {
                 ScrollView {
                     TopSection(
                         items: $items,
-                        completedItems: $completedItems,
-                        favoriteItems: $favoriteItems,
                         isDaysDisplayModeDetailed: $isDaysDisplayModeDetailed
                     )
                     .padding([.top, .bottom], 16)
                     
-//                     Code to test notifications. 
+//                    Code is used to test the notifications.
 //                    VStack(alignment: .leading) {
 //                        HStack {
 //                            Text("Notification Testing Center")
@@ -56,19 +52,14 @@ struct MainScreen: View {
 //                            Text(notification.content.title)
 //                            Text("\(notification.trigger!)")
 //                        }
-//
-//                        //
 //                    }
 //                    .padding(.horizontal)
 //                    .onAppear {
 //                        notificationManager.getPendingNotification()
-//
 //                    }
                     
                     BottomSection(
                         items: $items,
-                        completedItems: $completedItems,
-                        favoriteItems: $favoriteItems,
                         editItemSheet: $editItemSheet,
                         tappedItem: $tappedItem,
                         isDaysDisplayModeDetailed: $isDaysDisplayModeDetailed
@@ -77,8 +68,6 @@ struct MainScreen: View {
                 .sheet(isPresented: $editItemSheet) {
                     EditTappedItemSheet(
                         items: $items,
-                        completedItems: $completedItems,
-                        favoriteItems: $favoriteItems,
                         tappedItem: $tappedItem,
                         editItemSheet: $editItemSheet
                     )
@@ -154,7 +143,7 @@ struct MainScreen: View {
 
 struct MainScreen_Previews: PreviewProvider {
     static var previews: some View {
-        MainScreen(items: .constant([.placeholderItem()]), completedItems: .constant([]), favoriteItems: .constant([]), isDaysDisplayModeDetailed: .constant(false))
+        MainScreen(items: .constant([.placeholderItem()]), isDaysDisplayModeDetailed: .constant(false))
             .preferredColorScheme(.light)
     }
 }

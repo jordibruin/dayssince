@@ -8,33 +8,32 @@
 import SwiftUI
 
 
-struct NormalItemsList: View {
-    @Binding var items: [DaysSinceItem]
+struct DSItemListView: View {
+    @Binding var items: [DSItem]
     @Binding var editItemSheet: Bool
-    @Binding var tappedItem: DaysSinceItem
+    @Binding var tappedItem: DSItem
     @Binding var isDaysDisplayModeDetailed: Bool
     
     var isCategoryView: Bool = false
-    var category: CategoryDaysSinceItem = .work
+    var category: CategoryDSItem = .work
     
     
     var body: some View {
         if isCategoryView {
-            categoryViewList
+            categorizedItemListView
         } else {
-            normalViewList
+            itemListView
         }
     }
     
-    var categoryViewList: some View {
+    var categorizedItemListView: some View {
         ForEach(self.items.filter { $0.category == category } , id: \.id) { item in
-            IndividualItemView(
+            DSItemView(
                 editItemSheet: $editItemSheet,
                 tappedItem: $tappedItem,
                 isDaysDisplayModeDetailed: $isDaysDisplayModeDetailed,
                 item: item,
-                colored: true,
-                isFavorite: false
+                colored: true
             )
         }
     }
@@ -42,16 +41,15 @@ struct NormalItemsList: View {
     
     @AppStorage("selectedSortType") var selectedSortType: SortType = .daysAscending
     
-    var normalViewList: some View {
+    var itemListView: some View {
         ForEach(self.items.sorted { selectedSortType.sort(itemOne: $0, itemTwo: $1) }) { item in
             
-            IndividualItemView(
+            DSItemView(
                 editItemSheet: $editItemSheet,
                 tappedItem: $tappedItem,
                 isDaysDisplayModeDetailed: $isDaysDisplayModeDetailed,
                 item: item,
-                colored: false,
-                isFavorite: false
+                colored: false
             )
             
         }
@@ -60,6 +58,6 @@ struct NormalItemsList: View {
 
 struct NormalItemsList_Previews: PreviewProvider {
     static var previews: some View {
-        NormalItemsList(items: .constant([]), editItemSheet: .constant(false), tappedItem: .constant( .placeholderItem()), isDaysDisplayModeDetailed: .constant(false))
+        DSItemListView(items: .constant([]), editItemSheet: .constant(false), tappedItem: .constant( .placeholderItem()), isDaysDisplayModeDetailed: .constant(false))
     }
 }

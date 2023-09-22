@@ -17,23 +17,10 @@ struct ShareButton: View {
             showShare = true
         } label: {
             HStack {
-                LinearGradient(colors: [Color.workColor, Color.workColor.lighter()], startPoint: .topLeading, endPoint: .bottomTrailing)
-                    .frame(width: 34, height: 34)
-                    .cornerRadius(8)
-                    .overlay(
-                        Image(systemName: "heart.fill")
-                            .symbolRenderingMode(.hierarchical)
-                            .foregroundColor(.white)
-                    )
-                    .padding(.leading, -10)
-                
-                text
-                    
+                buttonImage
+                buttonText
                 Spacer()
-                Image(systemName: "arrow.up.forward.app.fill")
-                    .font(.title2)
-                    .foregroundColor(Color.workColor.darker())
-                    .opacity(0.5)
+                buttonShareArrow
             }
         }
         .foregroundColor(.primary)
@@ -42,9 +29,28 @@ struct ShareButton: View {
         }
     }
     
-    var text: some View {
+    var buttonImage: some View {
+        LinearGradient(colors: [Color.workColor, Color.workColor.lighter()], startPoint: .topLeading, endPoint: .bottomTrailing)
+            .frame(width: 34, height: 34)
+            .cornerRadius(8)
+            .overlay(
+                Image(systemName: "heart.fill")
+                    .symbolRenderingMode(.hierarchical)
+                    .foregroundColor(.white)
+            )
+            .padding(.leading, -10)
+    }
+    
+    var buttonText: some View {
         Text("Share Days Since")
             .font(.system(.body, design: .rounded))
+    }
+    
+    var buttonShareArrow: some View {
+        Image(systemName: "arrow.up.forward.app.fill")
+            .font(.title2)
+            .foregroundColor(Color.workColor.darker())
+            .opacity(0.5)
     }
 }
 

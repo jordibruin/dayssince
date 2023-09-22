@@ -9,38 +9,47 @@ import SwiftUI
 
 struct SettingsReviewButton: View {
     
+    @Environment(\.openURL) var openURL
     
     var body: some View {
         
         Button {
-            print("Open review link")
+            if let url = URL(string: "https://apps.apple.com/us/app/days-since-track-memories/id1634218216?action=write-review") {
+                    openURL(url)
+                }
         } label: {
             HStack {
-                LinearGradient(colors: [Color.workColor, Color.workColor.lighter()], startPoint: .topLeading, endPoint: .bottomTrailing)
-                    .frame(width: 34, height: 34)
-                    .cornerRadius(8)
-                    .overlay(
-                        Image(systemName: "star.fill")
-                            .symbolRenderingMode(.hierarchical)
-                            .foregroundColor(.white)
-                    )
-                    .padding(.leading, -10)
-                
-                text
-                    
+                buttonImage
+                buttonText
                 Spacer()
-                Image(systemName: "arrow.up.forward.app.fill")
-                    .font(.title2)
-                    .foregroundColor(Color.white)
-                    .opacity(0.5)
+                buttonShareArrow
             }
         }
         .foregroundColor(.primary)
     }
     
-    var text: some View {
+    var buttonImage: some View {
+        LinearGradient(colors: [Color.workColor, Color.workColor.lighter()], startPoint: .topLeading, endPoint: .bottomTrailing)
+            .frame(width: 34, height: 34)
+            .cornerRadius(8)
+            .overlay(
+                Image(systemName: "star.fill")
+                    .symbolRenderingMode(.hierarchical)
+                    .foregroundColor(.white)
+            )
+            .padding(.leading, -10)
+    }
+    
+    var buttonText: some View {
         Text("Review Days Since")
             .font(.system(.body, design: .rounded))
+    }
+    
+    var buttonShareArrow: some View {
+        Image(systemName: "arrow.up.forward.app.fill")
+            .font(.title2)
+            .foregroundColor(Color.workColor.darker())
+            .opacity(0.5)
     }
 }
 

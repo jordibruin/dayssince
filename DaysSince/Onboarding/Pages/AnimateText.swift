@@ -12,9 +12,3 @@ struct AnimateText: Identifiable {
     var text: String
     var offset: CGFloat = 110
 }
-//
-//struct AnimateText_Previews: PreviewProvider {
-//    static var previews: some View {
-//        AnimateText()
-//    }
-//}

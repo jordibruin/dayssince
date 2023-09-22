@@ -12,15 +12,13 @@ struct CategoryFilteredView: View {
     @Environment(\.colorScheme) var colorScheme
     
     
-    var category: CategoryDaysSinceItem
+    var category: CategoryDSItem
     
     @State var showAddItemSheet: Bool
     @State var editItemSheet: Bool
-    @State var tappedItem = DaysSinceItem.placeholderItem()
+    @State var tappedItem = DSItem.placeholderItem()
     
-    @Binding var items: [DaysSinceItem]
-    @Binding var completedItems: [DaysSinceItem]
-    @Binding var favoriteItems: [DaysSinceItem]
+    @Binding var items: [DSItem]
     
     @Binding var isDaysDisplayModeDetailed: Bool
     
@@ -31,7 +29,7 @@ struct CategoryFilteredView: View {
             
             ScrollView {
                 
-                NormalItemsList(
+                DSItemListView(
                     items: $items,
                     editItemSheet: $editItemSheet,
                     tappedItem: $tappedItem,
@@ -39,8 +37,6 @@ struct CategoryFilteredView: View {
                     isCategoryView: true,
                     category: category)
                 
-                
-                CompletedItemsList(completedItems: $completedItems, isCategoryView: true, category: category)
                 
                 // Add some space after the items for the button.
                 Color(.clear)
@@ -56,7 +52,7 @@ struct CategoryFilteredView: View {
             AddItemSheet(selectedCategory: category, remindersEnabled: false, items: $items)
         }
         .sheet(isPresented: $editItemSheet) {
-            EditTappedItemSheet(items: $items, completedItems: $completedItems, favoriteItems: $favoriteItems, tappedItem: $tappedItem, editItemSheet: $editItemSheet)
+            EditTappedItemSheet(items: $items, tappedItem: $tappedItem, editItemSheet: $editItemSheet)
         }
     }
     
@@ -104,7 +100,7 @@ struct CategoryFilteredView: View {
 
 struct CategoryFilteredView_Previews: PreviewProvider {
     static var previews: some View {
-        CategoryFilteredView(category: .work, showAddItemSheet: false, editItemSheet: false, tappedItem: DaysSinceItem.placeholderItem(), items: .constant([DaysSinceItem.placeholderItem()]), completedItems: .constant([]), favoriteItems: .constant([]), isDaysDisplayModeDetailed: .constant(false))
+        CategoryFilteredView(category: .work, showAddItemSheet: false, editItemSheet: false, tappedItem: DSItem.placeholderItem(), items: .constant([DSItem.placeholderItem()]), isDaysDisplayModeDetailed: .constant(false))
             .preferredColorScheme(.dark)
     }
 }
