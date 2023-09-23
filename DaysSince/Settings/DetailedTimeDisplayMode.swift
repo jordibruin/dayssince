@@ -8,11 +8,9 @@
 import SwiftUI
 
 struct DetailedTimeDisplayModeCell: View {
-    
     @Binding var isDaysDisplayModeDetailed: Bool
-    
+
     var body: some View {
-        
         Section {
             HStack {
                 buttonImage
@@ -27,7 +25,7 @@ struct DetailedTimeDisplayModeCell: View {
                 .padding(.leading, -8)
         }
     }
-    
+
     var buttonImage: some View {
         LinearGradient(colors: [Color.workColor, Color.workColor.lighter()], startPoint: .topLeading, endPoint: .bottomTrailing)
             .frame(width: 30, height: 30)
@@ -39,13 +37,13 @@ struct DetailedTimeDisplayModeCell: View {
             )
             .padding(.leading, -10)
     }
-    
+
     var buttonText: some View {
-        // ToDo: Current wording is poor.
+        // TODO: Current wording is poor.
         Text("Detailed Time Display Mode")
             .font(.system(.body, design: .rounded))
     }
-    
+
     var toggle: some View {
         Toggle("Detailed Time Display Mode", isOn: $isDaysDisplayModeDetailed)
             .tint(Color.workColor)

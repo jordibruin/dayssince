@@ -1,5 +1,5 @@
 //
-//  CategoryDaysSinceItem.swift
+//  CategoryDSItem.swift
 //  DaysSince
 //
 //  Created by Vicki Minerva on 5/25/22.
@@ -9,17 +9,16 @@ import Foundation
 import SwiftUI
 
 enum CategoryDSItem: Codable, Identifiable, Equatable, CaseIterable, Hashable {
-    
     static var allCases: [CategoryDSItem] = [
-        .work, .life, .hobbies, .health
+        .work, .life, .hobbies, .health,
     ]
-    
+
     case work
     case life
     case health
     case hobbies
     case none
-    
+
     var name: String {
         switch self {
         case .work:
@@ -34,7 +33,7 @@ enum CategoryDSItem: Codable, Identifiable, Equatable, CaseIterable, Hashable {
             return "No category"
         }
     }
-    
+
     var id: String {
         switch self {
         case .work:
@@ -49,7 +48,7 @@ enum CategoryDSItem: Codable, Identifiable, Equatable, CaseIterable, Hashable {
             return "No Category"
         }
     }
-    
+
     var color: Color {
         switch self {
         case .work:
@@ -64,7 +63,7 @@ enum CategoryDSItem: Codable, Identifiable, Equatable, CaseIterable, Hashable {
             return Color.black
         }
     }
-    
+
     var emoji: String {
         switch self {
         case .work:
@@ -79,7 +78,7 @@ enum CategoryDSItem: Codable, Identifiable, Equatable, CaseIterable, Hashable {
             return ""
         }
     }
-    
+
     var sfSymbolName: String {
         switch self {
         case .work:
@@ -94,5 +93,4 @@ enum CategoryDSItem: Codable, Identifiable, Equatable, CaseIterable, Hashable {
             return ""
         }
     }
-    
 }

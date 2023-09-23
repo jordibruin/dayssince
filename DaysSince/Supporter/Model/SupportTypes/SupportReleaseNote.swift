@@ -12,15 +12,15 @@ struct SupportReleaseNote: Identifiable, Codable {
     let title: String
     let version: String
     let description: String
-    
+
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.id = try container.decodeIfPresent(Int.self, forKey: .id) ?? 0
-        self.title = try container.decodeIfPresent(String.self, forKey: .title) ?? ""
-        self.version = try container.decodeIfPresent(String.self, forKey: .version) ?? ""
-        self.description = try container.decodeIfPresent(String.self, forKey: .description) ?? ""
+        id = try container.decodeIfPresent(Int.self, forKey: .id) ?? 0
+        title = try container.decodeIfPresent(String.self, forKey: .title) ?? ""
+        version = try container.decodeIfPresent(String.self, forKey: .version) ?? ""
+        description = try container.decodeIfPresent(String.self, forKey: .description) ?? ""
     }
-    
+
     init(
         id: Int,
         title: String,

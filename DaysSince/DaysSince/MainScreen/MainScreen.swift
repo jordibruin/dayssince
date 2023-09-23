@@ -8,31 +8,30 @@
 import SwiftUI
 
 struct MainScreen: View {
-    
     @Environment(\.colorScheme) var colorScheme
-    
+
     @State var showAddItemSheet = false
     @State var showSettings = false
     @State var editItemSheet = false
     @State var tappedItem = DSItem.placeholderItem()
-    
+
     @Binding var items: [DSItem]
     @Binding var isDaysDisplayModeDetailed: Bool
-    
+
     @EnvironmentObject var notificationManager: NotificationManager
-    
+
     var body: some View {
         NavigationView {
             ZStack {
                 MainBackgroundView()
-                
+
                 ScrollView {
                     TopSection(
                         items: $items,
                         isDaysDisplayModeDetailed: $isDaysDisplayModeDetailed
                     )
                     .padding([.top, .bottom], 16)
-                    
+
 //                    Code is used to test the notifications.
 //                    VStack(alignment: .leading) {
 //                        HStack {
@@ -57,7 +56,7 @@ struct MainScreen: View {
 //                    .onAppear {
 //                        notificationManager.getPendingNotification()
 //                    }
-                    
+
                     BottomSection(
                         items: $items,
                         editItemSheet: $editItemSheet,
@@ -72,7 +71,7 @@ struct MainScreen: View {
                         editItemSheet: $editItemSheet
                     )
                 }
-                
+
                 VStack {
                     Spacer()
                     addNewEventButton
@@ -80,7 +79,7 @@ struct MainScreen: View {
             }
             .navigationTitle("Events")
             .navigationBarTitleDisplayMode(.inline)
-            
+
             .toolbar(content: {
                 toolbarItems
             })
@@ -91,7 +90,6 @@ struct MainScreen: View {
         .sheet(isPresented: $showSettings) {
             SettingsScreen(isDaysDisplayModeDetailed: $isDaysDisplayModeDetailed)
         }
-        
     }
 
     var toolbarItems: some ToolbarContent {
@@ -107,13 +105,13 @@ struct MainScreen: View {
                         .font(.title2)
                 }
             }
-            
+
             ToolbarItem(placement: .navigationBarTrailing) {
                 SortingMenuView(items: $items)
             }
         }
     }
-    
+
     var addNewEventButton: some View {
         Button {
             showAddItemSheet = true
@@ -129,9 +127,10 @@ struct MainScreen: View {
             }
             .padding()
             .background(LinearGradient(
-                gradient: .init(colors: [colorScheme == .dark ? Color.workColor.opacity(0.85).darker(by: 0.1): Color.workColor.opacity(0.85), colorScheme == .dark ? Color.workColor.darker(by: 0.2): Color.workColor]),
+                gradient: .init(colors: [colorScheme == .dark ? Color.workColor.opacity(0.85).darker(by: 0.1) : Color.workColor.opacity(0.85), colorScheme == .dark ? Color.workColor.darker(by: 0.2) : Color.workColor]),
                 startPoint: .init(x: 0.0, y: 0.5),
-                endPoint: .init(x: 0, y: 1)))
+                endPoint: .init(x: 0, y: 1)
+            ))
             .background(colorScheme == .dark ? Color.black : Color.white)
             .clipShape(Capsule())
             .shadow(color: Color.workColor, radius: 10, x: 0, y: 5)

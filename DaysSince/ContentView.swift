@@ -7,14 +7,13 @@
 
 import SwiftUI
 
-
 struct ContentView: View {
     @AppStorage("hasSeenOnboarding") var hasSeenOnboarding: Bool = false
-    
+
     @AppStorage("items", store: UserDefaults(suiteName: "group.goodsnooze.dayssince")) var items: [DSItem] = []
-    
+
     @AppStorage("isDaysDisplayModeDetailed") var isDaysDisplayModeDetailed: Bool = false
-    
+
     var body: some View {
         if hasSeenOnboarding {
             MainScreen(items: $items, isDaysDisplayModeDetailed: $isDaysDisplayModeDetailed)

@@ -8,10 +8,9 @@
 import SwiftUI
 
 struct ChangelogView: View {
-    
     @Environment(\.presentationMode) var presentationMode
     let items: [ChangelogItem]
-    
+
     var body: some View {
         NavigationView {
             List {
@@ -32,10 +31,10 @@ struct ChangelogView: View {
                 }
             }
             .onAppear {
-                guard let newestUpdate = items.map ({ item in
+                guard let newestUpdate = items.map({ item in
                     item.id
                 }).max() else { return }
-                
+
                 // No longer show it on the main support page after a user tapped the new update icon
                 UserDefaults.standard.set(newestUpdate, forKey: "latestVersionIdOpened")
             }

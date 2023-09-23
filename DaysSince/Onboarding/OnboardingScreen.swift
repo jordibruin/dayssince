@@ -8,15 +8,12 @@
 import SwiftUI
 
 struct OnboardingScreen: View {
-    
     @Binding var hasSeenOnboarding: Bool
     @Binding var items: [DSItem]
-    
+
     @State var selectedPage = 0
-    
-    
+
     var body: some View {
-        
         TabView(selection: $selectedPage) {
             Introduction(selectedPage: $selectedPage).tag(0)
                 .simultaneousGesture(DragGesture())

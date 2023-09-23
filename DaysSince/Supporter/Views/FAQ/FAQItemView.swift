@@ -8,18 +8,17 @@
 import SwiftUI
 
 struct FAQItemView: View {
-    
     let item: FAQItem
-    
+
     var body: some View {
-        DisclosureGroup() {
+        DisclosureGroup {
             Text(item.text.toMarkdown())
                 .foregroundColor(Design.listTextColor)
                 .font(.system(.body, design: .rounded))
                 .offset(x: -20)
                 .padding(.vertical, 12)
                 .fixedSize(horizontal: false, vertical: true)
-                
+
         } label: {
             Text(item.title)
                 .font(.system(.body, design: .rounded))
@@ -31,11 +30,8 @@ struct FAQItemView: View {
     }
 }
 
-
-
 struct FAQItemView_Previews: PreviewProvider {
     static var previews: some View {
         FAQItemView(item: FAQItem.example)
     }
 }
-

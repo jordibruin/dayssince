@@ -8,15 +8,13 @@
 import SwiftUI
 
 struct SettingsReviewButton: View {
-    
     @Environment(\.openURL) var openURL
-    
+
     var body: some View {
-        
         Button {
             if let url = URL(string: "https://apps.apple.com/us/app/days-since-track-memories/id1634218216?action=write-review") {
-                    openURL(url)
-                }
+                openURL(url)
+            }
         } label: {
             HStack {
                 buttonImage
@@ -27,7 +25,7 @@ struct SettingsReviewButton: View {
         }
         .foregroundColor(.primary)
     }
-    
+
     var buttonImage: some View {
         LinearGradient(colors: [Color.workColor, Color.workColor.lighter()], startPoint: .topLeading, endPoint: .bottomTrailing)
             .frame(width: 34, height: 34)
@@ -39,12 +37,12 @@ struct SettingsReviewButton: View {
             )
             .padding(.leading, -10)
     }
-    
+
     var buttonText: some View {
         Text("Review Days Since")
             .font(.system(.body, design: .rounded))
     }
-    
+
     var buttonShareArrow: some View {
         Image(systemName: "arrow.up.forward.app.fill")
             .font(.title2)

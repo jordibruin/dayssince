@@ -14,11 +14,10 @@ extension Color {
     static let hobbiesColor = Color("hobbiesColor")
     static let healthColor = Color("healthColor")
     static let backgroundColor = Color("backgroundColor")
-    
+
     public func lighter(by amount: CGFloat = 0.2) -> Self { Self(UIColor(self).lighter(by: amount)) }
     public func darker(by amount: CGFloat = 0.2) -> Self { Self(UIColor(self).darker(by: amount)) }
 }
-
 
 extension UIColor {
     func mix(with color: UIColor, amount: CGFloat) -> Self {

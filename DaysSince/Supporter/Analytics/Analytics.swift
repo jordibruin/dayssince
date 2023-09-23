@@ -5,27 +5,27 @@
 ////  Created by Jordi Bruin on 05/12/2021.
 ////
 //
-//import Foundation
+// import Foundation
 //
 //
 ///// This handles the private analytics. When a user triggers an event, a +1 is added to a counter. You can replace this with your own analytics if you want.
-//struct Analytics {
+// struct Analytics {
 //    static func hit(_ option: CounterOption) {
 //        var analyticsPostfix = ""
 //        if isSimulatorOrTestFlight() {
 //            analyticsPostfix = "tf"
 //        }
-//        
+//
 //        // Turned off by default
 //        guard let url = URL(string: "https://api.countapi.xyz/hit/com.goodsnooze.posturepal/\(option.stringValue())\(analyticsPostfix)") else { return }
 //        let request = URLRequest(url: url)
 //        URLSession.shared.dataTask(with: request) { _, _, _ in }.resume()
 //        print("📊 \(option.stringValue()) ")
 //    }
-//}
+// }
 //
-//enum CounterOption: Hashable {
-//      
+// enum CounterOption: Hashable {
+//
 //    case support
 //    case openedSupport(Int)
 //    case openedWrong(Int)
@@ -33,9 +33,9 @@
 //    case setSensitivity(PostureSensitivity)
 //    case openTheme
 //    case chooseIcon(String)
-//    
+//
 //    case choosePattern(Pattern)
-//    
+//
 //    case proTheme
 //    case proSensitivity
 //    case proIcons
@@ -49,13 +49,13 @@
 //    case proScreenOpened
 //    case proStartPurchase
 //    case proPurchased
-//    
+//
 //    case startShare
 //    case settingsReview
 //    case reviewPrompt
-//    
+//
 //    case seriousModeOn
-//    
+//
 //    func stringValue() -> String {
 //        switch self {
 //        case .support:
@@ -106,11 +106,11 @@
 //            return "seriousModeOn"
 //        }
 //    }
-//}
+// }
 //
-//public func isSimulatorOrTestFlight() -> Bool {
+// public func isSimulatorOrTestFlight() -> Bool {
 //    guard let path = Bundle.main.appStoreReceiptURL?.path else {
 //        return false
 //    }
 //    return path.contains("CoreSimulator") || path.contains("sandboxReceipt")
-//}
+// }

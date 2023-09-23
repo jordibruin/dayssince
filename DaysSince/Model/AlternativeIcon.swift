@@ -11,11 +11,10 @@ struct AlternativeIcon: Identifiable {
     var id: String {
         return name + iconName
     }
-    
+
     let name: String
     let iconName: String
     let premium: Bool
-    
+
     let original: Bool
 }
-

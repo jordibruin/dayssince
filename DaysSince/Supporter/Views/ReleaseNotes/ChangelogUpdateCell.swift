@@ -8,9 +8,8 @@
 import SwiftUI
 
 struct ChangelogUpdateCell: View {
-    
     let item: ChangelogItem
-    
+
     var body: some View {
         Section {
             VStack(alignment: .leading, spacing: 12) {
@@ -35,9 +34,9 @@ struct ChangelogUpdateCell: View {
 struct ChangelogUpdateCell_Previews: PreviewProvider {
     static var previews: some View {
         ChangelogUpdateCell(item: ChangelogItem(id: 1, version: "test", notes: [
-        ReleaseNote(id: 1, releaseNote: "Note"),
-        ReleaseNote(id: 2, releaseNote: "Notesds"),
-        ReleaseNote(id: 3, releaseNote: "Note"),
+            ReleaseNote(id: 1, releaseNote: "Note"),
+            ReleaseNote(id: 2, releaseNote: "Notesds"),
+            ReleaseNote(id: 3, releaseNote: "Note"),
         ]))
     }
 }

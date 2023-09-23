@@ -8,28 +8,26 @@
 import SwiftUI
 
 struct AppIcons: View {
-    
     @Environment(\.dismiss) var dismiss
 //    @EnvironmentObject var store: Store
 //    @EnvironmentObject var reviewManager: ReviewManager
-    
+
     var columns: [GridItem] = [
         GridItem(.flexible(minimum: 100), spacing: 10),
         GridItem(.flexible(minimum: 100), spacing: 10),
-        GridItem(.flexible(minimum: 100), spacing: 10)
+        GridItem(.flexible(minimum: 100), spacing: 10),
     ]
-    
+
     var alternativeIcons: [AlternativeIcon] = [
         AlternativeIcon(name: "calendar-purple-image", iconName: "calendar-purple", premium: false, original: true),
         AlternativeIcon(name: "calendar-pink-image", iconName: "calendar-pink", premium: false, original: false),
         AlternativeIcon(name: "calendar-orange-image", iconName: "calendar-orange", premium: false, original: false),
         AlternativeIcon(name: "calendar-blue-image", iconName: "calendar-blue", premium: false, original: false),
-        AlternativeIcon(name: "AppIcon-image", iconName: "AppIcon", premium: false, original: false)
+        AlternativeIcon(name: "AppIcon-image", iconName: "AppIcon", premium: false, original: false),
     ]
-    
+
     @State var showPayWall = false
-    
-    
+
     var body: some View {
         ScrollView {
             LazyVGrid(columns: columns) {
@@ -46,14 +44,14 @@ struct AppIcons: View {
 //            PurchasesView(inOnboarding: false)
 //        }
     }
-    
+
     func iconView(icon: AlternativeIcon) -> some View {
         Button {
 //            Analytics.hit(.chooseIcon(icon.name))
             if icon.iconName == UIApplication.shared.alternateIconName {
                 return
             }
-            
+
             if icon.original {
                 UIApplication.shared.setAlternateIconName(nil) { error in
                     if let error = error {
@@ -76,11 +74,11 @@ struct AppIcons: View {
                         print(error.localizedDescription)
                         return
                     }
-                    
+
 //                    self.reviewManager.promptReviewAlert()
                 }
             }
-            
+
         } label: {
             Image(icon.name)
                 .resizable()
@@ -96,15 +94,15 @@ struct AppIcons: View {
                                 .shadow(color: Color.workColor.opacity(0.1), radius: 5, x: 0, y: 0)
                         }
                         .padding(8)
-                        
+
                         Spacer()
                     }
-                        .opacity(showCheckmark(icon: icon) ? 1 : 0)
+                    .opacity(showCheckmark(icon: icon) ? 1 : 0)
 //                        .opacity(icon.original ? UIApplication.shared.alternateIconName == nil ? 1 : 0 UIApplication.shared.alternateIconName == icon.iconName ? 1 : 0)
                 )
         }
     }
-    
+
     func showCheckmark(icon: AlternativeIcon) -> Bool {
         if icon.original {
             return UIApplication.shared.alternateIconName == nil

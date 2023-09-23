@@ -8,9 +8,8 @@
 import SwiftUI
 
 struct FAQDetailView: View {
-    
     let section: FAQSection
-    
+
     var body: some View {
         List {
             ForEach(section.items) { item in
@@ -28,7 +27,7 @@ struct FAQDetailView_Previews: PreviewProvider {
                 id: 1,
                 title: "",
                 items: [
-                    FAQItem(id: 1, title: "FAQ item Title", text: "FAQ Item text")
+                    FAQItem(id: 1, title: "FAQ item Title", text: "FAQ Item text"),
                 ]
             )
         )

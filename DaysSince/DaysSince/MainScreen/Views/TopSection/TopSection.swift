@@ -8,15 +8,14 @@
 import SwiftUI
 
 /**
-   The top section of the main screen contains the grid with the categories for the events.
-   By clicking on any of the categories it will lead you to a filtered view with events only from that category. 
-*/
+ The top section of the main screen contains the grid with the categories for the events.
+ By clicking on any of the categories it will lead you to a filtered view with events only from that category.
+ */
 struct TopSection: View {
-    
     @Binding var items: [DSItem]
-    
+
     @Binding var isDaysDisplayModeDetailed: Bool
-    
+
     var body: some View {
         HStack {
             VStack {
@@ -26,13 +25,15 @@ struct TopSection: View {
                         showAddItemSheet: false,
                         editItemSheet: false,
                         items: $items,
-                        isDaysDisplayModeDetailed: $isDaysDisplayModeDetailed)
+                        isDaysDisplayModeDetailed: $isDaysDisplayModeDetailed
+                    )
                 ) {
                     MenuBlockView(
                         category: .work,
-                        items: $items)}
-                
-                
+                        items: $items
+                    )
+                }
+
                 NavigationLink(
                     destination: CategoryFilteredView(
                         category: CategoryDSItem.life,
@@ -48,7 +49,7 @@ struct TopSection: View {
                     )
                 }
             }
-            
+
             VStack {
                 NavigationLink(
                     destination: CategoryFilteredView(
@@ -56,21 +57,23 @@ struct TopSection: View {
                         showAddItemSheet: false,
                         editItemSheet: false,
                         items: $items,
-                        isDaysDisplayModeDetailed: $isDaysDisplayModeDetailed)
+                        isDaysDisplayModeDetailed: $isDaysDisplayModeDetailed
+                    )
                 ) {
                     MenuBlockView(
                         category: .health,
                         items: $items
                     )
                 }
-                
+
                 NavigationLink(
                     destination: CategoryFilteredView(
                         category: CategoryDSItem.hobbies,
                         showAddItemSheet: false,
                         editItemSheet: false,
                         items: $items,
-                        isDaysDisplayModeDetailed: $isDaysDisplayModeDetailed)
+                        isDaysDisplayModeDetailed: $isDaysDisplayModeDetailed
+                    )
                 ) {
                     MenuBlockView(
                         category: .hobbies,

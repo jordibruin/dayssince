@@ -1,5 +1,5 @@
 //
-//  String+Extensions.swift
+//  HooliganString+Extensions.swift
 //  Supporter
 //
 //  Created by Jordi Bruin on 05/12/2021.

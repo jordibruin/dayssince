@@ -1,12 +1,12 @@
 ////https://github.com/yutailang0119/SBPAsyncImage
 //
-//import Foundation
+// import Foundation
 //
-//public typealias AsyncImage = BackportAsyncImage
+// public typealias AsyncImage = BackportAsyncImage
 //
-//import SwiftUI
+// import SwiftUI
 //
-//public enum AsyncImagePhase {
+// public enum AsyncImagePhase {
 //    case empty
 //    case success(Image)
 //    case failure(Error)
@@ -28,9 +28,9 @@
 //            return error
 //        }
 //    }
-//}
+// }
 //
-//public struct BackportAsyncImage<Content: View>: View {
+// public struct BackportAsyncImage<Content: View>: View {
 //    private let url: URL?
 //    private let scale: CGFloat
 //    private let transaction: Transaction
@@ -82,9 +82,9 @@
 //                              content: content)
 //        }
 //    }
-//}
+// }
 //
-//private final class Provider: ObservableObject {
+// private final class Provider: ObservableObject {
 //    @Published var phase: AsyncImagePhase
 //
 //    init() {
@@ -126,10 +126,10 @@
 //            .map(Image.init(uiImage:))
 //        #endif
 //    }
-//}
+// }
 //
-//@available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, *)
-//private struct ContentBody<Content: View>: View {
+// @available(iOS 14.0, macOS 11.0, tvOS 14.0, watchOS 7.0, *)
+// private struct ContentBody<Content: View>: View {
 //    @StateObject private var provider = Provider()
 //    private let url: URL?
 //    private let scale: CGFloat
@@ -155,9 +155,9 @@
 //                provider.download(url: url, scale: scale, transaction: transaction)
 //            }
 //    }
-//}
+// }
 //
-//private struct ContentCompatBody<Content: View>: View {
+// private struct ContentCompatBody<Content: View>: View {
 //    struct Body: View {
 //        @ObservedObject private var provider: Provider
 //        private let content: (AsyncImagePhase) -> Content
@@ -200,9 +200,9 @@
 //             transaction: transaction,
 //             content: content)
 //    }
-//}
+// }
 //
-//struct BackportAsyncImage_Previews: PreviewProvider {
+// struct BackportAsyncImage_Previews: PreviewProvider {
 //    static var url: URL? {
 //        URL(string: "http://httpbin.org/image/png")
 //    }
@@ -243,4 +243,4 @@
 //            .frame(width: 100, height: 100)
 //        }
 //    }
-//}
+// }
