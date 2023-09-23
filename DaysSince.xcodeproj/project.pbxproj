@@ -395,7 +395,6 @@
 				7A8EE6B12ABDAAC10074B690 /* CategoriesViews */,
 				7AF56A99286F32CD0068B467 /* Supporter */,
 				7AE8E363286C944500538521 /* AppIcons */,
-<<<<<<< refs/remotes/origin/refactor-codebase
 				7AE8E360286C91EB00538521 /* Settings */,
 				C2B53D782869CA2900407F40 /* Add Item */,
 				C2B53D7F2869CAB700407F40 /* Main */,
@@ -403,10 +402,6 @@
 				C2B53D7D2869CA8300407F40 /* CategoryRectangleView.swift */,
 				7A007CB62800885700985108 /* CategoryFilteredView.swift */,
 				C2B53D9E2869CD3000407F40 /* Edit */,
-=======
-				C2B53D782869CA2900407F40 /* AddItemViews */,
-				C2B53D9E2869CD3000407F40 /* EditItemViews */,
->>>>>>> Improved code readability, deleted unused code, refactored poor variable names, added some docstrings, and fixed the bug with the notifications for the event reminders. This effort is not finished yet but I have gone through a substantial part of the project.
 			);
 			name = Screens;
 			sourceTree = "<group>";
