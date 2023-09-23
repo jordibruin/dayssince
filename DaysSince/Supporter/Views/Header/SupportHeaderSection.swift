@@ -8,9 +8,8 @@
 import SwiftUI
 
 struct SupportHeaderSection: View {
-    
     @EnvironmentObject var support: SupportFetcher
-    
+
     var body: some View {
         Section {
             TabView {

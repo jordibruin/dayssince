@@ -8,29 +8,25 @@
 import SwiftUI
 
 struct CreateFirstEvent: View {
-    
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var notificationManager: NotificationManager
-    
+
     @Binding var hasSeenOnboarding: Bool
     @Binding var selectedPage: Int
     @Binding var items: [DSItem]
-    
-    
+
     @State private var name: String = ""
-    @State var date: Date = Date.now
+    @State var date: Date = .now
     @State var selectedCategory: CategoryDSItem? = nil
     @State var remindersEnabled: Bool = false
     @State var selectedReminder: DSItemReminders = .daily
-    
+
     @FocusState private var nameIsFocused: Bool
-    
-    
+
     var accentColor: Color {
         selectedCategory == nil ? Color.black : selectedCategory?.color as! Color
     }
 
-    
     var body: some View {
         Form {
             nameSection
@@ -45,7 +41,7 @@ struct CreateFirstEvent: View {
             }
         }
     }
-    
+
     var nameSection: some View {
         Section {
             TextField("Name your event", text: $name)
@@ -55,17 +51,17 @@ struct CreateFirstEvent: View {
             Text("Event Info")
         }
     }
-    
+
     var dateSection: some View {
         Section {
             DatePicker("Event Date", selection: $date, in: ...Date.now, displayedComponents: .date)
                 .datePickerStyle(.graphical)
                 .accentColor(self.selectedCategory != nil ? selectedCategory!.color : Color.blue)
-        }header: {
+        } header: {
             Text("Date")
         }
     }
-    
+
     var reminderSection: some View {
         Section {
             Toggle("Reminders", isOn: $remindersEnabled.animation())
@@ -73,7 +69,7 @@ struct CreateFirstEvent: View {
             // Select type of reminder
             if remindersEnabled {
                 Picker("Remind me", selection: $selectedReminder) {
-                    ForEach(DSItemReminders.allCases.filter({$0 != .none}), id: \.self) {
+                    ForEach(DSItemReminders.allCases.filter { $0 != .none }, id: \.self) {
                         Text($0.name)
                     }
                 }
@@ -83,7 +79,7 @@ struct CreateFirstEvent: View {
             Text("Reminders")
         }
     }
-    
+
     var newCategorySection: some View {
         Section {
             ForEach(CategoryDSItem.allCases) { category in
@@ -94,10 +90,10 @@ struct CreateFirstEvent: View {
                         Image(systemName: category.sfSymbolName)
                             .foregroundColor(selectedCategory == category ? selectedCategory!.color : .primary)
                             .frame(width: 40)
-                        
+
                         Text(category.name)
                         Spacer()
-                        
+
                         if selectedCategory == category {
                             Image(systemName: "checkmark.circle.fill")
                                 .imageScale(.large)
@@ -111,18 +107,18 @@ struct CreateFirstEvent: View {
             Text("Category")
         }
     }
-    
+
     var saveButtonSection: some View {
         Section {
             Button {
                 // Finish onboarding
                 print("Set onboarding to true")
-                
+
                 let generator = UIImpactFeedbackGenerator(style: .medium)
                 generator.impactOccurred()
-                
+
                 hasSeenOnboarding = true
-                
+
                 // Add new item.
                 let newItem = DSItem(
                     id: UUID(),
@@ -131,19 +127,17 @@ struct CreateFirstEvent: View {
                     dateLastDone: date,
                     remindersEnabled: remindersEnabled
                 )
-                
+
                 items.append(newItem)
-                    
+
                 if newItem.remindersEnabled {
                     notificationManager.addReminderFor(item: newItem)
                 }
-                
-                
+
                 print("➕ Added item. Now there are \(items.count) items!")
-                
-                if let itemAdded = items.last {
-                }
-                
+
+                if let itemAdded = items.last {}
+
                 dismiss()
             } label: {
                 HStack {
@@ -157,8 +151,6 @@ struct CreateFirstEvent: View {
             .buttonStyle(BorderlessButtonStyle())
         }
     }
-    
-    
 }
 
 struct CreateFirstEvent_Previews: PreviewProvider {

@@ -6,11 +6,10 @@
 //
 
 import Foundation
-//import Defaults
+// import Defaults
 import SwiftUI
 
-
-//extension Defaults.Keys {
+// extension Defaults.Keys {
 //    static let soundEnabled = Key<Bool>("soundEnabled", default: true, suite: DefaultsConstants.sharedDefaults)
 //    static let vibrationEnabled = Key<Bool>("vibrationEnabled", default: true, suite: DefaultsConstants.sharedDefaults)
 //    static let sensitivity = Key<PostureSensitivity>("postureSensitivity", default: .medium, suite: DefaultsConstants.sharedDefaults)
@@ -37,4 +36,4 @@ import SwiftUI
 //    // MARK: Customisation
 //    static let alertDelay = Key<Int>("alertDelay", default: 0, suite: DefaultsConstants.sharedDefaults)
 //
-//}
+// }

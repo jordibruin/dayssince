@@ -8,11 +8,9 @@
 import SwiftUI
 
 struct ShareButton: View {
-    
     @State var showShare = false
-    
+
     var body: some View {
-        
         Button {
             showShare = true
         } label: {
@@ -28,7 +26,7 @@ struct ShareButton: View {
             ShareSheet(items: [URL(string: "https://twitter.com/DaysSince_App")!])
         }
     }
-    
+
     var buttonImage: some View {
         LinearGradient(colors: [Color.workColor, Color.workColor.lighter()], startPoint: .topLeading, endPoint: .bottomTrailing)
             .frame(width: 34, height: 34)
@@ -40,12 +38,12 @@ struct ShareButton: View {
             )
             .padding(.leading, -10)
     }
-    
+
     var buttonText: some View {
         Text("Share Days Since")
             .font(.system(.body, design: .rounded))
     }
-    
+
     var buttonShareArrow: some View {
         Image(systemName: "arrow.up.forward.app.fill")
             .font(.title2)
@@ -60,14 +58,13 @@ struct ShareButton_Previews: PreviewProvider {
     }
 }
 
-struct ShareSheet : UIViewControllerRepresentable {
-    var items : [Any]
-    
-    func makeUIViewController(context: Context) -> some UIActivityViewController {
+struct ShareSheet: UIViewControllerRepresentable {
+    var items: [Any]
+
+    func makeUIViewController(context _: Context) -> some UIActivityViewController {
         let controller = UIActivityViewController(activityItems: items, applicationActivities: nil)
         return controller
     }
-    
-    func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {}
-    
+
+    func updateUIViewController(_: UIViewControllerType, context _: Context) {}
 }

@@ -8,13 +8,12 @@
 import SwiftUI
 
 struct ReleaseNoteDetail: View {
-    
     @Environment(\.openURL) var openURL
     @Environment(\.presentationMode) var presentationMode
-        
+
     let appStoreURL: String = "https://apps.apple.com/nl/app/bakery-simple-icon-creator/id1575220747"
     let releaseNote: SupportReleaseNote
-    
+
     var body: some View {
         NavigationView {
             ScrollView {
@@ -28,10 +27,10 @@ struct ReleaseNoteDetail: View {
                             .opacity(0.7)
                     }
                     .padding(.trailing, 40)
-                    
+
                     Text(releaseNote.description)
                         .font(.system(.body, design: .rounded))
-                    
+
                     updateButton
                 }
                 .padding()
@@ -45,14 +44,11 @@ struct ReleaseNoteDetail: View {
                     } label: {
                         Text("Back")
                     }
-
                 }
             }
         }
     }
-    
-    
-    
+
     var updateButton: some View {
         Group {
             if #available(iOS 15.0, *) {
@@ -72,7 +68,6 @@ struct ReleaseNoteDetail: View {
             }
         }
     }
-    
 }
 
 struct ReleaseNoteDetail_Previews: PreviewProvider {

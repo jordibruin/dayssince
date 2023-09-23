@@ -8,9 +8,8 @@
 import SwiftUI
 
 struct SupportContactSection: View {
-    
     @EnvironmentObject var support: SupportFetcher
-    
+
     var body: some View {
         if !support.contactSections.isEmpty {
             suppportSections
@@ -18,15 +17,13 @@ struct SupportContactSection: View {
             singleSection
         }
     }
-    
+
     var suppportSections: some View {
         ForEach(support.contactSections) { section in
             Section {
-                
                 ForEach(section.items) { item in
                     ContactItemView(item: item)
 //                    .listRowBackground(Design.listRowBackgroundColor)
-                    
                 }
             } header: {
                 if !section.title.isEmpty {
@@ -35,7 +32,7 @@ struct SupportContactSection: View {
             }
         }
     }
-    
+
     var singleSection: some View {
         Section {
             ForEach(support.contactItems) { item in

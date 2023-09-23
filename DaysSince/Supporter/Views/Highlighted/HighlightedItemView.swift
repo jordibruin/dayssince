@@ -8,10 +8,9 @@
 import SwiftUI
 
 struct HighlightedItemView: View {
-    
     let item: HighlightedItem
     @Environment(\.sizeCategory) var sizeCategory
-    
+
     var body: some View {
         if !sizeCategory.isAccessibilityCategory {
             regularView
@@ -19,20 +18,20 @@ struct HighlightedItemView: View {
             accessibleView
         }
     }
-    
+
     var emoji: some View {
         Text(item.emoji ?? "")
             .font(.title2)
             .padding(.leading, -8)
     }
-    
+
     var icon: some View {
         Image(systemName: item.imageName)
             .font(.title)
             .foregroundColor(item.color?.color)
             .padding(.leading, -8)
     }
-    
+
     var text: some View {
         VStack(alignment: .leading) {
             Text(item.title)
@@ -48,7 +47,7 @@ struct HighlightedItemView: View {
         .padding(.vertical, 12)
         .padding(.trailing, 4)
     }
-    
+
     var regularView: some View {
         HStack {
             if item.emoji != nil {
@@ -59,7 +58,7 @@ struct HighlightedItemView: View {
             text
         }
     }
-    
+
     var accessibleView: some View {
         VStack(alignment: .leading, spacing: 0) {
             if item.emoji != nil {

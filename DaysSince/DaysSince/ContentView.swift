@@ -7,13 +7,11 @@
 
 import SwiftUI
 
-
 struct ContentView: View {
     @AppStorage("items") var items = [DaysSinceItem]()
     @AppStorage("completedItems") var completedItems = [DaysSinceItem]()
     @AppStorage("favoriteItems") var favoriteItems = [DaysSinceItem]()
 
-    
     var body: some View {
         MainScreen(items: $items, completedItems: $completedItems, favoriteItems: $favoriteItems)
     }

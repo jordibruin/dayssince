@@ -8,10 +8,7 @@
 import SwiftUI
 
 struct SupportButton: View {
-    
-    
     var body: some View {
-        
         NavigationLink {
             SupportScreen()
                 .interactiveDismissDisabled()
@@ -25,12 +22,12 @@ struct SupportButton: View {
                             .foregroundColor(.white)
                     )
                     .padding(.leading, -10)
-                
+
                 text
             }
         }
     }
-    
+
     var text: some View {
         Text("Support")
             .font(.system(.body, design: .rounded))

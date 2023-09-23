@@ -8,20 +8,18 @@
 import SwiftUI
 
 struct SettingsScreen: View {
-    
     @Environment(\.dismiss) var dismiss
-    
+
     @Binding var isDaysDisplayModeDetailed: Bool
-    
-    
+
     var body: some View {
         NavigationView {
             List {
 //                daysSinceProSection
                 appIconsSection
-                
+
                 DetailedTimeDisplayModeCell(isDaysDisplayModeDetailed: $isDaysDisplayModeDetailed)
-                    
+
                 Section {
                     SettingsReviewButton()
                     ShareButton()
@@ -41,46 +39,43 @@ struct SettingsScreen: View {
                             .font(.title2)
                             .foregroundColor(Color.workColor.opacity(0.8))
                             .accessibilityLabel("Dismiss")
-                }
+                    }
                 }
             })
         }
         .accentColor(Color.workColor.darker())
     }
-        
+
     var daysSinceProSection: some View {
         Section {
             Button {
 //                Analytics.hit(.proSettings)
 //                showPaywall = true
-            } label: {
-
-            }
-            .frame(height: 120)
-            .listRowBackground(
-                ZStack(alignment: .leading) {
-                    Color.workColor
-                    
-                    Text("Days Since\nPro")
-                        .font(.system(.title, design: .rounded))
-                        .bold()
-                        .foregroundColor(.white)
-                        .padding(.vertical)
-                        .fixedSize(horizontal: false, vertical: true)
-                        .padding(.leading)
-                    
-                }
+            } label: {}
                 .frame(height: 120)
+                .listRowBackground(
+                    ZStack(alignment: .leading) {
+                        Color.workColor
+
+                        Text("Days Since\nPro")
+                            .font(.system(.title, design: .rounded))
+                            .bold()
+                            .foregroundColor(.white)
+                            .padding(.vertical)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .padding(.leading)
+                    }
+                    .frame(height: 120)
                     .accessibilityElement()
                     .accessibilityLabel("Days Since Pro")
-            )
-            .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                )
+                .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
         }
 //        .sheet(isPresented: $showPaywall) {
 //            PurchasesView(inOnboarding: false)
 //        }
     }
-    
+
     var appIconsSection: some View {
         Section {
             NavigationLink {
@@ -97,7 +92,7 @@ struct SettingsScreen: View {
             .listRowInsets(EdgeInsets(top: 6, leading: 6, bottom: 6, trailing: 16))
         }
     }
-    
+
     @ViewBuilder
     var iconImage: some View {
         if let iconName = UIApplication.shared.alternateIconName {
@@ -116,7 +111,7 @@ struct SettingsScreen: View {
                 .grayscale(0)
         }
     }
-    
+
     var footer: some View {
         HStack {
             Spacer()
@@ -125,7 +120,6 @@ struct SettingsScreen: View {
         }
         .padding(.top, 0)
     }
-    
 }
 
 struct SettingsScreen_Previews: PreviewProvider {

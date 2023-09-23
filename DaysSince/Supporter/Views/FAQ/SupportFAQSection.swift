@@ -8,9 +8,8 @@
 import SwiftUI
 
 struct SupportFAQSection: View {
-    
     @EnvironmentObject var support: SupportFetcher
-    
+
     var body: some View {
         ForEach(support.faqSections) { section in
             Section {
@@ -18,7 +17,7 @@ struct SupportFAQSection: View {
                     FAQItemView(item: item)
                         .listRowBackground(Design.listRowBackgroundColor)
                 }
-                
+
                 if section.hasDetailPage {
                     NavigationLink {
                         FAQDetailView(section: section)

@@ -13,16 +13,16 @@ struct SupportContactItem: Identifiable, Codable, Equatable {
     let url: String
     let imageName: String
     let color: SupportColor
-    
+
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.id = try container.decodeIfPresent(Int.self, forKey: .id) ?? 0
-        self.title = try container.decodeIfPresent(String.self, forKey: .title) ?? ""
-        self.url = try container.decodeIfPresent(String.self, forKey: .url) ?? ""
-        self.imageName = try container.decodeIfPresent(String.self, forKey: .imageName) ?? ""
-        self.color = try container.decodeIfPresent(SupportColor.self, forKey: .color) ?? .primary
+        id = try container.decodeIfPresent(Int.self, forKey: .id) ?? 0
+        title = try container.decodeIfPresent(String.self, forKey: .title) ?? ""
+        url = try container.decodeIfPresent(String.self, forKey: .url) ?? ""
+        imageName = try container.decodeIfPresent(String.self, forKey: .imageName) ?? ""
+        color = try container.decodeIfPresent(SupportColor.self, forKey: .color) ?? .primary
     }
-    
+
     init(
         id: Int,
         title: String,
@@ -36,7 +36,6 @@ struct SupportContactItem: Identifiable, Codable, Equatable {
         self.imageName = imageName ?? ""
         self.color = color
     }
-    
-    static let example = SupportContactItem(id: Int.random(in: 1...4032304), title: "Naam", url: "https://www.google.com", imageName: "message.fill", color: .primary)
-    
+
+    static let example = SupportContactItem(id: Int.random(in: 1 ... 4_032_304), title: "Naam", url: "https://www.google.com", imageName: "message.fill", color: .primary)
 }

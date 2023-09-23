@@ -8,17 +8,16 @@
 import SwiftUI
 
 struct SupportItemDetailView: View {
-    
     let item: SupportPageable
     @State var activePage: Int = 0
-    
+
     var body: some View {
         tabView()
-        .navigationBarTitleDisplayMode(.inline)
-        .tabViewStyle(.page(indexDisplayMode: .always))
-        .indexViewStyle(.page(backgroundDisplayMode: .always))
+            .navigationBarTitleDisplayMode(.inline)
+            .tabViewStyle(.page(indexDisplayMode: .always))
+            .indexViewStyle(.page(backgroundDisplayMode: .always))
     }
-    
+
     @ViewBuilder
     func tabView() -> some View {
         if item.supportPages.isEmpty {
@@ -28,7 +27,7 @@ struct SupportItemDetailView: View {
                 ForEach(item.supportPages) { page in
                     SupportItemPageView(page: page)
                 }
-        }
+            }
             .background(
                 Design.backgroundColor
                     .edgesIgnoringSafeArea(.bottom)

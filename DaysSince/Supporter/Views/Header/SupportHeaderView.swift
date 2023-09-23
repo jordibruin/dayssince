@@ -8,9 +8,8 @@
 import SwiftUI
 
 struct SupportHeaderView: View {
-    
     let item: HeaderItem
-    
+
     var body: some View {
         ZStack(alignment: .topLeading) {
             item.color.color
@@ -43,7 +42,6 @@ struct SupportHeaderView: View {
         }
 //        }
         .buttonStyle(FlatLinkStyle())
-
     }
 }
 
@@ -60,28 +58,22 @@ struct FlatLinkStyle: ButtonStyle {
 }
 
 struct SupportDetailScreen: View {
-    
     let title: String
     let description: String
-    
+
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
                 Text(title)
                     .font(.system(.title, design: .rounded))
                     .bold()
-                
+
                 Text(description)
                     .font(.system(.body, design: .rounded))
-                
             }
             .multilineTextAlignment(.leading)
             .padding()
         }
         .background(Color(.systemBackground))
     }
-    
-    
 }
-
-

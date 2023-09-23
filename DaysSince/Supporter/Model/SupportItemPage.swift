@@ -16,7 +16,7 @@ struct SupportItemPage: Identifiable, Codable {
     let darkVideoURL: String?
     let imageURL: String?
     let darkImageURL: String?
-    
+
     init(
         id: Int,
         title: String,
