@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-fileprivate extension DateFormatter {
+private extension DateFormatter {
     static var month: DateFormatter {
         let formatter = DateFormatter()
         formatter.dateFormat = "MMMM"
@@ -21,7 +21,7 @@ fileprivate extension DateFormatter {
     }
 }
 
-fileprivate extension Calendar {
+private extension Calendar {
     func generateDates(
         inside interval: DateInterval,
         matching components: DateComponents
@@ -123,4 +123,3 @@ struct CalendarView_Previews: PreviewProvider {
         }
     }
 }
-

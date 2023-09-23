@@ -8,9 +8,8 @@
 import SwiftUI
 
 struct SupportHighlightedSection: View {
-    
     @EnvironmentObject var support: SupportFetcher
-    
+
     var body: some View {
         ForEach(support.highlightedSections) { section in
             Section {

@@ -1,5 +1,5 @@
 //
-//  DStemReminders.swift
+//  DSItemReminders.swift
 //  DaysSince
 //
 //  Created by Vicki Minerva on 6/3/22.
@@ -7,19 +7,16 @@
 
 import Foundation
 
-
 enum DSItemReminders: Codable, Equatable, CaseIterable, Hashable {
-    
-    
     static var allCases: [DSItemReminders] = [
-        .daily, .weekly, .monthly, .none
+        .daily, .weekly, .monthly, .none,
     ]
-    
+
     case daily
     case weekly
     case monthly
     case none
-    
+
     var name: String {
         switch self {
         case .daily:
@@ -32,7 +29,7 @@ enum DSItemReminders: Codable, Equatable, CaseIterable, Hashable {
             return "No reminders"
         }
     }
-    
+
 //    var dateComponents: DateComponents {
 //        switch self {
 //        case .daily:

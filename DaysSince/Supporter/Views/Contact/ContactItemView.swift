@@ -8,13 +8,11 @@
 import SwiftUI
 
 struct ContactItemView: View {
-    
     @Environment(\.openURL) var openURL
-    
+
     let item: SupportContactItem
-    
+
     var body: some View {
-        
         Button {
             if let url = URL(string: item.url) {
                 openURL(url)

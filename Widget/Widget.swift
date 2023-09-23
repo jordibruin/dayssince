@@ -5,27 +5,25 @@
 //  Created by Jordi Bruin on 27/06/2022.
 //
 
-import WidgetKit
 import SwiftUI
+import WidgetKit
 
-//let snapshotEntry = WidgetContent()
+// let snapshotEntry = WidgetContent()
 
 struct Provider: IntentTimelineProvider {
-
     @AppStorage("items", store: UserDefaults(suiteName: "group.goodsnooze.dayssince")) var items: [DSItem] = []
-    
+
 //    var travelCardsManager = TravelCardsManager.shared
 
-    func placeholder(in context: Context) -> WidgetContent {
-
+    func placeholder(in _: Context) -> WidgetContent {
         let content = WidgetContent(date: Date(), name: "Adopted Leo 🐱", id: UUID(), color: Color.lifeColor, daysNumber: 237)
 
         return content
     }
 
     public func getSnapshot(
-        for configuration: SelectEventIntent,
-        in context: Context,
+        for _: SelectEventIntent,
+        in _: Context,
         completion: @escaping (WidgetContent) -> Void
     ) {
         let content = WidgetContent(date: Date(), name: "Adopted Charlie 🐶", id: UUID(), color: .green, daysNumber: 45)
@@ -34,18 +32,17 @@ struct Provider: IntentTimelineProvider {
 
     public func getTimeline(
         for configuration: SelectEventIntent,
-        in context: Context,
+        in _: Context,
         completion: @escaping (Timeline<WidgetContent>) -> Void
     ) {
-        
         let eventId = configuration.event?.identifier ?? ""
-      
+
         if let matchingEvent = items.first(where: { $0.id.uuidString == eventId }) {
-          let content = WidgetContent(item: matchingEvent)
-          completion(Timeline(entries: [content], policy: .atEnd))
+            let content = WidgetContent(item: matchingEvent)
+            completion(Timeline(entries: [content], policy: .atEnd))
         } else {
-          let content = WidgetContent(date: Date(), name: "No events", id: UUID(), color: .green, daysNumber: 4)
-          completion(Timeline(entries: [content], policy: .atEnd))
+            let content = WidgetContent(date: Date(), name: "No events", id: UUID(), color: .green, daysNumber: 4)
+            completion(Timeline(entries: [content], policy: .atEnd))
         }
     }
 }
@@ -68,9 +65,7 @@ struct SooseeWidget: Widget {
     }
 }
 
-
 struct EventCardWidgetView: View {
-
     let event: WidgetContent
 
     @Environment(\.widgetFamily) var family
@@ -89,9 +84,9 @@ struct EventCardWidgetView: View {
         .clipShape(RoundedRectangle(cornerRadius: 23))
         .overlay(
             RoundedRectangle(cornerRadius: 23)
-                .stroke(colorScheme == .dark ? event.color.darker(): event.color, lineWidth: 6)
+                .stroke(colorScheme == .dark ? event.color.darker() : event.color, lineWidth: 6)
         )
-        
+
         .shadow(color: Color.black.opacity(0.05), radius: 20, x: 0, y: 0)
     }
 
@@ -101,42 +96,33 @@ struct EventCardWidgetView: View {
             .bold()
             .foregroundColor(colorScheme == .dark ? .primary : event.color)
     }
-    
+
     var daysAgoText: some View {
         VStack(alignment: .leading) {
             Text("\(event.daysNumber)")
                 .font(.system(.title2, design: .rounded))
                 .bold()
                 .foregroundColor(colorScheme == .dark ? .primary : event.color)
-            
+
             Text("days")
                 .font(.system(.body, design: .rounded))
                 .foregroundColor(colorScheme == .dark ? .primary : event.color)
         }
         .frame(width: event.daysNumber > 999 ? 70 : event.daysNumber > 99 ? 50 : 40)
     }
-    
-
 
     var itemContent: some View {
         VStack(alignment: .leading) {
             if event.name != "No events" {
                 daysAgoText
             }
-        
+
             Spacer()
             nameText
         }
         .padding()
     }
-
 }
-
-
-
-
-
-
 
 struct WidgetContent: TimelineEntry {
     var date: Date
@@ -145,7 +131,7 @@ struct WidgetContent: TimelineEntry {
 
     let color: Color
     let daysNumber: Int
-    
+
     init(date: Date, name: String, id: UUID, color: Color, daysNumber: Int) {
         self.date = date
         self.name = name
@@ -153,14 +139,14 @@ struct WidgetContent: TimelineEntry {
         self.color = color
         self.daysNumber = daysNumber
     }
-    
+
     init(item: DSItem) {
-        self.date = item.dateLastDone
-        self.name = item.name
-        self.id = item.id
-        self.color = item.category.color
-        
+        date = item.dateLastDone
+        name = item.name
+        id = item.id
+        color = item.category.color
+
         let daysSince = Calendar.current.numberOfDaysBetween(item.dateLastDone, and: Date.now)
-        self.daysNumber = daysSince
+        daysNumber = daysSince
     }
 }

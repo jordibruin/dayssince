@@ -8,14 +8,13 @@
 import SwiftUI
 
 struct Deeplink: View {
-    
     let id: Int
-    
+
     @State var item: SupportPageable?
     @Environment(\.dismiss) var dismiss
     @State var activePage: Int = 0
     @StateObject var support = SupportFetcher()
-    
+
     var body: some View {
         NavigationView {
             Group {
@@ -44,8 +43,8 @@ struct Deeplink: View {
         }
         .tabViewStyle(.page(indexDisplayMode: .always))
         .indexViewStyle(.page(backgroundDisplayMode: .always))
-        .onChange(of: support.retrievedSupport, perform: { newValue in
-            if let item = support.allItems.first(where: { $0.id == self.id}) {
+        .onChange(of: support.retrievedSupport, perform: { _ in
+            if let item = support.allItems.first(where: { $0.id == self.id }) {
                 self.item = item
             } else {
                 print("ID NOT FOUND! Dismiss and throwerror ")
@@ -54,7 +53,7 @@ struct Deeplink: View {
             }
         })
     }
-    
+
     @ViewBuilder
     func tabView() -> some View {
         if item!.supportPages.isEmpty {
@@ -75,4 +74,3 @@ struct Deeplink_Previews: PreviewProvider {
         Deeplink(id: 4)
     }
 }
-

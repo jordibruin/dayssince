@@ -8,16 +8,15 @@
 import SwiftUI
 
 enum SortType: String, CaseIterable, Identifiable {
-    
     case alphabeticallyAscending
     case alphabeticallyDescending
     case daysAscending
     case daysDescending
     case category
     case created
-    
-    var id: String { self.rawValue }
-    
+
+    var id: String { rawValue }
+
     var name: String {
         switch self {
         case .alphabeticallyAscending:
@@ -34,7 +33,7 @@ enum SortType: String, CaseIterable, Identifiable {
             return "Created"
         }
     }
-        
+
     func sort(itemOne: DSItem, itemTwo: DSItem) -> Bool {
         switch self {
         case .alphabeticallyAscending:
@@ -51,26 +50,19 @@ enum SortType: String, CaseIterable, Identifiable {
             return true
         }
     }
-
 }
 
-
 struct SortingMenuView: View {
-    
     @Environment(\.colorScheme) var colorScheme
-    
-    
+
     @Binding var items: [DSItem]
-    
+
     @State var sortType = "none"
     @State var descending = true
     @State var image = "arrow.down"
-    
-
 
     @AppStorage("selectedSortType") var selectedSortType: SortType = .daysAscending
 
-    
     var body: some View {
         Menu {
             ForEach(SortType.allCases) { type in
@@ -80,7 +72,7 @@ struct SortingMenuView: View {
                     Label(
                         type.name,
                         systemImage:
-                            type == selectedSortType ? "checkmark.circle.fill" : ""
+                        type == selectedSortType ? "checkmark.circle.fill" : ""
                     )
                 }
             }

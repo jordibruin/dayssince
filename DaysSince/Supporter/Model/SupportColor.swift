@@ -10,12 +10,10 @@ import SwiftUI
 
 // Used to pass colors from JSON to SwiftUI. You can customize the colors used here to match your project
 enum SupportColor: Int, Codable {
-    
-    
     case primary = 0
     case secondary = 1
     case tertiary = 2
-        
+
     var color: Color {
         switch self {
         case .primary:
@@ -26,7 +24,7 @@ enum SupportColor: Int, Codable {
             return .green
         }
     }
-    
+
     init(colorIndex: Int) {
         if let color = SupportColor(rawValue: colorIndex) {
             self = color

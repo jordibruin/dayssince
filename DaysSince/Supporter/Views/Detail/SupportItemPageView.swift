@@ -5,27 +5,26 @@
 //  Created by Jordi Bruin on 01/12/2021.
 //
 
-import SwiftUI
 import AVKit
+import SwiftUI
 
 struct SupportItemPageView: View {
-    
     @Environment(\.colorScheme) var colorScheme
     let page: SupportItemPage
     @State private var player: AVPlayer?
-    
+
     // Used to pause and play when the page appears
     @State var stopPlayer: Bool = false
-    
+
     // The videos are muted by default
     @State var muted: Bool = false
-    
+
     var body: some View {
         GeometryReader { geo in
             VStack(spacing: 0) {
                 if page.videoURL != nil {
                     video
-                        .frame(height: geo.size.height * 5/9)
+                        .frame(height: geo.size.height * 5 / 9)
                 } else if page.imageURL != nil {
                     image
                         .frame(width: geo.size.width)
@@ -33,7 +32,7 @@ struct SupportItemPageView: View {
                 } else {
                     Color(.systemBackground)
                 }
-                
+
                 explanation
             }
         }
@@ -44,11 +43,11 @@ struct SupportItemPageView: View {
             stopPlayer = true
         }
     }
-    
+
     var video: some View {
         ZStack(alignment: .top) {
             Color(.systemBackground)
-            
+
             SupporterVideoPlayerController(
                 videoURL: URL(string: themeVideo()!)!,
                 stopPlayer: $stopPlayer,
@@ -57,7 +56,7 @@ struct SupportItemPageView: View {
         }
         .background(Design.backgroundColor)
     }
-    
+
     var image: some View {
         AsyncImage(url: URL(string: themeImage()!)) { image in
             image
@@ -68,7 +67,7 @@ struct SupportItemPageView: View {
             Design.backgroundColor
         }
     }
-    
+
     var explanation: some View {
         return ZStack(alignment: .topLeading) {
             Design.backgroundColor
@@ -77,7 +76,7 @@ struct SupportItemPageView: View {
                     Text(page.title)
                         .font(.system(.title2, design: .rounded))
                         .bold()
-                    
+
                     Text(page.subtitle)
                         .font(.system(.title3, design: .rounded))
                 }
@@ -85,7 +84,7 @@ struct SupportItemPageView: View {
             }
         }
     }
-    
+
     func themeVideo() -> String? {
         if colorScheme == .dark {
             if page.darkImageURL != nil {
@@ -97,8 +96,7 @@ struct SupportItemPageView: View {
             return page.videoURL
         }
     }
-    
-    
+
     func themeImage() -> String? {
         if colorScheme == .dark {
             if page.darkImageURL != nil {

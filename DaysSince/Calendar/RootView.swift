@@ -5,9 +5,9 @@
 ////  Created by Vicki Minerva on 4/4/22.
 ////
 //
-//import SwiftUI
+// import SwiftUI
 //
-//struct RootView: View {
+// struct RootView: View {
 //    @Environment(\.calendar) var calendar
 //
 //    private var year: DateInterval {
@@ -27,11 +27,11 @@
 //                )
 //        }
 //    }
-//}
+// }
 //
 //
-//struct RootView_Previews: PreviewProvider {
+// struct RootView_Previews: PreviewProvider {
 //    static var previews: some View {
 //        RootView()
 //    }
-//}
+// }

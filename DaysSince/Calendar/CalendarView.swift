@@ -5,9 +5,9 @@
 ////  Created by Vicki Minerva on 4/4/22.
 ////
 //
-//import SwiftUI
+// import SwiftUI
 //
-//fileprivate extension DateFormatter {
+// fileprivate extension DateFormatter {
 //    static var month: DateFormatter {
 //        let formatter = DateFormatter()
 //        formatter.dateFormat = "MMMM"
@@ -19,9 +19,9 @@
 //        formatter.dateFormat = "MMMM yyyy"
 //        return formatter
 //    }
-//}
+// }
 //
-//fileprivate extension Calendar {
+// fileprivate extension Calendar {
 //    func generateDates(
 //        inside interval: DateInterval,
 //        matching components: DateComponents
@@ -45,9 +45,9 @@
 //
 //        return dates
 //    }
-//}
+// }
 //
-//struct CalendarView<DateView>: View where DateView: View {
+// struct CalendarView<DateView>: View where DateView: View {
 //    @Environment(\.calendar) var calendar
 //
 //    let interval: DateInterval
@@ -111,9 +111,9 @@
 //            matching: DateComponents(hour: 0, minute: 0, second: 0)
 //        )
 //    }
-//}
+// }
 //
-//struct CalendarView_Previews: PreviewProvider {
+// struct CalendarView_Previews: PreviewProvider {
 //    static var previews: some View {
 //        CalendarView(interval: .init()) { _ in
 //            Text("30")
@@ -122,5 +122,5 @@
 //                .cornerRadius(8)
 //        }
 //    }
-//}
+// }
 //
