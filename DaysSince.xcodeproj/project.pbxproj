@@ -29,6 +29,9 @@
 		7A7CD913287F2E760001C64F /* CreateFirstEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A7CD912287F2E760001C64F /* CreateFirstEvent.swift */; };
 		7A868D182890814A009C92D6 /* DetailedTimeDisplayMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A868D172890814A009C92D6 /* DetailedTimeDisplayMode.swift */; };
 		7AAB507727FF86CC0086A5A8 /* Defaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AAB507627FF86CC0086A5A8 /* Defaults.swift */; };
+		7AB3BC822ABF89F800549CD9 /* MainAppColorPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB3BC812ABF89F800549CD9 /* MainAppColorPicker.swift */; };
+		7AB3BC852ABF917C00549CD9 /* Defaults in Frameworks */ = {isa = PBXBuildFile; productRef = 7AB3BC842ABF917C00549CD9 /* Defaults */; };
+		7AB3BC872ABF91C000549CD9 /* Defaults+Extension+Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB3BC862ABF91C000549CD9 /* Defaults+Extension+Colors.swift */; };
 		7AE2946727F4B0AF006A7E01 /* Calendar+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE2946627F4B0AF006A7E01 /* Calendar+Extensions.swift */; };
 		7AE8E362286C921200538521 /* SettingsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE8E361286C921200538521 /* SettingsScreen.swift */; };
 		7AE8E365286C945200538521 /* AppIcons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE8E364286C945200538521 /* AppIcons.swift */; };
@@ -175,6 +178,8 @@
 		7A868D172890814A009C92D6 /* DetailedTimeDisplayMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailedTimeDisplayMode.swift; sourceTree = "<group>"; };
 		7AAB507327FF860C0086A5A8 /* Defaults */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Defaults; path = "../../../../../Library/Developer/Xcode/DerivedData/Posture_Pal-baxwxadtvwjgulhdvdslumckelkv/SourcePackages/checkouts/Defaults"; sourceTree = "<group>"; };
 		7AAB507627FF86CC0086A5A8 /* Defaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Defaults.swift; sourceTree = "<group>"; };
+		7AB3BC812ABF89F800549CD9 /* MainAppColorPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainAppColorPicker.swift; sourceTree = "<group>"; };
+		7AB3BC862ABF91C000549CD9 /* Defaults+Extension+Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Defaults+Extension+Colors.swift"; sourceTree = "<group>"; };
 		7AE2946627F4B0AF006A7E01 /* Calendar+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Calendar+Extensions.swift"; sourceTree = "<group>"; };
 		7AE8E361286C921200538521 /* SettingsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsScreen.swift; sourceTree = "<group>"; };
 		7AE8E364286C945200538521 /* AppIcons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIcons.swift; sourceTree = "<group>"; };
@@ -261,6 +266,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7AB3BC852ABF917C00549CD9 /* Defaults in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -353,6 +359,7 @@
 				7AE2946627F4B0AF006A7E01 /* Calendar+Extensions.swift */,
 				7A67C6DF280061FA0095675F /* Color+Extensions.swift */,
 				14CAC90729B26ED900DF3C24 /* UIApplication+Extensions.swift */,
+				7AB3BC862ABF91C000549CD9 /* Defaults+Extension+Colors.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -409,6 +416,7 @@
 				7A65AAFF286CF818002D6DCA /* ShareButton.swift */,
 				7A65AB01286CFC53002D6DCA /* SupportButton.swift */,
 				7A868D172890814A009C92D6 /* DetailedTimeDisplayMode.swift */,
+				7AB3BC812ABF89F800549CD9 /* MainAppColorPicker.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -724,6 +732,9 @@
 				C2B53DD32869F6F200407F40 /* PBXTargetDependency */,
 			);
 			name = DaysSince;
+			packageProductDependencies = (
+				7AB3BC842ABF917C00549CD9 /* Defaults */,
+			);
 			productName = DaysSince;
 			productReference = 7A2A76F027F2446E006F0470 /* DaysSince.app */;
 			productType = "com.apple.product-type.application";
@@ -792,6 +803,9 @@
 				Base,
 			);
 			mainGroup = 7A2A76E727F2446E006F0470;
+			packageReferences = (
+				7AB3BC832ABF917C00549CD9 /* XCRemoteSwiftPackageReference "Defaults" */,
+			);
 			productRefGroup = 7A2A76F127F2446E006F0470 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -882,6 +896,7 @@
 				7AF56AE0286F32CD0068B467 /* HooliganColor+Extensions.swift in Sources */,
 				7A67C6E0280061FA0095675F /* Color+Extensions.swift in Sources */,
 				7AF56B00286F32CD0068B467 /* Analytics.swift in Sources */,
+				7AB3BC872ABF91C000549CD9 /* Defaults+Extension+Colors.swift in Sources */,
 				C2B53DA02869CD3C00407F40 /* EditTappedItemForm.swift in Sources */,
 				7A007CB72800885700985108 /* CategoryFilteredView.swift in Sources */,
 				7AF56AEA286F32CD0068B467 /* FAQItem.swift in Sources */,
@@ -932,6 +947,7 @@
 				7AF56AE9286F32CD0068B467 /* SupportContactItem.swift in Sources */,
 				7AF56AF7286F32CD0068B467 /* SupportHighlightedSection.swift in Sources */,
 				7A7CD913287F2E760001C64F /* CreateFirstEvent.swift in Sources */,
+				7AB3BC822ABF89F800549CD9 /* MainAppColorPicker.swift in Sources */,
 				C2B53D7A2869CA3B00407F40 /* AddItemForm.swift in Sources */,
 				C2B53D7E2869CA8300407F40 /* CategoryRectangleView.swift in Sources */,
 				7AF56AEE286F32CD0068B467 /* HighlightedItem.swift in Sources */,
@@ -1338,6 +1354,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		7AB3BC832ABF917C00549CD9 /* XCRemoteSwiftPackageReference "Defaults" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sindresorhus/Defaults";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		7AB3BC842ABF917C00549CD9 /* Defaults */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7AB3BC832ABF917C00549CD9 /* XCRemoteSwiftPackageReference "Defaults" */;
+			productName = Defaults;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 7A2A76E827F2446E006F0470 /* Project object */;
 }

@@ -5,9 +5,12 @@
 //  Created by Vicki Minerva on 6/29/22.
 //
 
+import Defaults
 import SwiftUI
 
 struct SettingsScreen: View {
+    @Default(.mainColor) var mainColor
+
     @Environment(\.dismiss) var dismiss
 
     @Binding var isDaysDisplayModeDetailed: Bool
@@ -18,6 +21,7 @@ struct SettingsScreen: View {
 //                daysSinceProSection
                 appIconsSection
 
+                MainAppColorPicker()
                 DetailedTimeDisplayModeCell(isDaysDisplayModeDetailed: $isDaysDisplayModeDetailed)
 
                 Section {
