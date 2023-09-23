@@ -14,6 +14,8 @@ struct SettingsScreen: View {
     @Environment(\.dismiss) var dismiss
 
     @Binding var isDaysDisplayModeDetailed: Bool
+    @Binding var showSettings: Bool
+    @Binding var showThemeSheet: Bool
 
     var body: some View {
         NavigationView {
@@ -21,7 +23,7 @@ struct SettingsScreen: View {
 //                daysSinceProSection
                 appIconsSection
 
-                MainAppColorPicker()
+                ThemeButton(showSettings: $showSettings, showThemeSheet: $showThemeSheet)
                 DetailedTimeDisplayModeCell(isDaysDisplayModeDetailed: $isDaysDisplayModeDetailed)
 
                 Section {
@@ -46,6 +48,12 @@ struct SettingsScreen: View {
                     }
                 }
             })
+        }
+        .onAppear {
+            print("Appear showThemeSheet", showThemeSheet)
+        }
+        .onDisappear {
+            print("Disappear showThemeSheet", showThemeSheet)
         }
         .accentColor(Color.workColor.darker())
     }
@@ -128,6 +136,6 @@ struct SettingsScreen: View {
 
 struct SettingsScreen_Previews: PreviewProvider {
     static var previews: some View {
-        SettingsScreen(isDaysDisplayModeDetailed: .constant(false))
+        SettingsScreen(isDaysDisplayModeDetailed: .constant(false), showSettings: .constant(true), showThemeSheet: .constant(false))
     }
 }

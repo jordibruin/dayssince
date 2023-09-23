@@ -29,9 +29,11 @@
 		7A7CD913287F2E760001C64F /* CreateFirstEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A7CD912287F2E760001C64F /* CreateFirstEvent.swift */; };
 		7A868D182890814A009C92D6 /* DetailedTimeDisplayMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A868D172890814A009C92D6 /* DetailedTimeDisplayMode.swift */; };
 		7AAB507727FF86CC0086A5A8 /* Defaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AAB507627FF86CC0086A5A8 /* Defaults.swift */; };
-		7AB3BC822ABF89F800549CD9 /* MainAppColorPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB3BC812ABF89F800549CD9 /* MainAppColorPicker.swift */; };
+		7AB3BC822ABF89F800549CD9 /* ThemeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB3BC812ABF89F800549CD9 /* ThemeButton.swift */; };
 		7AB3BC852ABF917C00549CD9 /* Defaults in Frameworks */ = {isa = PBXBuildFile; productRef = 7AB3BC842ABF917C00549CD9 /* Defaults */; };
 		7AB3BC872ABF91C000549CD9 /* Defaults+Extension+Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB3BC862ABF91C000549CD9 /* Defaults+Extension+Colors.swift */; };
+		7AB3BC892AC0CB2300549CD9 /* ThemeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB3BC882AC0CB2300549CD9 /* ThemeView.swift */; };
+		7AB3BC8B2AC0CBC300549CD9 /* ColorThemeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB3BC8A2AC0CBC300549CD9 /* ColorThemeView.swift */; };
 		7AE2946727F4B0AF006A7E01 /* Calendar+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE2946627F4B0AF006A7E01 /* Calendar+Extensions.swift */; };
 		7AE8E362286C921200538521 /* SettingsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE8E361286C921200538521 /* SettingsScreen.swift */; };
 		7AE8E365286C945200538521 /* AppIcons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE8E364286C945200538521 /* AppIcons.swift */; };
@@ -178,8 +180,10 @@
 		7A868D172890814A009C92D6 /* DetailedTimeDisplayMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailedTimeDisplayMode.swift; sourceTree = "<group>"; };
 		7AAB507327FF860C0086A5A8 /* Defaults */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Defaults; path = "../../../../../Library/Developer/Xcode/DerivedData/Posture_Pal-baxwxadtvwjgulhdvdslumckelkv/SourcePackages/checkouts/Defaults"; sourceTree = "<group>"; };
 		7AAB507627FF86CC0086A5A8 /* Defaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Defaults.swift; sourceTree = "<group>"; };
-		7AB3BC812ABF89F800549CD9 /* MainAppColorPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainAppColorPicker.swift; sourceTree = "<group>"; };
+		7AB3BC812ABF89F800549CD9 /* ThemeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeButton.swift; sourceTree = "<group>"; };
 		7AB3BC862ABF91C000549CD9 /* Defaults+Extension+Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Defaults+Extension+Colors.swift"; sourceTree = "<group>"; };
+		7AB3BC882AC0CB2300549CD9 /* ThemeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeView.swift; sourceTree = "<group>"; };
+		7AB3BC8A2AC0CBC300549CD9 /* ColorThemeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorThemeView.swift; sourceTree = "<group>"; };
 		7AE2946627F4B0AF006A7E01 /* Calendar+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Calendar+Extensions.swift"; sourceTree = "<group>"; };
 		7AE8E361286C921200538521 /* SettingsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsScreen.swift; sourceTree = "<group>"; };
 		7AE8E364286C945200538521 /* AppIcons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIcons.swift; sourceTree = "<group>"; };
@@ -416,7 +420,9 @@
 				7A65AAFF286CF818002D6DCA /* ShareButton.swift */,
 				7A65AB01286CFC53002D6DCA /* SupportButton.swift */,
 				7A868D172890814A009C92D6 /* DetailedTimeDisplayMode.swift */,
-				7AB3BC812ABF89F800549CD9 /* MainAppColorPicker.swift */,
+				7AB3BC812ABF89F800549CD9 /* ThemeButton.swift */,
+				7AB3BC882AC0CB2300549CD9 /* ThemeView.swift */,
+				7AB3BC8A2AC0CBC300549CD9 /* ColorThemeView.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -882,12 +888,14 @@
 			files = (
 				7AE8E367286C948200538521 /* AlternativeIcon.swift in Sources */,
 				7AAB507727FF86CC0086A5A8 /* Defaults.swift in Sources */,
+				7AB3BC8B2AC0CBC300549CD9 /* ColorThemeView.swift in Sources */,
 				7A2A770D27F26E2B006F0470 /* Array+Extensions.swift in Sources */,
 				C2B53D9B2869CACA00407F40 /* MenuBlockView.swift in Sources */,
 				7AF56AFD286F32CD0068B467 /* ChangelogView.swift in Sources */,
 				C21BDC58286F355200B2FDCC /* NotificationManager.swift in Sources */,
 				C2B53D752869CA1000407F40 /* CategoryDSItem.swift in Sources */,
 				7A2A76F627F2446E006F0470 /* ContentView.swift in Sources */,
+				7AB3BC892AC0CB2300549CD9 /* ThemeView.swift in Sources */,
 				C2B53D7C2869CA5800407F40 /* CategoriesGridView.swift in Sources */,
 				7AF56AFC286F32CD0068B467 /* NewUpdateBanner.swift in Sources */,
 				7AF56AD6286F32CD0068B467 /* Design.swift in Sources */,
@@ -947,7 +955,7 @@
 				7AF56AE9286F32CD0068B467 /* SupportContactItem.swift in Sources */,
 				7AF56AF7286F32CD0068B467 /* SupportHighlightedSection.swift in Sources */,
 				7A7CD913287F2E760001C64F /* CreateFirstEvent.swift in Sources */,
-				7AB3BC822ABF89F800549CD9 /* MainAppColorPicker.swift in Sources */,
+				7AB3BC822ABF89F800549CD9 /* ThemeButton.swift in Sources */,
 				C2B53D7A2869CA3B00407F40 /* AddItemForm.swift in Sources */,
 				C2B53D7E2869CA8300407F40 /* CategoryRectangleView.swift in Sources */,
 				7AF56AEE286F32CD0068B467 /* HighlightedItem.swift in Sources */,
@@ -1071,7 +1079,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -1126,7 +1134,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;

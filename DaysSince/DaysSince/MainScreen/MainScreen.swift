@@ -17,6 +17,7 @@ struct MainScreen: View {
     @State var showSettings = false
     @State var editItemSheet = false
     @State var tappedItem = DSItem.placeholderItem()
+    @State var showThemeSheet = false
 
     @Binding var items: [DSItem]
     @Binding var isDaysDisplayModeDetailed: Bool
@@ -91,7 +92,13 @@ struct MainScreen: View {
             AddItemSheet(selectedCategory: nil, remindersEnabled: false, items: $items)
         }
         .sheet(isPresented: $showSettings) {
-            SettingsScreen(isDaysDisplayModeDetailed: $isDaysDisplayModeDetailed)
+            SettingsScreen(isDaysDisplayModeDetailed: $isDaysDisplayModeDetailed, showSettings: $showSettings, showThemeSheet: $showThemeSheet)
+        }
+        .sheet(isPresented: $showThemeSheet) {
+            ThemeView()
+                .presentationDetents([.medium])
+                .onDisappear { showThemeSheet = false }
+                .transition(.move(edge: .bottom))
         }
     }
 

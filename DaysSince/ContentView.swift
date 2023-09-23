@@ -16,6 +16,7 @@ struct ContentView: View {
     @AppStorage("isDaysDisplayModeDetailed") var isDaysDisplayModeDetailed: Bool = false
 
     @Default(.mainColor) var mainColor
+    @Default(.backgroundColor) var backgroundColor
 
     var body: some View {
         if hasSeenOnboarding {
