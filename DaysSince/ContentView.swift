@@ -5,6 +5,7 @@
 //  Created by Vicki Minerva on 3/28/22.
 //
 
+import Defaults
 import SwiftUI
 
 struct ContentView: View {
@@ -13,6 +14,9 @@ struct ContentView: View {
     @AppStorage("items", store: UserDefaults(suiteName: "group.goodsnooze.dayssince")) var items: [DSItem] = []
 
     @AppStorage("isDaysDisplayModeDetailed") var isDaysDisplayModeDetailed: Bool = false
+
+    @Default(.mainColor) var mainColor
+    @Default(.backgroundColor) var backgroundColor
 
     var body: some View {
         if hasSeenOnboarding {

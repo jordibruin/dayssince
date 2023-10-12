@@ -5,15 +5,19 @@
 //  Created by Vicki Minerva on 5/23/22.
 //
 
+import Defaults
 import SwiftUI
 
 struct MainScreen: View {
+    @Default(.mainColor) var mainColor
+
     @Environment(\.colorScheme) var colorScheme
 
     @State var showAddItemSheet = false
     @State var showSettings = false
     @State var editItemSheet = false
     @State var tappedItem = DSItem.placeholderItem()
+    @State var showThemeSheet = false
 
     @Binding var items: [DSItem]
     @Binding var isDaysDisplayModeDetailed: Bool
@@ -88,7 +92,13 @@ struct MainScreen: View {
             AddItemSheet(selectedCategory: nil, remindersEnabled: false, items: $items)
         }
         .sheet(isPresented: $showSettings) {
-            SettingsScreen(isDaysDisplayModeDetailed: $isDaysDisplayModeDetailed)
+            SettingsScreen(isDaysDisplayModeDetailed: $isDaysDisplayModeDetailed, showSettings: $showSettings, showThemeSheet: $showThemeSheet)
+        }
+        .sheet(isPresented: $showThemeSheet) {
+            ThemeView()
+                .presentationDetents([.medium])
+                .onDisappear { showThemeSheet = false }
+                .transition(.move(edge: .bottom))
         }
     }
 
@@ -127,7 +137,7 @@ struct MainScreen: View {
             }
             .padding()
             .background(LinearGradient(
-                gradient: .init(colors: [colorScheme == .dark ? Color.workColor.opacity(0.85).darker(by: 0.1) : Color.workColor.opacity(0.85), colorScheme == .dark ? Color.workColor.darker(by: 0.2) : Color.workColor]),
+                gradient: .init(colors: [colorScheme == .dark ? mainColor.opacity(0.85).darker(by: 0.1) : mainColor.opacity(0.85), colorScheme == .dark ? mainColor.darker(by: 0.2) : mainColor]),
                 startPoint: .init(x: 0.0, y: 0.5),
                 endPoint: .init(x: 0, y: 1)
             ))
