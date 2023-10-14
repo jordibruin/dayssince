@@ -22,17 +22,15 @@ struct CategoryRectangleView: View {
             backgroundColor
             categoryBlockContent
         }
-        .clipShape(RoundedRectangle(cornerRadius: 25))
+        .clipShape(RoundedRectangle(cornerRadius: 24))
         .padding(.horizontal, 12)
         .padding(.vertical, 4)
         .shadow(color: selectedCategory == nil ? category.color : selectedCategory == category ? category.color : category.color.opacity(0.2), radius: 10, x: 0, y: 5)
     }
 
     var backgroundColor: some View {
-        withAnimation {
-            category.color
-                .opacity(selectedCategory == nil ? 1 : selectedCategory == category ? 1 : 0.7)
-        }
+        category.color
+            .opacity(selectedCategory == nil ? 1 : selectedCategory == category ? 1 : 0.7)
     }
 
     var categoryBlockContent: some View {

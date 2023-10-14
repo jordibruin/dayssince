@@ -9,11 +9,19 @@ import Foundation
 import SwiftUI
 
 extension Color {
-    static let workColor = Color("workColor") // "ppBlue")
-    static let lifeColor = Color("lifeColor") // "ppBlue")
+    static let workColor = Color("workColor")
+    static let lifeColor = Color("lifeColor")
     static let hobbiesColor = Color("hobbiesColor")
     static let healthColor = Color("healthColor")
     static let backgroundColor = Color("backgroundColor")
+    static let peachLightPink = Color("peachLightPink")
+    static let peachDarkPink = Color("peachDarkPink")
+    static let marioBlue = Color("marioBlue")
+    static let marioRed = Color("marioRed")
+    static let zeldaGreen = Color("zeldaGreen")
+    static let zeldaYellow = Color("zeldaYellow")
+    static let animalCrossingsBrown = Color("animalCrossingsBrown")
+    static let animalCrossingsGreen = Color("animalCrossingsGreen")
 
     public func lighter(by amount: CGFloat = 0.2) -> Self { Self(UIColor(self).lighter(by: amount)) }
     public func darker(by amount: CGFloat = 0.2) -> Self { Self(UIColor(self).darker(by: amount)) }

@@ -29,7 +29,6 @@
 		7A7CD913287F2E760001C64F /* CreateFirstEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A7CD912287F2E760001C64F /* CreateFirstEvent.swift */; };
 		7A868D182890814A009C92D6 /* DetailedTimeDisplayMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A868D172890814A009C92D6 /* DetailedTimeDisplayMode.swift */; };
 		7AAB507727FF86CC0086A5A8 /* Defaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AAB507627FF86CC0086A5A8 /* Defaults.swift */; };
-		7AB3BC822ABF89F800549CD9 /* ThemeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB3BC812ABF89F800549CD9 /* ThemeButton.swift */; };
 		7AB3BC852ABF917C00549CD9 /* Defaults in Frameworks */ = {isa = PBXBuildFile; productRef = 7AB3BC842ABF917C00549CD9 /* Defaults */; };
 		7AB3BC872ABF91C000549CD9 /* Defaults+Extension+Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB3BC862ABF91C000549CD9 /* Defaults+Extension+Colors.swift */; };
 		7AB3BC892AC0CB2300549CD9 /* ThemeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB3BC882AC0CB2300549CD9 /* ThemeView.swift */; };
@@ -180,7 +179,6 @@
 		7A868D172890814A009C92D6 /* DetailedTimeDisplayMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailedTimeDisplayMode.swift; sourceTree = "<group>"; };
 		7AAB507327FF860C0086A5A8 /* Defaults */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Defaults; path = "../../../../../Library/Developer/Xcode/DerivedData/Posture_Pal-baxwxadtvwjgulhdvdslumckelkv/SourcePackages/checkouts/Defaults"; sourceTree = "<group>"; };
 		7AAB507627FF86CC0086A5A8 /* Defaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Defaults.swift; sourceTree = "<group>"; };
-		7AB3BC812ABF89F800549CD9 /* ThemeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeButton.swift; sourceTree = "<group>"; };
 		7AB3BC862ABF91C000549CD9 /* Defaults+Extension+Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Defaults+Extension+Colors.swift"; sourceTree = "<group>"; };
 		7AB3BC882AC0CB2300549CD9 /* ThemeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeView.swift; sourceTree = "<group>"; };
 		7AB3BC8A2AC0CBC300549CD9 /* ColorThemeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorThemeView.swift; sourceTree = "<group>"; };
@@ -420,7 +418,6 @@
 				7A65AAFF286CF818002D6DCA /* ShareButton.swift */,
 				7A65AB01286CFC53002D6DCA /* SupportButton.swift */,
 				7A868D172890814A009C92D6 /* DetailedTimeDisplayMode.swift */,
-				7AB3BC812ABF89F800549CD9 /* ThemeButton.swift */,
 				7AB3BC882AC0CB2300549CD9 /* ThemeView.swift */,
 				7AB3BC8A2AC0CBC300549CD9 /* ColorThemeView.swift */,
 			);
@@ -955,7 +952,6 @@
 				7AF56AE9286F32CD0068B467 /* SupportContactItem.swift in Sources */,
 				7AF56AF7286F32CD0068B467 /* SupportHighlightedSection.swift in Sources */,
 				7A7CD913287F2E760001C64F /* CreateFirstEvent.swift in Sources */,
-				7AB3BC822ABF89F800549CD9 /* ThemeButton.swift in Sources */,
 				C2B53D7A2869CA3B00407F40 /* AddItemForm.swift in Sources */,
 				C2B53D7E2869CA8300407F40 /* CategoryRectangleView.swift in Sources */,
 				7AF56AEE286F32CD0068B467 /* HighlightedItem.swift in Sources */,
@@ -1164,6 +1160,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1197,6 +1194,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

@@ -15,7 +15,6 @@ struct SettingsScreen: View {
 
     @Binding var isDaysDisplayModeDetailed: Bool
     @Binding var showSettings: Bool
-    @Binding var showThemeSheet: Bool
 
     var body: some View {
         NavigationView {
@@ -23,7 +22,6 @@ struct SettingsScreen: View {
 //                daysSinceProSection
                 appIconsSection
 
-                ThemeButton(showSettings: $showSettings, showThemeSheet: $showThemeSheet)
                 DetailedTimeDisplayModeCell(isDaysDisplayModeDetailed: $isDaysDisplayModeDetailed)
 
                 Section {
@@ -43,19 +41,13 @@ struct SettingsScreen: View {
                     } label: {
                         Image(systemName: "chevron.down.circle.fill")
                             .font(.title2)
-                            .foregroundColor(Color.workColor.opacity(0.8))
+                            .foregroundColor(mainColor.opacity(0.8))
                             .accessibilityLabel("Dismiss")
                     }
                 }
             })
         }
-        .onAppear {
-            print("Appear showThemeSheet", showThemeSheet)
-        }
-        .onDisappear {
-            print("Disappear showThemeSheet", showThemeSheet)
-        }
-        .accentColor(Color.workColor.darker())
+        .accentColor(mainColor.darker())
     }
 
     var daysSinceProSection: some View {
@@ -67,7 +59,7 @@ struct SettingsScreen: View {
                 .frame(height: 120)
                 .listRowBackground(
                     ZStack(alignment: .leading) {
-                        Color.workColor
+                        mainColor
 
                         Text("Days Since\nPro")
                             .font(.system(.title, design: .rounded))
@@ -136,6 +128,9 @@ struct SettingsScreen: View {
 
 struct SettingsScreen_Previews: PreviewProvider {
     static var previews: some View {
-        SettingsScreen(isDaysDisplayModeDetailed: .constant(false), showSettings: .constant(true), showThemeSheet: .constant(false))
+        SettingsScreen(
+            isDaysDisplayModeDetailed: .constant(false),
+            showSettings: .constant(true)
+        )
     }
 }

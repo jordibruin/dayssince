@@ -5,10 +5,12 @@
 //  Created by Vicki Minerva on 6/30/22.
 //
 
+import Defaults
 import SwiftUI
 
 struct SettingsReviewButton: View {
     @Environment(\.openURL) var openURL
+    @Default(.mainColor) var mainColor
 
     var body: some View {
         Button {
@@ -27,7 +29,7 @@ struct SettingsReviewButton: View {
     }
 
     var buttonImage: some View {
-        LinearGradient(colors: [Color.workColor, Color.workColor.lighter()], startPoint: .topLeading, endPoint: .bottomTrailing)
+        LinearGradient(colors: [mainColor, mainColor.lighter()], startPoint: .topLeading, endPoint: .bottomTrailing)
             .frame(width: 34, height: 34)
             .cornerRadius(8)
             .overlay(
@@ -46,7 +48,7 @@ struct SettingsReviewButton: View {
     var buttonShareArrow: some View {
         Image(systemName: "arrow.up.forward.app.fill")
             .font(.title2)
-            .foregroundColor(Color.workColor.darker())
+            .foregroundColor(mainColor.darker())
             .opacity(0.5)
     }
 }

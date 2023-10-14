@@ -10,6 +10,7 @@ import SwiftUI
 
 struct MainScreen: View {
     @Default(.mainColor) var mainColor
+    @Default(.backgroundColor) var backgroundColor
 
     @Environment(\.colorScheme) var colorScheme
 
@@ -92,13 +93,13 @@ struct MainScreen: View {
             AddItemSheet(selectedCategory: nil, remindersEnabled: false, items: $items)
         }
         .sheet(isPresented: $showSettings) {
-            SettingsScreen(isDaysDisplayModeDetailed: $isDaysDisplayModeDetailed, showSettings: $showSettings, showThemeSheet: $showThemeSheet)
+            SettingsScreen(isDaysDisplayModeDetailed: $isDaysDisplayModeDetailed, showSettings: $showSettings)
         }
         .sheet(isPresented: $showThemeSheet) {
             ThemeView()
                 .presentationDetents([.medium])
+                .presentationCornerRadius(32)
                 .onDisappear { showThemeSheet = false }
-                .transition(.move(edge: .bottom))
         }
     }
 
@@ -109,15 +110,27 @@ struct MainScreen: View {
                     showSettings = true
                 } label: {
                     Image(systemName: "gearshape.fill")
-                        .foregroundColor(colorScheme == .dark ? .primary : .workColor.opacity(0.8))
+                        .foregroundColor(colorScheme == .dark ? .primary : mainColor.opacity(0.8))
                         .imageScale(.large)
                         .accessibilityLabel("Settings")
                         .font(.title2)
                 }
             }
 
-            ToolbarItem(placement: .navigationBarTrailing) {
+            ToolbarItem(placement: .navigationBarLeading) {
                 SortingMenuView(items: $items)
+            }
+
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    showThemeSheet = true
+                } label: {
+                    Image(systemName: "paintpalette.fill")
+                        .foregroundColor(colorScheme == .dark ? .primary : mainColor.opacity(0.8))
+                        .imageScale(.large)
+                        .accessibilityLabel("Change theme")
+                        .font(.title2)
+                }
             }
         }
     }
@@ -143,7 +156,7 @@ struct MainScreen: View {
             ))
             .background(colorScheme == .dark ? Color.black : Color.white)
             .clipShape(Capsule())
-            .shadow(color: Color.workColor, radius: 10, x: 0, y: 5)
+            .shadow(color: mainColor, radius: 10, x: 0, y: 5)
         }
         .buttonStyle(PlainButtonStyle())
         .padding(.bottom, 16)

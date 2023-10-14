@@ -80,7 +80,7 @@ struct MenuBlockView: View {
     }
 
     var itemCount: some View {
-        Text("\(findItemCount()) events")
+        Text("^[\(findItemCount()) event](inflect: true)")
             .font(.system(.caption, design: .rounded))
     }
 

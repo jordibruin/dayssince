@@ -5,6 +5,7 @@
 //  Created by Vicki Minerva on 4/4/22.
 //
 
+import Defaults
 import SwiftUI
 
 enum SortType: String, CaseIterable, Identifiable {
@@ -13,7 +14,7 @@ enum SortType: String, CaseIterable, Identifiable {
     case daysAscending
     case daysDescending
     case category
-    case created
+//    case created
 
     var id: String { rawValue }
 
@@ -24,13 +25,13 @@ enum SortType: String, CaseIterable, Identifiable {
         case .alphabeticallyDescending:
             return "Alphabetical (Z-A)"
         case .daysAscending:
-            return "Days (Old-New)"
-        case .daysDescending:
             return "Days (New-Old)"
+        case .daysDescending:
+            return "Days (Old-New)"
         case .category:
             return "Category"
-        case .created:
-            return "Created"
+//        case .created:
+//            return "Created"
         }
     }
 
@@ -39,15 +40,15 @@ enum SortType: String, CaseIterable, Identifiable {
         case .alphabeticallyAscending:
             return itemOne.name < itemTwo.name
         case .alphabeticallyDescending:
-            return itemOne.name < itemTwo.name
+            return itemOne.name > itemTwo.name
         case .daysAscending:
             return itemOne.daysAgo < itemTwo.daysAgo
         case .daysDescending:
             return itemOne.daysAgo > itemTwo.daysAgo
         case .category:
             return itemOne.category.name > itemTwo.category.name
-        case .created:
-            return true
+//        case .created:
+//            return true
         }
     }
 }
@@ -63,6 +64,8 @@ struct SortingMenuView: View {
 
     @AppStorage("selectedSortType") var selectedSortType: SortType = .daysAscending
 
+    @Default(.mainColor) var mainColor
+
     var body: some View {
         Menu {
             ForEach(SortType.allCases) { type in
@@ -72,7 +75,7 @@ struct SortingMenuView: View {
                     Label(
                         type.name,
                         systemImage:
-                        type == selectedSortType ? "checkmark.circle.fill" : ""
+                        type == selectedSortType ? "checkmark" : ""
                     )
                 }
             }
@@ -80,7 +83,7 @@ struct SortingMenuView: View {
             Image(systemName: "arrow.up.arrow.down.circle.fill")
                 .imageScale(.large)
                 .font(.title2)
-                .foregroundColor(colorScheme == .dark ? .primary : .workColor.opacity(0.8))
+                .foregroundColor(colorScheme == .dark ? .primary : mainColor.opacity(0.8))
         }
         .foregroundColor(.primary)
         .accessibilityLabel("Sorting Menu")
