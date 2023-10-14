@@ -16,6 +16,8 @@ struct ColorThemeView: View {
     let backgroundColorTemporary: Color
 
     var body: some View {
+        let isThemeSelected = (colorEquals(mainColorTemporary, mainColor) || colorEquals(backgroundColorTemporary, backgroundColor))
+
         Circle()
             .frame(width: 72, height: 72)
             .overlay {
@@ -28,10 +30,8 @@ struct ColorThemeView: View {
             }
             .overlay(
                 RoundedRectangle(cornerRadius: 24)
-                    .stroke(.black, lineWidth: (colorEquals("Main", mainColorTemporary, mainColor) || colorEquals("Background", backgroundColorTemporary, backgroundColor)) ? 6 : 0)
-                    .background(
-                        (colorEquals("Main", mainColorTemporary, mainColor) || colorEquals("Background", backgroundColorTemporary, backgroundColor)) ? .clear : .black.opacity(0.2)
-                    )
+                    .stroke(.black, lineWidth: isThemeSelected ? 6 : 0)
+                    .background(isThemeSelected ? .clear : .black.opacity(0.2))
             )
             .clipShape(RoundedRectangle(cornerRadius: 24))
             .onTapGesture {
@@ -46,7 +46,7 @@ struct ColorThemeView: View {
             .transition(.opacity)
     }
 
-    func colorEquals(_: String, _ color1: Color, _ color2: Color) -> Bool {
+    func colorEquals(_ color1: Color, _ color2: Color) -> Bool {
         let uiColor1 = UIColor(color1)
         let uiColor2 = UIColor(color2)
 
