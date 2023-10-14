@@ -5,16 +5,19 @@
 //  Created by Vicki Minerva on 6/30/22.
 //
 
+import Defaults
 import SwiftUI
 
 struct SupportButton: View {
+    @Default(.mainColor) var mainColor
+
     var body: some View {
         NavigationLink {
             SupportScreen()
                 .interactiveDismissDisabled()
         } label: {
             HStack {
-                LinearGradient(colors: [Color.workColor, Color.workColor.lighter()], startPoint: .topLeading, endPoint: .bottomTrailing)
+                LinearGradient(colors: [mainColor, mainColor.lighter()], startPoint: .topLeading, endPoint: .bottomTrailing)
                     .frame(width: 34, height: 34)
                     .cornerRadius(8)
                     .overlay(

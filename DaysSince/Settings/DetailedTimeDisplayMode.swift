@@ -5,10 +5,13 @@
 //  Created by Vicki Minerva on 7/26/22.
 //
 
+import Defaults
 import SwiftUI
 
 struct DetailedTimeDisplayModeCell: View {
     @Binding var isDaysDisplayModeDetailed: Bool
+
+    @Default(.mainColor) var mainColor
 
     var body: some View {
         Section {
@@ -27,7 +30,7 @@ struct DetailedTimeDisplayModeCell: View {
     }
 
     var buttonImage: some View {
-        LinearGradient(colors: [Color.workColor, Color.workColor.lighter()], startPoint: .topLeading, endPoint: .bottomTrailing)
+        LinearGradient(colors: [mainColor, mainColor.lighter()], startPoint: .topLeading, endPoint: .bottomTrailing)
             .frame(width: 30, height: 30)
             .cornerRadius(8)
             .overlay(
@@ -46,7 +49,7 @@ struct DetailedTimeDisplayModeCell: View {
 
     var toggle: some View {
         Toggle("Detailed Time Display Mode", isOn: $isDaysDisplayModeDetailed)
-            .tint(Color.workColor)
+            .tint(mainColor)
             .labelsHidden()
     }
 }

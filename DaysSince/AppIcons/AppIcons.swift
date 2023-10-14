@@ -5,12 +5,15 @@
 //  Created by Vicki Minerva on 6/29/22.
 //
 
+import Defaults
 import SwiftUI
 
 struct AppIcons: View {
     @Environment(\.dismiss) var dismiss
 //    @EnvironmentObject var store: Store
 //    @EnvironmentObject var reviewManager: ReviewManager
+
+    @Default(.mainColor) var mainColor
 
     var columns: [GridItem] = [
         GridItem(.flexible(minimum: 100), spacing: 10),
@@ -91,7 +94,7 @@ struct AppIcons: View {
                             Image(systemName: "checkmark.circle.fill")
                                 .font(.title)
                                 .foregroundColor(.white)
-                                .shadow(color: Color.workColor.opacity(0.1), radius: 5, x: 0, y: 0)
+                                .shadow(color: mainColor.opacity(0.1), radius: 5, x: 0, y: 0)
                         }
                         .padding(8)
 

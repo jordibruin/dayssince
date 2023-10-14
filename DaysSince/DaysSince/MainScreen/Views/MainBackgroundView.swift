@@ -5,10 +5,13 @@
 //  Created by Vicki Minerva on 5/23/22.
 //
 
+import Defaults
 import SwiftUI
 
 struct MainBackgroundView: View {
     @Environment(\.colorScheme) var colorScheme
+
+    @Default(.backgroundColor) var backgroundColor
 
     var body: some View {
         if colorScheme == .dark {
@@ -16,7 +19,7 @@ struct MainBackgroundView: View {
                 .ignoresSafeArea()
         } else {
             LinearGradient(
-                gradient: .init(colors: [Color.backgroundColor.opacity(0.0), Color.backgroundColor]),
+                gradient: .init(colors: [backgroundColor.opacity(0.0), backgroundColor]),
                 startPoint: .init(x: 1, y: 0),
                 endPoint: .init(x: 0.0001, y: 0)
             )

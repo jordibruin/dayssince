@@ -31,7 +31,7 @@ struct ThemeButton: View {
     }
 
     var buttonImage: some View {
-        LinearGradient(colors: [Color.workColor, Color.workColor.lighter()], startPoint: .topLeading, endPoint: .bottomTrailing)
+        LinearGradient(colors: [mainColor, mainColor.lighter()], startPoint: .topLeading, endPoint: .bottomTrailing)
             .frame(width: 30, height: 30)
             .cornerRadius(8)
             .overlay(
