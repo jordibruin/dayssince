@@ -11,15 +11,16 @@ struct AddItemForm: View {
     @Binding var items: [DSItem]
     @Binding var name: String
     @Binding var date: Date
-    @Binding var category: CategoryDSItem?
+    @Binding var category: Category?
     @Binding var remindersEnabled: Bool
+    @Binding var showCategorySheet: Bool
 
     let reminders = ["Daily", "Weekly", "Monthly"]
 
     @Binding var selectedReminder: DSItemReminders
 
     var accentColor: Color {
-        category == nil ? Color.black : category?.color as! Color
+        category?.color.color ?? Color.black
     }
 
     @FocusState.Binding var nameIsFocused: Bool
@@ -30,7 +31,7 @@ struct AddItemForm: View {
                 Form {
                     nameSection
                     dateSection
-                    newCategorySection
+                    CategoryFormSection(selectedCategory: $category, showCategorySheet: $showCategorySheet)
                     reminderSection
                 }
                 .scrollDismissesKeyboard(.immediately) // Only available for iOS 16+
@@ -46,11 +47,11 @@ struct AddItemForm: View {
             Form {
                 nameSection
                 dateSection
-                newCategorySection
+                CategoryFormSection(selectedCategory: $category, showCategorySheet: $showCategorySheet)
                 reminderSection
             }
             // Focus name field when the sheet is opened.
-            // On older iOS versions it didn't work if you immediatly focused it so it had to have a slight delay.
+            // On older iOS versions it didn't work if you immediatly focused a field, so it had to have a slight delay.
             .onAppear {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
                     nameIsFocused = true
@@ -73,7 +74,7 @@ struct AddItemForm: View {
         Section {
             DatePicker("Event Date", selection: $date, in: ...Date.now, displayedComponents: .date)
                 .datePickerStyle(.graphical)
-                .accentColor(self.category != nil ? self.category!.color : Color.blue)
+                .accentColor(accentColor)
         } header: {
             Text("Date")
         }
@@ -82,7 +83,7 @@ struct AddItemForm: View {
     var reminderSection: some View {
         Section {
             Toggle("Reminders", isOn: $remindersEnabled.animation())
-                .tint(self.category != nil ? self.category!.color : Color.green)
+                .tint(accentColor)
             // Select type of reminder
             if remindersEnabled {
                 Picker("Remind me", selection: $selectedReminder) {
@@ -94,34 +95,6 @@ struct AddItemForm: View {
             }
         } header: {
             Text("Reminders")
-        }
-    }
-
-    var newCategorySection: some View {
-        Section {
-            ForEach(CategoryDSItem.allCases) { category in
-                Button {
-                    self.category = category
-                } label: {
-                    HStack {
-                        Image(systemName: category.sfSymbolName)
-                            .foregroundColor(self.category == category ? self.category!.color : .primary)
-                            .frame(width: 40)
-
-                        Text(category.name)
-                        Spacer()
-
-                        if self.category == category {
-                            Image(systemName: "checkmark.circle.fill")
-                                .imageScale(.large)
-                                .foregroundColor(self.category!.color)
-                        }
-                    }
-                }
-                .foregroundColor(.primary)
-            }
-        } header: {
-            Text("Category")
         }
     }
 }
@@ -140,16 +113,15 @@ struct Background<Content: View>: View {
     }
 }
 
-// TODO: fix the preview
-// struct AddItemForm_Previews: PreviewProvider {
-//
-//    static var previews: some View {
-//        AddItemForm(items: .constant([]),
-//                    name: .constant(""),
-//                    date: .constant(Date.now),
-//                    category: .constant(CategoryDSItem.work),
-//                    remindersEnabled: .constant(true),
-//                    selectedReminder: .constant(DSItemReminders.daily),
-//                    nameIsFocused: .constant(false))
-//    }
-// }
+struct AddItemForm_Previews: PreviewProvider {
+    static var previews: some View {
+        AddItemForm(items: .constant([]),
+                    name: .constant(""),
+                    date: .constant(Date.now),
+                    category: .constant(Category.placeholderCategory()),
+                    remindersEnabled: .constant(true),
+                    showCategorySheet: .constant(false),
+                    selectedReminder: .constant(DSItemReminders.daily),
+                    nameIsFocused: FocusState<Bool>().projectedValue)
+    }
+}

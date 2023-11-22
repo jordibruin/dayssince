@@ -28,8 +28,8 @@ struct MainBackgroundView: View {
     }
 }
 
-// struct MainBackgroundView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        MainBackgroundView(mainColor:Binding<Color.workColor>)
-//    }
-// }
+struct MainBackgroundView_Previews: PreviewProvider {
+    static var previews: some View {
+        MainBackgroundView()
+    }
+}

@@ -15,12 +15,14 @@ struct ContentView: View {
 
     @AppStorage("isDaysDisplayModeDetailed") var isDaysDisplayModeDetailed: Bool = false
 
+    @Default(.categories) var categories
     @Default(.mainColor) var mainColor
     @Default(.backgroundColor) var backgroundColor
 
     var body: some View {
         if hasSeenOnboarding {
-            MainScreen(items: $items, isDaysDisplayModeDetailed: $isDaysDisplayModeDetailed)
+            MainScreen(items: $items,
+                       isDaysDisplayModeDetailed: $isDaysDisplayModeDetailed)
         } else {
             OnboardingScreen(hasSeenOnboarding: $hasSeenOnboarding, items: $items)
         }

@@ -5,9 +5,12 @@
 //  Created by Vicki Minerva on 5/23/22.
 //
 
+import Defaults
 import SwiftUI
 
 struct BottomSection: View {
+    @Default(.categories) var categories
+
     @Binding var items: [DSItem]
 
     @Binding var editItemSheet: Bool
@@ -31,6 +34,9 @@ struct BottomSection: View {
 
 struct BottomSection_Previews: PreviewProvider {
     static var previews: some View {
-        BottomSection(items: .constant([.placeholderItem()]), editItemSheet: .constant(false), tappedItem: .constant(DSItem.placeholderItem()), isDaysDisplayModeDetailed: .constant(false))
+        BottomSection(items: .constant([.placeholderItem()]),
+                      editItemSheet: .constant(false),
+                      tappedItem: .constant(DSItem.placeholderItem()),
+                      isDaysDisplayModeDetailed: .constant(false))
     }
 }

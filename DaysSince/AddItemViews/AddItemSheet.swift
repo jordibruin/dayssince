@@ -5,38 +5,49 @@
 //  Created by Vicki Minerva on 3/28/22.
 //
 
+import Defaults
 import SwiftUI
 import UserNotifications
 
 struct AddItemSheet: View {
+    @Default(.categories) var categories
+
     @Environment(\.dismiss) var dismiss
 
     @EnvironmentObject var notificationManager: NotificationManager
 
     @State private var name: String = ""
     @State var date: Date = .now
-    @State var selectedCategory: CategoryDSItem? = nil
+    @State var selectedCategory: Category?
     @State var remindersEnabled: Bool = false
     @State var selectedReminder: DSItemReminders = .daily
+    @State var showCategorySheet = false
 
     @FocusState private var nameIsFocused: Bool
 
     @Binding var items: [DSItem]
 
     var accentColor: Color {
-        selectedCategory == nil ? Color.black : selectedCategory?.color as! Color
+        selectedCategory?.color.color ?? .primary
     }
 
     var body: some View {
         // Form
         NavigationView {
-            AddItemForm(items: $items, name: $name, date: $date, category: $selectedCategory, remindersEnabled: $remindersEnabled, selectedReminder: $selectedReminder, nameIsFocused: $nameIsFocused)
+            AddItemForm(items: $items, name: $name, date: $date, category: $selectedCategory, remindersEnabled: $remindersEnabled, showCategorySheet: $showCategorySheet, selectedReminder: $selectedReminder, nameIsFocused: $nameIsFocused)
                 .navigationTitle("New Event")
                 .navigationBarTitleDisplayMode(.inline)
                 .ignoresSafeArea(.keyboard, edges: .bottom)
                 .toolbar(content: {
                     toolbarItems
                 })
+        }
+        .sheet(isPresented: $showCategorySheet) {
+            AddCategorySheet()
+                .presentationDragIndicator(.hidden)
+                .presentationDetents([.medium])
+                .presentationCornerRadius(44)
+                .onDisappear { showCategorySheet = false }
         }
     }
 
@@ -49,7 +60,7 @@ struct AddItemSheet: View {
                     Image(systemName: "chevron.down.circle.fill")
                 }
                 .font(.title3)
-                .foregroundColor(self.selectedCategory != nil ? self.selectedCategory!.color : .primary)
+                .foregroundColor(accentColor)
             }
 
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -57,7 +68,7 @@ struct AddItemSheet: View {
                     let newItem = DSItem(
                         id: UUID(),
                         name: name,
-                        category: selectedCategory ?? .life,
+                        category: selectedCategory ?? categories.first!,
                         dateLastDone: date,
                         remindersEnabled: remindersEnabled
                     )
@@ -70,12 +81,11 @@ struct AddItemSheet: View {
 
                     print("➕ Added item. Now there are \(items.count) items!")
 
-                    if let itemAdded = items.last {}
                     dismiss()
                 } label: {
                     Text("Save")
                 }
-                .foregroundColor(name.isEmpty ? Color.gray : self.selectedCategory != nil ? self.selectedCategory!.color : .primary)
+                .foregroundColor(accentColor)
                 .disabled(name.isEmpty)
             }
 
@@ -86,7 +96,7 @@ struct AddItemSheet: View {
                     } label: {
                         Text("Done")
                     }
-                    .foregroundColor(self.selectedCategory != nil ? self.selectedCategory!.color : .primary)
+                    .foregroundColor(accentColor)
                 }
             }
         }
@@ -95,6 +105,6 @@ struct AddItemSheet: View {
 
 struct AddItemSheet_Previews: PreviewProvider {
     static var previews: some View {
-        AddItemSheet(selectedCategory: CategoryDSItem.work, items: .constant([]))
+        AddItemSheet(selectedCategory: Category.placeholderCategory(), items: .constant([]))
     }
 }

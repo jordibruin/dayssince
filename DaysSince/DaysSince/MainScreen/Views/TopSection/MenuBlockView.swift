@@ -10,9 +10,11 @@ import SwiftUI
 struct MenuBlockView: View {
     @Environment(\.colorScheme) var colorScheme
 
-    let category: CategoryDSItem
+    let category: Category
 
     @Binding var items: [DSItem]
+
+    var accentColor: Color { category.color.color }
 
     var body: some View {
         ZStack(alignment: .leading) {
@@ -21,7 +23,7 @@ struct MenuBlockView: View {
         }
         .foregroundColor(.white)
         .clipShape(RoundedRectangle(cornerRadius: 20))
-        .shadow(color: category.color.opacity(0.4), radius: 5, x: 0, y: 5)
+        .shadow(color: accentColor.opacity(0.4), radius: 5, x: 0, y: 5)
     }
 
     @ViewBuilder
@@ -32,8 +34,8 @@ struct MenuBlockView: View {
                     LinearGradient(
                         gradient: .init(
                             colors: [
-                                category.color.opacity(0.84).darker(),
-                                category.color.darker(),
+                                accentColor.opacity(0.84).darker(),
+                                accentColor.darker(),
                             ]
                         ),
                         startPoint: .init(x: 0.0, y: 0),
@@ -46,8 +48,8 @@ struct MenuBlockView: View {
                     LinearGradient(
                         gradient: .init(
                             colors: [
-                                category.color.opacity(0.7),
-                                category.color,
+                                accentColor.opacity(0.7),
+                                accentColor,
                             ]
                         ),
                         startPoint: .init(x: 0.0, y: 0),
@@ -68,7 +70,7 @@ struct MenuBlockView: View {
 
     @ViewBuilder
     var emoji: some View {
-        Image(systemName: category.sfSymbolName)
+        Image(systemName: category.emoji)
             .imageScale(.large)
             .foregroundColor(.white)
     }
@@ -91,7 +93,7 @@ struct MenuBlockView: View {
 
 struct MenuBlockView_Previews: PreviewProvider {
     static var previews: some View {
-        MenuBlockView(category: .work, items: .constant([]))
+        MenuBlockView(category: Category.placeholderCategory(), items: .constant([]))
             .preferredColorScheme(.dark)
     }
 }

@@ -9,21 +9,23 @@ import Defaults
 import SwiftUI
 
 struct MainScreen: View {
+    @Default(.categories) var categories
     @Default(.mainColor) var mainColor
     @Default(.backgroundColor) var backgroundColor
 
     @Environment(\.colorScheme) var colorScheme
 
+    @EnvironmentObject var notificationManager: NotificationManager
+    @EnvironmentObject var categoryManager: CategoryManager
+
     @State var showAddItemSheet = false
     @State var showSettings = false
     @State var editItemSheet = false
-    @State var tappedItem = DSItem.placeholderItem()
+    @State var tappedItem: DSItem = .placeholderItem()
     @State var showThemeSheet = false
 
     @Binding var items: [DSItem]
     @Binding var isDaysDisplayModeDetailed: Bool
-
-    @EnvironmentObject var notificationManager: NotificationManager
 
     var body: some View {
         NavigationView {
@@ -72,8 +74,8 @@ struct MainScreen: View {
                 .sheet(isPresented: $editItemSheet) {
                     EditTappedItemSheet(
                         items: $items,
-                        tappedItem: $tappedItem,
-                        editItemSheet: $editItemSheet
+                        editItemSheet: $editItemSheet,
+                        tappedItem: $tappedItem
                     )
                 }
 
@@ -84,7 +86,6 @@ struct MainScreen: View {
             }
             .navigationTitle("Events")
             .navigationBarTitleDisplayMode(.inline)
-
             .toolbar(content: {
                 toolbarItems
             })
@@ -165,7 +166,10 @@ struct MainScreen: View {
 
 struct MainScreen_Previews: PreviewProvider {
     static var previews: some View {
-        MainScreen(items: .constant([.placeholderItem()]), isDaysDisplayModeDetailed: .constant(false))
-            .preferredColorScheme(.light)
+        MainScreen(
+            items: .constant([.placeholderItem()]),
+            isDaysDisplayModeDetailed: .constant(false)
+        )
+        .preferredColorScheme(.light)
     }
 }

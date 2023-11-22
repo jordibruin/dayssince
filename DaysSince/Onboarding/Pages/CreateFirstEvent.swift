@@ -5,9 +5,12 @@
 //  Created by Vicki Minerva on 7/13/22.
 //
 
+import Defaults
 import SwiftUI
 
 struct CreateFirstEvent: View {
+    @Default(.categories) var categories
+
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var notificationManager: NotificationManager
 
@@ -17,21 +20,20 @@ struct CreateFirstEvent: View {
 
     @State private var name: String = ""
     @State var date: Date = .now
-    @State var selectedCategory: CategoryDSItem? = nil
+    @State var selectedCategory: Category? = nil
     @State var remindersEnabled: Bool = false
     @State var selectedReminder: DSItemReminders = .daily
+    @State var showCategorySheet = false
 
     @FocusState private var nameIsFocused: Bool
 
-    var accentColor: Color {
-        selectedCategory == nil ? Color.black : selectedCategory?.color as! Color
-    }
+    var accentColor: Color { selectedCategory?.color.color ?? Color.black }
 
     var body: some View {
         Form {
             nameSection
             dateSection
-            newCategorySection
+            CategoryFormSection(selectedCategory: $selectedCategory, showCategorySheet: $showCategorySheet)
             reminderSection
             saveButtonSection
         }
@@ -39,6 +41,13 @@ struct CreateFirstEvent: View {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
                 nameIsFocused = true
             }
+        }
+        .sheet(isPresented: $showCategorySheet) {
+            AddCategorySheet()
+                .presentationDragIndicator(.hidden)
+                .presentationDetents([.medium])
+                .presentationCornerRadius(44)
+                .onDisappear { showCategorySheet = false }
         }
     }
 
@@ -56,7 +65,7 @@ struct CreateFirstEvent: View {
         Section {
             DatePicker("Event Date", selection: $date, in: ...Date.now, displayedComponents: .date)
                 .datePickerStyle(.graphical)
-                .accentColor(self.selectedCategory != nil ? selectedCategory!.color : Color.blue)
+                .accentColor(accentColor)
         } header: {
             Text("Date")
         }
@@ -65,7 +74,7 @@ struct CreateFirstEvent: View {
     var reminderSection: some View {
         Section {
             Toggle("Reminders", isOn: $remindersEnabled.animation())
-                .tint(self.selectedCategory != nil ? self.selectedCategory!.color : Color.green)
+                .tint(accentColor)
             // Select type of reminder
             if remindersEnabled {
                 Picker("Remind me", selection: $selectedReminder) {
@@ -77,34 +86,6 @@ struct CreateFirstEvent: View {
             }
         } header: {
             Text("Reminders")
-        }
-    }
-
-    var newCategorySection: some View {
-        Section {
-            ForEach(CategoryDSItem.allCases) { category in
-                Button {
-                    selectedCategory = category
-                } label: {
-                    HStack {
-                        Image(systemName: category.sfSymbolName)
-                            .foregroundColor(selectedCategory == category ? selectedCategory!.color : .primary)
-                            .frame(width: 40)
-
-                        Text(category.name)
-                        Spacer()
-
-                        if selectedCategory == category {
-                            Image(systemName: "checkmark.circle.fill")
-                                .imageScale(.large)
-                                .foregroundColor(selectedCategory!.color)
-                        }
-                    }
-                }
-                .foregroundColor(.primary)
-            }
-        } header: {
-            Text("Category")
         }
     }
 
@@ -123,7 +104,7 @@ struct CreateFirstEvent: View {
                 let newItem = DSItem(
                     id: UUID(),
                     name: name,
-                    category: selectedCategory ?? .life,
+                    category: selectedCategory ?? categories.first!,
                     dateLastDone: date,
                     remindersEnabled: remindersEnabled
                 )
@@ -136,14 +117,12 @@ struct CreateFirstEvent: View {
 
                 print("➕ Added item. Now there are \(items.count) items!")
 
-                if let itemAdded = items.last {}
-
                 dismiss()
             } label: {
                 HStack {
                     Spacer()
                     Label("Save Event", systemImage: "note.text.badge.plus")
-                        .foregroundColor(self.selectedCategory != nil ? self.selectedCategory!.color : .primary)
+                        .foregroundColor(accentColor)
                         .disabled(name.isEmpty)
                     Spacer()
                 }

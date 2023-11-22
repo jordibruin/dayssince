@@ -13,11 +13,12 @@ struct EditTappedItemForm: View {
     @EnvironmentObject var notificationManager: NotificationManager
 
     @Binding var items: [DSItem]
-
-    @Binding var tappedItem: DSItem
     @Binding var editItemSheet: Bool
+    @Binding var tappedItem: DSItem
+    @Binding var showCategorySheet: Bool
 
-    var category: CategoryDSItem = .hobbies
+    var category: Category { tappedItem.category }
+    var accentColor: Color { category.color.color }
 
     @FocusState.Binding var nameIsFocused: Bool
     @State var showConfirmDelete = false
@@ -27,7 +28,10 @@ struct EditTappedItemForm: View {
             Form {
                 nameSection
                 dateSection
-                newCategorySection
+                CategoryFormSection(selectedCategory: Binding(
+                    get: { tappedItem.category },
+                    set: { tappedItem.category = $0! }
+                ), showCategorySheet: $showCategorySheet)
                 reminderSection
                 deleteButtonSection
             }
@@ -44,7 +48,10 @@ struct EditTappedItemForm: View {
             Form {
                 nameSection
                 dateSection
-                newCategorySection
+                CategoryFormSection(selectedCategory: Binding(
+                    get: { tappedItem.category },
+                    set: { tappedItem.category = $0! }
+                ), showCategorySheet: $showCategorySheet)
                 reminderSection
                 deleteButtonSection
             }
@@ -73,7 +80,7 @@ struct EditTappedItemForm: View {
     var reminderSection: some View {
         Section {
             Toggle("Reminders", isOn: $tappedItem.remindersEnabled.animation())
-                .tint(tappedItem.category.color)
+                .tint(accentColor)
 //                .onChange(of: tappedItem.remindersEnabled) { remindersEnabled in
 //
 //                    if remindersEnabled {
@@ -117,38 +124,9 @@ struct EditTappedItemForm: View {
         Section {
             DatePicker("Event Date", selection: $tappedItem.dateLastDone, in: ...Date.now, displayedComponents: .date)
                 .datePickerStyle(.graphical)
-                .accentColor(tappedItem.category.color)
+                .accentColor(accentColor)
         } header: {
             Text("Date")
-        }
-    }
-
-    var newCategorySection: some View {
-        Section {
-            ForEach(CategoryDSItem.allCases) { category in
-                Button {
-                    tappedItem.category = category
-                } label: {
-                    HStack {
-                        Image(systemName: category.sfSymbolName)
-                            .foregroundColor(tappedItem.category == category ? tappedItem.category.color : .primary)
-                            .frame(width: 40)
-
-                        Text(category.name)
-
-                        Spacer()
-
-                        if tappedItem.category == category {
-                            Image(systemName: "checkmark.circle.fill")
-                                .imageScale(.large)
-                                .foregroundColor(tappedItem.category.color)
-                        }
-                    }
-                }
-                .foregroundColor(.primary)
-            }
-        } header: {
-            Text("Category")
         }
     }
 
@@ -192,8 +170,12 @@ struct EditTappedItemForm: View {
     }
 }
 
-// struct EditTappedItemForm_Previews: PreviewProvider {
-//    static var previews: some View {
-//        EditTappedItemForm(items: .constant([]), completedItems: .constant([]), favoriteItems: .constant([]), tappedItem: .constant(DaysSinceItem.placeholderItem()), editItemSheet: .constant(true), nameIsFocused: .constant(false))
-//    }
-// }
+struct EditTappedItemForm_Previews: PreviewProvider {
+    static var previews: some View {
+        EditTappedItemForm(items: .constant([]),
+                           editItemSheet: .constant(true),
+                           tappedItem: .constant(DSItem.placeholderItem()),
+                           showCategorySheet: .constant(false),
+                           nameIsFocused: FocusState<Bool>().projectedValue)
+    }
+}

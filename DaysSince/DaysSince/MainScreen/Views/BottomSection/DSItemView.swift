@@ -32,7 +32,7 @@ struct DSItemView: View {
         .overlay(
             RoundedRectangle(cornerRadius: 20)
                 .stroke(
-                    colorScheme == .dark ? item.category.color.darker() : item.category.color,
+                    colorScheme == .dark ? item.category.color.color.darker() : item.category.color.color,
                     lineWidth: 3
                 )
         )
@@ -48,7 +48,7 @@ struct DSItemView: View {
         Text(item.name)
             .font(.system(.title2, design: .rounded))
             .bold()
-            .foregroundColor(colored || colorScheme == .dark ? .white : item.category.color)
+            .foregroundColor(colored || colorScheme == .dark ? .white : item.category.color.color)
     }
 
     @ViewBuilder
@@ -70,11 +70,11 @@ struct DSItemView: View {
                         Text("\(years)")
                             .font(.system(.title3, design: .rounded))
                             .bold()
-                            .foregroundColor(colored || colorScheme == .dark ? .white : item.category.color)
+                            .foregroundColor(colored || colorScheme == .dark ? .white : item.category.color.color)
 
                         Text(years > 1 ? "years" : "year")
                             .font(.system(.caption, design: .rounded))
-                            .foregroundColor(colored || colorScheme == .dark ? .white : item.category.color)
+                            .foregroundColor(colored || colorScheme == .dark ? .white : item.category.color.color)
                     }
                 }
 
@@ -83,11 +83,11 @@ struct DSItemView: View {
                         Text("\(months)")
                             .font(.system(.title3, design: .rounded))
                             .bold()
-                            .foregroundColor(colored || colorScheme == .dark ? .white : item.category.color)
+                            .foregroundColor(colored || colorScheme == .dark ? .white : item.category.color.color)
 
                         Text(months > 1 ? "months" : "month")
                             .font(.system(.caption, design: .rounded))
-                            .foregroundColor(colored || colorScheme == .dark ? .white : item.category.color)
+                            .foregroundColor(colored || colorScheme == .dark ? .white : item.category.color.color)
                     }
                 }
 
@@ -95,11 +95,11 @@ struct DSItemView: View {
                     Text("\(days)")
                         .font(.system(months > 0 || years > 0 ? .title3 : .title2, design: .rounded))
                         .bold()
-                        .foregroundColor(colored || colorScheme == .dark ? .white : item.category.color)
+                        .foregroundColor(colored || colorScheme == .dark ? .white : item.category.color.color)
 
                     Text(days > 1 ? "days" : "day")
                         .font(.system(months > 0 || years > 0 ? .caption : .body, design: .rounded))
-                        .foregroundColor(colored || colorScheme == .dark ? .white : item.category.color)
+                        .foregroundColor(colored || colorScheme == .dark ? .white : item.category.color.color)
                 }
             }
             .frame(minWidth: 0)
@@ -110,11 +110,11 @@ struct DSItemView: View {
                 Text("\(item.daysAgo)")
                     .font(.system(.title2, design: .rounded))
                     .bold()
-                    .foregroundColor(colored || colorScheme == .dark ? .white : item.category.color)
+                    .foregroundColor(colored || colorScheme == .dark ? .white : item.category.color.color)
 
                 Text(item.daysAgo > 1 ? "days" : "day")
                     .font(.system(.body, design: .rounded))
-                    .foregroundColor(colored || colorScheme == .dark ? .white : item.category.color)
+                    .foregroundColor(colored || colorScheme == .dark ? .white : item.category.color.color)
             }
             .frame(minWidth: 0)
         }
@@ -123,9 +123,9 @@ struct DSItemView: View {
     @ViewBuilder
     var backgroundColor: some View {
         if colorScheme == .dark {
-            item.category.color.lighter(by: 0.04)
+            item.category.color.color.lighter(by: 0.04)
         } else if colored {
-            item.category.color
+            item.category.color.color
         } else {
             Color.white
         }
