@@ -12,6 +12,7 @@ import WidgetKit
 @main
 struct DaysSinceApp: App {
     @StateObject var notificationManager = NotificationManager()
+    @StateObject var categoryManager = CategoryManager()
 
     @Environment(\.scenePhase) var scenePhase
 
@@ -19,6 +20,7 @@ struct DaysSinceApp: App {
         WindowGroup {
             ContentView()
                 .environmentObject(notificationManager)
+                .environmentObject(categoryManager)
                 .onChange(of: self.scenePhase) {
                     switch $0 {
                     case .background:

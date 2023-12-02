@@ -14,7 +14,7 @@ struct DSItemListView: View {
     @Binding var isDaysDisplayModeDetailed: Bool
 
     var isCategoryView: Bool = false
-    var category: CategoryDSItem = .work
+    var category: Category?
 
     var body: some View {
         if isCategoryView {
@@ -54,6 +54,6 @@ struct DSItemListView: View {
 
 struct NormalItemsList_Previews: PreviewProvider {
     static var previews: some View {
-        DSItemListView(items: .constant([]), editItemSheet: .constant(false), tappedItem: .constant(.placeholderItem()), isDaysDisplayModeDetailed: .constant(false))
+        DSItemListView(items: .constant([]), editItemSheet: .constant(false), tappedItem: .constant(.placeholderItem()), isDaysDisplayModeDetailed: .constant(false), category: Category.placeholderCategory())
     }
 }

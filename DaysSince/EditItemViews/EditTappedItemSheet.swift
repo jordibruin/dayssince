@@ -11,25 +11,38 @@ struct EditTappedItemSheet: View {
     @EnvironmentObject var notificationManager: NotificationManager
 
     @Binding var items: [DSItem]
-
-    @Binding var tappedItem: DSItem
     @Binding var editItemSheet: Bool
+    @Binding var tappedItem: DSItem
 
     @Environment(\.dismiss) var dismiss
 
     @FocusState private var nameIsFocused: Bool
+    @State var showCategorySheet = false
 
     var body: some View {
         NavigationView {
             ZStack {
-                EditTappedItemForm(items: $items, tappedItem: $tappedItem, editItemSheet: $editItemSheet, nameIsFocused: $nameIsFocused)
-                    .ignoresSafeArea(.keyboard, edges: .bottom)
-                    .navigationTitle("Edit Event")
-                    .navigationBarTitleDisplayMode(.inline)
-                    .toolbar(content: {
-                        toolbarItems
-                    })
+                EditTappedItemForm(
+                    items: $items,
+                    editItemSheet: $editItemSheet,
+                    tappedItem: $tappedItem,
+                    showCategorySheet: $showCategorySheet,
+                    nameIsFocused: $nameIsFocused
+                )
+                .ignoresSafeArea(.keyboard, edges: .bottom)
+                .navigationTitle("Edit Event")
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar(content: {
+                    toolbarItems
+                })
             }
+        }
+        .sheet(isPresented: $showCategorySheet) {
+            AddCategorySheet()
+                .presentationDragIndicator(.hidden)
+                .presentationDetents([.medium])
+                .presentationCornerRadius(44)
+                .onDisappear { showCategorySheet = false }
         }
     }
 
@@ -42,7 +55,7 @@ struct EditTappedItemSheet: View {
                     Image(systemName: "chevron.down.circle.fill")
                 }
                 .font(.title2)
-                .foregroundColor(tappedItem.category.color)
+                .foregroundColor(tappedItem.category.color.color)
             }
 
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -81,7 +94,7 @@ struct EditTappedItemSheet: View {
                 } label: {
                     Text("Save")
                 }
-                .foregroundColor(tappedItem.name.isEmpty ? Color.gray : tappedItem.category.color)
+                .foregroundColor(tappedItem.name.isEmpty ? Color.gray : tappedItem.category.color.color)
                 .disabled(tappedItem.name.isEmpty)
             }
 
@@ -96,7 +109,7 @@ struct EditTappedItemSheet: View {
                     } label: {
                         Text("Done")
                     }
-                    .foregroundColor(tappedItem.category.color)
+                    .foregroundColor(tappedItem.category.color.color)
                 }
             }
         }
@@ -116,6 +129,8 @@ struct EditTappedItemSheet: View {
 
 struct EditTappedItemSheet_Previews: PreviewProvider {
     static var previews: some View {
-        EditTappedItemSheet(items: .constant([]), tappedItem: .constant(DSItem.placeholderItem()), editItemSheet: .constant(false))
+        EditTappedItemSheet(items: .constant([]),
+                            editItemSheet: .constant(false),
+                            tappedItem: .constant(DSItem.placeholderItem()))
     }
 }

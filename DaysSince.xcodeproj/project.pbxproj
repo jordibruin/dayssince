@@ -28,7 +28,18 @@
 		7A7CD911287F22E90001C64F /* AnimateText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A7CD910287F22E90001C64F /* AnimateText.swift */; };
 		7A7CD913287F2E760001C64F /* CreateFirstEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A7CD912287F2E760001C64F /* CreateFirstEvent.swift */; };
 		7A868D182890814A009C92D6 /* DetailedTimeDisplayMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A868D172890814A009C92D6 /* DetailedTimeDisplayMode.swift */; };
+		7A9141B42B0EA6AF00F06CA2 /* CategoryColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9141B32B0EA6AF00F06CA2 /* CategoryColor.swift */; };
+		7A9141B52B0EA6AF00F06CA2 /* CategoryColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9141B32B0EA6AF00F06CA2 /* CategoryColor.swift */; };
+		7A9141B62B0EA6AF00F06CA2 /* CategoryColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9141B32B0EA6AF00F06CA2 /* CategoryColor.swift */; };
+		7A9141B82B0EA6E300F06CA2 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9141B72B0EA6E300F06CA2 /* Category.swift */; };
+		7A9141B92B0EA6E300F06CA2 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9141B72B0EA6E300F06CA2 /* Category.swift */; };
+		7A9141BA2B0EA6E300F06CA2 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9141B72B0EA6E300F06CA2 /* Category.swift */; };
+		7A9141BC2B0EA6FE00F06CA2 /* Defaults in Frameworks */ = {isa = PBXBuildFile; productRef = 7A9141BB2B0EA6FE00F06CA2 /* Defaults */; };
+		7A9141BE2B0EA7C300F06CA2 /* Defaults in Frameworks */ = {isa = PBXBuildFile; productRef = 7A9141BD2B0EA7C300F06CA2 /* Defaults */; };
+		7A9141C02B111B6E00F06CA2 /* CategoryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9141BF2B111B6D00F06CA2 /* CategoryManager.swift */; };
+		7A9141C22B12555B00F06CA2 /* CategoryFormSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9141C12B12555B00F06CA2 /* CategoryFormSection.swift */; };
 		7AAB507727FF86CC0086A5A8 /* Defaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AAB507627FF86CC0086A5A8 /* Defaults.swift */; };
+		7AADEB652B12897000A7CF25 /* AddCategorySheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AADEB642B12897000A7CF25 /* AddCategorySheet.swift */; };
 		7AB3BC852ABF917C00549CD9 /* Defaults in Frameworks */ = {isa = PBXBuildFile; productRef = 7AB3BC842ABF917C00549CD9 /* Defaults */; };
 		7AB3BC872ABF91C000549CD9 /* Defaults+Extension+Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB3BC862ABF91C000549CD9 /* Defaults+Extension+Colors.swift */; };
 		7AB3BC892AC0CB2300549CD9 /* ThemeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB3BC882AC0CB2300549CD9 /* ThemeView.swift */; };
@@ -177,8 +188,13 @@
 		7A7CD910287F22E90001C64F /* AnimateText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimateText.swift; sourceTree = "<group>"; };
 		7A7CD912287F2E760001C64F /* CreateFirstEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateFirstEvent.swift; sourceTree = "<group>"; };
 		7A868D172890814A009C92D6 /* DetailedTimeDisplayMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailedTimeDisplayMode.swift; sourceTree = "<group>"; };
+		7A9141B32B0EA6AF00F06CA2 /* CategoryColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryColor.swift; sourceTree = "<group>"; };
+		7A9141B72B0EA6E300F06CA2 /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
+		7A9141BF2B111B6D00F06CA2 /* CategoryManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryManager.swift; sourceTree = "<group>"; };
+		7A9141C12B12555B00F06CA2 /* CategoryFormSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryFormSection.swift; sourceTree = "<group>"; };
 		7AAB507327FF860C0086A5A8 /* Defaults */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Defaults; path = "../../../../../Library/Developer/Xcode/DerivedData/Posture_Pal-baxwxadtvwjgulhdvdslumckelkv/SourcePackages/checkouts/Defaults"; sourceTree = "<group>"; };
 		7AAB507627FF86CC0086A5A8 /* Defaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Defaults.swift; sourceTree = "<group>"; };
+		7AADEB642B12897000A7CF25 /* AddCategorySheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCategorySheet.swift; sourceTree = "<group>"; };
 		7AB3BC862ABF91C000549CD9 /* Defaults+Extension+Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Defaults+Extension+Colors.swift"; sourceTree = "<group>"; };
 		7AB3BC882AC0CB2300549CD9 /* ThemeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeView.swift; sourceTree = "<group>"; };
 		7AB3BC8A2AC0CBC300549CD9 /* ColorThemeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorThemeView.swift; sourceTree = "<group>"; };
@@ -276,6 +292,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7A9141BC2B0EA6FE00F06CA2 /* Defaults in Frameworks */,
 				C2B53DB12869F0CE00407F40 /* SwiftUI.framework in Frameworks */,
 				C2B53DAF2869F0CE00407F40 /* WidgetKit.framework in Frameworks */,
 			);
@@ -285,6 +302,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7A9141BE2B0EA7C300F06CA2 /* Defaults in Frameworks */,
 				C2B53DCD2869F6F200407F40 /* Intents.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -324,6 +342,7 @@
 				7A2A76F327F2446E006F0470 /* DaysSinceApp.swift */,
 				7A2A76F527F2446E006F0470 /* ContentView.swift */,
 				C21BDC57286F355200B2FDCC /* NotificationManager.swift */,
+				7A9141BF2B111B6D00F06CA2 /* CategoryManager.swift */,
 				7AAB507027FF83CC0086A5A8 /* Screens */,
 				7A2A76F727F24470006F0470 /* Assets.xcassets */,
 				7A2A76F927F24470006F0470 /* Preview Content */,
@@ -349,6 +368,8 @@
 				C2B53D742869CA1000407F40 /* CategoryDSItem.swift */,
 				7AAB507627FF86CC0086A5A8 /* Defaults.swift */,
 				7AE8E366286C948200538521 /* AlternativeIcon.swift */,
+				7A9141B32B0EA6AF00F06CA2 /* CategoryColor.swift */,
+				7A9141B72B0EA6E300F06CA2 /* Category.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -623,6 +644,8 @@
 			children = (
 				7A2A770827F2592D006F0470 /* AddItemSheet.swift */,
 				C2B53D792869CA3B00407F40 /* AddItemForm.swift */,
+				7A9141C12B12555B00F06CA2 /* CategoryFormSection.swift */,
+				7AADEB642B12897000A7CF25 /* AddCategorySheet.swift */,
 			);
 			path = AddItemViews;
 			sourceTree = "<group>";
@@ -755,6 +778,9 @@
 			dependencies = (
 			);
 			name = WidgetExtension;
+			packageProductDependencies = (
+				7A9141BB2B0EA6FE00F06CA2 /* Defaults */,
+			);
 			productName = WidgetExtension;
 			productReference = C2B53DAC2869F0CE00407F40 /* WidgetExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
@@ -772,6 +798,9 @@
 			dependencies = (
 			);
 			name = WidgetIntents;
+			packageProductDependencies = (
+				7A9141BD2B0EA7C300F06CA2 /* Defaults */,
+			);
 			productName = WidgetIntents;
 			productReference = C2B53DCB2869F6F200407F40 /* WidgetIntents.appex */;
 			productType = "com.apple.product-type.app-extension";
@@ -890,8 +919,10 @@
 				C2B53D9B2869CACA00407F40 /* MenuBlockView.swift in Sources */,
 				7AF56AFD286F32CD0068B467 /* ChangelogView.swift in Sources */,
 				C21BDC58286F355200B2FDCC /* NotificationManager.swift in Sources */,
+				7A9141C22B12555B00F06CA2 /* CategoryFormSection.swift in Sources */,
 				C2B53D752869CA1000407F40 /* CategoryDSItem.swift in Sources */,
 				7A2A76F627F2446E006F0470 /* ContentView.swift in Sources */,
+				7A9141B82B0EA6E300F06CA2 /* Category.swift in Sources */,
 				7AB3BC892AC0CB2300549CD9 /* ThemeView.swift in Sources */,
 				C2B53D7C2869CA5800407F40 /* CategoriesGridView.swift in Sources */,
 				7AF56AFC286F32CD0068B467 /* NewUpdateBanner.swift in Sources */,
@@ -907,6 +938,7 @@
 				7AF56AEA286F32CD0068B467 /* FAQItem.swift in Sources */,
 				7AF56ADD286F32CD0068B467 /* SupportItemDetailView.swift in Sources */,
 				7AF56AE5286F32CD0068B467 /* SupportItemable.swift in Sources */,
+				7AADEB652B12897000A7CF25 /* AddCategorySheet.swift in Sources */,
 				C2B53D912869CACA00407F40 /* MainBackgroundView.swift in Sources */,
 				C2B53D992869CACA00407F40 /* TopSection.swift in Sources */,
 				7AF56AF3286F32CD0068B467 /* SupportContactSection.swift in Sources */,
@@ -946,6 +978,8 @@
 				7AF56AF5286F32CD0068B467 /* FAQItemView.swift in Sources */,
 				7AF56AF0286F32CD0068B467 /* SupportItemPage.swift in Sources */,
 				7A21765927FB2E3E006B106B /* EditTappedItemSheet.swift in Sources */,
+				7A9141C02B111B6E00F06CA2 /* CategoryManager.swift in Sources */,
+				7A9141B42B0EA6AF00F06CA2 /* CategoryColor.swift in Sources */,
 				7AF56AE2286F32CD0068B467 /* BackPortedAsyncImage.swift in Sources */,
 				7AE8E362286C921200538521 /* SettingsScreen.swift in Sources */,
 				7AF56AF1286F32CD0068B467 /* SupportColor.swift in Sources */,
@@ -970,6 +1004,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7A9141B52B0EA6AF00F06CA2 /* CategoryColor.swift in Sources */,
+				7A9141B92B0EA6E300F06CA2 /* Category.swift in Sources */,
 				C255EB68289A725100282E7B /* Widget.intentdefinition in Sources */,
 				C2B53DB42869F0CE00407F40 /* Widget.swift in Sources */,
 				C2B53DC42869F35B00407F40 /* DSItemReminders.swift in Sources */,
@@ -985,6 +1021,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7A9141B62B0EA6AF00F06CA2 /* CategoryColor.swift in Sources */,
+				7A9141BA2B0EA6E300F06CA2 /* Category.swift in Sources */,
 				C2B53DD82869F70E00407F40 /* DSItem.swift in Sources */,
 				C2B53DD92869F71300407F40 /* CategoryDSItem.swift in Sources */,
 				C2B53DDB2869F72400407F40 /* DSItemReminders.swift in Sources */,
@@ -1373,6 +1411,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		7A9141BB2B0EA6FE00F06CA2 /* Defaults */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7AB3BC832ABF917C00549CD9 /* XCRemoteSwiftPackageReference "Defaults" */;
+			productName = Defaults;
+		};
+		7A9141BD2B0EA7C300F06CA2 /* Defaults */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7AB3BC832ABF917C00549CD9 /* XCRemoteSwiftPackageReference "Defaults" */;
+			productName = Defaults;
+		};
 		7AB3BC842ABF917C00549CD9 /* Defaults */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 7AB3BC832ABF917C00549CD9 /* XCRemoteSwiftPackageReference "Defaults" */;

@@ -8,8 +8,8 @@
 import Foundation
 import SwiftUI
 
-enum CategoryDSItem: Codable, Identifiable, Equatable, CaseIterable, Hashable {
-    static var allCases: [CategoryDSItem] = [
+enum CategoryDSIte: Codable, Identifiable, Equatable, CaseIterable, Hashable {
+    static var allCases: [CategoryDSIte] = [
         .work, .life, .hobbies, .health,
     ]
 

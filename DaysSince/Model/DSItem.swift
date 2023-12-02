@@ -16,7 +16,7 @@ struct DSItem: Identifiable, Codable {
     var name: String
 
     /// Category of the item.
-    var category = CategoryDSItem.work
+    var category: Category
 
     /// Day last done.
     var dateLastDone: Date
@@ -33,7 +33,7 @@ struct DSItem: Identifiable, Codable {
 
     /// The emoji of the item.
     var emoji: String {
-        return category.sfSymbolName
+        return category.emoji
     }
 
     /// The ID of the repeating notification reminder.
@@ -51,6 +51,7 @@ struct DSItem: Identifiable, Codable {
     }
 
     static func placeholderItem() -> DSItem {
-        return DSItem(id: UUID(), name: "Placeholder", category: CategoryDSItem.hobbies, dateLastDone: Date.now, remindersEnabled: false)
+        let category = Category.placeholderCategory()
+        return DSItem(id: UUID(), name: "Placeholder", category: category, dateLastDone: Date.now, remindersEnabled: false)
     }
 }

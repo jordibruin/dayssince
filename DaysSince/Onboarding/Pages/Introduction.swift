@@ -25,7 +25,7 @@ struct Introduction: View {
     @State var colors = [
         Color.workColor,
         Color.lifeColor,
-        Color.hobbiesColor
+        Color.hobbiesColor,
     ]
 
     @State var currentIndex: Int = 2

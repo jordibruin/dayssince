@@ -5,6 +5,7 @@
 //  Created by Jordi Bruin on 27/06/2022.
 //
 
+import Defaults
 import SwiftUI
 import WidgetKit
 
@@ -144,7 +145,7 @@ struct WidgetContent: TimelineEntry {
         date = item.dateLastDone
         name = item.name
         id = item.id
-        color = item.category.color
+        color = item.category.color.color
 
         let daysSince = Calendar.current.numberOfDaysBetween(item.dateLastDone, and: Date.now)
         daysNumber = daysSince
