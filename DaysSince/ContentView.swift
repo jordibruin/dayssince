@@ -7,6 +7,7 @@
 
 import Defaults
 import SwiftUI
+import WishKit
 
 struct ContentView: View {
     @AppStorage("hasSeenOnboarding") var hasSeenOnboarding: Bool = false
@@ -18,6 +19,12 @@ struct ContentView: View {
     @Default(.categories) var categories
     @Default(.mainColor) var mainColor
     @Default(.backgroundColor) var backgroundColor
+
+    init() {
+        WishKit.configure(with: "6443C4AA-4663-4A27-89E5-846598908A4E")
+        WishKit.config.statusBadge = .show
+        WishKit.theme.primaryColor = mainColor
+    }
 
     var body: some View {
         if hasSeenOnboarding {

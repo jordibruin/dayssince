@@ -27,6 +27,7 @@ struct SettingsScreen: View {
                 Section {
                     SettingsReviewButton()
                     ShareButton()
+                    WishKitView()
                     SupportButton()
                 } footer: {
                     footer
