@@ -1,29 +1,28 @@
 //
-//  SupportButton.swift
+//  WishKitView.swift
 //  DaysSince
 //
-//  Created by Vicki Minerva on 6/30/22.
+//  Created by Vicki Minerva on 12/2/23.
 //
 
 import Defaults
 import SwiftUI
+import WishKit
 
-struct SupportButton: View {
+struct WishKitView: View {
     @Default(.mainColor) var mainColor
 
     var body: some View {
         NavigationLink {
-            SupportScreen()
-                .interactiveDismissDisabled()
+            WishKit.view
         } label: {
             HStack {
                 LinearGradient(colors: [mainColor, mainColor.lighter()], startPoint: .topLeading, endPoint: .bottomTrailing)
                     .frame(width: 34, height: 34)
                     .cornerRadius(8)
                     .overlay(
-                        Image(systemName: "questionmark")
+                        Image(systemName: "lightbulb.fill")
                             .foregroundColor(.white)
-                            .bold()
                     )
                     .padding(.leading, -10)
 
@@ -33,13 +32,13 @@ struct SupportButton: View {
     }
 
     var text: some View {
-        Text("Support")
+        Text("Suggest Features")
             .font(.system(.body, design: .rounded))
     }
 }
 
-struct SupportButton_Previews: PreviewProvider {
+struct WishKitView_Previews: PreviewProvider {
     static var previews: some View {
-        SupportButton()
+        WishKitView()
     }
 }
