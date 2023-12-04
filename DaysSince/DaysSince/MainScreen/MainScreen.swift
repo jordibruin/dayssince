@@ -90,28 +90,6 @@ struct MainScreen: View {
                 toolbarItems
             })
         }
-        .onAppear {
-            print("let's see if we can decode to the oter")
-        
-            if let defaults = UserDefaults(suiteName: "group.goodsnooze.dayssince") {
-                print("got defaults")
-                if let oldData = defaults.object(forKey: "items") as? Data {
-                    print("Got old data")
-                    let oldItems = try? JSONDecoder().decode([oldDSItem].self, from: oldData)
-                    
-                    print("Got some old items still")
-                    print(oldItems)
-                    //                let newItems = oldItems?.map { DSItemV2(fromOldModel: $0) }
-                    //
-                    //                if let newData = try? JSONEncoder().encode(newItems) {
-                    //                    UserDefaults.standard.set(newData, forKey: "DSItem")
-                    //                }
-                } else {
-                    print("did not get old data")
-                }
-            }
-            
-        }
         .sheet(isPresented: $showAddItemSheet) {
             AddItemSheet(selectedCategory: nil, remindersEnabled: false, items: $items)
         }

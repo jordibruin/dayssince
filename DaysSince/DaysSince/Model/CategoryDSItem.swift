@@ -34,7 +34,7 @@ enum CategoryDSIte: Codable, Identifiable, Equatable, CaseIterable, Hashable {
         }
     }
 
-    var id: String {
+var id: String {
         switch self {
         case .work:
             return "Work"
