@@ -18,6 +18,7 @@
 DaysSince is an iOS app that helps you count the days that passed since you last did the things important to you! 🕦🌱
 
 You can find it on the App Store 👇:
+
 https://apps.apple.com/us/app/days-since-track-memories/id1634218216
 
 ## Features
@@ -43,9 +44,10 @@ Make sure you fulfill the requirements.
 ## Deployment
 You can download the app from the App Store [here](https://apps.apple.com/us/app/days-since-track-memories/id1634218216). 
 
-You can clone this github repository on your computer and open it with Xcode. Or you can directly click on "Open with Xcode" from Github.
+You can clone this github repository on your computer and open it with Xcode. Or you can directly click on "Open with Xcode" from Github (see image below).
 
-// TODO: add a screenshot of the open with xcode
+<img width="822" alt="Open with Xcode from Github" src="https://github.com/jordibruin/dayssince/assets/90992029/442ac9da-ae14-4292-8901-416344f2cb24">
+
 
 Once you open the project in XCode, no additional set up is needed. Use the standard steps to:
 - Build the project (Command+B)
