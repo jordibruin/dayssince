@@ -1,20 +1,18 @@
 # DaysSince
-<div style="text-align: center;">
-    <img src="https://is1-ssl.mzstatic.com/image/thumb/PurpleSource126/v4/be/5a/0e/be5a0e88-78a2-33f7-13c3-601d70acf307/4145a3a9-ed53-42d2-8fe3-3be8bb0c90ec_Apple_iPhone_11_Pro_Max.png/460x0w.webp" width="250" />
-    <img src="https://is1-ssl.mzstatic.com/image/thumb/PurpleSource116/v4/36/d7/16/36d71602-ea3d-b473-e3f2-e736d95c4ae9/88b0c5ad-bcac-40da-b8d0-f4b141c86ee5_Apple_iPhone_11_Pro_Max__U00281_U0029.png/460x0w.webp" width="250" />
+<div align="center">
+  <img src="https://is1-ssl.mzstatic.com/image/thumb/PurpleSource126/v4/be/5a/0e/be5a0e88-78a2-33f7-13c3-601d70acf307/4145a3a9-ed53-42d2-8fe3-3be8bb0c90ec_Apple_iPhone_11_Pro_Max.png/460x0w.webp" width="250" />
+  <img src="https://is1-ssl.mzstatic.com/image/thumb/PurpleSource116/v4/36/d7/16/36d71602-ea3d-b473-e3f2-e736d95c4ae9/88b0c5ad-bcac-40da-b8d0-f4b141c86ee5_Apple_iPhone_11_Pro_Max__U00281_U0029.png/460x0w.webp" width="250" />
 </div>
 
-<div style="text-align: center;">
-    <img src="https://is1-ssl.mzstatic.com/image/thumb/PurpleSource126/v4/9e/b1/bc/9eb1bce4-4abf-b7b4-7770-7422a848d98d/eb02e412-c27a-449d-85ec-40ced057d4f0_Apple_iPhone_11_Pro_Max__U00282_U0029.png/460x0w.webp" width="250" />
-    <img src="https://is1-ssl.mzstatic.com/image/thumb/PurpleSource116/v4/4f/e8/79/4fe879ca-8441-ab40-e3e3-44f52f6b6e06/80cb3077-03a1-4dba-b26e-b17718eff136_Apple_iPhone_11_Pro_Max__U00283_U0029.png/460x0w.webp" width="250" />
+<div align="center">
+  <img src="https://is1-ssl.mzstatic.com/image/thumb/PurpleSource126/v4/9e/b1/bc/9eb1bce4-4abf-b7b4-7770-7422a848d98d/eb02e412-c27a-449d-85ec-40ced057d4f0_Apple_iPhone_11_Pro_Max__U00282_U0029.png/460x0w.webp" width="250" />
+  <img src="https://is1-ssl.mzstatic.com/image/thumb/PurpleSource116/v4/4f/e8/79/4fe879ca-8441-ab40-e3e3-44f52f6b6e06/80cb3077-03a1-4dba-b26e-b17718eff136_Apple_iPhone_11_Pro_Max__U00283_U0029.png/460x0w.webp" width="250" />
 </div>
 
-<div style="text-align: center;">
-    <img src="https://is1-ssl.mzstatic.com/image/thumb/PurpleSource126/v4/e0/bd/d2/e0bdd221-33c3-d82e-d657-cea669b551bf/0659ea1d-9a9c-4521-9841-e513db9baf35_Apple_iPhone_11_Pro_Max__U00284_U0029.png/460x0w.webp" width="250" />
-    <img src="https://is1-ssl.mzstatic.com/image/thumb/PurpleSource126/v4/33/1b/e1/331be1f1-9162-9286-8493-19015a759802/e6c1f190-6883-4d01-93ae-37057bddd665_Apple_iPhone_11_Pro_Max__U00285_U0029.png/460x0w.webp" width="250" />
+<div align="center">
+  <img src="https://is1-ssl.mzstatic.com/image/thumb/PurpleSource126/v4/e0/bd/d2/e0bdd221-33c3-d82e-d657-cea669b551bf/0659ea1d-9a9c-4521-9841-e513db9baf35_Apple_iPhone_11_Pro_Max__U00284_U0029.png/460x0w.webp" width="250" />
+  <img src="https://is1-ssl.mzstatic.com/image/thumb/PurpleSource126/v4/33/1b/e1/331be1f1-9162-9286-8493-19015a759802/e6c1f190-6883-4d01-93ae-37057bddd665_Apple_iPhone_11_Pro_Max__U00285_U0029.png/460x0w.webp" width="250" />
 </div>
-
-
 
 
 DaysSince is an iOS app that helps you count the days that passed since you last did the things important to you! 🕦🌱
