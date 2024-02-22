@@ -72,7 +72,7 @@ struct DSItemView: View {
                             .bold()
                             .foregroundColor(colored || colorScheme == .dark ? .white : item.category.color.color)
 
-                        Text(years > 1 ? "years" : "year")
+                        Text(years == 1 ? "year" : "years")
                             .font(.system(.caption, design: .rounded))
                             .foregroundColor(colored || colorScheme == .dark ? .white : item.category.color.color)
                     }
@@ -85,7 +85,7 @@ struct DSItemView: View {
                             .bold()
                             .foregroundColor(colored || colorScheme == .dark ? .white : item.category.color.color)
 
-                        Text(months > 1 ? "months" : "month")
+                        Text(months == 1 ? "month" : "months")
                             .font(.system(.caption, design: .rounded))
                             .foregroundColor(colored || colorScheme == .dark ? .white : item.category.color.color)
                     }
@@ -97,7 +97,7 @@ struct DSItemView: View {
                         .bold()
                         .foregroundColor(colored || colorScheme == .dark ? .white : item.category.color.color)
 
-                    Text(days > 1 ? "days" : "day")
+                    Text(days == 1 ? "day" : "days")
                         .font(.system(months > 0 || years > 0 ? .caption : .body, design: .rounded))
                         .foregroundColor(colored || colorScheme == .dark ? .white : item.category.color.color)
                 }

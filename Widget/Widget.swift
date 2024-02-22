@@ -63,6 +63,7 @@ struct SooseeWidget: Widget {
         }
         .configurationDisplayName(LocalizedStringKey("widget.title"))
         .description(LocalizedStringKey("widget.explanation"))
+        .contentMarginsDisabled() // iOS17 widgets force additional margin padding on your design
     }
 }
 
@@ -71,6 +72,8 @@ struct EventCardWidgetView: View {
 
     @Environment(\.widgetFamily) var family
     @Environment(\.colorScheme) var colorScheme
+
+    @AppStorage("isDaysDisplayModeDetailed", store: UserDefaults(suiteName: "group.goodsnooze.dayssince")) var isDaysDisplayModeDetailed: Bool = true
 
     @ViewBuilder
     var body: some View {
@@ -98,18 +101,70 @@ struct EventCardWidgetView: View {
             .foregroundColor(colorScheme == .dark ? .primary : event.color)
     }
 
+    @ViewBuilder
     var daysAgoText: some View {
-        VStack(alignment: .leading) {
-            Text("\(event.daysNumber)")
-                .font(.system(.title2, design: .rounded))
-                .bold()
-                .foregroundColor(colorScheme == .dark ? .primary : event.color)
+        let currentDate = Date()
+        let calendar = Calendar.current
 
-            Text("days")
-                .font(.system(.body, design: .rounded))
-                .foregroundColor(colorScheme == .dark ? .primary : event.color)
+        let dateComponents = calendar.dateComponents([.year, .month, .day], from: event.date, to: currentDate)
+
+        let years = dateComponents.year ?? 0
+        let months = dateComponents.month ?? 0
+        let days = dateComponents.day ?? 0
+
+        if isDaysDisplayModeDetailed {
+            HStack(alignment: .top, spacing: 6) {
+                if years > 0 {
+                    VStack(alignment: .center) {
+                        Text("\(years)")
+                            .font(.system(.title2, design: .rounded))
+                            .bold()
+                            .foregroundColor(colorScheme == .dark ? .primary : event.color)
+
+                        Text(years == 1 ? "year" : "years")
+                            .font(.system(years > 9 || months > 9 ? .caption : .caption, design: .rounded))
+                            .foregroundColor(colorScheme == .dark ? .primary : event.color)
+                    }
+                }
+
+                if months > 0 || years > 0 {
+                    VStack(alignment: .center) {
+                        Text("\(months)")
+                            .font(.system(.title2, design: .rounded))
+                            .bold()
+                            .foregroundColor(colorScheme == .dark ? .primary : event.color)
+
+                        Text(months == 1 ? "month" : "months")
+                            .font(.system(years > 0 ? .caption : .body, design: .rounded))
+                            .foregroundColor(colorScheme == .dark ? .primary : event.color)
+                    }
+                }
+
+                VStack(alignment: .center) {
+                    Text("\(days)")
+                        .font(.system(.title2, design: .rounded))
+                        .bold()
+                        .foregroundColor(colorScheme == .dark ? .primary : event.color)
+
+                    Text(days == 1 ? "day" : "days")
+                        .font(.system(years > 0 ? .caption : .body, design: .rounded))
+                        .foregroundColor(colorScheme == .dark ? .primary : event.color)
+                }
+            }
+            .padding(.trailing, 0)
+        } else {
+            VStack(alignment: .leading) {
+                Text("\(event.daysNumber)")
+                    .font(.system(event.daysNumber > 9999 ? .title3 : .title2, design: .rounded))
+                    .bold()
+                    .foregroundColor(colorScheme == .dark ? .primary : event.color)
+
+                Text("days")
+                    .font(.system(.body, design: .rounded))
+                    .foregroundColor(colorScheme == .dark ? .primary : event.color)
+            }
+            .frame(width: event.daysNumber > 999 ? 70 : event.daysNumber > 99 ? 50 : 40)
         }
-        .frame(width: event.daysNumber > 999 ? 70 : event.daysNumber > 99 ? 50 : 40)
     }
 
     var itemContent: some View {
