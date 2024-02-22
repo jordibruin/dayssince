@@ -90,8 +90,8 @@ struct EventCardWidgetView: View {
             RoundedRectangle(cornerRadius: 23)
                 .stroke(colorScheme == .dark ? event.color.darker() : event.color, lineWidth: 6)
         )
-
         .shadow(color: Color.black.opacity(0.05), radius: 20, x: 0, y: 0)
+        .widgetBackground(Color.clear) // Widgets changed with iOS 17, need to set the background to make them work 
     }
 
     var nameText: some View {
@@ -204,5 +204,19 @@ struct WidgetContent: TimelineEntry {
 
         let daysSince = Calendar.current.numberOfDaysBetween(item.dateLastDone, and: Date.now)
         daysNumber = daysSince
+    }
+}
+
+// Widgets changed with iOS 17
+// A hot fix for this so it still works on iOS16 devices
+extension View {
+    func widgetBackground(_ backgroundView: some View) -> some View {
+        if #available(iOSApplicationExtension 17.0, *) {
+            return containerBackground(for: .widget) {
+                backgroundView
+            }
+        } else {
+            return background(backgroundView)
+        }
     }
 }
