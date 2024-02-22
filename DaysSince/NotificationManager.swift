@@ -238,6 +238,7 @@ class NotificationManager: ObservableObject {
                 return nil
             }
             if matchingIdentifiers != nil {
+                print("Deleting \(matchingIdentifiers.count) reminders for this event")
                 self.center.removePendingNotificationRequests(withIdentifiers: matchingIdentifiers)
             }
         }

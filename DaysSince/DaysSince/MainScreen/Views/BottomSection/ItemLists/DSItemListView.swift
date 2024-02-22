@@ -8,10 +8,16 @@
 import SwiftUI
 
 struct DSItemListView: View {
+    @Environment(\.dismiss) var dismiss
+    @EnvironmentObject var notificationManager: NotificationManager
+
     @Binding var items: [DSItem]
     @Binding var editItemSheet: Bool
     @Binding var tappedItem: DSItem
     @Binding var isDaysDisplayModeDetailed: Bool
+
+    @State var showingDeleteAlert: Bool = false
+    @State var itemToDelete: DSItem? = nil
 
     var isCategoryView: Bool = false
     var category: Category?
@@ -48,7 +54,73 @@ struct DSItemListView: View {
                 item: item,
                 colored: false
             )
+            .contextMenu {
+                Button {
+                    changeDateTo(Date.now, item: item)
+                } label: {
+                    Label("Today", systemImage: "calendar")
+                }
+
+                Button {
+                    changeDateTo(Date().dayBefore, item: item)
+                } label: {
+                    Label("Yesterday", systemImage: "clock.arrow.circlepath")
+                }
+
+                Button {
+                    showingDeleteAlert = true
+                    itemToDelete = item
+                } label: {
+                    Label("Delete Event", systemImage: "trash")
+                        .tint(.red)
+                }
+            }
         }
+        .confirmationDialog(
+            Text("Are you sure you want to delete this event"),
+            isPresented: $showingDeleteAlert,
+            titleVisibility: .visible
+        ) {
+            Button("Delete", role: .destructive) {
+                withAnimation {
+                    deleteEvent(itemToDelete!)
+                }
+            }
+        }
+    }
+
+    func changeDateTo(_ date: Date, item: DSItem) {
+        withAnimation {
+            print("Change date to \(date) for item \(item.name)")
+
+            let itemIndex = getItemIndex(item)
+
+            items[itemIndex].dateLastDone = date
+
+            // If the event's reminders are enabled, update them
+            if items[itemIndex].remindersEnabled {
+                notificationManager.deleteReminderFor(item: items[itemIndex])
+                notificationManager.addReminderFor(item: items[itemIndex])
+            }
+        }
+    }
+
+    func deleteEvent(_ item: DSItem) {
+        withAnimation {
+            print("🗑 Delete event \(item.name)")
+
+            let itemIndex = getItemIndex(item)
+
+            // Remove notifications before deleting the event
+            notificationManager.deleteReminderFor(item: item)
+
+            items.remove(at: itemIndex)
+        }
+    }
+
+    func getItemIndex(_ item: DSItem) -> Int {
+        print("Looking for index of tapped item.")
+        return items.firstIndex(where: { $0.id == item.id })!
     }
 }
 

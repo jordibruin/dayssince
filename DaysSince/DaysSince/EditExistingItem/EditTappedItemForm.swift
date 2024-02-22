@@ -122,6 +122,39 @@ struct EditTappedItemForm: View {
 
     var dateSection: some View {
         Section {
+            HStack {
+                Spacer()
+
+                Button {
+                    tappedItem.dateLastDone = Date().dayBefore
+                } label: {
+                    VStack {
+                        Image(systemName: "clock.arrow.circlepath")
+                        Text("Yesterday")
+                    }
+                    .font(.system(.body, design: .rounded))
+                }
+
+                Spacer()
+
+                Button {
+                    print(Date.now)
+                    tappedItem.dateLastDone = Date.now
+                } label: {
+                    VStack {
+                        Image(systemName: "calendar")
+                        Text("Today")
+                    }
+                    .font(.system(.body, design: .rounded))
+                }
+
+                Spacer()
+            }
+            .accentColor(accentColor)
+            .buttonStyle(BorderlessButtonStyle())
+            .padding(.vertical, 8)
+            .alignmentGuide(.listRowSeparatorLeading) { $0[.leading] }
+
             DatePicker("Event Date", selection: $tappedItem.dateLastDone, in: ...Date.now, displayedComponents: .date)
                 .datePickerStyle(.graphical)
                 .accentColor(accentColor)

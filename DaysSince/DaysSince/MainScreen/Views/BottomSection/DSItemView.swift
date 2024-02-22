@@ -112,7 +112,7 @@ struct DSItemView: View {
                     .bold()
                     .foregroundColor(colored || colorScheme == .dark ? .white : item.category.color.color)
 
-                Text(item.daysAgo > 1 ? "days" : "day")
+                Text(item.daysAgo == 1 ? "day" : "days")
                     .font(.system(.body, design: .rounded))
                     .foregroundColor(colored || colorScheme == .dark ? .white : item.category.color.color)
             }
