@@ -14,11 +14,12 @@ struct AddCategorySheet: View {
     @State var selectedName: String = ""
     @State var selectedColor: CategoryColor = .work
     @State var selectedEmoji: String = "lightbulb"
+    @State var showMoreCategorySfSymbols: Bool = false
 
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var categoriesManager: CategoryManager
 
-    var emojis: [String] = ["lightbulb", "leaf", "gamecontroller", "heart.text.square", "graduationcap", "bell", "gift.fill", "heart", "laptopcomputer", "airplane"]
+    @State var emojis: [String] = ["lightbulb", "leaf", "gamecontroller", "heart.text.square", "graduationcap", "bell", "gift.fill", "heart", "laptopcomputer", "airplane"]
 
     var body: some View {
         ScrollView {
@@ -28,6 +29,15 @@ struct AddCategorySheet: View {
             color
         }
         .padding(.horizontal, 16)
+        .sheet(isPresented: $showMoreCategorySfSymbols, onDismiss: updateCategoryEmojis) {
+            MoreSfSymbolsView(accentColor: accentColor, selectedEmoji: $selectedEmoji)
+        }
+    }
+
+    func updateCategoryEmojis() {
+        if !emojis.contains(selectedEmoji) {
+            withAnimation { emojis.insert(selectedEmoji, at: 0) }
+        }
     }
 
     var header: some View {
@@ -85,6 +95,7 @@ struct AddCategorySheet: View {
             .background(Color.secondary.opacity(0.1))
             .cornerRadius(20)
         }
+        .padding(.bottom, 8)
     }
 
     var columns: [GridItem] = [
@@ -92,36 +103,52 @@ struct AddCategorySheet: View {
     ]
 
     var emoji: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Text("EMOJI")
-                .font(.caption)
-                .opacity(0.6)
-                .padding(.leading, 20)
+        VStack {
+            VStack(alignment: .leading, spacing: 6) {
+                Text("EMOJI")
+                    .font(.caption)
+                    .opacity(0.6)
+                    .padding(.leading, 20)
 
-            LazyVGrid(
-                columns: columns,
-                alignment: .center,
-                spacing: 20
-            ) {
-                ForEach(emojis, id: \.self) { emoji in
-                    Button {
-                        selectedEmoji = emoji
-                    } label: {
-                        Image(systemName: emoji)
-                            .font(.title)
-                            .foregroundColor(selectedEmoji == emoji ? accentColor : .primary)
-                            .padding(12)
-                            .background(accentColor.opacity(0.16).opacity(selectedEmoji == emoji ? 1 : 0))
-                            .cornerRadius(20)
+                LazyVGrid(
+                    columns: columns,
+                    alignment: .center,
+                    spacing: 20
+                ) {
+                    ForEach(emojis, id: \.self) { emoji in
+                        Button {
+                            selectedEmoji = emoji
+                        } label: {
+                            Image(systemName: emoji)
+                                .font(.title)
+                                .foregroundColor(selectedEmoji == emoji ? accentColor : .primary)
+                                .padding(10)
+                                .background(accentColor.opacity(0.16).opacity(selectedEmoji == emoji ? 1 : 0))
+                                .cornerRadius(20)
+                        }
                     }
                 }
+                .padding(.vertical, 6)
+                .background(Color.secondary.opacity(0.1))
+                .cornerRadius(16)
             }
-            .padding(12)
-            .padding(.vertical, 6)
-            .background(Color.secondary.opacity(0.1))
-            .cornerRadius(16)
+
+            HStack {
+                Spacer()
+
+                Button {
+                    showMoreCategorySfSymbols = true
+                } label: {
+                    Text("More")
+                        .foregroundColor(.primary)
+                        .bold()
+                }
+                .padding()
+                .background(Color.primary.opacity(0.1))
+                .cornerRadius(16)
+            }
         }
-        .padding(.horizontal, 4)
+        .padding(.bottom, 8)
     }
 
     var color: some View {
