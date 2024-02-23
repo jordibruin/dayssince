@@ -91,7 +91,7 @@ struct EventCardWidgetView: View {
                 .stroke(colorScheme == .dark ? event.color.darker() : event.color, lineWidth: 6)
         )
         .shadow(color: Color.black.opacity(0.05), radius: 20, x: 0, y: 0)
-        .widgetBackground(Color.clear) // Widgets changed with iOS 17, need to set the background to make them work 
+        .widgetBackground(Color.clear) // Widgets changed with iOS 17, need to set the background to make them work
     }
 
     var nameText: some View {
