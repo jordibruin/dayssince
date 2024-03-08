@@ -40,6 +40,7 @@ struct DSItemListView: View {
                 colored: true
             )
         }
+        .padding(.horizontal)
     }
 
     @AppStorage("selectedSortType") var selectedSortType: SortType = .daysAscending
@@ -54,6 +55,7 @@ struct DSItemListView: View {
                 item: item,
                 colored: false
             )
+            .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: 22.2))
             .contextMenu {
                 Button {
                     changeDateTo(Date.now, item: item)
@@ -76,6 +78,7 @@ struct DSItemListView: View {
                 }
             }
         }
+        .padding(.horizontal)
         .confirmationDialog(
             Text("Are you sure you want to delete this event"),
             isPresented: $showingDeleteAlert,

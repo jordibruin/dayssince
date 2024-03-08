@@ -36,7 +36,8 @@ struct DSItemView: View {
                     lineWidth: 3
                 )
         )
-        .padding(.horizontal)
+        .padding(.horizontal, 1.6)
+        .padding(.vertical, 1.61)
         .shadow(color: Color.black.opacity(0.05), radius: 20, x: 0, y: 0)
         .onTapGesture {
             editItemSheet = true

@@ -51,9 +51,11 @@ struct MoreSfSymbolsView: View {
                     }
                 }
                 .overlay {
-                    if #available(iOS 17.0, *) {
-                        if filteredEmojis.isEmpty {
+                    if filteredEmojis.flatMap({ $0 }).isEmpty {
+                        if #available(iOS 17.0, *) {
                             ContentUnavailableView.search(text: searchTerm)
+                        } else {
+                            Text("No match found")
                         }
                     }
                 }
@@ -77,6 +79,15 @@ struct MoreSfSymbolsView: View {
             })
             .searchable(text: $searchTerm, placement: .navigationBarDrawer(displayMode: .always))
         }
+        .overlay {
+            if filteredEmojis.flatMap({ $0 }).isEmpty {
+                if #available(iOS 17.0, *) {
+                    ContentUnavailableView.search(text: searchTerm)
+                } else {
+                    Text("No match found")
+                }
+            }
+        }
     }
 }
 
@@ -99,15 +110,15 @@ struct SfSymbolsSectionView: View {
                 alignment: .center,
                 spacing: 20
             ) {
-                ForEach(emojis, id: \.self) { emoji in
+                ForEach(emojis.indices, id: \.self) { index in
                     Button(action: {
-                        selectedEmoji = emoji
+                        selectedEmoji = emojis[index]
                     }) {
-                        Image(systemName: emoji)
+                        Image(systemName: emojis[index])
                             .font(.title)
-                            .foregroundColor(selectedEmoji == emoji ? accentColor : .primary)
+                            .foregroundColor(selectedEmoji == emojis[index] ? accentColor : .primary)
                             .padding(8)
-                            .background(accentColor.opacity(0.16).opacity(selectedEmoji == emoji ? 1 : 0))
+                            .background(accentColor.opacity(0.16).opacity(selectedEmoji == emojis[index] ? 1 : 0))
                             .cornerRadius(20)
                     }
                 }
