@@ -100,7 +100,6 @@ struct EventCardWidgetView: View {
             .bold()
             .foregroundColor(colorScheme == .dark ? .primary : event.color)
             .minimumScaleFactor(0.6) // Text fits in widget
-            .lineLimit(4)
     }
 
     @ViewBuilder
