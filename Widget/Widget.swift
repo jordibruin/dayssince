@@ -99,6 +99,8 @@ struct EventCardWidgetView: View {
             .font(.system(.title2, design: .rounded))
             .bold()
             .foregroundColor(colorScheme == .dark ? .primary : event.color)
+            .minimumScaleFactor(0.6) // Text fits in widget
+            .lineLimit(4)
     }
 
     @ViewBuilder
@@ -153,7 +155,7 @@ struct EventCardWidgetView: View {
             }
             .padding(.trailing, 0)
         } else {
-            VStack(alignment: .leading) {
+            VStack(alignment: .center) {
                 Text("\(event.daysNumber)")
                     .font(.system(event.daysNumber > 9999 ? .title3 : .title2, design: .rounded))
                     .bold()
