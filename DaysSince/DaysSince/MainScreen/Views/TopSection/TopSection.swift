@@ -13,15 +13,23 @@ import SwiftUI
  By clicking on any of the categories it will lead you to a filtered view with events only from that category.
  */
 struct TopSection: View {
+    @EnvironmentObject var categoryManager: CategoryManager
+
     @Default(.categories) var categories
 
     @Binding var items: [DSItem]
     @Binding var isDaysDisplayModeDetailed: Bool
 
+    @State var showDeleteCategoryAlert: Bool = false
+    @State var showUnableToDeleteCategory: Bool = false
+    @State var selectedCategory: Category? = nil
+    @State var showEditCategory: Bool = false
+
     var body: some View {
         ScrollView(.horizontal) {
             LazyHStack {
                 ForEach(categories, id: \.id) { category in
+
                     NavigationLink(
                         destination: CategoryFilteredView(
                             category: category,
@@ -38,60 +46,66 @@ struct TopSection: View {
                         .aspectRatio(1.0, contentMode: .fit) // Maintain square aspect ratio
                         .frame(minWidth: 0, maxWidth: .infinity)
                     }
+
+                    .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: 20))
+                    .contextMenu {
+                        Button {
+                            selectedCategory = category
+                            showEditCategory = true
+                        } label: {
+                            Label("Edit Category", systemImage: "rectangle.and.pencil.and.ellipsis")
+                        }
+
+                        Button {
+                            if categoryManager.isCategoryEmpty(category: category) {
+                                selectedCategory = category
+                                showDeleteCategoryAlert = true
+                            } else {
+                                showUnableToDeleteCategory = true
+                            }
+                        } label: {
+                            Label("Delete Category", systemImage: "trash")
+                        }
+                    }
                 }
             }
-            .padding(.horizontal, 16) // Adjust horizontal padding as needed
-            .padding(.vertical, 16) // Adjust vertical padding as needed
+            .padding(.horizontal, 16)
+            .padding(.vertical, 16)
         }
         .padding(.leading, 16)
-//
-//
-//                NavigationLink(
-//                    destination: CategoryFilteredView(
-//                        category: CategoryDSItem.life,
-//                        showAddItemSheet: false,
-//                        editItemSheet: false,
-//                        items: $items,
-//                        isDaysDisplayModeDetailed: $isDaysDisplayModeDetailed
-//                    )
-//                ) {
-//                    MenuBlockView(
-//                        category: .life,
-//                        items: $items
-//                    )
-//                }
-//            }
-//
-//            VStack {
-//                NavigationLink(
-//                    destination: CategoryFilteredView(
-//                        category: CategoryDSItem.health,
-//                        showAddItemSheet: false,
-//                        editItemSheet: false,
-//                        items: $items,
-//                        isDaysDisplayModeDetailed: $isDaysDisplayModeDetailed
-//                    )
-//                ) {
-//                    MenuBlockView(
-//                        category: .health,
-//                        items: $items
-//                    )
-//                }
-//
-//                NavigationLink(
-//                    destination: CategoryFilteredView(
-//                        category: CategoryDSItem.hobbies,
-//                        showAddItemSheet: false,
-//                        editItemSheet: false,
-//                        items: $items,
-//                        isDaysDisplayModeDetailed: $isDaysDisplayModeDetailed
-//                    )
-//                ) {
-//                    MenuBlockView(
-//                        category: .hobbies,
-//                        items: $items
-//                    )
-//                }
+        .confirmationDialog(
+            Text("Are you sure you want to delete this category?"),
+            isPresented: $showDeleteCategoryAlert,
+            titleVisibility: .visible
+        ) {
+            Button("Delete", role: .destructive) {
+                withAnimation(.easeOut) { categoryManager.deleteCategory(category: selectedCategory!) }
+            }
+        }
+        .alert("Unable to Delete Category", isPresented: $showUnableToDeleteCategory) {} message: {
+            Text("Category contains existing events.")
+        }
+        .sheet(isPresented: $showEditCategory) {
+            EditCategorySheet(category: selectedCategory!)
+                .presentationDragIndicator(.hidden)
+                .presentationDetents([.medium])
+                .presentationCornerRadius(44)
+                .onDisappear {
+                    showEditCategory = false
+                    selectedCategory = nil
+                }
+        }
+
+        .sheet(isPresented: Binding<Bool>(
+            get: { showEditCategory && selectedCategory != nil },
+            set: { newValue in
+                showEditCategory = newValue
+            }
+        )) {
+            if let index = selectedCategory {
+                EditCategorySheet(category: index)
+            }
+        }
     }
 }
 

@@ -33,15 +33,28 @@ class CategoryManager: ObservableObject {
     }
 
     func deleteCategory(category: Category) {
-        if !isCategoryEmpty(category: category) {
-            print("Can't delete category. There are existing events in that category.")
-            return
+        withAnimation {
+            if !isCategoryEmpty(category: category) {
+                print("Can't delete category. There are existing events in that category.")
+                return
+            }
+
+            guard let indexToDelete = categories.firstIndex(of: category) else { return }
+
+            categories.remove(at: indexToDelete)
+            print("Delete category \(category.name)")
         }
+        objectWillChange.send() // makes the animation work
+    }
 
-        guard let indexToDelete = categories.firstIndex(of: category) else { return }
-
-        categories.remove(at: indexToDelete)
-        print("Delete category \(category.name)")
+    func updateCategory(category: Category, name: String, emoji: String, color: CategoryColor) {
+        withAnimation {
+            guard let indexToUpdate = categories.firstIndex(of: category) else { return }
+            categories[indexToUpdate].name = name
+            categories[indexToUpdate].emoji = emoji
+            categories[indexToUpdate].color = color
+        }
+        objectWillChange.send()
     }
 
     func isCategoryEmpty(category: Category) -> Bool {

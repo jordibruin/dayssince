@@ -14,7 +14,6 @@ extension Array: RawRepresentable where Element: Codable {
         }
         do {
             let result = try JSONDecoder().decode([Element].self, from: data)
-            //            print("Init from result: \(result)")
             self = result
         } catch {
             print("Error: \(error)")

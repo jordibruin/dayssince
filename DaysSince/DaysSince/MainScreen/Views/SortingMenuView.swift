@@ -72,11 +72,13 @@ struct SortingMenuView: View {
                 Button {
                     selectedSortType = type
                 } label: {
-                    Label(
-                        type.name,
-                        systemImage:
-                        type == selectedSortType ? "checkmark" : ""
-                    )
+                    HStack {
+                        Text(type.name)
+                        Spacer()
+                        if type == selectedSortType {
+                            Image(systemName: "checkmark")
+                        }
+                    }
                 }
             }
         } label: {
