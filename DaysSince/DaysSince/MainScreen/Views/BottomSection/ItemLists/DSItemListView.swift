@@ -80,7 +80,7 @@ struct DSItemListView: View {
         }
         .padding(.horizontal)
         .confirmationDialog(
-            Text("Are you sure you want to delete this event"),
+            Text("Are you sure you want to delete this event?"),
             isPresented: $showingDeleteAlert,
             titleVisibility: .visible
         ) {

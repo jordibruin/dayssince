@@ -11,9 +11,9 @@ import SwiftUI
 
 struct Category: Identifiable, Codable, Equatable, Defaults.Serializable {
     let id: UUID
-    let name: String
-    let emoji: String
-    let color: CategoryColor
+    var name: String
+    var emoji: String
+    var color: CategoryColor
 
     init(id: UUID = UUID(), name: String, emoji: String, color: CategoryColor) {
         self.id = id

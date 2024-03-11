@@ -21,6 +21,7 @@
 		7A2A76FB27F24470006F0470 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7A2A76FA27F24470006F0470 /* Preview Assets.xcassets */; };
 		7A2A770927F2592D006F0470 /* AddItemSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2A770827F2592D006F0470 /* AddItemSheet.swift */; };
 		7A2A770D27F26E2B006F0470 /* Array+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2A770C27F26E2B006F0470 /* Array+Extensions.swift */; };
+		7A3B3D232B9F7B2B007BF1FC /* EditCategorySheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A3B3D222B9F7B2B007BF1FC /* EditCategorySheet.swift */; };
 		7A4D7F3E2B8804D400F6425F /* Date+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A4D7F3D2B8804D400F6425F /* Date+Extensions.swift */; };
 		7A4D7F402B881D1E00F6425F /* MoreSfSymbolsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A4D7F3F2B881D1E00F6425F /* MoreSfSymbolsView.swift */; };
 		7A65AAFE286CF5FD002D6DCA /* SettingsReviewButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A65AAFD286CF5FD002D6DCA /* SettingsReviewButton.swift */; };
@@ -184,6 +185,7 @@
 		7A2A76FA27F24470006F0470 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		7A2A770827F2592D006F0470 /* AddItemSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddItemSheet.swift; sourceTree = "<group>"; };
 		7A2A770C27F26E2B006F0470 /* Array+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Extensions.swift"; sourceTree = "<group>"; };
+		7A3B3D222B9F7B2B007BF1FC /* EditCategorySheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCategorySheet.swift; sourceTree = "<group>"; };
 		7A4D7F3D2B8804D400F6425F /* Date+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extensions.swift"; sourceTree = "<group>"; };
 		7A4D7F3F2B881D1E00F6425F /* MoreSfSymbolsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreSfSymbolsView.swift; sourceTree = "<group>"; };
 		7A65AAFD286CF5FD002D6DCA /* SettingsReviewButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsReviewButton.swift; sourceTree = "<group>"; };
@@ -705,6 +707,7 @@
 			children = (
 				C2B53D8E2869CACA00407F40 /* TopSection.swift */,
 				C2B53D902869CACA00407F40 /* MenuBlockView.swift */,
+				7A3B3D222B9F7B2B007BF1FC /* EditCategorySheet.swift */,
 			);
 			path = TopSection;
 			sourceTree = "<group>";
@@ -976,6 +979,7 @@
 				7A7CD911287F22E90001C64F /* AnimateText.swift in Sources */,
 				7AF56AE4286F32CD0068B467 /* SupportFetcher.swift in Sources */,
 				C2B53D982869CACA00407F40 /* SortingMenuView.swift in Sources */,
+				7A3B3D232B9F7B2B007BF1FC /* EditCategorySheet.swift in Sources */,
 				7A7CD90C287F20F70001C64F /* OnboardingScreen.swift in Sources */,
 				C2B53D922869CACA00407F40 /* DSItemView.swift in Sources */,
 				7AF56AF8286F32CD0068B467 /* HighlightedItemView.swift in Sources */,

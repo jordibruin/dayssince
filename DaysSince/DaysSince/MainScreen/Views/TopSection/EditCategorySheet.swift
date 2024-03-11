@@ -1,25 +1,30 @@
 //
-//  AddCategorySheet.swift
+//  EditCategorySheet.swift
 //  DaysSince
 //
-//  Created by Vicki Minerva on 11/25/23.
+//  Created by Vicki Minerva on 3/11/24.
 //
 
-import Defaults
 import SwiftUI
 
-struct AddCategorySheet: View {
+struct EditCategorySheet: View {
     @Default(.categories) var categories
 
+    @Environment(\.dismiss) var dismiss
+    @EnvironmentObject var categoryManager: CategoryManager
+
+    var category: Category
     @State var selectedName: String = ""
     @State var selectedColor: CategoryColor = .work
     @State var selectedEmoji: String = "lightbulb"
     @State var showMoreCategorySfSymbols: Bool = false
-
-    @Environment(\.dismiss) var dismiss
-    @EnvironmentObject var categoriesManager: CategoryManager
-
     @State var emojis: [String] = ["lightbulb", "leaf", "gamecontroller", "heart.text.square", "graduationcap", "bell", "gift.fill", "heart", "laptopcomputer", "airplane"]
+
+    private func updateStateVariables() {
+        selectedName = category.name
+        selectedColor = category.color
+        selectedEmoji = category.emoji
+    }
 
     var body: some View {
         ScrollView {
@@ -29,6 +34,9 @@ struct AddCategorySheet: View {
             color
         }
         .padding(.horizontal, 16)
+        .onAppear {
+            updateStateVariables()
+        }
         .sheet(isPresented: $showMoreCategorySfSymbols, onDismiss: updateCategoryEmojis) {
             MoreSfSymbolsView(accentColor: accentColor, selectedEmoji: $selectedEmoji)
         }
@@ -46,7 +54,7 @@ struct AddCategorySheet: View {
                 Spacer()
 
                 VStack(spacing: 4) {
-                    Text("New Category")
+                    Text("Edit Category")
                         .font(.system(.body, design: .rounded))
                         .bold()
 
@@ -63,11 +71,11 @@ struct AddCategorySheet: View {
 
                 Button {
                     withAnimation {
-                        categoriesManager.addCategory(name: selectedName, emoji: selectedEmoji, color: selectedColor)
+                        categoryManager.updateCategory(category: category, name: selectedName, emoji: selectedEmoji, color: selectedColor)
                         dismiss()
                     }
                 } label: {
-                    Text("Add")
+                    Text("Save")
                         .bold()
                         .foregroundColor(isCategoryCreationValid ? accentColor : Color.gray)
                         .padding(8)
@@ -195,8 +203,9 @@ struct AddCategorySheet: View {
     var accentColor: Color { selectedColor.color }
 }
 
-struct AddCategorySheet_Previews: PreviewProvider {
-    static var previews: some View {
-        AddCategorySheet()
-    }
-}
+import Defaults
+import SwiftUI
+
+// #Preview {
+//    EditCategorySheet()
+// }
