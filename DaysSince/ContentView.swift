@@ -34,25 +34,25 @@ struct ContentView: View {
         if hasSeenOnboarding {
             MainScreen(items: $items,
                        isDaysDisplayModeDetailed: $isDaysDisplayModeDetailed)
-//                .onAppear {
-//                    if !migratedFromOld {
-//                        if !oldItems.isEmpty {
-//                            let newItems = oldItems.map { oldItem in
-//                                DSItem(
-//                                    id: oldItem.id,
-//                                    name: oldItem.name,
-//                                    category: Category.placeholderCategory(),
-//                                    dateLastDone: oldItem.dateLastDone,
-//                                    remindersEnabled: oldItem.remindersEnabled,
-//                                    reminder: oldItem.reminder,
-//                                    reminderNotificationID: oldItem.reminderNotificationID
-//                                )
-//                            }
-//                            items = items + newItems
-//                            migratedFromOld = true
-//                        }
-//                    }
-//                }
+                .onAppear {
+                    if !migratedFromOld {
+                        if !oldItems.isEmpty {
+                            let newItems = oldItems.map { oldItem in
+                                DSItem(
+                                    id: oldItem.id,
+                                    name: oldItem.name,
+                                    category: Category.placeholderCategory(),
+                                    dateLastDone: oldItem.dateLastDone,
+                                    remindersEnabled: oldItem.remindersEnabled,
+                                    reminder: oldItem.reminder,
+                                    reminderNotificationID: oldItem.reminderNotificationID
+                                )
+                            }
+                            items = items + newItems
+                            migratedFromOld = true
+                        }
+                    }
+                }
         } else {
             OnboardingScreen(hasSeenOnboarding: $hasSeenOnboarding, items: $items)
         }
