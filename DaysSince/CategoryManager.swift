@@ -82,4 +82,21 @@ class CategoryManager: ObservableObject {
 
         return true
     }
+
+    func move(destinationItem: Category, draggedItem: Category?) {
+        withAnimation {
+            if let draggedItem {
+                let fromIndex = categories.firstIndex(of: draggedItem)
+                if let fromIndex {
+                    let toIndex = categories.firstIndex(of: destinationItem)
+                    if let toIndex, fromIndex != toIndex {
+                        withAnimation {
+                            categories.move(fromOffsets: IndexSet(integer: fromIndex), toOffset: toIndex > fromIndex ? (toIndex + 1) : toIndex)
+                        }
+                    }
+                }
+            }
+        }
+        objectWillChange.send()
+    }
 }

@@ -24,6 +24,7 @@ struct TopSection: View {
     @State var showUnableToDeleteCategory: Bool = false
     @State var selectedCategory: Category? = nil
     @State var showEditCategory: Bool = false
+    @State private var draggedCategory: Category?
 
     var body: some View {
         ScrollView(.horizontal) {
@@ -45,6 +46,13 @@ struct TopSection: View {
                         )
                         .aspectRatio(1.0, contentMode: .fit) // Maintain square aspect ratio
                         .frame(minWidth: 0, maxWidth: .infinity)
+                        .contentShape(.dragPreview, RoundedRectangle(cornerRadius: 20))
+                        .onDrag {
+                            self.draggedCategory = category
+                            return NSItemProvider()
+                        }
+                        .onDrop(of: [.text],
+                                delegate: DropViewDelegate(destinationItem: category, draggedItem: $draggedCategory, categoryManager: categoryManager))
                     }
                     .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: 20))
                     .contextMenu {
@@ -111,5 +119,29 @@ struct TopSection: View {
 struct TopSection_Previews: PreviewProvider {
     static var previews: some View {
         TopSection(items: .constant([]), isDaysDisplayModeDetailed: .constant(false))
+    }
+}
+
+// Delegate class to handle drop action
+struct DropViewDelegate: DropDelegate {
+    let destinationItem: Category
+    @Default(.categories) var categories
+    @Binding var draggedItem: Category?
+    var categoryManager: CategoryManager
+
+    func dropUpdated(info _: DropInfo) -> DropProposal? {
+        return DropProposal(operation: .move)
+    }
+
+    func performDrop(info _: DropInfo) -> Bool {
+        draggedItem = nil
+        return true
+    }
+
+    // Method to update the data model when an item is dropped
+    func dropEntered(info _: DropInfo) {
+        withAnimation {
+            categoryManager.move(destinationItem: destinationItem, draggedItem: draggedItem)
+        }
     }
 }
