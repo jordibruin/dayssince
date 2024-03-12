@@ -28,7 +28,7 @@ struct TopSection: View {
     var body: some View {
         ScrollView(.horizontal) {
             LazyHStack {
-                ForEach(categories, id: \.id) { category in
+                ForEach(categories, id: \.hashableIdentifier) { category in
 
                     NavigationLink(
                         destination: CategoryFilteredView(
@@ -46,7 +46,6 @@ struct TopSection: View {
                         .aspectRatio(1.0, contentMode: .fit) // Maintain square aspect ratio
                         .frame(minWidth: 0, maxWidth: .infinity)
                     }
-
                     .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: 20))
                     .contextMenu {
                         Button {
@@ -69,7 +68,7 @@ struct TopSection: View {
                     }
                 }
             }
-            .padding(.horizontal, 16)
+            .padding(.horizontal, 8)
             .padding(.vertical, 16)
         }
         .padding(.leading, 16)

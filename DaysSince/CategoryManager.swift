@@ -53,6 +53,13 @@ class CategoryManager: ObservableObject {
             categories[indexToUpdate].name = name
             categories[indexToUpdate].emoji = emoji
             categories[indexToUpdate].color = color
+
+            // Structs (Category) are value based, need to update the item's category too
+            for index in items.indices {
+                if items[index].category == category {
+                    items[index].category = categories[indexToUpdate]
+                }
+            }
         }
         objectWillChange.send()
     }
