@@ -12,13 +12,13 @@ import UserNotifications
 /**
  This class is responsible for managing the notifications for the reminders of different events.
  Methods:
- * refreshNotifications
- * getPendingNotifications
- * checkPermission: Checks whether the user has given permission to receive notification
- * addReminderFor
- * addReminderFor: Create notifications for an event
- * deleteReminderFor: Deletes existing notifications for an event
- * getDateComponentsFor:
+ refreshNotifications
+ getPendingNotifications
+ checkPermission: Checks whether the user has given permission to receive notification
+ addReminderFor
+ addReminderFor: Create notifications for an event
+ deleteReminderFor: Deletes existing notifications for an event
+ getDateComponentsFor:
 
  */
 class NotificationManager: ObservableObject {
@@ -33,6 +33,7 @@ class NotificationManager: ObservableObject {
         refreshNotifications()
     }
 
+    /// Refresh the notifications. Delete all and reschedule them. Used when app is started and when a user edits an event to make sure the notifications stay up to date.
     func refreshNotifications() {
         print("refresh notifications")
         // Remove all old pending requests to generate new ones
@@ -48,6 +49,7 @@ class NotificationManager: ObservableObject {
         getPendingNotification()
     }
 
+    /// Get the notifications that are scheduled and pending (not sent yet)
     func getPendingNotification() {
         center.getPendingNotificationRequests { requests in
 
@@ -74,6 +76,7 @@ class NotificationManager: ObservableObject {
 
     @Published var notificationPermissionGiven = true
 
+    /// Check if user has given permission to the app to send notifications
     private func checkPermission() {
         center.getNotificationSettings { settings in
             if settings.authorizationStatus == .authorized {
@@ -85,6 +88,8 @@ class NotificationManager: ObservableObject {
         }
     }
 
+    /// Add reminders for a days since event
+    /// - Parameter item: Days Since event to schedule reminders for
     func addReminderFor(item: DSItem) {
 //        var notificationsContent: [UNMutableNotificationContent]
 
@@ -197,6 +202,10 @@ class NotificationManager: ObservableObject {
     }
 
     /// Create the date for a reminder notification of a Days Since Item
+    /// - Parameters:
+    ///   - item: Days Since event to get the date components for
+    ///   - extraDays: The extra days  -- 7 for a week, 30 for a month, etc.
+    /// - Returns: Date components for the dates of a reminder
     private func getDateComponentsFor(item: DSItem, extraDays: Double) -> DateComponents {
         var dateComponents = DateComponents()
         let startDate = Calendar.current.startOfDay(for: Date())
@@ -225,6 +234,7 @@ class NotificationManager: ObservableObject {
     }
 
     /// Delete the reminder notifications for a Days Since item.
+    /// - Parameter item: event to delete the reminders for
     func deleteReminderFor(item: DSItem) {
         /*
           The notification IDs have the following format: reminderNotificationIDX, where X is an integer starting from 0.

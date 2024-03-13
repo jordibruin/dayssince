@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// Reminders for the Days Since events.
 enum DSItemReminders: Codable, Equatable, CaseIterable, Hashable {
     static var allCases: [DSItemReminders] = [
         .daily, .weekly, .monthly, .none,

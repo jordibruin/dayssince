@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 
+/// Represents the color of a category. Used to store in user defaults.
 enum CategoryColor: Codable, Identifiable, Equatable, CaseIterable, Hashable {
     static var allCases: [CategoryColor] = [
         .work, .life, .hobbies, .health, .marioBlue, .zeldaYellow, .animalCrossingsGreen, .marioRed, .animalCrossingsBrown,

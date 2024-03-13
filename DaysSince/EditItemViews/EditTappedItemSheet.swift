@@ -115,6 +115,8 @@ struct EditTappedItemSheet: View {
         }
     }
 
+    // MARK: - Actions
+
     func updateNotificationReminder() {
         let realItem = items[getItemIndex()]
 

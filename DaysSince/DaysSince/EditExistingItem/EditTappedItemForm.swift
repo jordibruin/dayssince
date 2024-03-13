@@ -163,6 +163,8 @@ struct EditTappedItemForm: View {
         }
     }
 
+    // MARK: - Actions
+
     func getItemIndex() -> Int {
         print("Looking for index of tapped item.")
         return items.firstIndex(where: { $0.id == tappedItem.id })!

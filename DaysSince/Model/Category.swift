@@ -9,6 +9,7 @@ import Defaults
 import Foundation
 import SwiftUI
 
+/// Category object that a Days Since event/item is categorized into.
 struct Category: Identifiable, Codable, Equatable, Defaults.Serializable {
     let id: UUID
     var name: String

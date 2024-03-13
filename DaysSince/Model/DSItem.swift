@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 import UserNotifications
 
+/// Element used to store an event / item in Days Since.
 struct DSItem: Identifiable, Codable {
     let id: UUID
 
