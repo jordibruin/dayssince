@@ -122,7 +122,6 @@ struct TopSection_Previews: PreviewProvider {
     }
 }
 
-// Delegate class to handle drop action
 struct DropViewDelegate: DropDelegate {
     let destinationItem: Category
     @Default(.categories) var categories

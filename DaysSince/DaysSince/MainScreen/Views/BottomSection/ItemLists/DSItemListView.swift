@@ -18,6 +18,7 @@ struct DSItemListView: View {
 
     @State var showingDeleteAlert: Bool = false
     @State var itemToDelete: DSItem? = nil
+//    @State private var draggedItem: DSItem?
 
     var isCategoryView: Bool = false
     var category: Category?
@@ -55,7 +56,7 @@ struct DSItemListView: View {
                 item: item,
                 colored: false
             )
-            .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: 22.2))
+            .contentShape([.contextMenuPreview, .dragPreview, .hoverEffect], RoundedRectangle(cornerRadius: 22.2))
             .contextMenu {
                 Button {
                     changeDateTo(Date.now, item: item)
@@ -77,6 +78,12 @@ struct DSItemListView: View {
                         .tint(.red)
                 }
             }
+//            .onDrag {
+//                self.draggedItem = item
+//                return NSItemProvider()
+//            }
+//            .onDrop(of: [.text],
+//                    delegate: DropViewDelegateForItems(destinationItem: item, draggedItem: $draggedItem))
         }
         .padding(.horizontal)
         .confirmationDialog(
@@ -132,3 +139,35 @@ struct NormalItemsList_Previews: PreviewProvider {
         DSItemListView(items: .constant([]), editItemSheet: .constant(false), tappedItem: .constant(.placeholderItem()), isDaysDisplayModeDetailed: .constant(false), category: Category.placeholderCategory())
     }
 }
+
+// struct DropViewDelegateForItems: DropDelegate {
+//    let destinationItem: DSItem
+//    @AppStorage("items", store: UserDefaults(suiteName: "group.goodsnooze.dayssince")) var items: [DSItem] = []
+//    @Binding var draggedItem: DSItem?
+//
+//    func dropUpdated(info _: DropInfo) -> DropProposal? {
+//        return DropProposal(operation: .move)
+//    }
+//
+//    func performDrop(info _: DropInfo) -> Bool {
+//        draggedItem = nil
+//        return true
+//    }
+//
+//    // Method to update the data model when an item is dropped
+//    func dropEntered(info _: DropInfo) {
+//        withAnimation {
+//            if let draggedItem {
+//                let fromIndex = items.firstIndex(of: draggedItem)
+//                if let fromIndex {
+//                    let toIndex = items.firstIndex(of: destinationItem)
+//                    if let toIndex, fromIndex != toIndex {
+//                        withAnimation {
+//                            items.move(fromOffsets: IndexSet(integer: fromIndex), toOffset: toIndex > fromIndex ? (toIndex + 1) : toIndex)
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//    }
+// }

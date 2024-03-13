@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 import UserNotifications
 
-struct DSItem: Identifiable, Codable {
+struct DSItem: Identifiable, Codable, Equatable {
     let id: UUID
 
     /// The name of the item.
@@ -53,6 +53,10 @@ struct DSItem: Identifiable, Codable {
     static func placeholderItem() -> DSItem {
         let category = Category.placeholderCategory()
         return DSItem(id: UUID(), name: "Placeholder", category: category, dateLastDone: Date.now, remindersEnabled: false)
+    }
+
+    static func == (lhs: DSItem, rhs: DSItem) -> Bool {
+        return lhs.id == rhs.id
     }
 }
 
