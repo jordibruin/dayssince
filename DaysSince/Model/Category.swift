@@ -22,6 +22,15 @@ struct Category: Identifiable, Codable, Equatable, Defaults.Serializable {
         self.color = color
     }
 
+    static func == (lhs: Category, rhs: Category) -> Bool {
+        return lhs.id == rhs.id
+    }
+
+    // Computed property for a hashable identifier
+    var hashableIdentifier: String {
+        return "\(id)-\(name)-\(emoji)-\(color)"
+    }
+
     static func placeholderCategory() -> Category {
         return Category(name: "Placeholder", emoji: "placeholder", color: .work)
     }

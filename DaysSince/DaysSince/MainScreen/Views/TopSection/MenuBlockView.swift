@@ -72,6 +72,7 @@ struct MenuBlockView: View {
     var emoji: some View {
         Image(systemName: category.emoji)
             .imageScale(.large)
+            .frame(width: 24, height: 24) // fixed size so the category rectangle doesn't change size depending on symbol shape
             .foregroundColor(.white)
     }
 

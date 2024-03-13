@@ -53,6 +53,13 @@ class CategoryManager: ObservableObject {
             categories[indexToUpdate].name = name
             categories[indexToUpdate].emoji = emoji
             categories[indexToUpdate].color = color
+
+            // Structs (Category) are value based, need to update the item's category too
+            for index in items.indices {
+                if items[index].category == category {
+                    items[index].category = categories[indexToUpdate]
+                }
+            }
         }
         objectWillChange.send()
     }
@@ -74,5 +81,22 @@ class CategoryManager: ObservableObject {
         }
 
         return true
+    }
+
+    func move(destinationCategory: Category, draggedCategory: Category?) {
+        withAnimation {
+            if let draggedCategory {
+                let fromIndex = categories.firstIndex(of: draggedCategory)
+                if let fromIndex {
+                    let toIndex = categories.firstIndex(of: destinationCategory)
+                    if let toIndex, fromIndex != toIndex {
+                        withAnimation {
+                            categories.move(fromOffsets: IndexSet(integer: fromIndex), toOffset: toIndex > fromIndex ? (toIndex + 1) : toIndex)
+                        }
+                    }
+                }
+            }
+        }
+        objectWillChange.send()
     }
 }
