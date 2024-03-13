@@ -28,7 +28,7 @@ struct Category: Identifiable, Codable, Equatable, Defaults.Serializable {
 
     // Computed property for a hashable identifier
     var hashableIdentifier: String {
-        return "\(name)-\(emoji)-\(color)"
+        return "\(id)-\(name)-\(emoji)-\(color)"
     }
 
     static func placeholderCategory() -> Category {
