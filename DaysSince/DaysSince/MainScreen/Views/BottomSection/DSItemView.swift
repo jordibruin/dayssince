@@ -5,6 +5,7 @@
 //  Created by Vicki Minerva on 4/7/22.
 //
 
+import Foundation
 import SwiftUI
 
 struct DSItemView: View {
@@ -58,7 +59,7 @@ struct DSItemView: View {
             let currentDate = Date()
             let calendar = Calendar.current
 
-            let dateComponents = calendar.dateComponents([.year, .month, .day], from: item.dateLastDone, to: currentDate)
+            let dateComponents = calendar.dateComponents([.year, .month, .day], from: calendar.startOfDay(for: item.dateLastDone), to: calendar.startOfDay(for: currentDate))
 
             let years = dateComponents.year ?? 0
             let months = dateComponents.month ?? 0

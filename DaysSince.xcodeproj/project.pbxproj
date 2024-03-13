@@ -1430,8 +1430,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/wishkit/wishkit-ios.git";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 3.0.0;
+				branch = main;
+				kind = branch;
 			};
 		};
 		7AB3BC832ABF917C00549CD9 /* XCRemoteSwiftPackageReference "Defaults" */ = {

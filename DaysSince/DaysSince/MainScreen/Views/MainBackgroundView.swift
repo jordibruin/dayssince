@@ -19,7 +19,7 @@ struct MainBackgroundView: View {
                 .ignoresSafeArea()
         } else {
             LinearGradient(
-                gradient: .init(colors: [backgroundColor.opacity(0.0), backgroundColor]),
+                gradient: .init(colors: [backgroundColor.opacity(0.6), backgroundColor]),
                 startPoint: .init(x: 1, y: 0),
                 endPoint: .init(x: 0.0001, y: 0)
             )

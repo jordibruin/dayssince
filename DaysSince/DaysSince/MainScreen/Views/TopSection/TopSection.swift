@@ -76,7 +76,7 @@ struct TopSection: View {
                     }
                 }
             }
-            .padding(.horizontal, 8)
+            .padding(.horizontal, 14)
             .padding(.vertical, 16)
         }
         .padding(.leading, 16)

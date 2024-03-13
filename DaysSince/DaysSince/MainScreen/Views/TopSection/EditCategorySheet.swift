@@ -62,8 +62,9 @@ struct EditCategorySheet: View {
                     RoundedRectangle(cornerRadius: 4)
                         .frame(width: 72, height: 2)
                         .opacity(0.5)
+                        .foregroundColor(Color.primary.opacity(0.4))
                 }
-                .foregroundColor(Color.primary.opacity(0.4))
+
                 Spacer()
             }
             HStack {

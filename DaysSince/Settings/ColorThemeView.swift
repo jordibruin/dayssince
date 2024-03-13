@@ -9,6 +9,8 @@ import Defaults
 import SwiftUI
 
 struct ColorThemeView: View {
+    @Environment(\.colorScheme) var colorScheme
+
     @Default(.mainColor) var mainColor
     @Default(.backgroundColor) var backgroundColor
 
@@ -22,16 +24,16 @@ struct ColorThemeView: View {
             .frame(width: 72, height: 72)
             .overlay {
                 LinearGradient(stops: [
-                    Gradient.Stop(color: mainColorTemporary, location: 0),
-                    Gradient.Stop(color: mainColorTemporary, location: 0.5),
+                    Gradient.Stop(color: backgroundColorTemporary, location: 0),
                     Gradient.Stop(color: backgroundColorTemporary, location: 0.5),
-                    Gradient.Stop(color: backgroundColorTemporary, location: 1),
+                    Gradient.Stop(color: mainColorTemporary, location: 0.5),
+                    Gradient.Stop(color: mainColorTemporary, location: 1),
                 ], startPoint: .topLeading, endPoint: .bottomTrailing)
             }
             .overlay(
                 RoundedRectangle(cornerRadius: 24)
-                    .stroke(.black, lineWidth: isThemeSelected ? 6 : 0)
-                    .background(isThemeSelected ? .clear : .black.opacity(0.2))
+                    .stroke(colorScheme == .light ? .black : .white, lineWidth: isThemeSelected ? 6 : 0)
+                    .background(isThemeSelected ? .clear : .black.opacity(0.5))
             )
             .clipShape(RoundedRectangle(cornerRadius: 24))
             .onTapGesture {

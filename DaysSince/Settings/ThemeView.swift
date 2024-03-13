@@ -33,14 +33,22 @@ struct ThemeView: View {
         VStack(alignment: .leading, spacing: 0) {
             HStack(alignment: .center) {
                 Spacer()
-                Text("Colors")
-                    .font(.system(.headline, design: .rounded))
-                    .bold()
-                    .padding(.horizontal, 24)
+
+                VStack(spacing: 12) {
+                    RoundedRectangle(cornerRadius: 4)
+                        .frame(width: 40, height: 2)
+                        .opacity(0.5)
+                        .foregroundColor(Color.primary.opacity(0.4))
+
+                    Text("Themes")
+                        .font(.system(.headline, design: .rounded))
+                        .bold()
+                        .padding(.horizontal, 24)
+                }
+
                 Spacer()
             }
-
-            .padding(.top, 20)
+            .padding(.top, 6)
 
             LazyVGrid(
                 columns: columns,

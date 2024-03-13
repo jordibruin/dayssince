@@ -1,4 +1,5 @@
 {
+  "originHash" : "238d61c8e05a8555c8bc57ebef890c8cb0d539c92ccce9c59f15353992608bb3",
   "pins" : [
     {
       "identity" : "defaults",
@@ -6,7 +7,7 @@
       "location" : "https://github.com/sindresorhus/Defaults",
       "state" : {
         "branch" : "main",
-        "revision" : "3efef5a28ebdbbe922d4a2049493733ed14475a6"
+        "revision" : "38925e3cfacf3fb89a81a35b1cd44fd5a5b7e0fa"
       }
     },
     {
@@ -14,8 +15,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/wishkit/wishkit-ios.git",
       "state" : {
-        "revision" : "6575444ac14462ee02705de3db3df7a051731be8",
-        "version" : "3.0.0"
+        "branch" : "main",
+        "revision" : "dad332bcab0bba1ae61c914f5fe84a78510ae759"
       }
     },
     {
@@ -23,10 +24,10 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/wishkit/wishkit-ios-shared.git",
       "state" : {
-        "revision" : "9677991c12016d1d243b3e4697cccf8a7ec52b80",
-        "version" : "1.2.0"
+        "revision" : "118c9c482e4ad57c65d664283516425b98616483",
+        "version" : "1.4.3"
       }
     }
   ],
-  "version" : 2
+  "version" : 3
 }
