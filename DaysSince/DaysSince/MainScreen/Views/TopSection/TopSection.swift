@@ -52,7 +52,7 @@ struct TopSection: View {
                             return NSItemProvider()
                         }
                         .onDrop(of: [.text],
-                                delegate: DropViewDelegate(destinationItem: category, draggedItem: $draggedCategory, categoryManager: categoryManager))
+                                delegate: DropViewDelegate(destinationCategory: category, categoryManager: categoryManager, draggedCategory: $draggedCategory))
                     }
                     .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: 20))
                     .contextMenu {
@@ -124,24 +124,26 @@ struct TopSection_Previews: PreviewProvider {
 
 // Delegate class to handle drop action
 struct DropViewDelegate: DropDelegate {
-    let destinationItem: Category
     @Default(.categories) var categories
-    @Binding var draggedItem: Category?
+
+    let destinationCategory: Category
     var categoryManager: CategoryManager
+
+    @Binding var draggedCategory: Category?
 
     func dropUpdated(info _: DropInfo) -> DropProposal? {
         return DropProposal(operation: .move)
     }
 
     func performDrop(info _: DropInfo) -> Bool {
-        draggedItem = nil
+        draggedCategory = nil
         return true
     }
 
     // Method to update the data model when an item is dropped
     func dropEntered(info _: DropInfo) {
         withAnimation {
-            categoryManager.move(destinationItem: destinationItem, draggedItem: draggedItem)
+            categoryManager.move(destinationCategory: destinationCategory, draggedCategory: draggedCategory)
         }
     }
 }
