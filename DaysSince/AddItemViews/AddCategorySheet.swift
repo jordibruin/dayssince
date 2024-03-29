@@ -184,6 +184,8 @@ struct AddCategorySheet: View {
         .padding(.horizontal, 4)
     }
 
+    // MARK: - Actions
+
     var isCategoryCreationValid: Bool {
         return !selectedName.isEmpty
     }

@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 
+/// Representation of category of the old DS events (before customizable category feature)
 enum CategoryDSIte: Codable, Identifiable, Equatable, CaseIterable, Hashable {
     static var allCases: [CategoryDSIte] = [
         .work, .life, .hobbies, .health,

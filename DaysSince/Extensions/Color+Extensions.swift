@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 
+// Custom colors used thoughout the app
 extension Color {
     static let workColor = Color("workColor")
     static let lifeColor = Color("lifeColor")
@@ -27,6 +28,7 @@ extension Color {
     public func darker(by amount: CGFloat = 0.2) -> Self { Self(UIColor(self).darker(by: amount)) }
 }
 
+// Used for color comparison of the themes.
 extension UIColor {
     func mix(with color: UIColor, amount: CGFloat) -> Self {
         var red1: CGFloat = 0

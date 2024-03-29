@@ -48,6 +48,8 @@ struct ColorThemeView: View {
             .transition(.opacity)
     }
 
+    // MARK: - Actions
+
     func colorEquals(_ color1: Color, _ color2: Color) -> Bool {
         let uiColor1 = UIColor(color1)
         let uiColor2 = UIColor(color2)

@@ -9,15 +9,23 @@ import Defaults
 import Foundation
 import SwiftUI
 
+/// Manages anything related to the categories (adding, editing, deleting, etc.)
 class CategoryManager: ObservableObject {
     @Default(.categories) var categories: [Category]
     @AppStorage("items", store: UserDefaults(suiteName: "group.goodsnooze.dayssince")) var items: [DSItem] = []
 
+    /// Create a new category
+    /// - Parameters:
+    ///   - name: String name of new category
+    ///   - emoji: String, sfSymbol of new category
+    ///   - color: CategoryColor, color of the new category
     func addCategory(name: String, emoji: String, color: CategoryColor) {
         let newCategory = Category(name: name, emoji: emoji, color: color)
         categories.append(newCategory)
     }
 
+    /// Delete a category
+    /// - Parameter index: the index to be deleted of the categories array where the categories are being store
     func deleteCategory(at index: Int) {
         guard index < categories.count else { return }
 
@@ -32,6 +40,8 @@ class CategoryManager: ObservableObject {
         print("Delete category \(categoryToDelete.name)")
     }
 
+    /// Delete a category
+    /// - Parameter category: Category, the category instance to be deleted
     func deleteCategory(category: Category) {
         withAnimation {
             if !isCategoryEmpty(category: category) {
@@ -47,6 +57,12 @@ class CategoryManager: ObservableObject {
         objectWillChange.send() // makes the animation work
     }
 
+    /// Edit an existing category
+    /// - Parameters:
+    ///   - category: Category, the instance to be updated
+    ///   - name: String, (new) name of the category
+    ///   - emoji: String, (new) sfSymbol
+    ///   - color: CategoryColor, (new) color
     func updateCategory(category: Category, name: String, emoji: String, color: CategoryColor) {
         withAnimation {
             guard let indexToUpdate = categories.firstIndex(of: category) else { return }
@@ -64,6 +80,9 @@ class CategoryManager: ObservableObject {
         objectWillChange.send()
     }
 
+    /// Indicates whether any Days Since events are assigned to this category
+    /// - Parameter category: Category
+    /// - Returns: Bool, true if no events are assigned to this category, false otherwise
     func isCategoryEmpty(category: Category) -> Bool {
         if items.contains(where: { $0.category == category }) {
             return false
@@ -71,6 +90,9 @@ class CategoryManager: ObservableObject {
         return true
     }
 
+    /// Indicates whether any Days Since events are assigned to this category
+    /// - Parameter index: Int, index of the category in the categories array in User Defaults
+    /// - Returns: Bool, true if no events are assigned to this category, false otherwise
     func isCategoryEmpty(index: Int) -> Bool {
         guard index < categories.count else { return false }
 
@@ -83,6 +105,10 @@ class CategoryManager: ObservableObject {
         return true
     }
 
+    /// Reorder the categories array in User Defaults, Used for the Drag and Drop functionaility
+    /// - Parameters:
+    ///   - destinationCategory: Category, the destination where we want to place it
+    ///   - draggedCategory: Category?, the category we want to move
     func move(destinationCategory: Category, draggedCategory: Category?) {
         withAnimation {
             if let draggedCategory {
