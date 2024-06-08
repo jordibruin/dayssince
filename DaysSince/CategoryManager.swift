@@ -12,8 +12,6 @@ import Combine
 
 /// Manages anything related to the categories (adding, editing, deleting, etc.)
 class CategoryManager: ObservableObject {
-//    @Default(.categories) var categories: [Category]
-    @AppStorage("items", store: UserDefaults(suiteName: "group.goodsnooze.dayssince")) var items: [DSItem] = []
     
     // Computed property for categories
     private var categories: [Category] {
@@ -33,7 +31,7 @@ class CategoryManager: ObservableObject {
 
     /// Delete a category
     /// - Parameter index: the index to be deleted of the categories array where the categories are being store
-    func deleteCategory(at index: Int) {
+    func deleteCategory(at index: Int, items: [DSItem]) {
         guard index < categories.count else { return }
 
         let categoryToDelete = categories[index]
@@ -70,7 +68,7 @@ class CategoryManager: ObservableObject {
     ///   - name: String, (new) name of the category
     ///   - emoji: String, (new) sfSymbol
     ///   - color: CategoryColor, (new) color
-    func updateCategory(category: Category, name: String, emoji: String, color: CategoryColor) {
+    func updateCategory(category: Category, name: String, emoji: String, color: CategoryColor, items: inout [DSItem]) {
         withAnimation {
             guard let indexToUpdate = categories.firstIndex(of: category) else { return }
             categories[indexToUpdate].name = name

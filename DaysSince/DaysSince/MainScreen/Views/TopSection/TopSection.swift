@@ -93,7 +93,7 @@ struct TopSection: View {
             Text("Category contains existing events.")
         }
         .sheet(isPresented: $showEditCategory) {
-            EditCategorySheet(category: selectedCategory!)
+            EditCategorySheet(items: $items, category: selectedCategory!)
                 .presentationDragIndicator(.hidden)
                 .presentationDetents([.medium])
                 .presentationCornerRadius(44)
@@ -109,7 +109,7 @@ struct TopSection: View {
             }
         )) {
             if let index = selectedCategory {
-                EditCategorySheet(category: index)
+                EditCategorySheet(items: $items, category: index)
             }
         }
     }

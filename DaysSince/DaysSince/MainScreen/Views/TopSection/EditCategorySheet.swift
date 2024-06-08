@@ -12,6 +12,8 @@ struct EditCategorySheet: View {
 
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var categoryManager: CategoryManager
+    
+    @Binding var items: [DSItem]
 
     var category: Category
     @State var selectedName: String = ""
@@ -72,7 +74,7 @@ struct EditCategorySheet: View {
 
                 Button {
                     withAnimation {
-                        categoryManager.updateCategory(category: category, name: selectedName, emoji: selectedEmoji, color: selectedColor)
+                        categoryManager.updateCategory(category: category, name: selectedName, emoji: selectedEmoji, color: selectedColor, items: &items)
                         dismiss()
                     }
                 } label: {
