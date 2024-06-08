@@ -27,7 +27,6 @@ struct ContentView: View {
     init() {
         WishKit.configure(with: "6443C4AA-4663-4A27-89E5-846598908A4E")
         WishKit.config.statusBadge = .show
-        WishKit.theme.primaryColor = mainColor
     }
 
     var body: some View {
@@ -35,6 +34,8 @@ struct ContentView: View {
             MainScreen(items: $items,
                        isDaysDisplayModeDetailed: $isDaysDisplayModeDetailed)
                 .onAppear {
+                    WishKit.theme.primaryColor = mainColor
+                    
                     if !migratedFromOld {
                         if !oldItems.isEmpty {
                             let newItems = oldItems.map { oldItem in

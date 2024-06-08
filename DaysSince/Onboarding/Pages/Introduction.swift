@@ -36,7 +36,6 @@ struct Introduction: View {
     var body: some View {
         ZStack {
             GeometryReader { proxy in
-                let size = proxy.size
                 Color.white
 
                 LinearGradient(colors: [colors[currentIndex].opacity(0.1), colors[currentIndex].opacity(0.6)], startPoint: .top, endPoint: .bottom)
