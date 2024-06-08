@@ -64,7 +64,7 @@ struct TopSection: View {
                         }
 
                         Button {
-                            if categoryManager.isCategoryEmpty(category: category) {
+                            if categoryManager.isCategoryEmpty(category: category, items: items) {
                                 selectedCategory = category
                                 showDeleteCategoryAlert = true
                             } else {
@@ -86,7 +86,7 @@ struct TopSection: View {
             titleVisibility: .visible
         ) {
             Button("Delete", role: .destructive) {
-                withAnimation(.easeOut) { categoryManager.deleteCategory(category: selectedCategory!) }
+                withAnimation(.easeOut) { categoryManager.deleteCategory(category: selectedCategory!, items: items) }
             }
         }
         .alert("Unable to Delete Category", isPresented: $showUnableToDeleteCategory) {} message: {
@@ -102,7 +102,6 @@ struct TopSection: View {
                     selectedCategory = nil
                 }
         }
-
         .sheet(isPresented: Binding<Bool>(
             get: { showEditCategory && selectedCategory != nil },
             set: { newValue in

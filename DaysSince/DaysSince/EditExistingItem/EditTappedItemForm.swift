@@ -138,7 +138,6 @@ struct EditTappedItemForm: View {
                 Spacer()
 
                 Button {
-                    print(Date.now)
                     tappedItem.dateLastDone = Date.now
                 } label: {
                     VStack {

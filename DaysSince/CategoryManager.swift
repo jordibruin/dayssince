@@ -8,11 +8,18 @@
 import Defaults
 import Foundation
 import SwiftUI
+import Combine
 
 /// Manages anything related to the categories (adding, editing, deleting, etc.)
 class CategoryManager: ObservableObject {
-    @Default(.categories) var categories: [Category]
+//    @Default(.categories) var categories: [Category]
     @AppStorage("items", store: UserDefaults(suiteName: "group.goodsnooze.dayssince")) var items: [DSItem] = []
+    
+    // Computed property for categories
+    private var categories: [Category] {
+        get { Defaults[.categories] }
+        set { Defaults[.categories] = newValue }
+    }
 
     /// Create a new category
     /// - Parameters:
@@ -31,7 +38,7 @@ class CategoryManager: ObservableObject {
 
         let categoryToDelete = categories[index]
 
-        if !isCategoryEmpty(category: categoryToDelete) {
+        if !isCategoryEmpty(category: categoryToDelete, items: items) {
             print("Can't delete category. There are existing events in that category.")
             return
         }
@@ -42,9 +49,9 @@ class CategoryManager: ObservableObject {
 
     /// Delete a category
     /// - Parameter category: Category, the category instance to be deleted
-    func deleteCategory(category: Category) {
+    func deleteCategory(category: Category, items: [DSItem]) {
         withAnimation {
-            if !isCategoryEmpty(category: category) {
+            if !isCategoryEmpty(category: category, items: items) {
                 print("Can't delete category. There are existing events in that category.")
                 return
             }
@@ -83,7 +90,7 @@ class CategoryManager: ObservableObject {
     /// Indicates whether any Days Since events are assigned to this category
     /// - Parameter category: Category
     /// - Returns: Bool, true if no events are assigned to this category, false otherwise
-    func isCategoryEmpty(category: Category) -> Bool {
+    func isCategoryEmpty(category: Category, items: [DSItem]) -> Bool {
         if items.contains(where: { $0.category == category }) {
             return false
         }
@@ -93,7 +100,7 @@ class CategoryManager: ObservableObject {
     /// Indicates whether any Days Since events are assigned to this category
     /// - Parameter index: Int, index of the category in the categories array in User Defaults
     /// - Returns: Bool, true if no events are assigned to this category, false otherwise
-    func isCategoryEmpty(index: Int) -> Bool {
+    func isCategoryEmpty(index: Int, items: [DSItem]) -> Bool {
         guard index < categories.count else { return false }
 
         let category = categories[index]

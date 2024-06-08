@@ -62,7 +62,7 @@ struct CategoryFilteredView: View {
         .confirmationDialog("Delete Category", isPresented: $showConfirmDelete) {
             Button("Delete", role: .destructive) {
                 withAnimation {
-                    categoryManager.deleteCategory(category: category)
+                    categoryManager.deleteCategory(category: category, items: items)
                 }
             }
         } message: {
@@ -77,7 +77,7 @@ struct CategoryFilteredView: View {
         Group {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
-                    if categoryManager.isCategoryEmpty(category: category) {
+                    if categoryManager.isCategoryEmpty(category: category, items: items) {
                         showConfirmDelete = true
                     } else {
                         showUnableToDelete = true
