@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import WidgetKit
 
 struct EditTappedItemSheet: View {
     @EnvironmentObject var notificationManager: NotificationManager
@@ -89,6 +90,8 @@ struct EditTappedItemSheet: View {
                         notificationManager.addReminderFor(item: items[itemIndex])
                     }
 
+                    WidgetCenter.shared.reloadTimelines(ofKind: "SooseeWidget")
+                    
                     editItemSheet = false
                     dismiss()
                 } label: {
