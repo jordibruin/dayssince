@@ -96,66 +96,85 @@ class NotificationManager: ObservableObject {
         var requests: [UNNotificationRequest] = []
 
         switch item.reminder {
+            
         case .daily:
-            for i in 0 ... 6 {
-                let content = UNMutableNotificationContent()
-                content.title = "\(item.name)"
-                content.body = "It's been \(item.daysAgo + i) days since \(item.name)!"
-                content.sound = UNNotificationSound.default
+            let content = UNMutableNotificationContent()
+            content.title = "\(item.name)"
+            content.body = "One more day since \(item.name)!"
+            content.sound = UNNotificationSound.default
 
-                let dateComponents = getDateComponentsFor(item: item, extraDays: Double(i))
-                let trigger = UNCalendarNotificationTrigger(
-                    dateMatching: dateComponents,
-                    repeats: false
-                )
+//                let dateComponents = getDateComponentsFor(item: item, extraDays: Double(i))
+            let calendar = Calendar.current
+            var dateComponents = DateComponents(calendar: calendar, timeZone: TimeZone.current)
+            dateComponents.hour = 10
+            dateComponents.minute = 0
+            
+            let trigger = UNCalendarNotificationTrigger(
+                dateMatching: dateComponents,
+                repeats: true
+            )
 
-                let request = UNNotificationRequest(
-                    identifier: "\(item.reminderNotificationID)\(i)",
-                    content: content,
-                    trigger: trigger
-                )
-                requests.append(request)
-            }
+            let request = UNNotificationRequest(
+                identifier: "\(item.reminderNotificationID)",
+                content: content,
+                trigger: trigger
+            )
+            requests.append(request)
+
         case .weekly:
-            for i in 0 ... 3 {
-                let content = UNMutableNotificationContent()
-                content.title = "\(item.name)"
-                content.body = "It's been \(item.daysAgo + (i * 7)) days since \(item.name)!"
-                content.sound = UNNotificationSound.default
+            let content = UNMutableNotificationContent()
+            content.title = "\(item.name)"
+            content.body = "It's been another week since \(item.name)!"
+            content.sound = UNNotificationSound.default
 
-                let dateComponents = getDateComponentsFor(item: item, extraDays: Double(i) * 7)
-                let trigger = UNCalendarNotificationTrigger(
-                    dateMatching: dateComponents,
-                    repeats: false
-                )
+//                let dateComponents = getDateComponentsFor(item: item, extraDays: Double(i) * 7)
+            var dateComponents = DateComponents()
+            dateComponents.calendar = Calendar.current
+            let weekday = Calendar.current.component(.weekday, from: item.dateLastDone)
+            dateComponents.weekday = weekday
+            dateComponents.hour = 10
+            dateComponents.minute = 0
+            
+            let trigger = UNCalendarNotificationTrigger(
+                dateMatching: dateComponents,
+                repeats: true
+            )
 
-                let request = UNNotificationRequest(
-                    identifier: "\(item.reminderNotificationID)\(i)",
-                    content: content,
-                    trigger: trigger
-                )
-                requests.append(request)
-            }
+            let request = UNNotificationRequest(
+                identifier: "\(item.reminderNotificationID)",
+                content: content,
+                trigger: trigger
+            )
+            requests.append(request)
+            
         case .monthly:
-            for i in 0 ... 3 {
-                let content = UNMutableNotificationContent()
-                content.title = "\(item.name)"
-                content.body = "It's been \(item.daysAgo + (i * 30)) days since \(item.name)!"
-                content.sound = UNNotificationSound.default
+            let content = UNMutableNotificationContent()
+            content.title = "\(item.name)"
+            content.body = "It's been another month since \(item.name)!"
+            content.sound = UNNotificationSound.default
 
-                let dateComponents = getDateComponentsFor(item: item, extraDays: Double(i) * 30)
-                let trigger = UNCalendarNotificationTrigger(
-                    dateMatching: dateComponents,
-                    repeats: false
-                )
+//                let dateComponents = getDateComponentsFor(item: item, extraDays: Double(i) * 30)
+            var dateComponents = DateComponents()
+            dateComponents.calendar = Calendar.current
+            let weekday = Calendar.current.component(.weekday, from: item.dateLastDone)
+            dateComponents.weekday = weekday
+            let weekOfMonth = Calendar.current.component(.weekOfMonth, from: item.dateLastDone)
+            dateComponents.weekOfMonth = weekOfMonth
+            dateComponents.hour = 10
+            dateComponents.minute = 0
+            
+            let trigger = UNCalendarNotificationTrigger(
+                dateMatching: dateComponents,
+                repeats: true
+            )
 
-                let request = UNNotificationRequest(
-                    identifier: "\(item.reminderNotificationID)\(i)",
-                    content: content,
-                    trigger: trigger
-                )
-                requests.append(request)
-            }
+            let request = UNNotificationRequest(
+                identifier: "\(item.reminderNotificationID)",
+                content: content,
+                trigger: trigger
+            )
+            requests.append(request)
+        
         default:
             return
         }
@@ -179,7 +198,11 @@ class NotificationManager: ObservableObject {
         center.getNotificationSettings { settings in
             if settings.authorizationStatus == .authorized {
                 for request in requests {
+                    
+                    self.center.removePendingNotificationRequests(withIdentifiers: ["\(item.reminderNotificationID)"])
                     self.center.add(request)
+                    
+                    print("🗑️ Removed pending notification requests with indetifiers \([item.reminderNotificationID])")
                     print("🔔 Added notification!")
                     print("The request is: \(request)")
                 }
