@@ -91,9 +91,12 @@ class NotificationManager: ObservableObject {
     /// Add reminders for a days since event
     /// - Parameter item: Days Since event to schedule reminders for
     func addReminderFor(item: DSItem) {
-//        var notificationsContent: [UNMutableNotificationContent]
 
         var requests: [UNNotificationRequest] = []
+        
+        // Time for the notifications is hardcoded at 10am
+        let hour = 10
+        let minute = 0
 
         switch item.reminder {
             
@@ -103,11 +106,10 @@ class NotificationManager: ObservableObject {
             content.body = "One more day since \(item.name)!"
             content.sound = UNNotificationSound.default
 
-//                let dateComponents = getDateComponentsFor(item: item, extraDays: Double(i))
             let calendar = Calendar.current
             var dateComponents = DateComponents(calendar: calendar, timeZone: TimeZone.current)
-            dateComponents.hour = 10
-            dateComponents.minute = 0
+            dateComponents.hour = hour
+            dateComponents.minute = minute
             
             let trigger = UNCalendarNotificationTrigger(
                 dateMatching: dateComponents,
@@ -127,13 +129,12 @@ class NotificationManager: ObservableObject {
             content.body = "It's been another week since \(item.name)!"
             content.sound = UNNotificationSound.default
 
-//                let dateComponents = getDateComponentsFor(item: item, extraDays: Double(i) * 7)
             var dateComponents = DateComponents()
             dateComponents.calendar = Calendar.current
             let weekday = Calendar.current.component(.weekday, from: item.dateLastDone)
             dateComponents.weekday = weekday
-            dateComponents.hour = 10
-            dateComponents.minute = 0
+            dateComponents.hour = hour
+            dateComponents.minute = minute
             
             let trigger = UNCalendarNotificationTrigger(
                 dateMatching: dateComponents,
@@ -153,15 +154,12 @@ class NotificationManager: ObservableObject {
             content.body = "It's been another month since \(item.name)!"
             content.sound = UNNotificationSound.default
 
-//                let dateComponents = getDateComponentsFor(item: item, extraDays: Double(i) * 30)
             var dateComponents = DateComponents()
             dateComponents.calendar = Calendar.current
-            let weekday = Calendar.current.component(.weekday, from: item.dateLastDone)
-            dateComponents.weekday = weekday
-            let weekOfMonth = Calendar.current.component(.weekOfMonth, from: item.dateLastDone)
-            dateComponents.weekOfMonth = weekOfMonth
-            dateComponents.hour = 10
-            dateComponents.minute = 0
+            let dayOfMonth = Calendar.current.component(.day, from: item.dateLastDone)
+            dateComponents.day = dayOfMonth
+            dateComponents.hour = hour
+            dateComponents.minute = minute
             
             let trigger = UNCalendarNotificationTrigger(
                 dateMatching: dateComponents,
