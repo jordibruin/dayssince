@@ -55,7 +55,7 @@ struct MainScreen: View {
 //                        .buttonStyle(.borderedProminent)
 //
 //                        ForEach(notificationManager.pendingNotifications, id: \.self) { notification in
-//                            Text(notification.content.title)
+//                            Text("🔔 for event: \(notification.content.title)")
 //                            Text("\(notification.trigger!)")
 //                        }
 //                    }
