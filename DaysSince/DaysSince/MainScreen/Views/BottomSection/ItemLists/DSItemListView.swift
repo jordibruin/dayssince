@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import WidgetKit
 
 struct DSItemListView: View {
     @Environment(\.dismiss) var dismiss
@@ -106,6 +107,8 @@ struct DSItemListView: View {
                 notificationManager.addReminderFor(item: items[itemIndex])
             }
         }
+        
+        WidgetCenter.shared.reloadTimelines(ofKind: "SooseeWidget")
     }
 
     func deleteEvent(_ item: DSItem) {

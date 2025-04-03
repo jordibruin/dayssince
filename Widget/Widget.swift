@@ -204,7 +204,8 @@ struct WidgetContent: TimelineEntry {
         color = item.category.color.color
 
         let daysSince = Calendar.current.numberOfDaysBetween(item.dateLastDone, and: Date.now)
-        daysNumber = daysSince
+        daysNumber = abs(daysSince)
+        
     }
 }
 
