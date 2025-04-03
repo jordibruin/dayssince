@@ -107,7 +107,7 @@ struct EventCardWidgetView: View {
         let currentDate = Date()
         let calendar = Calendar.current
 
-        let dateComponents = calendar.dateComponents([.year, .month, .day], from: event.date, to: currentDate)
+        let dateComponents = calendar.dateComponents([.year, .month, .day], from: calendar.startOfDay(for: event.date), to: calendar.startOfDay(for: currentDate))
 
         let years = dateComponents.year ?? 0
         let months = dateComponents.month ?? 0
