@@ -13,6 +13,12 @@ import WidgetKit
 struct DaysSinceApp: App {
     @StateObject var notificationManager = NotificationManager()
     @StateObject var categoryManager = CategoryManager()
+    @StateObject var reviewManager: ReviewManager
+    
+    init() {
+        let reviewManager = ReviewManager()
+        _reviewManager = StateObject(wrappedValue: reviewManager)
+    }
 
     @Environment(\.scenePhase) var scenePhase
 
@@ -21,6 +27,7 @@ struct DaysSinceApp: App {
             ContentView()
                 .environmentObject(notificationManager)
                 .environmentObject(categoryManager)
+                .environmentObject(reviewManager)
                 .onChange(of: self.scenePhase) {
                     switch $0 {
                     case .background:

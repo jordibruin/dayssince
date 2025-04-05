@@ -10,6 +10,7 @@ import SwiftUI
 
 struct AddCategorySheet: View {
     @Default(.categories) var categories
+    @Environment(\.colorScheme) var colorScheme
 
     @State var selectedName: String = ""
     @State var selectedColor: CategoryColor = .work
@@ -193,8 +194,14 @@ struct AddCategorySheet: View {
     var buttonColor: Color {
         return isCategoryCreationValid ? .accentColor : .gray
     }
-
-    var accentColor: Color { selectedColor.color }
+    
+    var accentColor: Color {
+            if selectedColor.color == .black && colorScheme == .dark {
+                return Color.white
+            } else {
+                return selectedColor.color
+            }
+        }
 }
 
 struct AddCategorySheet_Previews: PreviewProvider {

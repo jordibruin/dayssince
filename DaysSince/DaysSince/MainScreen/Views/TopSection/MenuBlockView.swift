@@ -9,12 +9,16 @@ import SwiftUI
 
 struct MenuBlockView: View {
     @Environment(\.colorScheme) var colorScheme
-
     let category: Category
-
     @Binding var items: [DSItem]
-
-    var accentColor: Color { category.color.color }
+    
+    var accentColor: Color {
+        if category.color.color == .black && colorScheme == .dark {
+            return Color(.tertiarySystemBackground)
+        } else {
+            return category.color.color
+        }
+    }
 
     var body: some View {
         ZStack(alignment: .leading) {

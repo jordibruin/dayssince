@@ -12,6 +12,8 @@ import SwiftUI
 extension Defaults.Keys {
     static let mainColor = Key<Color>("mainColor", default: Color.workColor)
     static let backgroundColor = Key<Color>("backgroundColor", default: Color.backgroundColor)
+    static let selectedThemeId = Key<String>("selectedThemeId", default: "default")
+    
     static let categories = Key<[Category]>("categories", default: [
         Category(name: "Work", emoji: "lightbulb", color: .work),
         Category(name: "Life", emoji: "leaf", color: .life),

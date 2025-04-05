@@ -15,7 +15,7 @@ struct MainBackgroundView: View {
 
     var body: some View {
         if colorScheme == .dark {
-            Color.black
+            Color(.systemBackground)
                 .ignoresSafeArea()
         } else {
             LinearGradient(

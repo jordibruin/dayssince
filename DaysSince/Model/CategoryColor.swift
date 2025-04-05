@@ -11,7 +11,7 @@ import SwiftUI
 /// Represents the color of a category. Used to store in user defaults.
 enum CategoryColor: Codable, Identifiable, Equatable, CaseIterable, Hashable {
     static var allCases: [CategoryColor] = [
-        .work, .life, .hobbies, .health, .marioBlue, .zeldaYellow, .animalCrossingsGreen, .marioRed, .animalCrossingsBrown,
+        .work, .life, .hobbies, .health, .marioBlue, .zeldaYellow, .animalCrossingsGreen, .marioRed, .animalCrossingsBrown, .black
     ]
 
     case work
@@ -23,6 +23,7 @@ enum CategoryColor: Codable, Identifiable, Equatable, CaseIterable, Hashable {
     case animalCrossingsGreen
     case marioRed
     case animalCrossingsBrown
+    case black
 
     var id: String {
         switch self {
@@ -44,6 +45,8 @@ enum CategoryColor: Codable, Identifiable, Equatable, CaseIterable, Hashable {
             return "MarioRed"
         case .animalCrossingsBrown:
             return "AnimalCrossingsBrown"
+        case .black:
+            return "Black"
         }
     }
 
@@ -67,6 +70,16 @@ enum CategoryColor: Codable, Identifiable, Equatable, CaseIterable, Hashable {
             return Color.marioRed
         case .animalCrossingsBrown:
             return Color.animalCrossingsBrown
+        case .black:
+            return Color.black
+        }
+    }
+    
+    func foregroundColor(for colorScheme: ColorScheme) -> Color {
+        if self == .black && colorScheme == .dark {
+            return Color.white
+        } else {
+            return self.color
         }
     }
 }

@@ -11,6 +11,7 @@ import WidgetKit
 struct DSItemListView: View {
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var notificationManager: NotificationManager
+    @EnvironmentObject var reviewManager: ReviewManager
 
     @Binding var items: [DSItem]
     @Binding var editItemSheet: Bool
@@ -106,6 +107,9 @@ struct DSItemListView: View {
                 notificationManager.deleteReminderFor(item: items[itemIndex])
                 notificationManager.addReminderFor(item: items[itemIndex])
             }
+            
+            // Prompt for review after date change
+            reviewManager.promptReviewAlert()
         }
         
         WidgetCenter.shared.reloadTimelines(ofKind: "SooseeWidget")

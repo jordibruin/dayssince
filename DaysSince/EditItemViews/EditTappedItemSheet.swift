@@ -10,6 +10,7 @@ import WidgetKit
 
 struct EditTappedItemSheet: View {
     @EnvironmentObject var notificationManager: NotificationManager
+    @Environment(\.colorScheme) var colorScheme
 
     @Binding var items: [DSItem]
     @Binding var editItemSheet: Bool
@@ -56,7 +57,7 @@ struct EditTappedItemSheet: View {
                     Image(systemName: "chevron.down.circle.fill")
                 }
                 .font(.title2)
-                .foregroundColor(tappedItem.category.color.color)
+                .foregroundColor(tappedItem.category.color.foregroundColor(for: colorScheme))
             }
 
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -97,7 +98,7 @@ struct EditTappedItemSheet: View {
                 } label: {
                     Text("Save")
                 }
-                .foregroundColor(tappedItem.name.isEmpty ? Color.gray : tappedItem.category.color.color)
+                .foregroundColor(tappedItem.name.isEmpty ? Color.gray : tappedItem.category.color.foregroundColor(for: colorScheme))
                 .disabled(tappedItem.name.isEmpty)
             }
 
