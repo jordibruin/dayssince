@@ -13,7 +13,8 @@ struct AddItemSheet: View {
     @Default(.categories) var categories
 
     @Environment(\.dismiss) var dismiss
-
+    @Environment(\.colorScheme) var colorScheme
+    
     @EnvironmentObject var notificationManager: NotificationManager
 
     @State private var name: String = ""
@@ -28,8 +29,13 @@ struct AddItemSheet: View {
     @Binding var items: [DSItem]
 
     var accentColor: Color {
-        selectedCategory?.color.color ?? .primary
+        if selectedCategory?.color.color == .black && colorScheme == .dark {
+            return Color.white
+        } else {
+            return selectedCategory?.color.color ?? .primary
+        }
     }
+    
 
     var body: some View {
         // Form

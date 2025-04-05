@@ -33,7 +33,7 @@ struct DSItemView: View {
         .overlay(
             RoundedRectangle(cornerRadius: 20)
                 .stroke(
-                    colorScheme == .dark ? item.category.color.color.darker() : item.category.color.color,
+                    colorScheme == .dark ? item.category.color.color == .black ? Color(.secondarySystemBackground) :  item.category.color.color.darker() : item.category.color.color,
                     lineWidth: 3
                 )
         )
@@ -125,7 +125,8 @@ struct DSItemView: View {
     @ViewBuilder
     var backgroundColor: some View {
         if colorScheme == .dark {
-            item.category.color.color.lighter(by: 0.04)
+            if item.category.color.color == .black { Color(.tertiarySystemBackground) }
+            else {item.category.color.color.lighter(by: 0.04)}
         } else if colored {
             item.category.color.color
         } else {

@@ -14,6 +14,7 @@ import SwiftUI
  */
 struct TopSection: View {
     @EnvironmentObject var categoryManager: CategoryManager
+    @EnvironmentObject var reviewManager: ReviewManager
 
     @Default(.categories) var categories
 
@@ -100,6 +101,7 @@ struct TopSection: View {
                 .onDisappear {
                     showEditCategory = false
                     selectedCategory = nil
+                    reviewManager.promptReviewAlert()
                 }
         }
         .sheet(isPresented: Binding<Bool>(

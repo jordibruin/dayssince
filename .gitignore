@@ -4,3 +4,9 @@
 
 ## User settings
 xcuserdata/
+
+# macOS
+.DS_Store
+
+# Cursor Editor
+.cursor/

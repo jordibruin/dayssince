@@ -10,16 +10,21 @@ import SwiftUI
 
 struct ColorThemeView: View {
     @Environment(\.colorScheme) var colorScheme
+    @EnvironmentObject var reviewManager: ReviewManager
 
     @Default(.mainColor) var mainColor
     @Default(.backgroundColor) var backgroundColor
+    @Default(.selectedThemeId) var selectedThemeId
 
     let mainColorTemporary: Color
     let backgroundColorTemporary: Color
+    let themeId: String
 
+    var isThemeSelected: Bool {
+        return themeId == selectedThemeId
+    }
+    
     var body: some View {
-        let isThemeSelected = (colorEquals(mainColorTemporary, mainColor) || colorEquals(backgroundColorTemporary, backgroundColor))
-
         Circle()
             .frame(width: 72, height: 72)
             .overlay {
@@ -41,9 +46,12 @@ struct ColorThemeView: View {
                 generator.impactOccurred()
 
                 withAnimation {
+                    selectedThemeId = themeId
                     mainColor = mainColorTemporary
                     backgroundColor = backgroundColorTemporary
                 }
+                
+                reviewManager.promptReviewAlert()
             }
             .transition(.opacity)
     }
@@ -60,7 +68,7 @@ struct ColorThemeView: View {
 
 struct ColorThemeView_Previews: PreviewProvider {
     static var previews: some View {
-        ColorThemeView(mainColorTemporary: Color.workColor, backgroundColorTemporary: Color.backgroundColor)
-        ColorThemeView(mainColorTemporary: Color.workColor, backgroundColorTemporary: Color.backgroundColor)
+        ColorThemeView(mainColorTemporary: Color.workColor, backgroundColorTemporary: Color.backgroundColor, themeId: "default")
+        ColorThemeView(mainColorTemporary: Color.workColor, backgroundColorTemporary: Color.backgroundColor, themeId: "default")
     }
 }

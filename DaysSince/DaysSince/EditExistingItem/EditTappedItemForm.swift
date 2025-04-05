@@ -9,6 +9,7 @@ import SwiftUI
 
 struct EditTappedItemForm: View {
     @Environment(\.dismiss) var dismiss
+    @Environment(\.colorScheme) var colorScheme
 
     @EnvironmentObject var notificationManager: NotificationManager
 
@@ -18,7 +19,13 @@ struct EditTappedItemForm: View {
     @Binding var showCategorySheet: Bool
 
     var category: Category { tappedItem.category }
-    var accentColor: Color { category.color.color }
+    var accentColor: Color {
+        if category.color.color == .black && colorScheme == .dark {
+            return Color.white
+        } else {
+            return category.color.color
+        }
+    }
 
     @FocusState.Binding var nameIsFocused: Bool
     @State var showConfirmDelete = false

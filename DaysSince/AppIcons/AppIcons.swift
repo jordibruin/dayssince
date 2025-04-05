@@ -11,7 +11,7 @@ import SwiftUI
 struct AppIcons: View {
     @Environment(\.dismiss) var dismiss
 //    @EnvironmentObject var store: Store
-//    @EnvironmentObject var reviewManager: ReviewManager
+    @EnvironmentObject var reviewManager: ReviewManager
 
     @Default(.mainColor) var mainColor
 
@@ -78,7 +78,7 @@ struct AppIcons: View {
                         return
                     }
 
-//                    self.reviewManager.promptReviewAlert()
+                    self.reviewManager.promptReviewAlert()
                 }
             }
 

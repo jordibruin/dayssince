@@ -9,7 +9,8 @@ import SwiftUI
 
 struct EditCategorySheet: View {
     @Default(.categories) var categories
-
+    @Environment(\.colorScheme) var colorScheme
+    
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var categoryManager: CategoryManager
     
@@ -205,7 +206,13 @@ struct EditCategorySheet: View {
         return isCategoryCreationValid ? .accentColor : .gray
     }
 
-    var accentColor: Color { selectedColor.color }
+    var accentColor: Color {
+        if selectedColor.color == .black && colorScheme == .dark {
+            return Color.white
+        } else {
+            return selectedColor.color
+        }
+    }
 }
 
 import Defaults
