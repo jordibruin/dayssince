@@ -160,9 +160,13 @@ struct MultipleEventsProvider: IntentTimelineProvider {
 
         
         // The view will display however many were actually selected (up to 5).
-
         // Create the timeline entry with the fetched events
-        let entry = MultipleEventsEntry(date: Date(), events: selectedEvents)
+        var entry = MultipleEventsEntry(date: Date(), events: [WidgetContent(date: Date(), name: "No events", id: UUID(), color: .green, daysNumber: 4)])
+        
+        if !selectedEvents.isEmpty {
+            entry = MultipleEventsEntry(date: Date(), events: selectedEvents)
+        }
+        
         let timeline = Timeline(entries: [entry], policy: .atEnd)
         completion(timeline)
     }
