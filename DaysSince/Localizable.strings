@@ -6,5 +6,5 @@
   
 */
 
-"widget.title" = "Event Widget";
-"widget.explanation" = "Display the details of an event.";
+"widget.title.singleEvent" = "Event Widget";
+"widget.explanation.singleEvent" = "Display the details of an event.";
