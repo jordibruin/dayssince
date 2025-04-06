@@ -23,7 +23,7 @@ struct DaysSinceApp: App {
         config.defaultSignalPrefix = "DaysSince."
         config.testMode = isSimulatorOrTestFlight()
         TelemetryDeck.initialize(config: config)
-        Analytics.send(.launchApp)
+//        Analytics.send(.launchApp)
     }
 
     @Environment(\.scenePhase) var scenePhase
