@@ -50,7 +50,9 @@ struct AppIcons: View {
 
     func iconView(icon: AlternativeIcon) -> some View {
         Button {
-//            Analytics.hit(.chooseIcon(icon.name))
+            
+            Analytics.send(.chooseIcon, with: ["iconName": icon.iconName])
+            
             if icon.iconName == UIApplication.shared.alternateIconName {
                 return
             }

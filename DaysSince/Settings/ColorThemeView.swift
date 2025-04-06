@@ -42,6 +42,8 @@ struct ColorThemeView: View {
             )
             .clipShape(RoundedRectangle(cornerRadius: 24))
             .onTapGesture {
+                Analytics.send(.chooseTheme, with: ["themeId": themeId])
+                
                 let generator = UIImpactFeedbackGenerator(style: .medium)
                 generator.impactOccurred()
 

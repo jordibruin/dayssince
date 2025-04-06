@@ -27,6 +27,8 @@ class CategoryManager: ObservableObject {
     func addCategory(name: String, emoji: String, color: CategoryColor) {
         let newCategory = Category(name: name, emoji: emoji, color: color)
         categories.append(newCategory)
+        
+        Analytics.send(.addNewCategory, with: ["emoji": emoji, "color": color.id])
     }
 
     /// Delete a category
@@ -82,6 +84,9 @@ class CategoryManager: ObservableObject {
                 }
             }
         }
+        
+        Analytics.send(.updateCategory, with: ["emoji": emoji, "color": color.id])
+        
         objectWillChange.send()
     }
 

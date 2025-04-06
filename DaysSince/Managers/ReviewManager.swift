@@ -30,7 +30,7 @@ class ReviewManager: ObservableObject {
             print("Requesting review for version \(currentVersion)")
             SKStoreReviewController.requestReview(in: scene)
             
-//            Analytics.send(.reviewPrompt)
+            Analytics.send(.reviewPrompt)
         }
         
         latestVersionThatReviewWasAskedFor = currentVersion

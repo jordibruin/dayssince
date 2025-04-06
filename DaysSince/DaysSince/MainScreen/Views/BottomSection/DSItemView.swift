@@ -140,6 +140,7 @@ struct DSItemView: View {
             Spacer()
             daysAgoText
                 .onTapGesture {
+                    if isDaysDisplayModeDetailed {Analytics.send(.detailedModeOn)}
                     withAnimation {
                         isDaysDisplayModeDetailed.toggle()
                     }

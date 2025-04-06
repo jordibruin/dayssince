@@ -8,6 +8,7 @@
 import Defaults
 import SwiftUI
 import WidgetKit
+import TelemetryDeck
 
 @main
 struct DaysSinceApp: App {
@@ -18,6 +19,11 @@ struct DaysSinceApp: App {
     init() {
         let reviewManager = ReviewManager()
         _reviewManager = StateObject(wrappedValue: reviewManager)
+        let config = TelemetryDeck.Config(appID: "FBE58244-22B0-4207-9ED7-052DEB5B8A26")
+        config.defaultSignalPrefix = "DaysSince."
+        config.testMode = isSimulatorOrTestFlight()
+        TelemetryDeck.initialize(config: config)
+        Analytics.send(.launchApp)
     }
 
     @Environment(\.scenePhase) var scenePhase

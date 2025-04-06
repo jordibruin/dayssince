@@ -94,7 +94,7 @@
 		7AF56AFD286F32CD0068B467 /* ChangelogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF56AD0286F32CD0068B467 /* ChangelogView.swift */; };
 		7AF56AFE286F32CD0068B467 /* SupportHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF56AD2286F32CD0068B467 /* SupportHeaderView.swift */; };
 		7AF56AFF286F32CD0068B467 /* SupportHeaderSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF56AD3286F32CD0068B467 /* SupportHeaderSection.swift */; };
-		7AF56B00286F32CD0068B467 /* Analytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF56AD5286F32CD0068B467 /* Analytics.swift */; };
+		7AF56B00286F32CD0068B467 /* AnalyticsOld.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF56AD5286F32CD0068B467 /* AnalyticsOld.swift */; };
 		C255EB67289A725100282E7B /* Widget.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = C255EB6B289A725100282E7B /* Widget.intentdefinition */; };
 		C255EB68289A725100282E7B /* Widget.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = C255EB6B289A725100282E7B /* Widget.intentdefinition */; };
 		C255EB69289A725100282E7B /* Widget.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = C255EB6B289A725100282E7B /* Widget.intentdefinition */; };
@@ -136,6 +136,8 @@
 		C2B53DE2286A080900407F40 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7A2A76F727F24470006F0470 /* Assets.xcassets */; };
 		C2B53DE3286A080A00407F40 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7A2A76F727F24470006F0470 /* Assets.xcassets */; };
 		D47457F42DA112DF00561C4E /* Bundle+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47457F32DA112DF00561C4E /* Bundle+Extensions.swift */; };
+		D4DE5C932DA2A43300C5EA63 /* TelemetryDeck in Frameworks */ = {isa = PBXBuildFile; productRef = D4DE5C922DA2A43300C5EA63 /* TelemetryDeck */; };
+		D4DE5C952DA2A5A600C5EA63 /* Analytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4DE5C942DA2A5A600C5EA63 /* Analytics.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -251,7 +253,7 @@
 		7AF56AD0286F32CD0068B467 /* ChangelogView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangelogView.swift; sourceTree = "<group>"; };
 		7AF56AD2286F32CD0068B467 /* SupportHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SupportHeaderView.swift; sourceTree = "<group>"; };
 		7AF56AD3286F32CD0068B467 /* SupportHeaderSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SupportHeaderSection.swift; sourceTree = "<group>"; };
-		7AF56AD5286F32CD0068B467 /* Analytics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Analytics.swift; sourceTree = "<group>"; };
+		7AF56AD5286F32CD0068B467 /* AnalyticsOld.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnalyticsOld.swift; sourceTree = "<group>"; };
 		C255EB6A289A725100282E7B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; name = Base; path = Base.lproj/Widget.intentdefinition; sourceTree = "<group>"; };
 		C255EB6D289A725300282E7B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Widget.strings; sourceTree = "<group>"; };
 		C2B53D742869CA1000407F40 /* CategoryDSItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CategoryDSItem.swift; path = DaysSince/DaysSince/Model/CategoryDSItem.swift; sourceTree = SOURCE_ROOT; };
@@ -284,6 +286,7 @@
 		C2B53DE02869FCF700407F40 /* WidgetIntents.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = WidgetIntents.entitlements; sourceTree = "<group>"; };
 		C2B53DE1286A002000407F40 /* WidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = WidgetExtension.entitlements; sourceTree = "<group>"; };
 		D47457F32DA112DF00561C4E /* Bundle+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+Extensions.swift"; sourceTree = "<group>"; };
+		D4DE5C942DA2A5A600C5EA63 /* Analytics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Analytics.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -297,6 +300,7 @@
 			files = (
 				7A227DE32B1BA7D300C378A2 /* WishKit in Frameworks */,
 				7AB3BC852ABF917C00549CD9 /* Defaults in Frameworks */,
+				D4DE5C932DA2A43300C5EA63 /* TelemetryDeck in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -352,6 +356,7 @@
 				7A2A770B27F26E14006F0470 /* Extensions */,
 				7A2A770127F25156006F0470 /* Model */,
 				7A2A76F327F2446E006F0470 /* DaysSinceApp.swift */,
+				D4DE5C942DA2A5A600C5EA63 /* Analytics.swift */,
 				7A2A76F527F2446E006F0470 /* ContentView.swift */,
 				D47457F02DA1128A00561C4E /* Managers */,
 				7AAB507027FF83CC0086A5A8 /* Screens */,
@@ -648,7 +653,7 @@
 		7AF56AD4286F32CD0068B467 /* Analytics */ = {
 			isa = PBXGroup;
 			children = (
-				7AF56AD5286F32CD0068B467 /* Analytics.swift */,
+				7AF56AD5286F32CD0068B467 /* AnalyticsOld.swift */,
 			);
 			path = Analytics;
 			sourceTree = "<group>";
@@ -780,6 +785,7 @@
 			packageProductDependencies = (
 				7AB3BC842ABF917C00549CD9 /* Defaults */,
 				7A227DE22B1BA7D300C378A2 /* WishKit */,
+				D4DE5C922DA2A43300C5EA63 /* TelemetryDeck */,
 			);
 			productName = DaysSince;
 			productReference = 7A2A76F027F2446E006F0470 /* DaysSince.app */;
@@ -858,6 +864,7 @@
 			packageReferences = (
 				7AB3BC832ABF917C00549CD9 /* XCRemoteSwiftPackageReference "Defaults" */,
 				7A227DE12B1BA7D300C378A2 /* XCRemoteSwiftPackageReference "wishkit-ios" */,
+				D4DE5C912DA2A43300C5EA63 /* XCRemoteSwiftPackageReference "SwiftSDK" */,
 			);
 			productRefGroup = 7A2A76F127F2446E006F0470 /* Products */;
 			projectDirPath = "";
@@ -952,7 +959,7 @@
 				14CAC90829B26ED900DF3C24 /* UIApplication+Extensions.swift in Sources */,
 				7AF56AE0286F32CD0068B467 /* HooliganColor+Extensions.swift in Sources */,
 				7A67C6E0280061FA0095675F /* Color+Extensions.swift in Sources */,
-				7AF56B00286F32CD0068B467 /* Analytics.swift in Sources */,
+				7AF56B00286F32CD0068B467 /* AnalyticsOld.swift in Sources */,
 				7AB3BC872ABF91C000549CD9 /* Defaults+Extension+Colors.swift in Sources */,
 				C2B53DA02869CD3C00407F40 /* EditTappedItemForm.swift in Sources */,
 				7A007CB72800885700985108 /* CategoryFilteredView.swift in Sources */,
@@ -1012,6 +1019,7 @@
 				C2B53D7A2869CA3B00407F40 /* AddItemForm.swift in Sources */,
 				C2B53D7E2869CA8300407F40 /* CategoryRectangleView.swift in Sources */,
 				7AF56AEE286F32CD0068B467 /* HighlightedItem.swift in Sources */,
+				D4DE5C952DA2A5A600C5EA63 /* Analytics.swift in Sources */,
 				C2B53D772869CA1F00407F40 /* DSItemReminders.swift in Sources */,
 				7AF56AE3286F32CD0068B467 /* HooliganString+Extensions.swift in Sources */,
 				C2B53D962869CACA00407F40 /* DSItemListView.swift in Sources */,
@@ -1211,7 +1219,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = DaysSince/DaysSince.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_ASSET_PATHS = "\"DaysSince/Preview Content\"";
 				DEVELOPMENT_TEAM = 8Q7TMPA46J;
 				ENABLE_PREVIEWS = YES;
@@ -1248,7 +1256,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = DaysSince/DaysSince.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_ASSET_PATHS = "\"DaysSince/Preview Content\"";
 				DEVELOPMENT_TEAM = 8Q7TMPA46J;
 				ENABLE_PREVIEWS = YES;
@@ -1446,6 +1454,14 @@
 				kind = branch;
 			};
 		};
+		D4DE5C912DA2A43300C5EA63 /* XCRemoteSwiftPackageReference "SwiftSDK" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/TelemetryDeck/SwiftSDK";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.9.2;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1468,6 +1484,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 7AB3BC832ABF917C00549CD9 /* XCRemoteSwiftPackageReference "Defaults" */;
 			productName = Defaults;
+		};
+		D4DE5C922DA2A43300C5EA63 /* TelemetryDeck */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D4DE5C912DA2A43300C5EA63 /* XCRemoteSwiftPackageReference "SwiftSDK" */;
+			productName = TelemetryDeck;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
