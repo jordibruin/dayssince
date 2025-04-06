@@ -136,6 +136,7 @@
 		C2B53DE2286A080900407F40 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7A2A76F727F24470006F0470 /* Assets.xcassets */; };
 		C2B53DE3286A080A00407F40 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7A2A76F727F24470006F0470 /* Assets.xcassets */; };
 		D43DE5662DA32960008A5A8D /* SingleEventWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D43DE5652DA32960008A5A8D /* SingleEventWidgetView.swift */; };
+		D43DE5682DA32C51008A5A8D /* MultipleEventsWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D43DE5672DA32C51008A5A8D /* MultipleEventsWidgetView.swift */; };
 		D47457F42DA112DF00561C4E /* Bundle+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47457F32DA112DF00561C4E /* Bundle+Extensions.swift */; };
 /* End PBXBuildFile section */
 
@@ -285,6 +286,7 @@
 		C2B53DE02869FCF700407F40 /* WidgetIntents.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = WidgetIntents.entitlements; sourceTree = "<group>"; };
 		C2B53DE1286A002000407F40 /* WidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = WidgetExtension.entitlements; sourceTree = "<group>"; };
 		D43DE5652DA32960008A5A8D /* SingleEventWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleEventWidgetView.swift; sourceTree = "<group>"; };
+		D43DE5672DA32C51008A5A8D /* MultipleEventsWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipleEventsWidgetView.swift; sourceTree = "<group>"; };
 		D47457F32DA112DF00561C4E /* Bundle+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+Extensions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -740,6 +742,7 @@
 			children = (
 				C2B53DB32869F0CE00407F40 /* Widget.swift */,
 				D43DE5652DA32960008A5A8D /* SingleEventWidgetView.swift */,
+				D43DE5672DA32C51008A5A8D /* MultipleEventsWidgetView.swift */,
 				C255EB6B289A725100282E7B /* Widget.intentdefinition */,
 				C2B53DB62869F0CF00407F40 /* Assets.xcassets */,
 				C2B53DB82869F0CF00407F40 /* Info.plist */,
@@ -1040,6 +1043,7 @@
 				C2B53DDD2869F74100407F40 /* Array+Extensions.swift in Sources */,
 				C2B53DC32869F35600407F40 /* CategoryDSItem.swift in Sources */,
 				C2B53DC62869F36A00407F40 /* Color+Extensions.swift in Sources */,
+				D43DE5682DA32C51008A5A8D /* MultipleEventsWidgetView.swift in Sources */,
 				C2B53DC22869F1AA00407F40 /* DSItem.swift in Sources */,
 				C2B53DC52869F36100407F40 /* Calendar+Extensions.swift in Sources */,
 			);

@@ -91,7 +91,7 @@ struct EditTappedItemSheet: View {
                         notificationManager.addReminderFor(item: items[itemIndex])
                     }
 
-                    WidgetCenter.shared.reloadTimelines(ofKind: "SooseeWidget")
+                    WidgetCenter.shared.reloadAllTimelines()
                     
                     editItemSheet = false
                     dismiss()

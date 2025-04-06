@@ -6,5 +6,7 @@
   
 */
 
-"widget.title.singleEvent" = "Event Widget";
-"widget.explanation.singleEvent" = "Display the details of an event.";
+"widget.singleEvent.title" = "Event Widget";
+"widget.singleEvent.explanation" = "Display the details of an event.";
+"widget.multiEvent.title" = "Multiple Events Widget";
+"widget.multiEvent.explanation" = "Display the details of up to 5 events.";
