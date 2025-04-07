@@ -18,21 +18,67 @@ struct EventCardWidgetView: View {
 
     @ViewBuilder
     var body: some View {
-        ZStack(alignment: .leading) {
-            if colorScheme == .dark {
-                event.color.lighter(by: 0.04)
-            } else {
-                Color.white
+        switch family {
+        case .accessoryCircular:
+            VStack {
+                if event.name == "No event" {
+                    Text("Tap to select!")
+                } else {
+                    Text("\(event.daysNumber)")
+                        .font(.system(.title, design: .rounded))
+                        .bold()
+                        .widgetAccentable()
+                    Text(event.daysNumber > 0 ? "days" : "day")
+                        .fontDesign(.rounded)
+                }
             }
-            itemContent
+            .widgetBackground(Color.clear)
+        case .accessoryInline:
+            Group {
+                if event.name == "No event" {
+                    Text("Tap to select event!")
+                } else {
+                    Text("\(event.daysNumber) \(event.daysNumber > 0 ? "days" : "day") since \(event.name) ")
+                }
+            }
+            .widgetBackground(Color.clear)
+        case .accessoryRectangular:
+            HStack {
+                if event.name == "No event" {
+                    Text("Tap to select event!")
+                } else {
+                    Text(event.name)
+                        .font(.system(.headline, design: .rounded))
+                    Spacer()
+                    VStack {
+                        Text("\(event.daysNumber)")
+                            .fontDesign(.rounded)
+                            .bold()
+                            .widgetAccentable()
+                        Text(event.daysNumber > 0 ? "days" : "day")
+                            .fontDesign(.rounded)
+                    }
+                }
+            }
+            
+            .widgetBackground(Color.clear)
+        default:
+            ZStack(alignment: .leading) {
+                if colorScheme == .dark {
+                    event.color.lighter(by: 0.04)
+                } else {
+                    Color.white
+                }
+                itemContent
+            }
+            .clipShape(RoundedRectangle(cornerRadius: 23))
+            .overlay(
+                RoundedRectangle(cornerRadius: 23)
+                    .stroke(colorScheme == .dark ? event.color.darker() : event.color, lineWidth: 6)
+            )
+            .shadow(color: Color.black.opacity(0.05), radius: 20, x: 0, y: 0)
+            .widgetBackground(Color.clear) // Widgets changed with iOS 17, need to set the background to make them work
         }
-        .clipShape(RoundedRectangle(cornerRadius: 23))
-        .overlay(
-            RoundedRectangle(cornerRadius: 23)
-                .stroke(colorScheme == .dark ? event.color.darker() : event.color, lineWidth: 6)
-        )
-        .shadow(color: Color.black.opacity(0.05), radius: 20, x: 0, y: 0)
-        .widgetBackground(Color.clear) // Widgets changed with iOS 17, need to set the background to make them work
     }
 
     var nameText: some View {
@@ -111,7 +157,7 @@ struct EventCardWidgetView: View {
 
     var itemContent: some View {
         VStack(alignment: .leading) {
-            if event.name != "No events" {
+            if event.name != "No event" {
                 daysAgoText
             }
 

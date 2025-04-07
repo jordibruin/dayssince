@@ -79,7 +79,8 @@ struct MultipleEventsWidgetView: View {
             .font(.system(.headline, design: .rounded))
             .bold()
             .foregroundColor(colorScheme == .dark ? .primary : event.color)
-            .minimumScaleFactor(0.2) // Text fits in widget
+            .lineLimit(2)
+            .minimumScaleFactor(0.6) // Text fits in widget
     }
     
     @ViewBuilder

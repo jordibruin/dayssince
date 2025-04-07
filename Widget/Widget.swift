@@ -43,7 +43,7 @@ struct Provider: IntentTimelineProvider {
             let content = WidgetContent(item: matchingEvent)
             completion(Timeline(entries: [content], policy: .atEnd))
         } else {
-            let content = WidgetContent(date: Date(), name: "No events", id: UUID(), color: .green, daysNumber: 4)
+            let content = WidgetContent(date: Date(), name: "No event", id: UUID(), color: .green, daysNumber: 4)
             completion(Timeline(entries: [content], policy: .atEnd))
         }
     }
@@ -62,7 +62,7 @@ struct SingleEventWidget: Widget {
         }
         .configurationDisplayName(LocalizedStringKey("widget.singleEvent.title"))
         .description(LocalizedStringKey("widget.singleEvent.explanation"))
-        .supportedFamilies([.systemSmall, .systemMedium])
+        .supportedFamilies([.systemSmall, .systemMedium, .accessoryCircular, .accessoryInline, .accessoryRectangular])
         .contentMarginsDisabled() // iOS17 widgets force additional margin padding on your design
     }
 }
