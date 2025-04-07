@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+import WidgetKit
 
 struct EventCardWidgetView: View {
     let event: WidgetContent
@@ -122,6 +122,17 @@ struct EventCardWidgetView: View {
     }
 }
 
-#Preview {
-    EventCardWidgetView(event: WidgetContent(date: Date.now, name: "Test event", id: UUID(), color: .workColor, daysNumber: 7))
+struct EventCardWidgetView_Previews: PreviewProvider {
+    static var previews: some View {
+        Group {
+            EventCardWidgetView(event: WidgetContent(date: Date.now, name: "Test event", id: UUID(), color: .workColor, daysNumber: 7))
+                .previewContext(WidgetPreviewContext(family: .systemSmall))
+                .previewDisplayName("Small Widget")
+            
+            EventCardWidgetView(event: WidgetContent(date: Date.now, name: "Test event", id: UUID(), color: .workColor, daysNumber: 7))
+                .previewContext(WidgetPreviewContext(family: .systemMedium))
+                .previewDisplayName("Medium Widget")
+                .environment(\.colorScheme, .dark)
+        }
+    }
 }

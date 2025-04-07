@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import WidgetKit
 
 struct MultipleEventsWidgetView: View {
     let entry: MultipleEventsEntry
@@ -34,33 +35,27 @@ struct MultipleEventsWidgetView: View {
     }
 
     var body: some View {
-        ZStack(alignment: .leading) {
-            if colorScheme == .dark {
-                backgroundColor
-            } else {
-                Color.white
-            }
-            
+        GeometryReader { geometry in
             VStack(alignment: .leading, spacing: 2) { 
                 // Iterate over all available events (up to 5), removing the prefix limit
                 ForEach(entry.events) { event in
                     itemContent(for: event)
-                    
-//                    // Add divider logic, checking against last ID
-//                    if event.id != entry.events.last?.id {
-//                         Divider().background(borderColor.opacity(0.5))
-//                    }
                 }
-//                Spacer() // Push content to top
             }
-            .padding(4)
+//            .aspectRatio(contentMode: .fit)
+            .padding()
+            .padding(.bottom, 6)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(colorScheme == .dark ? backgroundColor : Color.white)
+            
         }
         .clipShape(RoundedRectangle(cornerRadius: 23))
         .overlay(
             RoundedRectangle(cornerRadius: 23)
                 .stroke(borderColor, lineWidth: 6)
         )
-        .widgetBackground(Color.clear) // iOS 17 background handling
+        .shadow(color: Color.black.opacity(0.05), radius: 20, x: 0, y: 0)
+        .widgetBackground(Color.clear)
     }
     
     @ViewBuilder
@@ -68,6 +63,7 @@ struct MultipleEventsWidgetView: View {
         
         HStack(alignment: .center) {
             nameText(for: event)
+                .minimumScaleFactor(0.2)
             
             Spacer()
             
@@ -80,10 +76,10 @@ struct MultipleEventsWidgetView: View {
     
     func nameText(for event: WidgetContent) -> some View {
         Text(event.name)
-            .font(.system(.subheadline, design: .rounded))
+            .font(.system(.headline, design: .rounded))
             .bold()
             .foregroundColor(colorScheme == .dark ? .primary : event.color)
-            .minimumScaleFactor(0.6) // Text fits in widget
+            .minimumScaleFactor(0.2) // Text fits in widget
     }
     
     @ViewBuilder
@@ -100,59 +96,54 @@ struct MultipleEventsWidgetView: View {
         if isDaysDisplayModeDetailed {
             HStack(alignment: .top, spacing: 6) {
                 if years > 0 {
-                    VStack(alignment: .center) {
-                        Text("\(years)")
-                            .font(.system(.subheadline, design: .rounded))
-                            .bold()
-                            .foregroundColor(colorScheme == .dark ? .primary : event.color)
-
-                        Text(years == 1 ? "year" : "years")
-                            .font(.system(years > 9 || months > 9 ? .caption : .caption, design: .rounded))
-                            .foregroundColor(colorScheme == .dark ? .primary : event.color)
-                    }
+                    timeUnitView(value: years, unit: years == 1 ? "year" : "years", color: event.color)
                 }
 
                 if months > 0 || years > 0 {
-                    VStack(alignment: .center) {
-                        Text("\(months)")
-                            .font(.system(.subheadline, design: .rounded))
-                            .bold()
-                            .foregroundColor(colorScheme == .dark ? .primary : event.color)
-
-                        Text(months == 1 ? "month" : "months")
-                            .font(.system(years > 0 ? .caption2 : .caption, design: .rounded))
-                            .foregroundColor(colorScheme == .dark ? .primary : event.color)
-                    }
+                    timeUnitView(value: months, unit: months == 1 ? "month" : "months", color: event.color)
                 }
 
-                VStack(alignment: .center) {
-                    Text("\(days)")
-                        .font(.system(.subheadline, design: .rounded))
-                        .bold()
-                        .foregroundColor(colorScheme == .dark ? .primary : event.color)
-
-                    Text(days == 1 ? "day" : "days")
-                        .font(.system(years > 0 ? .caption : .caption, design: .rounded))
-                        .foregroundColor(colorScheme == .dark ? .primary : event.color)
-                }
+               
+                timeUnitView(value: days, unit: days == 1 ? "day" : "days", color: event.color)
+                
             }
-            .padding(.trailing, 0)
+//            .padding(.trailing, 0)
         } else {
-            VStack(alignment: .center) {
-                Text("\(event.daysNumber)")
-                    .font(.system(event.daysNumber > 9999 ? .title3 : .subheadline, design: .rounded))
-                    .bold()
-                    .foregroundColor(colorScheme == .dark ? .primary : event.color)
+            timeUnitView(value: event.daysNumber, unit: "days", color: event.color)
+                .frame(width: event.daysNumber > 999 ? 60 : event.daysNumber > 99 ? 45 : 35)
+            
+        }
+    }
+    
+    private func timeUnitView(value: Int, unit: String, color: Color) -> some View {
+        VStack(alignment: .center, spacing: 0) {
+            Text("\(value)")
+                .font(.system(.title2, design: .rounded))
+                .bold()
+                .minimumScaleFactor(0.7)
+                .foregroundColor(colorScheme == .dark ? .primary : color)
+                .lineLimit(1)
 
-                Text("days")
-                    .font(.system(.footnote, design: .rounded))
-                    .foregroundColor(colorScheme == .dark ? .primary : event.color)
-            }
-            .frame(width: event.daysNumber > 999 ? 70 : event.daysNumber > 99 ? 50 : 40)
+            Text(unit)
+                .font(.system(.caption, design: .rounded))
+                .minimumScaleFactor(0.4)
+                .foregroundColor(colorScheme == .dark ? .primary : color)
+                .lineLimit(1)
         }
     }
 }
 
-//#Preview {
-//    MultipleEventsWidgetView()
-//}
+struct MultipleEventsWidgetView_Previews: PreviewProvider {
+    static var previews: some View {
+        Group {
+            MultipleEventsWidgetView(entry: MultipleEventsEntry.snapshot())
+                .previewContext(WidgetPreviewContext(family: .systemMedium))
+                .previewDisplayName("Medium Widget")
+            
+            MultipleEventsWidgetView(entry: MultipleEventsEntry.snapshot())
+                .previewContext(WidgetPreviewContext(family: .systemLarge))
+                .previewDisplayName("Large Widget (Dark)")
+                .environment(\.colorScheme, .dark)
+        }
+    }
+}
