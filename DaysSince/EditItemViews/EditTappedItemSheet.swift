@@ -81,17 +81,14 @@ struct EditTappedItemSheet: View {
                         notificationManager.deleteReminderFor(item: items[itemIndex])
                     } else {
                         // If the user changed the frequency update the trigger.
-//                        if items[itemIndex].reminder != tappedItem.reminder {
-//                            notificationManager.deleteReminderFor(item: items[itemIndex])
-//                            items[itemIndex].reminder = tappedItem.reminder
-//                            notificationManager.addReminderFor(item: items[itemIndex])
-//                        }
                         notificationManager.deleteReminderFor(item: items[itemIndex])
                         items[itemIndex].reminder = tappedItem.reminder
                         notificationManager.addReminderFor(item: items[itemIndex])
                     }
 
                     WidgetCenter.shared.reloadAllTimelines()
+                    
+                    Analytics.send(.editEvent, with: ["remindersEnabled": String(items[itemIndex].remindersEnabled)])
                     
                     editItemSheet = false
                     dismiss()

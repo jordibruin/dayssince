@@ -15,6 +15,7 @@ struct ShareButton: View {
 
     var body: some View {
         Button {
+            Analytics.send(.settingsReview)
             showShare = true
         } label: {
             HStack {

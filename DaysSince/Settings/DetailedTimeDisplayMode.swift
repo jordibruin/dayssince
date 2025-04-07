@@ -51,6 +51,12 @@ struct DetailedTimeDisplayModeCell: View {
         Toggle("Detailed Time Display Mode", isOn: $isDaysDisplayModeDetailed)
             .tint(mainColor)
             .labelsHidden()
+            .onChange(of: isDaysDisplayModeDetailed) { isDaysDisplayModeDetailed in
+                if isDaysDisplayModeDetailed {
+                    Analytics.send(.detailedModeOn)
+                }
+            }
+                
     }
 }
 

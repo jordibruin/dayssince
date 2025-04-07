@@ -71,6 +71,8 @@ struct AddItemSheet: View {
 
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
+                    Analytics.send(.addNewEvent, with: ["remindersEnabled": String(remindersEnabled)])
+                    
                     let newItem = DSItem(
                         id: UUID(),
                         name: name,
