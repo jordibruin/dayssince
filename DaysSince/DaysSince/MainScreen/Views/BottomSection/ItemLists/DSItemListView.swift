@@ -112,7 +112,7 @@ struct DSItemListView: View {
             reviewManager.promptReviewAlert()
         }
         
-        WidgetCenter.shared.reloadTimelines(ofKind: "SooseeWidget")
+        WidgetCenter.shared.reloadAllTimelines()
     }
 
     func deleteEvent(_ item: DSItem) {

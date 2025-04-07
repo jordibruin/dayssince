@@ -12,6 +12,7 @@
 			<array/>
 			<key>IntentsSupported</key>
 			<array>
+				<string>SelectMultipleEventsIntent</string>
 				<string>SelectEventIntent</string>
 			</array>
 		</dict>

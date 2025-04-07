@@ -9,48 +9,11 @@ import Defaults
 import SwiftUI
 import WidgetKit
 
-// let snapshotEntry = WidgetContent()
 
-struct Provider: IntentTimelineProvider {
-    @AppStorage("items", store: UserDefaults(suiteName: "group.goodsnooze.dayssince")) var items: [DSItem] = []
+// MARK: - Single Event Widget
 
-//    var travelCardsManager = TravelCardsManager.shared
-
-    func placeholder(in _: Context) -> WidgetContent {
-        let content = WidgetContent(date: Date(), name: "Adopted Leo 🐱", id: UUID(), color: Color.lifeColor, daysNumber: 237)
-
-        return content
-    }
-
-    public func getSnapshot(
-        for _: SelectEventIntent,
-        in _: Context,
-        completion: @escaping (WidgetContent) -> Void
-    ) {
-        let content = WidgetContent(date: Date(), name: "Adopted Charlie 🐶", id: UUID(), color: .green, daysNumber: 45)
-        completion(content)
-    }
-
-    public func getTimeline(
-        for configuration: SelectEventIntent,
-        in _: Context,
-        completion: @escaping (Timeline<WidgetContent>) -> Void
-    ) {
-        let eventId = configuration.event?.identifier ?? ""
-
-        if let matchingEvent = items.first(where: { $0.id.uuidString == eventId }) {
-            let content = WidgetContent(item: matchingEvent)
-            completion(Timeline(entries: [content], policy: .atEnd))
-        } else {
-            let content = WidgetContent(date: Date(), name: "No events", id: UUID(), color: .green, daysNumber: 4)
-            completion(Timeline(entries: [content], policy: .atEnd))
-        }
-    }
-}
-
-@main
-struct SooseeWidget: Widget {
-    let kind: String = "SooseeWidget"
+struct SingleEventWidget: Widget {
+    let kind: String = "SingleEventWidget"
 
     public var body: some WidgetConfiguration {
         IntentConfiguration(
@@ -59,153 +22,68 @@ struct SooseeWidget: Widget {
             provider: Provider()
         ) { entry in
             EventCardWidgetView(event: entry)
-//            TravelCardWidgetView(viewModel: TravelCardWidgetViewModel(content: entry))
         }
-        .configurationDisplayName(LocalizedStringKey("widget.title"))
-        .description(LocalizedStringKey("widget.explanation"))
+        .configurationDisplayName(LocalizedStringKey("widget.singleEvent.title"))
+        .description(LocalizedStringKey("widget.singleEvent.explanation"))
+        .supportedFamilies([.systemSmall, .systemMedium, .accessoryCircular, .accessoryInline, .accessoryRectangular])
         .contentMarginsDisabled() // iOS17 widgets force additional margin padding on your design
     }
 }
 
-struct EventCardWidgetView: View {
-    let event: WidgetContent
 
-    @Environment(\.widgetFamily) var family
-    @Environment(\.colorScheme) var colorScheme
 
-    @AppStorage("isDaysDisplayModeDetailed", store: UserDefaults(suiteName: "group.goodsnooze.dayssince")) var isDaysDisplayModeDetailed: Bool = true
+// MARK: - Multi Event Widget
 
-    @ViewBuilder
-    var body: some View {
-        ZStack(alignment: .leading) {
-            if colorScheme == .dark {
-                event.color.lighter(by: 0.04)
-            } else {
-                Color.white
-            }
-            itemContent
-        }
-        .clipShape(RoundedRectangle(cornerRadius: 23))
-        .overlay(
-            RoundedRectangle(cornerRadius: 23)
-                .stroke(colorScheme == .dark ? event.color.darker() : event.color, lineWidth: 6)
-        )
-        .shadow(color: Color.black.opacity(0.05), radius: 20, x: 0, y: 0)
-        .widgetBackground(Color.clear) // Widgets changed with iOS 17, need to set the background to make them work
+// Define the data structure for the multi-event widget
+struct MultipleEventsEntry: TimelineEntry {
+    let date: Date
+    let events: [WidgetContent] // Store up to 5 events
+
+    // Helper to create placeholder data (show up to 5)
+    static func placeholder() -> MultipleEventsEntry {
+        let placeholderEvent = WidgetContent(date: Date(), name: "Placeholder Event", id: UUID(), color: .gray, daysNumber: 0)
+        // Adjust placeholder count if needed for different widget sizes
+        return MultipleEventsEntry(date: Date(), events: Array(repeating: placeholderEvent, count: 5))
     }
-
-    var nameText: some View {
-        Text(event.name)
-            .font(.system(.title2, design: .rounded))
-            .bold()
-            .foregroundColor(colorScheme == .dark ? .primary : event.color)
-            .minimumScaleFactor(0.6) // Text fits in widget
-    }
-
-    @ViewBuilder
-    var daysAgoText: some View {
-        let currentDate = Date()
-        let calendar = Calendar.current
-
-        let dateComponents = calendar.dateComponents([.year, .month, .day], from: calendar.startOfDay(for: event.date), to: calendar.startOfDay(for: currentDate))
-
-        let years = dateComponents.year ?? 0
-        let months = dateComponents.month ?? 0
-        let days = dateComponents.day ?? 0
-
-        if isDaysDisplayModeDetailed {
-            HStack(alignment: .top, spacing: 6) {
-                if years > 0 {
-                    VStack(alignment: .center) {
-                        Text("\(years)")
-                            .font(.system(.title2, design: .rounded))
-                            .bold()
-                            .foregroundColor(colorScheme == .dark ? .primary : event.color)
-
-                        Text(years == 1 ? "year" : "years")
-                            .font(.system(years > 9 || months > 9 ? .caption : .caption, design: .rounded))
-                            .foregroundColor(colorScheme == .dark ? .primary : event.color)
-                    }
-                }
-
-                if months > 0 || years > 0 {
-                    VStack(alignment: .center) {
-                        Text("\(months)")
-                            .font(.system(.title2, design: .rounded))
-                            .bold()
-                            .foregroundColor(colorScheme == .dark ? .primary : event.color)
-
-                        Text(months == 1 ? "month" : "months")
-                            .font(.system(years > 0 ? .caption : .body, design: .rounded))
-                            .foregroundColor(colorScheme == .dark ? .primary : event.color)
-                    }
-                }
-
-                VStack(alignment: .center) {
-                    Text("\(days)")
-                        .font(.system(.title2, design: .rounded))
-                        .bold()
-                        .foregroundColor(colorScheme == .dark ? .primary : event.color)
-
-                    Text(days == 1 ? "day" : "days")
-                        .font(.system(years > 0 ? .caption : .body, design: .rounded))
-                        .foregroundColor(colorScheme == .dark ? .primary : event.color)
-                }
-            }
-            .padding(.trailing, 0)
-        } else {
-            VStack(alignment: .center) {
-                Text("\(event.daysNumber)")
-                    .font(.system(event.daysNumber > 9999 ? .title3 : .title2, design: .rounded))
-                    .bold()
-                    .foregroundColor(colorScheme == .dark ? .primary : event.color)
-
-                Text("days")
-                    .font(.system(.body, design: .rounded))
-                    .foregroundColor(colorScheme == .dark ? .primary : event.color)
-            }
-            .frame(width: event.daysNumber > 999 ? 70 : event.daysNumber > 99 ? 50 : 40)
-        }
-    }
-
-    var itemContent: some View {
-        VStack(alignment: .leading) {
-            if event.name != "No events" {
-                daysAgoText
-            }
-
-            Spacer()
-            nameText
-        }
-        .padding()
+    
+    // Helper to create snapshot data (show up to 5 realistic examples)
+    static func snapshot() -> MultipleEventsEntry {
+        let event1 = WidgetContent(date: Calendar.current.date(byAdding: .day, value: -403, to: Date())!, name: "📲 New phone", id: UUID(), color: .workColor, daysNumber: 403)
+        let event2 = WidgetContent(date: Calendar.current.date(byAdding: .day, value: -4, to: Date())!, name: "💇‍♀️ Haircut", id: UUID(), color: .healthColor, daysNumber: 4)
+        let event3 = WidgetContent(date: Calendar.current.date(byAdding: .day, value: -14, to: Date())!, name: "💅 Nails", id: UUID(), color: .hobbiesColor, daysNumber: 14)
+        let event4 = WidgetContent(date: Calendar.current.date(byAdding: .day, value: -94, to: Date())!, name: "📆 Project Deadline", id: UUID(), color: .workColor, daysNumber: 94)
+        let event5 = WidgetContent(date: Calendar.current.date(byAdding: .day, value: -2, to: Date())!, name: "🌴 Vacation Start", id: UUID(), color: .zeldaYellow, daysNumber: 2)
+         // Show a representative number for the snapshot, e.g., 3-5
+         return MultipleEventsEntry(date: Date(), events: [event1, event2, event4, event5])
     }
 }
 
-struct WidgetContent: TimelineEntry {
-    var date: Date
-    let name: String
-    let id: UUID
 
-    let color: Color
-    let daysNumber: Int
+// Define the new multi-event widget configuration
+struct MultipleEventsWidget: Widget {
+    let kind: String = "MultipleEventsWidget"
 
-    init(date: Date, name: String, id: UUID, color: Color, daysNumber: Int) {
-        self.date = date
-        self.name = name
-        self.id = id
-        self.color = color
-        self.daysNumber = daysNumber
+    var body: some WidgetConfiguration {
+        IntentConfiguration(
+            kind: kind,
+            intent: SelectMultipleEventsIntent.self,
+            provider: MultipleEventsProvider()
+        ) { entry in
+            MultipleEventsWidgetView(entry: entry)
+        }
+        .configurationDisplayName(LocalizedStringKey("widget.multiEvent.title"))
+        .description(LocalizedStringKey("widget.multiEvent.explanation"))
+        .supportedFamilies([.systemMedium, .systemLarge])
+        .contentMarginsDisabled()
     }
+}
 
-    init(item: DSItem) {
-        date = item.dateLastDone
-        name = item.name
-        id = item.id
-        color = item.category.color.color
-
-        let daysSince = Calendar.current.numberOfDaysBetween(item.dateLastDone, and: Date.now)
-        daysNumber = abs(daysSince)
-        
+// MARK: - Widget Bundle
+@main
+struct DaysSinceWidgetsBundle: WidgetBundle {
+    var body: some Widget {
+        SingleEventWidget()
+        MultipleEventsWidget() 
     }
 }
 
