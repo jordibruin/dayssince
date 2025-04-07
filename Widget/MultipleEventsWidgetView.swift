@@ -15,17 +15,10 @@ struct MultipleEventsWidgetView: View {
 
     @AppStorage("isDaysDisplayModeDetailed", store: UserDefaults(suiteName: "group.goodsnooze.dayssince")) var isDaysDisplayModeDetailed: Bool = true
 
-    
-    // Determine background color based on scheme
     private var backgroundColor: Color {
         entry.events.first?.color.lighter(by: 0.04) ?? Color(.systemBackground)
     }
-
-    // Determine text color based on scheme
-//    private var primaryTextColor: Color {
-//        colorScheme == .dark ? .white : .black
-//    }
-//
+    
     private var borderColor: Color {
         if let firstEvent = entry.events.first {
             return colorScheme == .dark ? firstEvent.color.darker() : firstEvent.color
@@ -85,6 +78,17 @@ struct MultipleEventsWidgetView: View {
     
     @ViewBuilder
     func daysAgoText(for event: WidgetContent) -> some View {
+        if isDaysDisplayModeDetailed {
+            detailedTimeView(for: event)
+        } else {
+            timeUnitView(value: event.daysNumber, unit: "days", color: event.color)
+                .frame(width: event.daysNumber > 999 ? 60 : event.daysNumber > 99 ? 45 : 35)
+            
+        }
+    }
+    
+    @ViewBuilder
+    func detailedTimeView(for event: WidgetContent) -> some View {
         let currentDate = Date()
         let calendar = Calendar.current
 
@@ -93,27 +97,21 @@ struct MultipleEventsWidgetView: View {
         let years = dateComponents.year ?? 0
         let months = dateComponents.month ?? 0
         let days = dateComponents.day ?? 0
-
-        if isDaysDisplayModeDetailed {
-            HStack(alignment: .top, spacing: 6) {
-                if years > 0 {
-                    timeUnitView(value: years, unit: years == 1 ? "year" : "years", color: event.color)
-                }
-
-                if months > 0 || years > 0 {
-                    timeUnitView(value: months, unit: months == 1 ? "month" : "months", color: event.color)
-                }
-
-               
-                timeUnitView(value: days, unit: days == 1 ? "day" : "days", color: event.color)
-                
+        
+        HStack(alignment: .top, spacing: 6) {
+            if years > 0 {
+                timeUnitView(value: years, unit: years == 1 ? "year" : "years", color: event.color)
             }
-//            .padding(.trailing, 0)
-        } else {
-            timeUnitView(value: event.daysNumber, unit: "days", color: event.color)
-                .frame(width: event.daysNumber > 999 ? 60 : event.daysNumber > 99 ? 45 : 35)
+
+            if months > 0 || years > 0 {
+                timeUnitView(value: months, unit: months == 1 ? "month" : "months", color: event.color)
+            }
+
+           
+            timeUnitView(value: days, unit: days == 1 ? "day" : "days", color: event.color)
             
         }
+//            .padding(.trailing, 0)
     }
     
     private func timeUnitView(value: Int, unit: String, color: Color) -> some View {
