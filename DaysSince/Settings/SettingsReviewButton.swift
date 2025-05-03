@@ -14,6 +14,7 @@ struct SettingsReviewButton: View {
 
     var body: some View {
         Button {
+            Analytics.send(.settingsReview)
             if let url = URL(string: "https://apps.apple.com/us/app/days-since-track-memories/id1634218216?action=write-review") {
                 openURL(url)
             }
