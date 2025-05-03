@@ -78,7 +78,8 @@ struct AddItemSheet: View {
                         name: name,
                         category: selectedCategory ?? categories.first!,
                         dateLastDone: date,
-                        remindersEnabled: remindersEnabled
+                        remindersEnabled: remindersEnabled,
+                        reminder: selectedReminder,
                     )
 
                     items.append(newItem)

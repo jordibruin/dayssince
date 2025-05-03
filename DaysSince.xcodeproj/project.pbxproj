@@ -139,6 +139,7 @@
 		D43DE5662DA32960008A5A8D /* SingleEventWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D43DE5652DA32960008A5A8D /* SingleEventWidgetView.swift */; };
 		D43DE5682DA32C51008A5A8D /* MultipleEventsWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D43DE5672DA32C51008A5A8D /* MultipleEventsWidgetView.swift */; };
 		D47457F42DA112DF00561C4E /* Bundle+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47457F32DA112DF00561C4E /* Bundle+Extensions.swift */; };
+		D479C3EB2DC6557100631220 /* LinkButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D479C3EA2DC6557100631220 /* LinkButton.swift */; };
 		D4DE5C932DA2A43300C5EA63 /* TelemetryDeck in Frameworks */ = {isa = PBXBuildFile; productRef = D4DE5C922DA2A43300C5EA63 /* TelemetryDeck */; };
 		D4DE5C952DA2A5A600C5EA63 /* Analytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4DE5C942DA2A5A600C5EA63 /* Analytics.swift */; };
 /* End PBXBuildFile section */
@@ -292,6 +293,7 @@
 		D43DE5652DA32960008A5A8D /* SingleEventWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleEventWidgetView.swift; sourceTree = "<group>"; };
 		D43DE5672DA32C51008A5A8D /* MultipleEventsWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipleEventsWidgetView.swift; sourceTree = "<group>"; };
 		D47457F32DA112DF00561C4E /* Bundle+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+Extensions.swift"; sourceTree = "<group>"; };
+		D479C3EA2DC6557100631220 /* LinkButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkButton.swift; sourceTree = "<group>"; };
 		D4DE5C942DA2A5A600C5EA63 /* Analytics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Analytics.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -463,6 +465,7 @@
 				7AE8E361286C921200538521 /* SettingsScreen.swift */,
 				7A65AAFD286CF5FD002D6DCA /* SettingsReviewButton.swift */,
 				7A65AAFF286CF818002D6DCA /* ShareButton.swift */,
+				D479C3EA2DC6557100631220 /* LinkButton.swift */,
 				7A65AB01286CFC53002D6DCA /* SupportButton.swift */,
 				7A227DD32B1BA21100C378A2 /* WishKitView.swift */,
 				7A868D172890814A009C92D6 /* DetailedTimeDisplayMode.swift */,
@@ -971,6 +974,7 @@
 				7AB3BC892AC0CB2300549CD9 /* ThemeView.swift in Sources */,
 				C2B53D7C2869CA5800407F40 /* CategoriesGridView.swift in Sources */,
 				7AF56AFC286F32CD0068B467 /* NewUpdateBanner.swift in Sources */,
+				D479C3EB2DC6557100631220 /* LinkButton.swift in Sources */,
 				7AF56AD6286F32CD0068B467 /* Design.swift in Sources */,
 				C255EB67289A725100282E7B /* Widget.intentdefinition in Sources */,
 				14CAC90829B26ED900DF3C24 /* UIApplication+Extensions.swift in Sources */,
@@ -1245,6 +1249,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DaysSince/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -1255,7 +1260,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.6;
+				MARKETING_VERSION = 1.0.7;
 				PRODUCT_BUNDLE_IDENTIFIER = com.goodsnooze.dayssince;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -1282,6 +1287,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DaysSince/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -1292,7 +1298,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.6;
+				MARKETING_VERSION = 1.0.7;
 				PRODUCT_BUNDLE_IDENTIFIER = com.goodsnooze.dayssince;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

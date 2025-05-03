@@ -15,7 +15,6 @@ struct ShareButton: View {
 
     var body: some View {
         Button {
-            Analytics.send(.settingsReview)
             showShare = true
         } label: {
             HStack {
@@ -27,7 +26,7 @@ struct ShareButton: View {
         }
         .foregroundColor(.primary)
         .sheet(isPresented: $showShare) {
-            ShareSheet(items: [URL(string: "https://twitter.com/DaysSince_App")!])
+            ShareSheet(items: [URL(string: "https://apps.apple.com/app/id1634218216")!])
         }
     }
 

@@ -18,10 +18,8 @@ struct AddItemForm: View {
     let reminders = ["Daily", "Weekly", "Monthly"]
 
     @Binding var selectedReminder: DSItemReminders
-
-    var accentColor: Color {
-        category?.color.color ?? Color.black
-    }
+    
+    var accentColor: Color { category == nil || category?.color.color == .black ? Color.primary :  category!.color.color }
 
     @FocusState.Binding var nameIsFocused: Bool
 

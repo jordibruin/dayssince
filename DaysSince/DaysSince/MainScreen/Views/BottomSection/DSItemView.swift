@@ -14,20 +14,30 @@ struct DSItemView: View {
     @Binding var editItemSheet: Bool
     @Binding var tappedItem: DSItem
     @Binding var isDaysDisplayModeDetailed: Bool
-
-    var item: DSItem
+    
+    let itemID: UUID
+    @Binding var items: [DSItem]
+    
     var colored: Bool
+    
+    private var currentItem: DSItem? {
+        items.first { $0.id == itemID }
+    }
 
     var body: some View {
-        ZStack(alignment: .topTrailing) {
-            itemBody
+        if let item = currentItem {
+            ZStack(alignment: .topTrailing) {
+                itemBody(item: item)
+            }
+        } else {
+            EmptyView()
         }
     }
 
-    var itemBody: some View {
+    func itemBody(item: DSItem) -> some View {
         ZStack(alignment: .leading) {
-            backgroundColor
-            itemContent
+            backgroundColor(item: item)
+            itemContent(item: item)
         }
         .clipShape(RoundedRectangle(cornerRadius: 20))
         .overlay(
@@ -46,7 +56,7 @@ struct DSItemView: View {
         }
     }
 
-    var nameText: some View {
+    func nameText(item: DSItem) -> some View {
         Text(item.name)
             .font(.system(.title2, design: .rounded))
             .bold()
@@ -54,7 +64,9 @@ struct DSItemView: View {
     }
 
     @ViewBuilder
-    var daysAgoText: some View {
+    func daysAgoText(item: DSItem) -> some View {
+        let resolvedForegroundColor = colored || colorScheme == .dark ? Color.white : item.category.color.color
+        
         if isDaysDisplayModeDetailed {
             let currentDate = Date()
             let calendar = Calendar.current
@@ -65,18 +77,17 @@ struct DSItemView: View {
             let months = dateComponents.month ?? 0
             let days = dateComponents.day ?? 0
 
-            // Show years, months and days
             HStack {
                 if years > 0 {
                     VStack {
                         Text("\(years)")
                             .font(.system(.title3, design: .rounded))
                             .bold()
-                            .foregroundColor(colored || colorScheme == .dark ? .white : item.category.color.color)
+                            .foregroundColor(resolvedForegroundColor)
 
                         Text(years == 1 ? "year" : "years")
                             .font(.system(.caption, design: .rounded))
-                            .foregroundColor(colored || colorScheme == .dark ? .white : item.category.color.color)
+                            .foregroundColor(resolvedForegroundColor)
                     }
                 }
 
@@ -85,11 +96,11 @@ struct DSItemView: View {
                         Text("\(months)")
                             .font(.system(.title3, design: .rounded))
                             .bold()
-                            .foregroundColor(colored || colorScheme == .dark ? .white : item.category.color.color)
+                            .foregroundColor(resolvedForegroundColor)
 
                         Text(months == 1 ? "month" : "months")
                             .font(.system(.caption, design: .rounded))
-                            .foregroundColor(colored || colorScheme == .dark ? .white : item.category.color.color)
+                            .foregroundColor(resolvedForegroundColor)
                     }
                 }
 
@@ -97,33 +108,32 @@ struct DSItemView: View {
                     Text("\(days)")
                         .font(.system(months > 0 || years > 0 ? .title3 : .title2, design: .rounded))
                         .bold()
-                        .foregroundColor(colored || colorScheme == .dark ? .white : item.category.color.color)
+                        .foregroundColor(resolvedForegroundColor)
 
                     Text(days == 1 ? "day" : "days")
                         .font(.system(months > 0 || years > 0 ? .caption : .body, design: .rounded))
-                        .foregroundColor(colored || colorScheme == .dark ? .white : item.category.color.color)
+                        .foregroundColor(resolvedForegroundColor)
                 }
             }
             .frame(minWidth: 0)
 
-            // If user just wants to see the days.
         } else {
             VStack {
                 Text("\(item.daysAgo)")
                     .font(.system(.title2, design: .rounded))
                     .bold()
-                    .foregroundColor(colored || colorScheme == .dark ? .white : item.category.color.color)
+                    .foregroundColor(resolvedForegroundColor)
 
                 Text(item.daysAgo == 1 ? "day" : "days")
                     .font(.system(.body, design: .rounded))
-                    .foregroundColor(colored || colorScheme == .dark ? .white : item.category.color.color)
+                    .foregroundColor(resolvedForegroundColor)
             }
             .frame(minWidth: 0)
         }
     }
-
+    
     @ViewBuilder
-    var backgroundColor: some View {
+    func backgroundColor(item: DSItem) -> some View {
         if colorScheme == .dark {
             if item.category.color.color == .black { Color(.tertiarySystemBackground) }
             else {item.category.color.color.lighter(by: 0.04)}
@@ -134,11 +144,11 @@ struct DSItemView: View {
         }
     }
 
-    var itemContent: some View {
+    func itemContent(item: DSItem) -> some View {
         HStack {
-            nameText
+            nameText(item: item)
             Spacer()
-            daysAgoText
+            daysAgoText(item: item)
                 .onTapGesture {
                     if isDaysDisplayModeDetailed {Analytics.send(.detailedModeOn)}
                     withAnimation {
@@ -151,12 +161,30 @@ struct DSItemView: View {
 }
 
 struct DSItemView_Preview: PreviewProvider {
+    static let mockItemID = DSItem.placeholderItem().id
+    @State static var mockItems = [DSItem.placeholderItem()]
+    @State static var mockTappedItem = DSItem.placeholderItem()
+
     static var previews: some View {
         DSItemView(editItemSheet: .constant(false),
-                   tappedItem: .constant(DSItem.placeholderItem()),
+                   tappedItem: $mockTappedItem,
                    isDaysDisplayModeDetailed: .constant(false),
-                   item: DSItem.placeholderItem(),
+                   itemID: mockItemID,
+                   items: $mockItems,
                    colored: true)
-            .frame(height: 10)
+            .padding()
+            .previewLayout(.sizeThatFits)
+            .environment(\.colorScheme, .light)
+        
+        DSItemView(editItemSheet: .constant(false),
+                   tappedItem: $mockTappedItem,
+                   isDaysDisplayModeDetailed: .constant(false),
+                   itemID: mockItemID,
+                   items: $mockItems,
+                   colored: true)
+            .padding()
+            .previewLayout(.sizeThatFits)
+            .background(Color.black)
+            .environment(\.colorScheme, .dark)
     }
 }
