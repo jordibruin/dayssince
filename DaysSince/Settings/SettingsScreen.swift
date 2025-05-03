@@ -25,8 +25,11 @@ struct SettingsScreen: View {
                 DetailedTimeDisplayModeCell(isDaysDisplayModeDetailed: $isDaysDisplayModeDetailed)
 
                 Section {
-                    SettingsReviewButton()
+                    WebsiteButton()
+                    TwitterButton()
+                    PrivacyButton()
                     ShareButton()
+                    SettingsReviewButton()
                     WishKitView()
                     SupportButton()
                 } footer: {
@@ -120,7 +123,12 @@ struct SettingsScreen: View {
     var footer: some View {
         HStack {
             Spacer()
-            Text("Thank you for using Days Since! ❤️")
+            
+            VStack(alignment: .center) {
+                Text("\(Bundle.main.appVersion)")
+                Text("Thank you for using Days Since! ❤️")
+            }
+            
             Spacer()
         }
         .padding(.top, 0)
@@ -133,5 +141,11 @@ struct SettingsScreen_Previews: PreviewProvider {
             isDaysDisplayModeDetailed: .constant(false),
             showSettings: .constant(true)
         )
+    }
+}
+
+extension Bundle {
+    var appVersion: String {
+        infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0"
     }
 }

@@ -9,12 +9,14 @@ import Defaults
 import SwiftUI
 
 struct CategoryFormSection: View {
+    @Environment(\.colorScheme) var colorScheme
     @Default(.categories) var categories
 
     @Binding var selectedCategory: Category?
     @Binding var showCategorySheet: Bool
 
-    var accentColor: Color { selectedCategory?.color.color ?? Color.black }
+    var accentColor: Color { selectedCategory == nil ? Color.primary :  selectedCategory?.color.color == .black && colorScheme == .dark ? Color.white : selectedCategory!.color.color }
+    
 
     var body: some View {
         Section {

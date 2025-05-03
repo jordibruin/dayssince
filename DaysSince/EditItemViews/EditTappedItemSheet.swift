@@ -7,8 +7,10 @@
 
 import SwiftUI
 import WidgetKit
+import Defaults
 
 struct EditTappedItemSheet: View {
+    @Default(.categories) var categories
     @EnvironmentObject var notificationManager: NotificationManager
     @Environment(\.colorScheme) var colorScheme
 
@@ -44,7 +46,9 @@ struct EditTappedItemSheet: View {
                 .presentationDragIndicator(.hidden)
                 .presentationDetents([.medium])
                 .presentationCornerRadius(44)
-                .onDisappear { showCategorySheet = false }
+                .onDisappear {
+                    showCategorySheet = false
+                }
         }
     }
 
