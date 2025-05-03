@@ -41,7 +41,9 @@ struct PrivacyButton: View {
 
 struct LinkButton: View {
     @Default(.mainColor) var mainColor
+    @Default(.selectedThemeId) var selectedThemeId
     @Environment(\.openURL) var openURL
+    @Environment(\.colorScheme) var colorScheme
 
     let title: String
     let symbolName: String
@@ -83,7 +85,7 @@ struct LinkButton: View {
     var buttonShareArrow: some View {
         Image(systemName: "arrow.up.forward.app.fill")
             .font(.title2)
-            .foregroundColor(mainColor.darker())
+            .foregroundColor(["blackWhite", "zelda", "blackDefaultBackground"].contains(selectedThemeId) ? .primary : mainColor)
             .opacity(0.5)
     }
 }

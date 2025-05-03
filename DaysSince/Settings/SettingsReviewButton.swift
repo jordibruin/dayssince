@@ -11,6 +11,7 @@ import SwiftUI
 struct SettingsReviewButton: View {
     @Environment(\.openURL) var openURL
     @Default(.mainColor) var mainColor
+    @Default(.selectedThemeId) var selectedThemeId
 
     var body: some View {
         Button {
@@ -49,7 +50,7 @@ struct SettingsReviewButton: View {
     var buttonShareArrow: some View {
         Image(systemName: "arrow.up.forward.app.fill")
             .font(.title2)
-            .foregroundColor(mainColor.darker())
+            .foregroundColor(["blackWhite", "zelda", "blackDefaultBackground"].contains(selectedThemeId) ? .primary : mainColor)
             .opacity(0.5)
     }
 }

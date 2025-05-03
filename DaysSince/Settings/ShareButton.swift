@@ -10,7 +10,8 @@ import SwiftUI
 
 struct ShareButton: View {
     @State var showShare = false
-
+    
+    @Default(.selectedThemeId) var selectedThemeId
     @Default(.mainColor) var mainColor
 
     var body: some View {
@@ -50,7 +51,7 @@ struct ShareButton: View {
     var buttonShareArrow: some View {
         Image(systemName: "arrow.up.forward.app.fill")
             .font(.title2)
-            .foregroundColor(mainColor.darker())
+            .foregroundColor(["blackWhite", "zelda", "blackDefaultBackground"].contains(selectedThemeId) ? .primary : mainColor)
             .opacity(0.5)
     }
 }
