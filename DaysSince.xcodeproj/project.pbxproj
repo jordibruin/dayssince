@@ -140,6 +140,15 @@
 		D43DE5682DA32C51008A5A8D /* MultipleEventsWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D43DE5672DA32C51008A5A8D /* MultipleEventsWidgetView.swift */; };
 		D47457F42DA112DF00561C4E /* Bundle+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47457F32DA112DF00561C4E /* Bundle+Extensions.swift */; };
 		D479C3EB2DC6557100631220 /* LinkButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D479C3EA2DC6557100631220 /* LinkButton.swift */; };
+		D479C4252DC6C50200631220 /* IntroPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D479C4242DC6C50200631220 /* IntroPage.swift */; };
+		D479C4272DC6C9A400631220 /* CustomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D479C4262DC6C9A400631220 /* CustomButton.swift */; };
+		D479C4292DC6CAA000631220 /* RippleEffect.metal in Sources */ = {isa = PBXBuildFile; fileRef = D479C4282DC6CAA000631220 /* RippleEffect.metal */; };
+		D479C42C2DC6CADD00631220 /* RippleModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = D479C42B2DC6CADD00631220 /* RippleModifier.swift */; };
+		D479C42E2DC6CB7000631220 /* RippleEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = D479C42D2DC6CB7000631220 /* RippleEffect.swift */; };
+		D479C4302DC6CCA900631220 /* CategoryPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D479C42F2DC6CCA900631220 /* CategoryPage.swift */; };
+		D479C4322DC6DBD800631220 /* ChatBubble.swift in Sources */ = {isa = PBXBuildFile; fileRef = D479C4312DC6DBD800631220 /* ChatBubble.swift */; };
+		D479C4342DC6DBF700631220 /* Categories+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D479C4332DC6DBF700631220 /* Categories+Extensions.swift */; };
+		D479C4362DC6DD4A00631220 /* ProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D479C4352DC6DD4A00631220 /* ProgressBar.swift */; };
 		D4DE5C932DA2A43300C5EA63 /* TelemetryDeck in Frameworks */ = {isa = PBXBuildFile; productRef = D4DE5C922DA2A43300C5EA63 /* TelemetryDeck */; };
 		D4DE5C952DA2A5A600C5EA63 /* Analytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4DE5C942DA2A5A600C5EA63 /* Analytics.swift */; };
 /* End PBXBuildFile section */
@@ -294,6 +303,15 @@
 		D43DE5672DA32C51008A5A8D /* MultipleEventsWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipleEventsWidgetView.swift; sourceTree = "<group>"; };
 		D47457F32DA112DF00561C4E /* Bundle+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+Extensions.swift"; sourceTree = "<group>"; };
 		D479C3EA2DC6557100631220 /* LinkButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkButton.swift; sourceTree = "<group>"; };
+		D479C4242DC6C50200631220 /* IntroPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroPage.swift; sourceTree = "<group>"; };
+		D479C4262DC6C9A400631220 /* CustomButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomButton.swift; sourceTree = "<group>"; };
+		D479C4282DC6CAA000631220 /* RippleEffect.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = RippleEffect.metal; sourceTree = "<group>"; };
+		D479C42B2DC6CADD00631220 /* RippleModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RippleModifier.swift; sourceTree = "<group>"; };
+		D479C42D2DC6CB7000631220 /* RippleEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RippleEffect.swift; sourceTree = "<group>"; };
+		D479C42F2DC6CCA900631220 /* CategoryPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryPage.swift; sourceTree = "<group>"; };
+		D479C4312DC6DBD800631220 /* ChatBubble.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatBubble.swift; sourceTree = "<group>"; };
+		D479C4332DC6DBF700631220 /* Categories+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Categories+Extensions.swift"; sourceTree = "<group>"; };
+		D479C4352DC6DD4A00631220 /* ProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressBar.swift; sourceTree = "<group>"; };
 		D4DE5C942DA2A5A600C5EA63 /* Analytics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Analytics.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -363,6 +381,7 @@
 			children = (
 				C2B53DA42869EFF600407F40 /* DaysSince.entitlements */,
 				C2B53DA32869EF8100407F40 /* Info.plist */,
+				D479C42A2DC6CACD00631220 /* Metal */,
 				7A2A770B27F26E14006F0470 /* Extensions */,
 				7A2A770127F25156006F0470 /* Model */,
 				7A2A76F327F2446E006F0470 /* DaysSinceApp.swift */,
@@ -405,6 +424,7 @@
 			children = (
 				7A2A770C27F26E2B006F0470 /* Array+Extensions.swift */,
 				C2B53D9C2869CB0200407F40 /* Binding+Extensions.swift */,
+				D479C4332DC6DBF700631220 /* Categories+Extensions.swift */,
 				7AE2946627F4B0AF006A7E01 /* Calendar+Extensions.swift */,
 				7A67C6DF280061FA0095675F /* Color+Extensions.swift */,
 				14CAC90729B26ED900DF3C24 /* UIApplication+Extensions.swift */,
@@ -419,6 +439,7 @@
 			isa = PBXGroup;
 			children = (
 				7A7CD90B287F20F70001C64F /* OnboardingScreen.swift */,
+				D479C4372DC6DF3300631220 /* Components */,
 				7A7CD90D287F21750001C64F /* Pages */,
 			);
 			path = Onboarding;
@@ -430,6 +451,8 @@
 				7A7CD90E287F21890001C64F /* Introduction.swift */,
 				7A7CD910287F22E90001C64F /* AnimateText.swift */,
 				7A7CD912287F2E760001C64F /* CreateFirstEvent.swift */,
+				D479C4242DC6C50200631220 /* IntroPage.swift */,
+				D479C42F2DC6CCA900631220 /* CategoryPage.swift */,
 			);
 			path = Pages;
 			sourceTree = "<group>";
@@ -775,6 +798,26 @@
 			path = WidgetIntents;
 			sourceTree = "<group>";
 		};
+		D479C42A2DC6CACD00631220 /* Metal */ = {
+			isa = PBXGroup;
+			children = (
+				D479C4282DC6CAA000631220 /* RippleEffect.metal */,
+				D479C42B2DC6CADD00631220 /* RippleModifier.swift */,
+				D479C42D2DC6CB7000631220 /* RippleEffect.swift */,
+			);
+			path = Metal;
+			sourceTree = "<group>";
+		};
+		D479C4372DC6DF3300631220 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				D479C4262DC6C9A400631220 /* CustomButton.swift */,
+				D479C4352DC6DD4A00631220 /* ProgressBar.swift */,
+				D479C4312DC6DBD800631220 /* ChatBubble.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -971,6 +1014,7 @@
 				C2B53D752869CA1000407F40 /* CategoryDSItem.swift in Sources */,
 				7A2A76F627F2446E006F0470 /* ContentView.swift in Sources */,
 				7A9141B82B0EA6E300F06CA2 /* Category.swift in Sources */,
+				D479C4252DC6C50200631220 /* IntroPage.swift in Sources */,
 				7AB3BC892AC0CB2300549CD9 /* ThemeView.swift in Sources */,
 				C2B53D7C2869CA5800407F40 /* CategoriesGridView.swift in Sources */,
 				7AF56AFC286F32CD0068B467 /* NewUpdateBanner.swift in Sources */,
@@ -983,6 +1027,7 @@
 				7AF56B00286F32CD0068B467 /* AnalyticsOld.swift in Sources */,
 				7AB3BC872ABF91C000549CD9 /* Defaults+Extension+Colors.swift in Sources */,
 				C2B53DA02869CD3C00407F40 /* EditTappedItemForm.swift in Sources */,
+				D479C42E2DC6CB7000631220 /* RippleEffect.swift in Sources */,
 				7A007CB72800885700985108 /* CategoryFilteredView.swift in Sources */,
 				7AF56AEA286F32CD0068B467 /* FAQItem.swift in Sources */,
 				7AF56ADD286F32CD0068B467 /* SupportItemDetailView.swift in Sources */,
@@ -998,6 +1043,7 @@
 				7AF56AD7286F32CD0068B467 /* HooliganVideoPlayerController.swift in Sources */,
 				7A65AAFE286CF5FD002D6DCA /* SettingsReviewButton.swift in Sources */,
 				7A7CD90F287F21890001C64F /* Introduction.swift in Sources */,
+				D479C4272DC6C9A400631220 /* CustomButton.swift in Sources */,
 				7AE2946727F4B0AF006A7E01 /* Calendar+Extensions.swift in Sources */,
 				7AF56AEF286F32CD0068B467 /* SupportLocale.swift in Sources */,
 				7AF56ADE286F32CD0068B467 /* SupportScreen.swift in Sources */,
@@ -1008,12 +1054,15 @@
 				7AF56AFF286F32CD0068B467 /* SupportHeaderSection.swift in Sources */,
 				7AF56AD8286F32CD0068B467 /* Deeplink.swift in Sources */,
 				7A868D182890814A009C92D6 /* DetailedTimeDisplayMode.swift in Sources */,
+				D479C4322DC6DBD800631220 /* ChatBubble.swift in Sources */,
+				D479C4362DC6DD4A00631220 /* ProgressBar.swift in Sources */,
 				7A7CD911287F22E90001C64F /* AnimateText.swift in Sources */,
 				7AF56AE4286F32CD0068B467 /* SupportFetcher.swift in Sources */,
 				C2B53D982869CACA00407F40 /* SortingMenuView.swift in Sources */,
 				7A3B3D232B9F7B2B007BF1FC /* EditCategorySheet.swift in Sources */,
 				7A7CD90C287F20F70001C64F /* OnboardingScreen.swift in Sources */,
 				C2B53D922869CACA00407F40 /* DSItemView.swift in Sources */,
+				D479C42C2DC6CADD00631220 /* RippleModifier.swift in Sources */,
 				D47457F42DA112DF00561C4E /* Bundle+Extensions.swift in Sources */,
 				7AF56AF8286F32CD0068B467 /* HighlightedItemView.swift in Sources */,
 				7A4D7F3E2B8804D400F6425F /* Date+Extensions.swift in Sources */,
@@ -1023,6 +1072,7 @@
 				7AF56AF6286F32CD0068B467 /* FAQDetailView.swift in Sources */,
 				7AF56AED286F32CD0068B467 /* HeaderItem.swift in Sources */,
 				C2B53D972869CACA00407F40 /* BottomSection.swift in Sources */,
+				D479C4342DC6DBF700631220 /* Categories+Extensions.swift in Sources */,
 				7AF56AE1286F32CD0068B467 /* HooliganBundle+Extensions.swift in Sources */,
 				7AF56AFB286F32CD0068B467 /* ChangelogUpdateCell.swift in Sources */,
 				7AF56AE6286F32CD0068B467 /* HighlightedSection.swift in Sources */,
@@ -1031,6 +1081,7 @@
 				7AF56AF0286F32CD0068B467 /* SupportItemPage.swift in Sources */,
 				7A21765927FB2E3E006B106B /* EditTappedItemSheet.swift in Sources */,
 				7A9141B42B0EA6AF00F06CA2 /* CategoryColor.swift in Sources */,
+				D479C4292DC6CAA000631220 /* RippleEffect.metal in Sources */,
 				7AF56AE2286F32CD0068B467 /* BackPortedAsyncImage.swift in Sources */,
 				7AE8E362286C921200538521 /* SettingsScreen.swift in Sources */,
 				7AF56AF1286F32CD0068B467 /* SupportColor.swift in Sources */,
@@ -1045,6 +1096,7 @@
 				7AF56AE3286F32CD0068B467 /* HooliganString+Extensions.swift in Sources */,
 				C2B53D962869CACA00407F40 /* DSItemListView.swift in Sources */,
 				7AF56AF9286F32CD0068B467 /* SupportItemPageView.swift in Sources */,
+				D479C4302DC6CCA900631220 /* CategoryPage.swift in Sources */,
 				7A65AB00286CF818002D6DCA /* ShareButton.swift in Sources */,
 				7AF56AF4286F32CD0068B467 /* SupportFAQSection.swift in Sources */,
 				7AF56AFA286F32CD0068B467 /* ReleaseNoteDetail.swift in Sources */,
@@ -1255,7 +1307,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1293,7 +1345,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
