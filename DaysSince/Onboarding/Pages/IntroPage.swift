@@ -13,6 +13,8 @@ struct IntroPage: View {
     @State var counter: Int = 0
     @State var origin: CGPoint = .zero
     
+    let navigate: (OnboardingScreen) -> Void
+    
     var body: some View {
         ZStack {
             backgroundColor()
@@ -28,7 +30,7 @@ struct IntroPage: View {
                     .modifier(RippleEffect(at: origin, trigger: counter))
                     .onAppear {
                         origin = .zero
-                        triggerRippleWithDelay(repeats: 3, delay: 0.8)
+                        triggerRippleWithDelay(repeats: 3, delay: 1.5)
                     }
                     .onTapGesture { location in
                         origin = location
@@ -60,6 +62,7 @@ struct IntroPage: View {
     
     func nextPage() -> Void {
         print("next page")
+        navigate(.screen2)
     }
     
     func triggerRippleWithDelay(repeats: Int, delay: TimeInterval) {
@@ -72,5 +75,5 @@ struct IntroPage: View {
 }
 
 #Preview {
-    IntroPage()
+    IntroPage(navigate: { _ in })
 }

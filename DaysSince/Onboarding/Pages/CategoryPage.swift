@@ -8,13 +8,12 @@
 import SwiftUI
 
 struct CategoryPage: View {
-    private var items: [DSItem] = []
-    
     @State private var counter = 0
     @State private var origin: CGPoint = .zero
     @State private var selectedCategories: Set<Category> = []
     @State private var tappedCategory: Category?
 
+    let navigate: (OnboardingScreen) -> Void
     private static let gridLayout = Array(repeating: GridItem(.flexible(minimum: 100), spacing: 10), count: 3)
 
     private var optionalCategories: [Category] {
@@ -97,12 +96,13 @@ struct CategoryPage: View {
 
     private func nextPage() {
         print("next page")
+        navigate(.screen3)
     }
 }
 
 
 #Preview {
-    CategoryPage()
+    CategoryPage(navigate: { _ in})
 }
 
 struct CategorySelectionView: View {
@@ -128,4 +128,3 @@ struct CategorySelectionView: View {
             .onTapGesture(perform: onTap)
     }
 }
-

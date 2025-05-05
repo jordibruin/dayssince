@@ -149,6 +149,12 @@
 		D479C4322DC6DBD800631220 /* ChatBubble.swift in Sources */ = {isa = PBXBuildFile; fileRef = D479C4312DC6DBD800631220 /* ChatBubble.swift */; };
 		D479C4342DC6DBF700631220 /* Categories+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D479C4332DC6DBF700631220 /* Categories+Extensions.swift */; };
 		D479C4362DC6DD4A00631220 /* ProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D479C4352DC6DD4A00631220 /* ProgressBar.swift */; };
+		D4C0E20C2DC79A4D00673A5A /* OnboardingRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C0E20B2DC79A4D00673A5A /* OnboardingRootView.swift */; };
+		D4C0E20E2DC79DC800673A5A /* PickFirstEventPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C0E20D2DC79DC800673A5A /* PickFirstEventPage.swift */; };
+		D4C0E2102DC7B39500673A5A /* EventCardModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C0E20F2DC7B39500673A5A /* EventCardModel.swift */; };
+		D4C0E2112DC7B39500673A5A /* EventCardModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C0E20F2DC7B39500673A5A /* EventCardModel.swift */; };
+		D4C0E2122DC7B39500673A5A /* EventCardModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C0E20F2DC7B39500673A5A /* EventCardModel.swift */; };
+		D4C0E2142DC7B3ED00673A5A /* CompactEventCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C0E2132DC7B3ED00673A5A /* CompactEventCardView.swift */; };
 		D4DE5C932DA2A43300C5EA63 /* TelemetryDeck in Frameworks */ = {isa = PBXBuildFile; productRef = D4DE5C922DA2A43300C5EA63 /* TelemetryDeck */; };
 		D4DE5C952DA2A5A600C5EA63 /* Analytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4DE5C942DA2A5A600C5EA63 /* Analytics.swift */; };
 /* End PBXBuildFile section */
@@ -312,6 +318,10 @@
 		D479C4312DC6DBD800631220 /* ChatBubble.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatBubble.swift; sourceTree = "<group>"; };
 		D479C4332DC6DBF700631220 /* Categories+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Categories+Extensions.swift"; sourceTree = "<group>"; };
 		D479C4352DC6DD4A00631220 /* ProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressBar.swift; sourceTree = "<group>"; };
+		D4C0E20B2DC79A4D00673A5A /* OnboardingRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingRootView.swift; sourceTree = "<group>"; };
+		D4C0E20D2DC79DC800673A5A /* PickFirstEventPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickFirstEventPage.swift; sourceTree = "<group>"; };
+		D4C0E20F2DC7B39500673A5A /* EventCardModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCardModel.swift; sourceTree = "<group>"; };
+		D4C0E2132DC7B3ED00673A5A /* CompactEventCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompactEventCardView.swift; sourceTree = "<group>"; };
 		D4DE5C942DA2A5A600C5EA63 /* Analytics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Analytics.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -413,6 +423,7 @@
 				C2B53D742869CA1000407F40 /* CategoryDSItem.swift */,
 				7AAB507627FF86CC0086A5A8 /* Defaults.swift */,
 				7AE8E366286C948200538521 /* AlternativeIcon.swift */,
+				D4C0E20F2DC7B39500673A5A /* EventCardModel.swift */,
 				7A9141B32B0EA6AF00F06CA2 /* CategoryColor.swift */,
 				7A9141B72B0EA6E300F06CA2 /* Category.swift */,
 			);
@@ -439,6 +450,7 @@
 			isa = PBXGroup;
 			children = (
 				7A7CD90B287F20F70001C64F /* OnboardingScreen.swift */,
+				D4C0E20B2DC79A4D00673A5A /* OnboardingRootView.swift */,
 				D479C4372DC6DF3300631220 /* Components */,
 				7A7CD90D287F21750001C64F /* Pages */,
 			);
@@ -449,6 +461,7 @@
 			isa = PBXGroup;
 			children = (
 				7A7CD90E287F21890001C64F /* Introduction.swift */,
+				D4C0E20D2DC79DC800673A5A /* PickFirstEventPage.swift */,
 				7A7CD910287F22E90001C64F /* AnimateText.swift */,
 				7A7CD912287F2E760001C64F /* CreateFirstEvent.swift */,
 				D479C4242DC6C50200631220 /* IntroPage.swift */,
@@ -812,6 +825,7 @@
 			isa = PBXGroup;
 			children = (
 				D479C4262DC6C9A400631220 /* CustomButton.swift */,
+				D4C0E2132DC7B3ED00673A5A /* CompactEventCardView.swift */,
 				D479C4352DC6DD4A00631220 /* ProgressBar.swift */,
 				D479C4312DC6DBD800631220 /* ChatBubble.swift */,
 			);
@@ -1021,6 +1035,7 @@
 				D479C3EB2DC6557100631220 /* LinkButton.swift in Sources */,
 				7AF56AD6286F32CD0068B467 /* Design.swift in Sources */,
 				C255EB67289A725100282E7B /* Widget.intentdefinition in Sources */,
+				D4C0E20C2DC79A4D00673A5A /* OnboardingRootView.swift in Sources */,
 				14CAC90829B26ED900DF3C24 /* UIApplication+Extensions.swift in Sources */,
 				7AF56AE0286F32CD0068B467 /* HooliganColor+Extensions.swift in Sources */,
 				7A67C6E0280061FA0095675F /* Color+Extensions.swift in Sources */,
@@ -1031,6 +1046,7 @@
 				7A007CB72800885700985108 /* CategoryFilteredView.swift in Sources */,
 				7AF56AEA286F32CD0068B467 /* FAQItem.swift in Sources */,
 				7AF56ADD286F32CD0068B467 /* SupportItemDetailView.swift in Sources */,
+				D4C0E2122DC7B39500673A5A /* EventCardModel.swift in Sources */,
 				7AF56AE5286F32CD0068B467 /* SupportItemable.swift in Sources */,
 				7AADEB652B12897000A7CF25 /* AddCategorySheet.swift in Sources */,
 				C2B53D912869CACA00407F40 /* MainBackgroundView.swift in Sources */,
@@ -1088,8 +1104,10 @@
 				7AF56AE9286F32CD0068B467 /* SupportContactItem.swift in Sources */,
 				7AF56AF7286F32CD0068B467 /* SupportHighlightedSection.swift in Sources */,
 				7A7CD913287F2E760001C64F /* CreateFirstEvent.swift in Sources */,
+				D4C0E20E2DC79DC800673A5A /* PickFirstEventPage.swift in Sources */,
 				C2B53D7A2869CA3B00407F40 /* AddItemForm.swift in Sources */,
 				C2B53D7E2869CA8300407F40 /* CategoryRectangleView.swift in Sources */,
+				D4C0E2142DC7B3ED00673A5A /* CompactEventCardView.swift in Sources */,
 				7AF56AEE286F32CD0068B467 /* HighlightedItem.swift in Sources */,
 				D4DE5C952DA2A5A600C5EA63 /* Analytics.swift in Sources */,
 				C2B53D772869CA1F00407F40 /* DSItemReminders.swift in Sources */,
@@ -1117,6 +1135,7 @@
 				D43DE5662DA32960008A5A8D /* SingleEventWidgetView.swift in Sources */,
 				C2B53DC42869F35B00407F40 /* DSItemReminders.swift in Sources */,
 				C2B53DDD2869F74100407F40 /* Array+Extensions.swift in Sources */,
+				D4C0E2112DC7B39500673A5A /* EventCardModel.swift in Sources */,
 				C2B53DC32869F35600407F40 /* CategoryDSItem.swift in Sources */,
 				C2B53DC62869F36A00407F40 /* Color+Extensions.swift in Sources */,
 				D43DE5682DA32C51008A5A8D /* MultipleEventsWidgetView.swift in Sources */,
@@ -1136,6 +1155,7 @@
 				C2B53DDB2869F72400407F40 /* DSItemReminders.swift in Sources */,
 				C2B53DDE2869F74100407F40 /* Array+Extensions.swift in Sources */,
 				C255EB69289A725100282E7B /* Widget.intentdefinition in Sources */,
+				D4C0E2102DC7B39500673A5A /* EventCardModel.swift in Sources */,
 				C2B53DD02869F6F200407F40 /* IntentHandler.swift in Sources */,
 				C2B53DDA2869F71D00407F40 /* Color+Extensions.swift in Sources */,
 				C2B53DDC2869F72900407F40 /* Calendar+Extensions.swift in Sources */,

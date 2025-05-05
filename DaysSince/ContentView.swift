@@ -55,7 +55,8 @@ struct ContentView: View {
                     }
                 }
         } else {
-            OnboardingScreen(hasSeenOnboarding: $hasSeenOnboarding, items: $items)
+//            OnboardingScreen(hasSeenOnboarding: $hasSeenOnboarding, items: $items)
+            OnboardingRootView()
         }
     }
 }
