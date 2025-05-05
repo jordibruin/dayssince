@@ -30,16 +30,4 @@ enum DSItemReminders: Codable, Equatable, CaseIterable, Hashable {
             return "No reminders"
         }
     }
-
-//    var dateComponents: DateComponents {
-//        switch self {
-//        case .daily:
-//            dateComponents.hour = 10
-//            return dateComponents
-//        case .weekly:
-//            return dateComponents.day = "Monday"
-//        case .monthly:
-//            return dateC
-//        }
-//    }
 }

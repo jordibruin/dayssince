@@ -86,7 +86,7 @@ struct PickFirstEventPage: View {
     
     private func nextPage() {
         print("next page")
-//        navigate(.screen4)
+        navigate(.screen4(initialEventName: selectedEvent?.name ?? " "))
     }
 }
 
