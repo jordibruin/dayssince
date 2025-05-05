@@ -31,3 +31,8 @@ enum DSItemReminders: Codable, Equatable, CaseIterable, Hashable {
         }
     }
 }
+
+extension DSItemReminders: Identifiable {
+    var id: Self { self }
+}
+

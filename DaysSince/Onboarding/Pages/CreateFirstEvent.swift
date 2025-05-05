@@ -151,29 +151,7 @@ struct CreateFirstEvent: View {
     @State private var eventName: String
     @State private var eventDate: Date = Date()
     @State var eventCategory: Category
-    @State private var eventReminder: ReminderOption = .none
-   
-    enum ReminderOption: String, CaseIterable, Identifiable {
-        case none = "No Reminders"
-        case daily = "Daily"
-        case weekly = "Weekly"
-        case monthly = "Monthly"
-
-        var id: String { rawValue }
-
-        var isEnabled: Bool {
-            self != .none
-        }
-
-        var reminderType: DSItemReminders {
-            switch self {
-            case .none: return .none
-            case .daily: return .daily
-            case .weekly: return .weekly
-            case .monthly: return .monthly
-            }
-        }
-    }
+    @State private var eventReminder: DSItemReminders = .none
 
     init(initialEventName: String, navigate: @escaping (OnboardingScreen) -> Void) {
         self._eventName = State(initialValue: initialEventName)
@@ -255,7 +233,8 @@ struct CreateFirstEvent: View {
                     get: { eventCategory },
                     set: { if let value = $0 { eventCategory = value } }
                 ),
-                showCategorySheet: $showCategorySheet
+                showCategorySheet: $showCategorySheet,
+                showHeader: false
             )
             .padding(.top)
         }
@@ -280,13 +259,13 @@ struct CreateFirstEvent: View {
     }
     
     private func nextPage() {
-        let remindersEnabled = eventReminder.isEnabled
-        let reminderType = eventReminder.reminderType
+        let remindersEnabled = eventReminder != .none
+        let reminderType = eventReminder
 
         let item = DSItem(
             id: UUID(),
             name: eventName,
-            category: eventCategory/* your selected category */,
+            category: eventCategory,
             dateLastDone: eventDate,
             remindersEnabled: remindersEnabled,
             reminder: reminderType
@@ -314,20 +293,29 @@ struct CreateFirstEvent_Previews: PreviewProvider {
 
 
 struct ReminderFormSection: View {
-    @Binding var selectedReminder: CreateFirstEvent.ReminderOption
+    @Binding var selectedReminder: DSItemReminders
     let accentColor: Color
 
+    private func displayName(for option: DSItemReminders) -> String {
+            switch option {
+            case .none: return "🚫 No reminders"
+            case .daily: return "🕰️ Daily"
+            case .weekly: return "🗓️ Weekly"
+            case .monthly: return "⌛ Monthly"
+            }
+        }
+    
     var body: some View {
         Section {
             VStack(spacing: 8) {
-                ForEach(CreateFirstEvent.ReminderOption.allCases) { option in
+                ForEach(DSItemReminders.allCases) { reminderOption in
                     Button {
-                        withAnimation { selectedReminder = option }
+                        withAnimation { selectedReminder = reminderOption }
                     } label: {
                         HStack {
-                            Text(option.rawValue)
+                            Text(displayName(for: reminderOption))
                             Spacer()
-                            if selectedReminder == option {
+                            if selectedReminder == reminderOption {
                                 Image(systemName: "checkmark.circle.fill")
                                     .imageScale(.large)
                                     .foregroundColor(accentColor)

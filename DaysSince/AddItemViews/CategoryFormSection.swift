@@ -14,7 +14,8 @@ struct CategoryFormSection: View {
 
     @Binding var selectedCategory: Category?
     @Binding var showCategorySheet: Bool
-
+    
+    var showHeader: Bool = true
     var accentColor: Color { selectedCategory == nil ? Color.primary :  selectedCategory?.color.color == .black && colorScheme == .dark ? Color.white : selectedCategory!.color.color }
     
 
@@ -23,7 +24,9 @@ struct CategoryFormSection: View {
             categoriesList
             addCategoryButton
         } header: {
-            Text("Category")
+            if showHeader {
+                Text("Category")
+            }
         }
     }
 
