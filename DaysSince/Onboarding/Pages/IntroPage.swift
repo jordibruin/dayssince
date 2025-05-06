@@ -30,7 +30,9 @@ struct IntroPage: View {
                     .modifier(RippleEffect(at: origin, trigger: counter))
                     .onAppear {
                         origin = .zero
-                        triggerRippleWithDelay(repeats: 3, delay: 1.5)
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            triggerRippleWithDelay(repeats: 3, delay: 1.5)
+                        }
                     }
                     .onTapGesture { location in
                         origin = location

@@ -73,7 +73,9 @@ struct CategoryPage: View {
                 }
                 .onTapGesture { location in
                     origin = location
-                    counter += 1
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                        counter += 1
+                    }
                 }
 
             ChatBubble(direction: .left) {

@@ -271,8 +271,8 @@ struct CreateFirstEvent: View {
             reminder: reminderType
         )
 
-        print("Creating item:", item)
-//        navigate(.screen4)
+        print("[Onboarding] Creating item:", item)
+        navigate(.screen5)
     }
 }
 

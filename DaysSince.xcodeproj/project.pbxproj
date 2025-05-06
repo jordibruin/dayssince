@@ -149,6 +149,7 @@
 		D479C4322DC6DBD800631220 /* ChatBubble.swift in Sources */ = {isa = PBXBuildFile; fileRef = D479C4312DC6DBD800631220 /* ChatBubble.swift */; };
 		D479C4342DC6DBF700631220 /* Categories+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D479C4332DC6DBF700631220 /* Categories+Extensions.swift */; };
 		D479C4362DC6DD4A00631220 /* ProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D479C4352DC6DD4A00631220 /* ProgressBar.swift */; };
+		D4A926F12DCA4B2B0089F037 /* FirstEventPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4A926F02DCA4B2B0089F037 /* FirstEventPreview.swift */; };
 		D4C0E20C2DC79A4D00673A5A /* OnboardingRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C0E20B2DC79A4D00673A5A /* OnboardingRootView.swift */; };
 		D4C0E20E2DC79DC800673A5A /* PickFirstEventPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C0E20D2DC79DC800673A5A /* PickFirstEventPage.swift */; };
 		D4C0E2102DC7B39500673A5A /* EventCardModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C0E20F2DC7B39500673A5A /* EventCardModel.swift */; };
@@ -318,6 +319,7 @@
 		D479C4312DC6DBD800631220 /* ChatBubble.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatBubble.swift; sourceTree = "<group>"; };
 		D479C4332DC6DBF700631220 /* Categories+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Categories+Extensions.swift"; sourceTree = "<group>"; };
 		D479C4352DC6DD4A00631220 /* ProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressBar.swift; sourceTree = "<group>"; };
+		D4A926F02DCA4B2B0089F037 /* FirstEventPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstEventPreview.swift; sourceTree = "<group>"; };
 		D4C0E20B2DC79A4D00673A5A /* OnboardingRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingRootView.swift; sourceTree = "<group>"; };
 		D4C0E20D2DC79DC800673A5A /* PickFirstEventPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickFirstEventPage.swift; sourceTree = "<group>"; };
 		D4C0E20F2DC7B39500673A5A /* EventCardModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCardModel.swift; sourceTree = "<group>"; };
@@ -464,6 +466,7 @@
 				D4C0E20D2DC79DC800673A5A /* PickFirstEventPage.swift */,
 				7A7CD910287F22E90001C64F /* AnimateText.swift */,
 				7A7CD912287F2E760001C64F /* CreateFirstEvent.swift */,
+				D4A926F02DCA4B2B0089F037 /* FirstEventPreview.swift */,
 				D479C4242DC6C50200631220 /* IntroPage.swift */,
 				D479C42F2DC6CCA900631220 /* CategoryPage.swift */,
 			);
@@ -1072,6 +1075,7 @@
 				7A868D182890814A009C92D6 /* DetailedTimeDisplayMode.swift in Sources */,
 				D479C4322DC6DBD800631220 /* ChatBubble.swift in Sources */,
 				D479C4362DC6DD4A00631220 /* ProgressBar.swift in Sources */,
+				D4A926F12DCA4B2B0089F037 /* FirstEventPreview.swift in Sources */,
 				7A7CD911287F22E90001C64F /* AnimateText.swift in Sources */,
 				7AF56AE4286F32CD0068B467 /* SupportFetcher.swift in Sources */,
 				C2B53D982869CACA00407F40 /* SortingMenuView.swift in Sources */,

@@ -23,6 +23,8 @@ struct OnboardingRootView: View {
                     PickFirstEventPage(navigate: navigate)
                 case .screen4(let initialEventName):
                     CreateFirstEvent(initialEventName: initialEventName, navigate: navigate)
+                case .screen5:
+                    FirstEventPreview(navigate: navigate)
                 }
             }
         }
@@ -37,6 +39,7 @@ enum OnboardingScreen: Hashable {
     case screen2
     case screen3
     case screen4(initialEventName: String)
+    case screen5
     // Add more if needed
 }
 
