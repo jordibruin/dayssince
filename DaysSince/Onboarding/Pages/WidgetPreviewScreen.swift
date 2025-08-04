@@ -71,7 +71,6 @@ struct WidgetPreviewScreen: View {
             
             // Small widget
             HStack(spacing: 12) {
-                
                 CompactEventCardView(event: EventCardModel(from: latestEvent))
                     .aspectRatio(1.0, contentMode: .fit)
                     .shadow(radius: 5, x: 1, y: 2)
@@ -91,7 +90,7 @@ struct WidgetPreviewScreen: View {
             }
             
         }
-        .padding(.top)
+        .padding(.top, 8)
     }
 
 }
