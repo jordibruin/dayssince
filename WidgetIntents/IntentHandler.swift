@@ -22,31 +22,61 @@ class IntentHandler: INExtension, SelectEventIntentHandling, SelectMultipleEvent
 
     // Provide options for the first event selection
     func provideEvent1OptionsCollection(for intent: SelectMultipleEventsIntent) async throws -> INObjectCollection<WidgetDaysSinceEvent> {
-        let events = items.map { WidgetDaysSinceEvent(identifier: $0.id.uuidString, display: $0.name) }
+        var events: [WidgetDaysSinceEvent] = []
+        let noneOption = WidgetDaysSinceEvent(identifier: "", display: "None")
+        events.append(noneOption)
+        events.append(contentsOf: items.map {
+            WidgetDaysSinceEvent(identifier: $0.id.uuidString, display: $0.name)
+        })
+        
         return INObjectCollection(items: events)
     }
 
     // Provide options for the second event selection
     func provideEvent2OptionsCollection(for intent: SelectMultipleEventsIntent) async throws -> INObjectCollection<WidgetDaysSinceEvent> {
-        let events = items.map { WidgetDaysSinceEvent(identifier: $0.id.uuidString, display: $0.name) }
+        var events: [WidgetDaysSinceEvent] = []
+        let noneOption = WidgetDaysSinceEvent(identifier: "", display: "None")
+        events.append(noneOption)
+        events.append(contentsOf: items.map {
+            WidgetDaysSinceEvent(identifier: $0.id.uuidString, display: $0.name)
+        })
+        
         return INObjectCollection(items: events)
     }
 
     // Provide options for the third event selection
     func provideEvent3OptionsCollection(for intent: SelectMultipleEventsIntent) async throws -> INObjectCollection<WidgetDaysSinceEvent> {
-        let events = items.map { WidgetDaysSinceEvent(identifier: $0.id.uuidString, display: $0.name) }
+        var events: [WidgetDaysSinceEvent] = []
+        let noneOption = WidgetDaysSinceEvent(identifier: "", display: "None")
+        events.append(noneOption)
+        events.append(contentsOf: items.map {
+            WidgetDaysSinceEvent(identifier: $0.id.uuidString, display: $0.name)
+        })
+        
         return INObjectCollection(items: events)
     }
 
     // Provide options for the fourth event selection
     func provideEvent4OptionsCollection(for intent: SelectMultipleEventsIntent) async throws -> INObjectCollection<WidgetDaysSinceEvent> {
-        let events = items.map { WidgetDaysSinceEvent(identifier: $0.id.uuidString, display: $0.name) }
+        var events: [WidgetDaysSinceEvent] = []
+        let noneOption = WidgetDaysSinceEvent(identifier: "", display: "None")
+        events.append(noneOption)
+        events.append(contentsOf: items.map {
+            WidgetDaysSinceEvent(identifier: $0.id.uuidString, display: $0.name)
+        })
+        
         return INObjectCollection(items: events)
     }
 
     // Provide options for the fifth event selection
     func provideEvent5OptionsCollection(for intent: SelectMultipleEventsIntent) async throws -> INObjectCollection<WidgetDaysSinceEvent> {
-        let events = items.map { WidgetDaysSinceEvent(identifier: $0.id.uuidString, display: $0.name) }
+        var events: [WidgetDaysSinceEvent] = []
+        let noneOption = WidgetDaysSinceEvent(identifier: "", display: "None")
+        events.append(noneOption)
+        events.append(contentsOf: items.map {
+            WidgetDaysSinceEvent(identifier: $0.id.uuidString, display: $0.name)
+        })
+        
         return INObjectCollection(items: events)
     }
 

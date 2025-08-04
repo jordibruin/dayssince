@@ -12,8 +12,8 @@
 			<array/>
 			<key>IntentsSupported</key>
 			<array>
-				<string>SelectMultipleEventsIntent</string>
 				<string>SelectEventIntent</string>
+				<string>SelectMultipleEventsIntent</string>
 			</array>
 		</dict>
 		<key>NSExtensionPointIdentifier</key>
