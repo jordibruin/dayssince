@@ -214,7 +214,7 @@ struct TermsAndFriends: View {
 //                .frame(height: 10)
             
             Link(destination: URLConstants.termsOfUseURL) {
-                Text("Terms of Use")
+                Text("Privacy Policy")
                     .font(.system(.body, design: .rounded).weight(.medium))
             }
             
