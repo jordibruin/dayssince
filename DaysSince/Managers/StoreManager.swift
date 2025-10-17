@@ -54,7 +54,9 @@ final class StoreManager: ObservableObject {
         }
     }
 
-    func purchasePro() async {
+    func purchasePro(inOnboarding: Bool = false) async {
+        Analytics.send(.proStartPurchase)
+        
         guard let product = proProduct else {
             await requestProducts()
             return
@@ -71,6 +73,11 @@ final class StoreManager: ObservableObject {
                 if [IAP.proProductID].contains(transaction.productID) && transaction.revocationDate == nil {
 //                    hasProAccess = true
                     onEntitlementPotentiallyChanged?()
+
+                    Analytics.send(.proPurchased)
+                    if inOnboarding {
+                        Analytics.send(.proPurchasedInOnboarding)
+                    }
                 }
                 await transaction.finish()
             case .userCancelled, .pending:

@@ -13,10 +13,22 @@ struct PayWallScreen: View {
     @EnvironmentObject var storeManager: StoreManager
     @EnvironmentObject var entitlements: Entitlements
     @Default(.mainColor) var mainColor
-
-    @State private var isLoading: Bool = false
-    let inOnboarding: Bool
     @AppStorage("hasSeenOnboarding") private var hasSeenOnboarding = false
+    
+    @State private var isLoading: Bool = false
+    @Binding var selectedPage: Int
+    let inOnboarding: Bool
+
+    init(inOnboarding: Bool = false, selectedPage: Binding<Int> = .constant(0)) {
+        if inOnboarding {
+            Analytics.send(.proOnboarding)
+        }
+        self.inOnboarding = inOnboarding
+        self._selectedPage = selectedPage
+        
+        print("hit multiple times")
+        Analytics.send(.proScreenOpened)
+    }
 
     var body: some View {
         ZStack {
@@ -129,7 +141,7 @@ struct PayWallScreen: View {
         if let product = storeManager.proProduct {
             Button {
                 Task {
-                    await storeManager.purchasePro()
+                    await storeManager.purchasePro(inOnboarding: inOnboarding)
                 }
             } label: {
                 HStack {

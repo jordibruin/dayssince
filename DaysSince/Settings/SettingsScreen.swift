@@ -63,6 +63,7 @@ struct SettingsScreen: View {
     var daysSinceProSection: some View {
         Section {
             Button {
+                Analytics.send(.proSettings)
                 showPaywall = true
             } label: {
             }

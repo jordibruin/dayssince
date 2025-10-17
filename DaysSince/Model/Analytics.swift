@@ -41,12 +41,13 @@ enum AnalyticType: String, Hashable {
     
     //    case proTheme
     case proIcons
-    //    case proSettings
+    case proSettings
     //    case proHome
-    //    case proOnboarding
-    //    case proStartPurchase
-    //    case proPurchasedInOnboarding
-    //    case proPurchased
+    case proOnboarding
+    case proScreenOpened
+    case proStartPurchase
+    case proPurchasedInOnboarding
+    case proPurchased
     
     func stringValue() -> String {
         switch self {
@@ -70,8 +71,20 @@ enum AnalyticType: String, Hashable {
             return "settingsReview"
         case .detailedModeOn:
             return "detailedModeOn"
+        case .proSettings:
+            return "proSettings"
         case .proIcons:
             return "proIcons"
+        case .proOnboarding:
+            return "proOnboarding"
+        case .proScreenOpened:
+            return "proScreenOpened"
+        case .proStartPurchase:
+            return "proStartPurchase"
+        case .proPurchased:
+            return "proPurchased"
+        case .proPurchasedInOnboarding:
+            return "proPurchasedInOnboarding"
         }
     }
 }
