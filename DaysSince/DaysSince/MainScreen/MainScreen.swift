@@ -17,12 +17,14 @@ struct MainScreen: View {
 
     @EnvironmentObject var notificationManager: NotificationManager
     @EnvironmentObject var categoryManager: CategoryManager
+    @EnvironmentObject var entitlements: Entitlements
 
     @State var showAddItemSheet = false
     @State var showSettings = false
     @State var editItemSheet = false
     @State var tappedItem: DSItem = .placeholderItem()
     @State var showThemeSheet = false
+    @State var showPaywall = false
 
     @Binding var items: [DSItem]
     @Binding var isDaysDisplayModeDetailed: Bool
@@ -75,7 +77,8 @@ struct MainScreen: View {
                     EditTappedItemSheet(
                         items: $items,
                         editItemSheet: $editItemSheet,
-                        tappedItem: $tappedItem
+                        tappedItem: $tappedItem,
+                        showPayWall: $showPaywall
                     )
                 }
 
@@ -101,6 +104,9 @@ struct MainScreen: View {
                 .presentationDetents([.medium])
                 .presentationCornerRadius(32)
                 .onDisappear { showThemeSheet = false }
+        }
+        .sheet(isPresented: $showPaywall) {
+            PayWallScreen(inOnboarding: false)
         }
     }
 
@@ -138,7 +144,12 @@ struct MainScreen: View {
 
     var addNewEventButton: some View {
         Button {
-            showAddItemSheet = true
+            if entitlements.canCreateNewEvent(currentCount: items.count) {
+                showAddItemSheet = true
+            } else {
+                showPaywall = true
+            }
+            
         } label: {
             HStack {
                 Image(systemName: "plus")

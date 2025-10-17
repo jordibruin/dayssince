@@ -23,6 +23,7 @@ struct AddItemSheet: View {
     @State var remindersEnabled: Bool = false
     @State var selectedReminder: DSItemReminders = .daily
     @State var showCategorySheet = false
+    @State var showPaywall = false
 
     @FocusState private var nameIsFocused: Bool
 
@@ -40,20 +41,33 @@ struct AddItemSheet: View {
     var body: some View {
         // Form
         NavigationView {
-            AddItemForm(items: $items, name: $name, date: $date, category: $selectedCategory, remindersEnabled: $remindersEnabled, showCategorySheet: $showCategorySheet, selectedReminder: $selectedReminder, nameIsFocused: $nameIsFocused)
+            AddItemForm(
+                items: $items,
+                name: $name,
+                date: $date,
+                category: $selectedCategory,
+                remindersEnabled: $remindersEnabled,
+                showCategorySheet: $showCategorySheet,
+                showPaywall: $showPaywall,
+                selectedReminder: $selectedReminder,
+                nameIsFocused: $nameIsFocused
+            )
                 .navigationTitle("New Event")
                 .navigationBarTitleDisplayMode(.inline)
                 .ignoresSafeArea(.keyboard, edges: .bottom)
-                .toolbar(content: {
-                    toolbarItems
-                })
         }
+        .toolbar(content: {
+            toolbarItems
+        })
         .sheet(isPresented: $showCategorySheet) {
             AddCategorySheet()
                 .presentationDragIndicator(.hidden)
                 .presentationDetents([.medium])
                 .presentationCornerRadius(44)
                 .onDisappear { showCategorySheet = false }
+        }
+        .sheet(isPresented: $showPaywall) {
+            PayWallScreen(inOnboarding: false)
         }
     }
 
@@ -114,6 +128,6 @@ struct AddItemSheet: View {
 
 struct AddItemSheet_Previews: PreviewProvider {
     static var previews: some View {
-        AddItemSheet(selectedCategory: Category.placeholderCategory(), items: .constant([]))
+        AddItemSheet(selectedCategory: Category.placeholderCategory(), showPaywall: false, items: .constant([]))
     }
 }

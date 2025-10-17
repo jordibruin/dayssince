@@ -20,6 +20,8 @@ struct OnboardingScreen: View {
 
             CreateFirstEvent(hasSeenOnboarding: $hasSeenOnboarding, selectedPage: $selectedPage, items: $items).tag(1)
                 .simultaneousGesture(DragGesture())
+            
+            PayWallScreen(inOnboarding: true).tag(2)
 
 //            PurchasesView(inOnboarding: true, selectedPage: $selectedPage).tag(2)
 //                .clipped()

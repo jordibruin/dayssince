@@ -12,14 +12,17 @@ struct SettingsScreen: View {
     @Default(.mainColor) var mainColor
 
     @Environment(\.dismiss) var dismiss
+    @EnvironmentObject var entitlements: Entitlements
 
     @Binding var isDaysDisplayModeDetailed: Bool
     @Binding var showSettings: Bool
 
+    @State private var showPaywall: Bool = false
+
     var body: some View {
         NavigationView {
             List {
-//                daysSinceProSection
+                daysSinceProSection
                 appIconsSection
 
                 DetailedTimeDisplayModeCell(isDaysDisplayModeDetailed: $isDaysDisplayModeDetailed)
@@ -52,36 +55,51 @@ struct SettingsScreen: View {
             })
         }
         .accentColor(mainColor.darker())
+        .sheet(isPresented: $showPaywall) {
+            PayWallScreen(inOnboarding: false)
+        }
     }
 
     var daysSinceProSection: some View {
         Section {
             Button {
-//                Analytics.hit(.proSettings)
-//                showPaywall = true
-            } label: {}
-                .frame(height: 120)
-                .listRowBackground(
-                    ZStack(alignment: .leading) {
-                        mainColor
+                showPaywall = true
+            } label: {
+            }
+            .frame(height: 120)
+            .listRowBackground(
+                ZStack(alignment: .leading) {
+                    proBackground
+                        .frame(height: 120)
+                        .cornerRadius(20)
 
-                        Text("Days Since\nPro")
-                            .font(.system(.title, design: .rounded))
-                            .bold()
-                            .foregroundColor(.white)
-                            .padding(.vertical)
-                            .fixedSize(horizontal: false, vertical: true)
-                            .padding(.leading)
-                    }
-                    .frame(height: 120)
-                    .accessibilityElement()
-                    .accessibilityLabel("Days Since Pro")
-                )
-                .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                    Text("Days Since\nPro")
+                        .font(.system(.title, design: .rounded))
+                        .bold()
+                        .foregroundColor(.white)
+                        .padding(.vertical)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .padding(.leading)
+                        .accessibilityLabel("Days Since Pro")
+                }
+                .frame(height: 120)
+                .cornerRadius(20)
+            )
+            .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
         }
-//        .sheet(isPresented: $showPaywall) {
-//            PurchasesView(inOnboarding: false)
-//        }
+    }
+
+    @ViewBuilder
+    private var proBackground: some View {
+        if entitlements.isPro {
+            LinearGradient(
+                colors: [mainColor, mainColor.lighter()],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        } else {
+            mainColor
+        }
     }
 
     var appIconsSection: some View {
@@ -141,6 +159,7 @@ struct SettingsScreen_Previews: PreviewProvider {
             isDaysDisplayModeDetailed: .constant(false),
             showSettings: .constant(true)
         )
+        .environmentObject(StoreManager())
     }
 }
 
@@ -149,3 +168,5 @@ extension Bundle {
         infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0"
     }
 }
+
+

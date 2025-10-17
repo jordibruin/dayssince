@@ -17,6 +17,7 @@ struct EditTappedItemSheet: View {
     @Binding var items: [DSItem]
     @Binding var editItemSheet: Bool
     @Binding var tappedItem: DSItem
+    @Binding var showPayWall: Bool
 
     @Environment(\.dismiss) var dismiss
 
@@ -31,6 +32,7 @@ struct EditTappedItemSheet: View {
                     editItemSheet: $editItemSheet,
                     tappedItem: $tappedItem,
                     showCategorySheet: $showCategorySheet,
+                    showPaywall: $showPayWall,
                     nameIsFocused: $nameIsFocused
                 )
                 .ignoresSafeArea(.keyboard, edges: .bottom)
@@ -138,6 +140,6 @@ struct EditTappedItemSheet_Previews: PreviewProvider {
     static var previews: some View {
         EditTappedItemSheet(items: .constant([]),
                             editItemSheet: .constant(false),
-                            tappedItem: .constant(DSItem.placeholderItem()))
+                            tappedItem: .constant(DSItem.placeholderItem()), showPayWall: .constant(false))
     }
 }

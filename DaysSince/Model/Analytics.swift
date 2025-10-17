@@ -40,7 +40,7 @@ enum AnalyticType: String, Hashable {
     case detailedModeOn
     
     //    case proTheme
-    //    case proIcons
+    case proIcons
     //    case proSettings
     //    case proHome
     //    case proOnboarding
@@ -70,6 +70,8 @@ enum AnalyticType: String, Hashable {
             return "settingsReview"
         case .detailedModeOn:
             return "detailedModeOn"
+        case .proIcons:
+            return "proIcons"
         }
     }
 }

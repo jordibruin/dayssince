@@ -24,6 +24,7 @@ struct CreateFirstEvent: View {
     @State var remindersEnabled: Bool = false
     @State var selectedReminder: DSItemReminders = .daily
     @State var showCategorySheet = false
+    @State var showPaywall = false
 
     @FocusState private var nameIsFocused: Bool
 
@@ -33,7 +34,7 @@ struct CreateFirstEvent: View {
         Form {
             nameSection
             dateSection
-            CategoryFormSection(selectedCategory: $selectedCategory, showCategorySheet: $showCategorySheet)
+            CategoryFormSection(selectedCategory: $selectedCategory, showCategorySheet: $showCategorySheet, showPaywall: $showPaywall)
             reminderSection
             saveButtonSection
         }
@@ -98,8 +99,6 @@ struct CreateFirstEvent: View {
                 let generator = UIImpactFeedbackGenerator(style: .medium)
                 generator.impactOccurred()
 
-                hasSeenOnboarding = true
-
                 // Add new item.
                 let newItem = DSItem(
                     id: UUID(),
@@ -118,6 +117,10 @@ struct CreateFirstEvent: View {
                 print("➕ Added item. Now there are \(items.count) items!")
 
                 dismiss()
+                
+                withAnimation {
+                    selectedPage += 1
+                }
             } label: {
                 HStack {
                     Spacer()

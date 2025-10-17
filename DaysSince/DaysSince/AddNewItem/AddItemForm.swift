@@ -14,6 +14,7 @@ struct AddItemForm: View {
     @Binding var category: Category?
     @Binding var remindersEnabled: Bool
     @Binding var showCategorySheet: Bool
+    @Binding var showPaywall: Bool
 
     let reminders = ["Daily", "Weekly", "Monthly"]
 
@@ -29,7 +30,7 @@ struct AddItemForm: View {
                 Form {
                     nameSection
                     dateSection
-                    CategoryFormSection(selectedCategory: $category, showCategorySheet: $showCategorySheet)
+                    CategoryFormSection(selectedCategory: $category, showCategorySheet: $showCategorySheet, showPaywall: $showPaywall)
                     reminderSection
                 }
                 .scrollDismissesKeyboard(.immediately) // Only available for iOS 16+
@@ -45,7 +46,7 @@ struct AddItemForm: View {
             Form {
                 nameSection
                 dateSection
-                CategoryFormSection(selectedCategory: $category, showCategorySheet: $showCategorySheet)
+                CategoryFormSection(selectedCategory: $category, showCategorySheet: $showCategorySheet, showPaywall: $showPaywall)
                 reminderSection
             }
             // Focus name field when the sheet is opened.
@@ -119,6 +120,7 @@ struct AddItemForm_Previews: PreviewProvider {
                     category: .constant(Category.placeholderCategory()),
                     remindersEnabled: .constant(true),
                     showCategorySheet: .constant(false),
+                    showPaywall: .constant(false),
                     selectedReminder: .constant(DSItemReminders.daily),
                     nameIsFocused: FocusState<Bool>().projectedValue)
     }

@@ -17,6 +17,7 @@ struct EditTappedItemForm: View {
     @Binding var editItemSheet: Bool
     @Binding var tappedItem: DSItem
     @Binding var showCategorySheet: Bool
+    @Binding var showPaywall: Bool
 
     var category: Category { tappedItem.category }
     var accentColor: Color {
@@ -38,7 +39,7 @@ struct EditTappedItemForm: View {
                 CategoryFormSection(selectedCategory: Binding(
                     get: { tappedItem.category },
                     set: { tappedItem.category = $0! }
-                ), showCategorySheet: $showCategorySheet)
+                ), showCategorySheet: $showCategorySheet, showPaywall: $showPaywall)
                 reminderSection
                 deleteButtonSection
             }
@@ -58,7 +59,7 @@ struct EditTappedItemForm: View {
                 CategoryFormSection(selectedCategory: Binding(
                     get: { tappedItem.category },
                     set: { tappedItem.category = $0! }
-                ), showCategorySheet: $showCategorySheet)
+                ), showCategorySheet: $showCategorySheet, showPaywall: $showPaywall)
                 reminderSection
                 deleteButtonSection
             }
@@ -217,6 +218,7 @@ struct EditTappedItemForm_Previews: PreviewProvider {
                            editItemSheet: .constant(true),
                            tappedItem: .constant(DSItem.placeholderItem()),
                            showCategorySheet: .constant(false),
+                           showPaywall: .constant(false),
                            nameIsFocused: FocusState<Bool>().projectedValue)
     }
 }

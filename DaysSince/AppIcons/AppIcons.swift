@@ -10,11 +10,13 @@ import SwiftUI
 
 struct AppIcons: View {
     @Environment(\.dismiss) var dismiss
-//    @EnvironmentObject var store: Store
+    @EnvironmentObject var entitlements: Entitlements
     @EnvironmentObject var reviewManager: ReviewManager
 
     @Default(.mainColor) var mainColor
 
+    @State var showPaywall: Bool = false
+    
     var columns: [GridItem] = [
         GridItem(.flexible(minimum: 100), spacing: 10),
         GridItem(.flexible(minimum: 100), spacing: 10),
@@ -23,10 +25,10 @@ struct AppIcons: View {
 
     var alternativeIcons: [AlternativeIcon] = [
         AlternativeIcon(name: "calendar-purple-image", iconName: "calendar-purple", premium: false, original: true),
-        AlternativeIcon(name: "calendar-pink-image", iconName: "calendar-pink", premium: false, original: false),
         AlternativeIcon(name: "calendar-orange-image", iconName: "calendar-orange", premium: false, original: false),
-        AlternativeIcon(name: "calendar-blue-image", iconName: "calendar-blue", premium: false, original: false),
-        AlternativeIcon(name: "AppIcon-image", iconName: "AppIcon", premium: false, original: false),
+        AlternativeIcon(name: "calendar-pink-image", iconName: "calendar-pink", premium: true, original: false),
+        AlternativeIcon(name: "calendar-blue-image", iconName: "calendar-blue", premium: true, original: false),
+        AlternativeIcon(name: "AppIcon-image", iconName: "AppIcon", premium: true, original: false),
     ]
 
     @State var showPayWall = false
@@ -43,9 +45,9 @@ struct AppIcons: View {
         }
         .navigationTitle("App Icons")
         .navigationBarTitleDisplayMode(.inline)
-//        .sheet(isPresented: $showPayWall) {
-//            PurchasesView(inOnboarding: false)
-//        }
+        .sheet(isPresented: $showPayWall) {
+            PayWallScreen(inOnboarding: false)
+        }
     }
 
     func iconView(icon: AlternativeIcon) -> some View {
@@ -67,11 +69,11 @@ struct AppIcons: View {
                 }
             } else {
                 if icon.premium {
-//                    if !store.hasFullAccess {
-//                        Analytics.hit(.proIcons)
-//                        showPayWall = true
-//                        return
-//                    }
+                    if !entitlements.isPro {
+                        Analytics.send(.proIcons)
+                        showPayWall = true
+                        return
+                    }
                 }
                 UIApplication.shared.setAlternateIconName(icon.iconName) { error in
                     if let error = error {

@@ -16,9 +16,11 @@ struct AddCategorySheet: View {
     @State var selectedColor: CategoryColor = .work
     @State var selectedEmoji: String = "lightbulb"
     @State var showMoreCategorySfSymbols: Bool = false
+    @State var showPaywall: Bool = false
 
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var categoriesManager: CategoryManager
+    @EnvironmentObject var entitlements: Entitlements
 
     @State var emojis: [String] = ["lightbulb", "leaf", "gamecontroller", "heart.text.square", "graduationcap", "bell", "gift.fill", "heart", "laptopcomputer", "airplane"]
 
@@ -32,6 +34,9 @@ struct AddCategorySheet: View {
         .padding(.horizontal, 16)
         .sheet(isPresented: $showMoreCategorySfSymbols, onDismiss: updateCategoryEmojis) {
             MoreSfSymbolsView(accentColor: accentColor, selectedEmoji: $selectedEmoji)
+        }
+        .sheet(isPresented: $showPaywall) {
+            PayWallScreen(inOnboarding: false)
         }
     }
 
@@ -63,10 +68,15 @@ struct AddCategorySheet: View {
                 Spacer()
 
                 Button {
-                    withAnimation {
-                        categoriesManager.addCategory(name: selectedName, emoji: selectedEmoji, color: selectedColor)
-                        dismiss()
+                    if entitlements.canCreateNewCategory(currentCount: categories.count) {
+                        withAnimation {
+                            categoriesManager.addCategory(name: selectedName, emoji: selectedEmoji, color: selectedColor)
+                            dismiss()
+                        }
+                    } else {
+                        showPaywall = true
                     }
+                    
                 } label: {
                     Text("Add")
                         .bold()

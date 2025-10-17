@@ -10,10 +10,12 @@ import SwiftUI
 
 struct CategoryFormSection: View {
     @Environment(\.colorScheme) var colorScheme
+    @EnvironmentObject var entitlements: Entitlements
     @Default(.categories) var categories
 
     @Binding var selectedCategory: Category?
     @Binding var showCategorySheet: Bool
+    @Binding var showPaywall: Bool
 
     var accentColor: Color { selectedCategory == nil ? Color.primary :  selectedCategory?.color.color == .black && colorScheme == .dark ? Color.white : selectedCategory!.color.color }
     
@@ -55,7 +57,11 @@ struct CategoryFormSection: View {
         HStack {
             Spacer()
             Button {
-                showCategorySheet = true
+                if entitlements.canCreateNewCategory(currentCount: categories.count) {
+                    showCategorySheet = true
+                } else {
+                    showPaywall = true
+                }
             } label: {
                 HStack {
                     Image(systemName: "plus.rectangle.fill.on.rectangle.fill")
@@ -75,6 +81,6 @@ struct CategoryFormSection: View {
 
 struct CategoryFormSection_Previews: PreviewProvider {
     static var previews: some View {
-        CategoryFormSection(selectedCategory: .constant(nil), showCategorySheet: .constant(false))
+        CategoryFormSection(selectedCategory: .constant(nil), showCategorySheet: .constant(false), showPaywall: .constant(false))
     }
 }

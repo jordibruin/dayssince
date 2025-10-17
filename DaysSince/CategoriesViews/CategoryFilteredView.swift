@@ -22,6 +22,7 @@ struct CategoryFilteredView: View {
     @State var showConfirmDelete = false
     @State var showUnableToDelete = false
     @State var showEditCategory: Bool = false
+    @State var showPaywall = false
 
     @Binding var items: [DSItem]
     @Binding var isDaysDisplayModeDetailed: Bool
@@ -68,7 +69,7 @@ struct CategoryFilteredView: View {
                 AddItemSheet(selectedCategory: category, remindersEnabled: false, items: $items)
             }
             .sheet(isPresented: $editItemSheet) {
-                EditTappedItemSheet(items: $items, editItemSheet: $editItemSheet, tappedItem: $tappedItem)
+                EditTappedItemSheet(items: $items, editItemSheet: $editItemSheet, tappedItem: $tappedItem, showPayWall: $showPaywall)
             }
             .sheet(isPresented: $showEditCategory) {
                 EditCategorySheet(items: $items, category: category)

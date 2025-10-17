@@ -19,6 +19,8 @@ struct ContentView: View {
     @AppStorage("isDaysDisplayModeDetailed", store: UserDefaults(suiteName: "group.goodsnooze.dayssince")) var isDaysDisplayModeDetailed: Bool = true
 
     @AppStorage("migratedFromOld") var migratedFromOld: Bool = false
+    
+    @EnvironmentObject var entitlements: Entitlements
 
     @Default(.categories) var categories
     @Default(.mainColor) var mainColor
@@ -52,6 +54,14 @@ struct ContentView: View {
                             items = items + newItems
                             migratedFromOld = true
                         }
+                    }
+                    
+                    // Reset the theme colors if the user does not have pro
+                    if !entitlements.isPro {
+//                        mainColor = Color.workColor
+//                        backgroundColor =  Color.backgroundColor
+                        _mainColor.reset()
+                        _backgroundColor.reset()
                     }
                 }
         } else {
