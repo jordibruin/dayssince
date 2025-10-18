@@ -21,7 +21,7 @@ struct SingleEventWidget_Standard: View {
             if colorScheme == .dark {
                 event.color.lighter(by: 0.04)
             } else {
-                Color.white
+                Color.clear
             }
             itemContent
         }
@@ -31,7 +31,10 @@ struct SingleEventWidget_Standard: View {
                 .stroke(colorScheme == .dark ? event.color.darker() : event.color, lineWidth: 8)
         )
         .shadow(color: Color.black.opacity(0.05), radius: 20, x: 0, y: 0)
-        .widgetBackground(Color.clear) // Widgets changed with iOS 17, need to set the background to make them work
+        .luminanceToAlpha()
+        .containerBackground(for: .widget) { Color.clear }
+        .widgetAccentable()
+//        .widgetBackground(Color.clear) // Widgets changed with iOS 17, need to set the background to make them work
     }
     
     var nameText: some View {
