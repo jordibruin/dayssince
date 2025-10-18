@@ -140,6 +140,10 @@
 		D43DE5682DA32C51008A5A8D /* MultipleEventsWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D43DE5672DA32C51008A5A8D /* MultipleEventsWidgetView.swift */; };
 		D47457F42DA112DF00561C4E /* Bundle+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47457F32DA112DF00561C4E /* Bundle+Extensions.swift */; };
 		D479C3EB2DC6557100631220 /* LinkButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D479C3EA2DC6557100631220 /* LinkButton.swift */; };
+		D4A526CB2EA4534C000D80E0 /* calendar-purple.icon in Resources */ = {isa = PBXBuildFile; fileRef = D4A526CA2EA4534C000D80E0 /* calendar-purple.icon */; };
+		D4D0BB092EA44F2F00559A3C /* calendar-blue.icon in Resources */ = {isa = PBXBuildFile; fileRef = D4D0BB052EA44F2F00559A3C /* calendar-blue.icon */; };
+		D4D0BB0A2EA44F2F00559A3C /* calendar-orange.icon in Resources */ = {isa = PBXBuildFile; fileRef = D4D0BB062EA44F2F00559A3C /* calendar-orange.icon */; };
+		D4D0BB0B2EA44F2F00559A3C /* calendar-pink.icon in Resources */ = {isa = PBXBuildFile; fileRef = D4D0BB072EA44F2F00559A3C /* calendar-pink.icon */; };
 		D4DE5C932DA2A43300C5EA63 /* TelemetryDeck in Frameworks */ = {isa = PBXBuildFile; productRef = D4DE5C922DA2A43300C5EA63 /* TelemetryDeck */; };
 		D4DE5C952DA2A5A600C5EA63 /* Analytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4DE5C942DA2A5A600C5EA63 /* Analytics.swift */; };
 /* End PBXBuildFile section */
@@ -294,6 +298,10 @@
 		D43DE5672DA32C51008A5A8D /* MultipleEventsWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipleEventsWidgetView.swift; sourceTree = "<group>"; };
 		D47457F32DA112DF00561C4E /* Bundle+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+Extensions.swift"; sourceTree = "<group>"; };
 		D479C3EA2DC6557100631220 /* LinkButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkButton.swift; sourceTree = "<group>"; };
+		D4A526CA2EA4534C000D80E0 /* calendar-purple.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = "calendar-purple.icon"; sourceTree = "<group>"; };
+		D4D0BB052EA44F2F00559A3C /* calendar-blue.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = "calendar-blue.icon"; sourceTree = "<group>"; };
+		D4D0BB062EA44F2F00559A3C /* calendar-orange.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = "calendar-orange.icon"; sourceTree = "<group>"; };
+		D4D0BB072EA44F2F00559A3C /* calendar-pink.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = "calendar-pink.icon"; sourceTree = "<group>"; };
 		D4DE5C942DA2A5A600C5EA63 /* Analytics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Analytics.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -373,6 +381,10 @@
 				7A2A76F727F24470006F0470 /* Assets.xcassets */,
 				7A2A76F927F24470006F0470 /* Preview Content */,
 				4C169EB9291A97D700E2BBC1 /* Localizable.strings */,
+				D4D0BB052EA44F2F00559A3C /* calendar-blue.icon */,
+				D4D0BB062EA44F2F00559A3C /* calendar-orange.icon */,
+				D4A526CA2EA4534C000D80E0 /* calendar-purple.icon */,
+				D4D0BB072EA44F2F00559A3C /* calendar-pink.icon */,
 			);
 			path = DaysSince;
 			sourceTree = "<group>";
@@ -902,6 +914,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D4D0BB092EA44F2F00559A3C /* calendar-blue.icon in Resources */,
+				D4D0BB0A2EA44F2F00559A3C /* calendar-orange.icon in Resources */,
+				D4D0BB0B2EA44F2F00559A3C /* calendar-pink.icon in Resources */,
 				7AF56ADB286F32CD0068B467 /* HighlightsOnly.json in Resources */,
 				7A2A76FB27F24470006F0470 /* Preview Assets.xcassets in Resources */,
 				7AF56ADC286F32CD0068B467 /* fullSample.json in Resources */,
@@ -909,6 +924,7 @@
 				7AF56AD9286F32CD0068B467 /* CHANGELOG.md in Resources */,
 				4C169EBA291A97D700E2BBC1 /* Localizable.strings in Resources */,
 				7AF56ADA286F32CD0068B467 /* FAQOnly.json in Resources */,
+				D4A526CB2EA4534C000D80E0 /* calendar-purple.icon in Resources */,
 				7A2A76F827F24470006F0470 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

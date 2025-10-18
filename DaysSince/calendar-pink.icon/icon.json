@@ -1,0 +1,182 @@
+{
+  "fill" : {
+    "linear-gradient" : [
+      "srgb:0.84780,0.23072,0.41564,1.00000",
+      "srgb:0.84487,0.43896,0.55606,1.00000"
+    ],
+    "orientation" : {
+      "start" : {
+        "x" : 0.5,
+        "y" : 0
+      },
+      "stop" : {
+        "x" : 0.5,
+        "y" : 0.7
+      }
+    }
+  },
+  "groups" : [
+    {
+      "layers" : [
+        {
+          "fill" : {
+            "solid" : "srgb:0.84457,0.24392,0.42836,1.00000"
+          },
+          "image-name" : "Rectangle 5.png",
+          "name" : "Rectangle 5",
+          "position" : {
+            "scale" : 1,
+            "translation-in-points" : [
+              422,
+              0
+            ]
+          }
+        },
+        {
+          "fill" : {
+            "solid" : "srgb:0.82386,0.21720,0.40806,1.00000"
+          },
+          "image-name" : "Rectangle 4.png",
+          "name" : "Rectangle 4",
+          "position" : {
+            "scale" : 1,
+            "translation-in-points" : [
+              -422,
+              0
+            ]
+          }
+        },
+        {
+          "blend-mode" : "overlay",
+          "fill-specializations" : [
+            {
+              "value" : {
+                "solid" : "srgb:0.60192,0.16753,0.29613,1.00000"
+              }
+            },
+            {
+              "appearance" : "dark",
+              "value" : {
+                "solid" : "display-p3:0.68720,0.24669,0.36607,1.00000"
+              }
+            }
+          ],
+          "glass" : true,
+          "hidden" : false,
+          "image-name" : "24 dark.png",
+          "name" : "24 dark",
+          "opacity-specializations" : [
+            {
+              "appearance" : "dark",
+              "value" : 1
+            }
+          ]
+        },
+        {
+          "hidden" : true,
+          "image-name" : "24.png",
+          "name" : "24"
+        }
+      ],
+      "shadow" : {
+        "kind" : "neutral",
+        "opacity" : 0.5
+      },
+      "translucency" : {
+        "enabled" : true,
+        "value" : 0.5
+      }
+    },
+    {
+      "layers" : [
+        {
+          "blend-mode" : "multiply",
+          "fill" : {
+            "solid" : "srgb:0.92088,0.53304,0.64671,1.00000"
+          },
+          "glass" : true,
+          "image-name" : "Rectangle 2.png",
+          "name" : "Rectangle 2",
+          "position" : {
+            "scale" : 1,
+            "translation-in-points" : [
+              0,
+              -200.5
+            ]
+          }
+        }
+      ],
+      "shadow" : {
+        "kind" : "neutral",
+        "opacity" : 0.5
+      },
+      "translucency" : {
+        "enabled" : true,
+        "value" : 0.5
+      }
+    },
+    {
+      "layers" : [
+        {
+          "fill-specializations" : [
+            {
+              "value" : {
+                "solid" : "srgb:0.94283,0.69309,0.76744,1.00000"
+              }
+            },
+            {
+              "appearance" : "dark",
+              "value" : {
+                "solid" : "display-p3:0.80354,0.61782,0.67800,1.00000"
+              }
+            }
+          ],
+          "image-name" : "Rectangle 3-2.png",
+          "name" : "Rectangle 3-2",
+          "opacity-specializations" : [
+            {
+              "value" : 1
+            },
+            {
+              "appearance" : "dark",
+              "value" : 1
+            }
+          ],
+          "position" : {
+            "scale" : 1,
+            "translation-in-points" : [
+              0,
+              203
+            ]
+          }
+        },
+        {
+          "image-name" : "Rectangle 3.png",
+          "name" : "Rectangle 3",
+          "opacity" : 0.8,
+          "position" : {
+            "scale" : 1,
+            "translation-in-points" : [
+              0,
+              203
+            ]
+          }
+        }
+      ],
+      "shadow" : {
+        "kind" : "neutral",
+        "opacity" : 0.5
+      },
+      "translucency" : {
+        "enabled" : true,
+        "value" : 0.5
+      }
+    }
+  ],
+  "supported-platforms" : {
+    "circles" : [
+      "watchOS"
+    ],
+    "squares" : "shared"
+  }
+}
