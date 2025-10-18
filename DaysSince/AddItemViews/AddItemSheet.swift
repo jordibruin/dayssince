@@ -55,10 +55,10 @@ struct AddItemSheet: View {
                 .navigationTitle("New Event")
                 .navigationBarTitleDisplayMode(.inline)
                 .ignoresSafeArea(.keyboard, edges: .bottom)
+                .toolbar(content: {
+                    toolbarItems
+                })
         }
-        .toolbar(content: {
-            toolbarItems
-        })
         .sheet(isPresented: $showCategorySheet) {
             AddCategorySheet()
                 .presentationDragIndicator(.hidden)
