@@ -27,8 +27,8 @@ struct SingleEventWidget_Standard: View {
         }
         .clipShape(RoundedRectangle(cornerRadius: 23))
         .overlay(
-            RoundedRectangle(cornerRadius: 23)
-                .stroke(colorScheme == .dark ? event.color.darker() : event.color, lineWidth: 6)
+            RoundedRectangle(cornerRadius: 28)
+                .stroke(colorScheme == .dark ? event.color.darker() : event.color, lineWidth: 8)
         )
         .shadow(color: Color.black.opacity(0.05), radius: 20, x: 0, y: 0)
         .widgetBackground(Color.clear) // Widgets changed with iOS 17, need to set the background to make them work
