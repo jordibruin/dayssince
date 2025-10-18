@@ -12,6 +12,7 @@ struct PayWallScreen: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject var storeManager: StoreManager
     @EnvironmentObject var entitlements: Entitlements
+    @EnvironmentObject var reviewManager: ReviewManager
     @Default(.mainColor) var mainColor
     @AppStorage("hasSeenOnboarding") private var hasSeenOnboarding = false
     
@@ -141,7 +142,11 @@ struct PayWallScreen: View {
         if let product = storeManager.proProduct {
             Button {
                 Task {
-                    await storeManager.purchasePro(inOnboarding: inOnboarding)
+                    if await storeManager.purchasePro(inOnboarding: inOnboarding) {
+                        await MainActor.run {
+                            reviewManager.promptReviewAlert()
+                        }
+                    }
                 }
             } label: {
                 HStack {

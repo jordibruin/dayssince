@@ -54,12 +54,12 @@ final class StoreManager: ObservableObject {
         }
     }
 
-    func purchasePro(inOnboarding: Bool = false) async {
+    func purchasePro(inOnboarding: Bool = false) async -> Bool {
         Analytics.send(.proStartPurchase)
         
         guard let product = proProduct else {
             await requestProducts()
-            return
+            return false
         }
 
         isPurchasing = true
@@ -80,6 +80,7 @@ final class StoreManager: ObservableObject {
                     }
                 }
                 await transaction.finish()
+                return true
             case .userCancelled, .pending:
                 break
             @unknown default:
@@ -89,6 +90,7 @@ final class StoreManager: ObservableObject {
             purchaseErrorMessage = (error as NSError).localizedDescription
             print("Purchase error: \(error)")
         }
+        return false 
     }
 
     func restorePurchases() async {
