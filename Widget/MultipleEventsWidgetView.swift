@@ -12,6 +12,7 @@ struct MultipleEventsWidgetView: View {
     let entry: MultipleEventsEntry
     @Environment(\.widgetFamily) var family
     @Environment(\.colorScheme) var colorScheme
+    @Environment(\.widgetRenderingMode) var renderingMode
 
     @AppStorage("isDaysDisplayModeDetailed", store: UserDefaults(suiteName: "group.goodsnooze.dayssince")) var isDaysDisplayModeDetailed: Bool = true
 
@@ -35,20 +36,31 @@ struct MultipleEventsWidgetView: View {
                     itemContent(for: event)
                 }
             }
-//            .aspectRatio(contentMode: .fit)
             .padding()
             .padding(.bottom, 6)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(colorScheme == .dark ? backgroundColor : Color.clear)
-            
+            .background {
+                if colorScheme == .dark && renderingMode == .fullColor {
+                    backgroundColor
+                } else {
+                    Color.clear.luminanceToAlpha()
+                }
+            }
         }
-        .clipShape(RoundedRectangle(cornerRadius: 23))
+        .clipShape(ContainerRelativeShape())
         .overlay(
-            RoundedRectangle(cornerRadius: 28)
-                .stroke(borderColor, lineWidth: 8)
+            Group {
+                if renderingMode == .fullColor {
+                    ContainerRelativeShape()
+                        .strokeBorder(borderColor, lineWidth: 4)
+                } else {
+                    ContainerRelativeShape()
+                        .strokeBorder(borderColor, lineWidth: 4)
+                        .luminanceToAlpha()
+                }
+            }
         )
-        .shadow(color: Color.black.opacity(0.05), radius: 20, x: 0, y: 0)
-//        .luminanceToAlpha()
+        .background(ContainerRelativeShape().fill(Color.clear))
         .containerBackground(for: .widget) { Color.clear }
         .widgetAccentable()
     }
