@@ -87,6 +87,7 @@ struct PayWallScreen: View {
                         Label("You already own Pro", systemImage: "checkmark.seal.fill")
                             .foregroundColor(.green)
                             .padding(.top, 8)
+                            .frame(maxWidth: .infinity)
                     } else {
                         pricingArea
                     }
