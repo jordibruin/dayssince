@@ -13,28 +13,37 @@ struct SingleEventWidget_Standard: View {
     var event: WidgetContent
     
     @Environment(\.colorScheme) var colorScheme
+    @Environment(\.widgetRenderingMode) var renderingMode
 
     @AppStorage("isDaysDisplayModeDetailed", store: UserDefaults(suiteName: "group.goodsnooze.dayssince")) var isDaysDisplayModeDetailed: Bool = true
     
     var body: some View {
         ZStack(alignment: .leading) {
-            if colorScheme == .dark {
+            if colorScheme == .dark && renderingMode == .fullColor {
                 event.color.lighter(by: 0.04)
             } else {
                 Color.clear
+                    .luminanceToAlpha()
             }
+
             itemContent
         }
-        .clipShape(RoundedRectangle(cornerRadius: 23))
+        .clipShape(ContainerRelativeShape())
         .overlay(
-            RoundedRectangle(cornerRadius: 28)
-                .stroke(colorScheme == .dark ? event.color.darker() : event.color, lineWidth: 8)
+            Group {
+                if renderingMode == .fullColor {
+                    ContainerRelativeShape()
+                        .strokeBorder(colorScheme == .dark ? event.color.darker() : event.color, lineWidth: 4)
+                } else {
+                    ContainerRelativeShape()
+                        .strokeBorder(colorScheme == .dark ? event.color.darker() : event.color, lineWidth: 4)
+                        .luminanceToAlpha()
+                }
+            }
         )
-        .shadow(color: Color.black.opacity(0.05), radius: 20, x: 0, y: 0)
-        .luminanceToAlpha()
+        .background(ContainerRelativeShape().fill(Color.clear))
         .containerBackground(for: .widget) { Color.clear }
         .widgetAccentable()
-//        .widgetBackground(Color.clear) // Widgets changed with iOS 17, need to set the background to make them work
     }
     
     var nameText: some View {

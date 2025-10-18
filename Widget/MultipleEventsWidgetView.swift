@@ -39,7 +39,7 @@ struct MultipleEventsWidgetView: View {
             .padding()
             .padding(.bottom, 6)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(colorScheme == .dark ? backgroundColor : Color.white)
+            .background(colorScheme == .dark ? backgroundColor : Color.clear)
             
         }
         .clipShape(RoundedRectangle(cornerRadius: 23))
@@ -48,7 +48,9 @@ struct MultipleEventsWidgetView: View {
                 .stroke(borderColor, lineWidth: 8)
         )
         .shadow(color: Color.black.opacity(0.05), radius: 20, x: 0, y: 0)
-        .widgetBackground(Color.clear)
+//        .luminanceToAlpha()
+        .containerBackground(for: .widget) { Color.clear }
+        .widgetAccentable()
     }
     
     @ViewBuilder
