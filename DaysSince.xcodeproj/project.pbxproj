@@ -141,6 +141,7 @@
 		D47457F42DA112DF00561C4E /* Bundle+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47457F32DA112DF00561C4E /* Bundle+Extensions.swift */; };
 		D479C3EB2DC6557100631220 /* LinkButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D479C3EA2DC6557100631220 /* LinkButton.swift */; };
 		D4A526CB2EA4534C000D80E0 /* calendar-purple.icon in Resources */ = {isa = PBXBuildFile; fileRef = D4A526CA2EA4534C000D80E0 /* calendar-purple.icon */; };
+		D4A526E12EA51E1B000D80E0 /* red-app-icon.icon in Resources */ = {isa = PBXBuildFile; fileRef = D4A526E02EA51E1B000D80E0 /* red-app-icon.icon */; };
 		D4D0BB092EA44F2F00559A3C /* calendar-blue.icon in Resources */ = {isa = PBXBuildFile; fileRef = D4D0BB052EA44F2F00559A3C /* calendar-blue.icon */; };
 		D4D0BB0A2EA44F2F00559A3C /* calendar-orange.icon in Resources */ = {isa = PBXBuildFile; fileRef = D4D0BB062EA44F2F00559A3C /* calendar-orange.icon */; };
 		D4D0BB0B2EA44F2F00559A3C /* calendar-pink.icon in Resources */ = {isa = PBXBuildFile; fileRef = D4D0BB072EA44F2F00559A3C /* calendar-pink.icon */; };
@@ -299,6 +300,7 @@
 		D47457F32DA112DF00561C4E /* Bundle+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+Extensions.swift"; sourceTree = "<group>"; };
 		D479C3EA2DC6557100631220 /* LinkButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkButton.swift; sourceTree = "<group>"; };
 		D4A526CA2EA4534C000D80E0 /* calendar-purple.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = "calendar-purple.icon"; sourceTree = "<group>"; };
+		D4A526E02EA51E1B000D80E0 /* red-app-icon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = "red-app-icon.icon"; sourceTree = "<group>"; };
 		D4D0BB052EA44F2F00559A3C /* calendar-blue.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = "calendar-blue.icon"; sourceTree = "<group>"; };
 		D4D0BB062EA44F2F00559A3C /* calendar-orange.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = "calendar-orange.icon"; sourceTree = "<group>"; };
 		D4D0BB072EA44F2F00559A3C /* calendar-pink.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = "calendar-pink.icon"; sourceTree = "<group>"; };
@@ -385,6 +387,7 @@
 				D4D0BB062EA44F2F00559A3C /* calendar-orange.icon */,
 				D4A526CA2EA4534C000D80E0 /* calendar-purple.icon */,
 				D4D0BB072EA44F2F00559A3C /* calendar-pink.icon */,
+				D4A526E02EA51E1B000D80E0 /* red-app-icon.icon */,
 			);
 			path = DaysSince;
 			sourceTree = "<group>";
@@ -916,6 +919,7 @@
 			files = (
 				D4D0BB092EA44F2F00559A3C /* calendar-blue.icon in Resources */,
 				D4D0BB0A2EA44F2F00559A3C /* calendar-orange.icon in Resources */,
+				D4A526E12EA51E1B000D80E0 /* red-app-icon.icon in Resources */,
 				D4D0BB0B2EA44F2F00559A3C /* calendar-pink.icon in Resources */,
 				7AF56ADB286F32CD0068B467 /* HighlightsOnly.json in Resources */,
 				7A2A76FB27F24470006F0470 /* Preview Assets.xcassets in Resources */,
