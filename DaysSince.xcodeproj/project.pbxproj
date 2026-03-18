@@ -324,6 +324,7 @@
 		D4D0BB062EA44F2F00559A3C /* calendar-orange.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = "calendar-orange.icon"; sourceTree = "<group>"; };
 		D4D0BB072EA44F2F00559A3C /* calendar-pink.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = "calendar-pink.icon"; sourceTree = "<group>"; };
 		D4DE5C942DA2A5A600C5EA63 /* Analytics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Analytics.swift; sourceTree = "<group>"; };
+		D5TE5T00000000000000A001 /* DaysSinceTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DaysSinceTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D5TE5T0000000000000B0001 /* DSItemTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DSItemTests.swift; sourceTree = "<group>"; };
 		D5TE5T0000000000000B0002 /* CategoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryTests.swift; sourceTree = "<group>"; };
 		D5TE5T0000000000000B0003 /* CategoryColorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryColorTests.swift; sourceTree = "<group>"; };
@@ -336,7 +337,6 @@
 		D5TE5T0000000000000B0010 /* AnalyticsTypeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsTypeTests.swift; sourceTree = "<group>"; };
 		D5TE5T0000000000000B0011 /* AlternativeIconTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlternativeIconTests.swift; sourceTree = "<group>"; };
 		D5TE5T0000000000000B0012 /* ColorThemeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorThemeTests.swift; sourceTree = "<group>"; };
-		D5TE5T00000000000000A001 /* DaysSinceTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DaysSinceTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -957,15 +957,15 @@
 					7A2A76EF27F2446E006F0470 = {
 						CreatedOnToolsVersion = 13.2.1;
 					};
-					D5TE5T00000000000000A002 = {
-						CreatedOnToolsVersion = 16.0;
-						TestTargetID = 7A2A76EF27F2446E006F0470;
-					};
 					C2B53DAB2869F0CE00407F40 = {
 						CreatedOnToolsVersion = 13.3;
 					};
 					C2B53DCA2869F6F200407F40 = {
 						CreatedOnToolsVersion = 13.3;
+					};
+					D5TE5T00000000000000A002 = {
+						CreatedOnToolsVersion = 16.0;
+						TestTargetID = 7A2A76EF27F2446E006F0470;
 					};
 				};
 			};
@@ -1509,7 +1509,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = WidgetIntents/WidgetIntents.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 8Q7TMPA46J;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = WidgetIntents/Info.plist;
@@ -1521,7 +1521,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.9;
 				PRODUCT_BUNDLE_IDENTIFIER = com.goodsnooze.dayssince.WidgetIntents;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -1536,7 +1536,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = WidgetIntents/WidgetIntents.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 8Q7TMPA46J;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = WidgetIntents/Info.plist;
@@ -1548,7 +1548,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.9;
 				PRODUCT_BUNDLE_IDENTIFIER = com.goodsnooze.dayssince.WidgetIntents;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
