@@ -27,6 +27,7 @@ struct AppIcons: View {
         AlternativeIcon(name: "calendar-orange-image", iconName: "calendar-orange", premium: false, original: false),
         AlternativeIcon(name: "calendar-blue-image", iconName: "calendar-blue", premium: false, original: false),
         AlternativeIcon(name: "AppIcon-image", iconName: "AppIcon", premium: false, original: false),
+        AlternativeIcon(name: "red-app-icon-image", iconName: "red-app-icon", premium: true, original: false),
     ]
 
     @State var showPayWall = false
