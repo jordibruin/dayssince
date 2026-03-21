@@ -29,8 +29,6 @@
 		7A65AB02286CFC53002D6DCA /* SupportButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A65AB01286CFC53002D6DCA /* SupportButton.swift */; };
 		7A67C6E0280061FA0095675F /* Color+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A67C6DF280061FA0095675F /* Color+Extensions.swift */; };
 		7A7CD90C287F20F70001C64F /* OnboardingScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A7CD90B287F20F70001C64F /* OnboardingScreen.swift */; };
-		7A7CD90F287F21890001C64F /* Introduction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A7CD90E287F21890001C64F /* Introduction.swift */; };
-		7A7CD911287F22E90001C64F /* AnimateText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A7CD910287F22E90001C64F /* AnimateText.swift */; };
 		7A7CD913287F2E760001C64F /* CreateFirstEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A7CD912287F2E760001C64F /* CreateFirstEvent.swift */; };
 		7A868D182890814A009C92D6 /* DetailedTimeDisplayMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A868D172890814A009C92D6 /* DetailedTimeDisplayMode.swift */; };
 		7A9141B42B0EA6AF00F06CA2 /* CategoryColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9141B32B0EA6AF00F06CA2 /* CategoryColor.swift */; };
@@ -157,6 +155,8 @@
 		D4C0E2112DC7B39500673A5A /* EventCardModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C0E20F2DC7B39500673A5A /* EventCardModel.swift */; };
 		D4C0E2122DC7B39500673A5A /* EventCardModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C0E20F2DC7B39500673A5A /* EventCardModel.swift */; };
 		D4C0E2142DC7B3ED00673A5A /* CompactEventCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C0E2132DC7B3ED00673A5A /* CompactEventCardView.swift */; };
+		D4D3FA9B2F6F4B39008967AC /* FeaturesPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4D3FA9A2F6F4B39008967AC /* FeaturesPage.swift */; };
+		D4D3FA9D2F6F4EC9008967AC /* LastPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4D3FA9C2F6F4EC9008967AC /* LastPage.swift */; };
 		D4DE5C932DA2A43300C5EA63 /* TelemetryDeck in Frameworks */ = {isa = PBXBuildFile; productRef = D4DE5C922DA2A43300C5EA63 /* TelemetryDeck */; };
 		D4DE5C952DA2A5A600C5EA63 /* Analytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4DE5C942DA2A5A600C5EA63 /* Analytics.swift */; };
 /* End PBXBuildFile section */
@@ -215,8 +215,6 @@
 		7A65AB01286CFC53002D6DCA /* SupportButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportButton.swift; sourceTree = "<group>"; };
 		7A67C6DF280061FA0095675F /* Color+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Extensions.swift"; sourceTree = "<group>"; };
 		7A7CD90B287F20F70001C64F /* OnboardingScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingScreen.swift; sourceTree = "<group>"; };
-		7A7CD90E287F21890001C64F /* Introduction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Introduction.swift; sourceTree = "<group>"; };
-		7A7CD910287F22E90001C64F /* AnimateText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimateText.swift; sourceTree = "<group>"; };
 		7A7CD912287F2E760001C64F /* CreateFirstEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateFirstEvent.swift; sourceTree = "<group>"; };
 		7A868D172890814A009C92D6 /* DetailedTimeDisplayMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailedTimeDisplayMode.swift; sourceTree = "<group>"; };
 		7A9141B32B0EA6AF00F06CA2 /* CategoryColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryColor.swift; sourceTree = "<group>"; };
@@ -326,6 +324,8 @@
 		D4C0E20D2DC79DC800673A5A /* PickFirstEventPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickFirstEventPage.swift; sourceTree = "<group>"; };
 		D4C0E20F2DC7B39500673A5A /* EventCardModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCardModel.swift; sourceTree = "<group>"; };
 		D4C0E2132DC7B3ED00673A5A /* CompactEventCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompactEventCardView.swift; sourceTree = "<group>"; };
+		D4D3FA9A2F6F4B39008967AC /* FeaturesPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeaturesPage.swift; sourceTree = "<group>"; };
+		D4D3FA9C2F6F4EC9008967AC /* LastPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LastPage.swift; sourceTree = "<group>"; };
 		D4DE5C942DA2A5A600C5EA63 /* Analytics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Analytics.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -464,9 +464,9 @@
 		7A7CD90D287F21750001C64F /* Pages */ = {
 			isa = PBXGroup;
 			children = (
-				7A7CD90E287F21890001C64F /* Introduction.swift */,
 				D4C0E20D2DC79DC800673A5A /* PickFirstEventPage.swift */,
-				7A7CD910287F22E90001C64F /* AnimateText.swift */,
+				D4D3FA9A2F6F4B39008967AC /* FeaturesPage.swift */,
+				D4D3FA9C2F6F4EC9008967AC /* LastPage.swift */,
 				D4A926F22DCA5A8B0089F037 /* WidgetPreviewScreen.swift */,
 				7A7CD912287F2E760001C64F /* CreateFirstEvent.swift */,
 				D4A926F02DCA4B2B0089F037 /* FirstEventPreview.swift */,
@@ -1041,6 +1041,7 @@
 				D479C3EB2DC6557100631220 /* LinkButton.swift in Sources */,
 				7AF56AD6286F32CD0068B467 /* Design.swift in Sources */,
 				C255EB67289A725100282E7B /* Widget.intentdefinition in Sources */,
+				D4D3FA9D2F6F4EC9008967AC /* LastPage.swift in Sources */,
 				D4C0E20C2DC79A4D00673A5A /* OnboardingRootView.swift in Sources */,
 				14CAC90829B26ED900DF3C24 /* UIApplication+Extensions.swift in Sources */,
 				7AF56AE0286F32CD0068B467 /* HooliganColor+Extensions.swift in Sources */,
@@ -1064,7 +1065,6 @@
 				7A2A76F427F2446E006F0470 /* DaysSinceApp.swift in Sources */,
 				7AF56AD7286F32CD0068B467 /* HooliganVideoPlayerController.swift in Sources */,
 				7A65AAFE286CF5FD002D6DCA /* SettingsReviewButton.swift in Sources */,
-				7A7CD90F287F21890001C64F /* Introduction.swift in Sources */,
 				D479C4272DC6C9A400631220 /* CustomButton.swift in Sources */,
 				7AE2946727F4B0AF006A7E01 /* Calendar+Extensions.swift in Sources */,
 				7AF56AEF286F32CD0068B467 /* SupportLocale.swift in Sources */,
@@ -1079,7 +1079,7 @@
 				D479C4322DC6DBD800631220 /* ChatBubble.swift in Sources */,
 				D479C4362DC6DD4A00631220 /* ProgressBar.swift in Sources */,
 				D4A926F12DCA4B2B0089F037 /* FirstEventPreview.swift in Sources */,
-				7A7CD911287F22E90001C64F /* AnimateText.swift in Sources */,
+				D4D3FA9B2F6F4B39008967AC /* FeaturesPage.swift in Sources */,
 				7AF56AE4286F32CD0068B467 /* SupportFetcher.swift in Sources */,
 				C2B53D982869CACA00407F40 /* SortingMenuView.swift in Sources */,
 				7A3B3D232B9F7B2B007BF1FC /* EditCategorySheet.swift in Sources */,

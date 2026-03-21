@@ -9,9 +9,15 @@ import SwiftUI
 
 struct WidgetPreviewScreen: View {
     @AppStorage("items", store: UserDefaults(suiteName: "group.goodsnooze.dayssince"))
+    
     private var storedItems: [DSItem] = []
     private var injectedItems: [DSItem]?
-    @State private var items: [DSItem] = []
+    let navigate: (OnboardingScreen) -> Void
+
+    init(items: [DSItem]? = nil, navigate: @escaping (OnboardingScreen) -> Void) {
+        self.injectedItems = items
+        self.navigate = navigate
+    }
 
     var latestEvent: DSItem {
         (injectedItems ?? storedItems).last ?? DSItem(id: UUID(), name: "Test", category: Category.placeholderCategory(), dateLastDone: Date.now, remindersEnabled: false)
@@ -41,14 +47,13 @@ struct WidgetPreviewScreen: View {
                 .padding(.vertical, 1)
         }
         .padding(.vertical)
-        .onAppear {
-            items = injectedItems ?? storedItems
-        }
-        CustomButton(action: {
-            // move to next screen
-        }, label: "Looks great!", color: .workColor)
+        CustomButton(action: nextPage, label: "Looks great!", color: .workColor)
         .padding(.horizontal)
         .padding(.vertical, 0)
+    }
+    
+    func nextPage() -> Void {
+        navigate(.screen7)
     }
 
     var widgetPreviews: some View {
@@ -83,7 +88,10 @@ struct WidgetPreviewScreen: View {
 
             // Medium simulations
             VStack(spacing: 12) {
-                MediumWidgetMultiEvent(entry:[ EventCardModel(from: latestEvent), EventCardModel(from: latestEvent)])
+                MediumWidgetMultiEvent(entry: [
+                    EventCardModel(from: latestEvent),
+                    EventCardModel(id: UUID(), dateLastDone: latestEvent.dateLastDone, name: latestEvent.name, color: latestEvent.category.color.color)
+                ])
                     .frame(height: 160)
                     .shadow(radius: 5, x: 1, y: 2)
                     .padding(.all, 8)
@@ -113,7 +121,7 @@ private struct WidgetPreviewScreenWrapper: View {
     @State private var items: [DSItem] = [mock]
 
     var body: some View {
-        WidgetPreviewScreen()
+        WidgetPreviewScreen(items: items, navigate: { _ in })
     }
 }
 

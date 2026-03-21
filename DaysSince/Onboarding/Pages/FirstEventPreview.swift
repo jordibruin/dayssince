@@ -90,7 +90,7 @@ struct FirstEventPreview: View {
             .padding(.horizontal)
 
             CustomButton(
-                action: {},
+                action: nextPage,
                 label: "Yay!",
                 color: .animalCrossingsGreen
             )
@@ -104,7 +104,10 @@ struct FirstEventPreview: View {
             }
         }
     }
-
+    
+    func nextPage() -> Void {
+            navigate(.screen6)
+        }
 }
 
 
