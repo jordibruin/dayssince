@@ -42,6 +42,48 @@ struct DSItemListView: View {
                 items: items,
                 colored: true
             )
+            .contextMenu {
+                Button {
+                    if let index = items.wrappedValue.firstIndex(where: { $0.id == item.id }) {
+                        changeDateTo(Date.now, itemIndex: index)
+                    }
+                } label: {
+                    Label("Today", systemImage: "calendar")
+                }
+
+                Button {
+                    if let index = items.wrappedValue.firstIndex(where: { $0.id == item.id }) {
+                       changeDateTo(Date().dayBefore, itemIndex: index)
+                    }
+                } label: {
+                    Label("Yesterday", systemImage: "clock.arrow.circlepath")
+                }
+
+                Button {
+                    showingDeleteAlert = true
+                    itemToDelete = items.wrappedValue.first { $0.id == item.id }
+                } label: {
+                    Label("Delete Event", systemImage: "trash")
+                        .tint(.red)
+                }
+            }
+            .confirmationDialog(
+                Text("Are you sure you want to delete this event?"),
+                isPresented: $showingDeleteAlert,
+                titleVisibility: .visible
+            ) {
+                Button("Delete", role: .destructive) {
+                    withAnimation {
+                        if let item = itemToDelete {
+                            deleteEvent(item)
+                        }
+                        itemToDelete = nil
+                    }
+                }
+                Button("Cancel", role: .cancel) {
+                    itemToDelete = nil
+                }
+            }
         }
         .padding(.horizontal)
     }
@@ -85,25 +127,25 @@ struct DSItemListView: View {
                         .tint(.red)
                 }
             }
-        }
-        .padding(.horizontal)
-        .confirmationDialog(
-            Text("Are you sure you want to delete this event?"),
-            isPresented: $showingDeleteAlert,
-            titleVisibility: .visible
-        ) {
-            Button("Delete", role: .destructive) {
-                withAnimation {
-                    if let item = itemToDelete {
-                        deleteEvent(item)
+            .confirmationDialog(
+                Text("Are you sure you want to delete this event?"),
+                isPresented: $showingDeleteAlert,
+                titleVisibility: .visible
+            ) {
+                Button("Delete", role: .destructive) {
+                    withAnimation {
+                        if let item = itemToDelete {
+                            deleteEvent(item)
+                        }
+                        itemToDelete = nil
                     }
+                }
+                Button("Cancel", role: .cancel) {
                     itemToDelete = nil
                 }
             }
-            Button("Cancel", role: .cancel) {
-                itemToDelete = nil
-            }
         }
+        .padding(.horizontal)
     }
 
     func changeDateTo(_ date: Date, itemIndex: Int) {

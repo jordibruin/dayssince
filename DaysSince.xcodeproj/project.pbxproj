@@ -157,8 +157,25 @@
 		D4C0E2142DC7B3ED00673A5A /* CompactEventCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C0E2132DC7B3ED00673A5A /* CompactEventCardView.swift */; };
 		D4D3FA9B2F6F4B39008967AC /* FeaturesPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4D3FA9A2F6F4B39008967AC /* FeaturesPage.swift */; };
 		D4D3FA9D2F6F4EC9008967AC /* LastPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4D3FA9C2F6F4EC9008967AC /* LastPage.swift */; };
+		D4A526CB2EA4534C000D80E0 /* calendar-purple.icon in Resources */ = {isa = PBXBuildFile; fileRef = D4A526CA2EA4534C000D80E0 /* calendar-purple.icon */; };
+		D4A526E12EA51E1B000D80E0 /* red-app-icon.icon in Resources */ = {isa = PBXBuildFile; fileRef = D4A526E02EA51E1B000D80E0 /* red-app-icon.icon */; };
+		D4D0BB092EA44F2F00559A3C /* calendar-blue.icon in Resources */ = {isa = PBXBuildFile; fileRef = D4D0BB052EA44F2F00559A3C /* calendar-blue.icon */; };
+		D4D0BB0A2EA44F2F00559A3C /* calendar-orange.icon in Resources */ = {isa = PBXBuildFile; fileRef = D4D0BB062EA44F2F00559A3C /* calendar-orange.icon */; };
+		D4D0BB0B2EA44F2F00559A3C /* calendar-pink.icon in Resources */ = {isa = PBXBuildFile; fileRef = D4D0BB072EA44F2F00559A3C /* calendar-pink.icon */; };
 		D4DE5C932DA2A43300C5EA63 /* TelemetryDeck in Frameworks */ = {isa = PBXBuildFile; productRef = D4DE5C922DA2A43300C5EA63 /* TelemetryDeck */; };
 		D4DE5C952DA2A5A600C5EA63 /* Analytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4DE5C942DA2A5A600C5EA63 /* Analytics.swift */; };
+		D5TE5T0000000000000C0001 /* DSItemTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5TE5T0000000000000B0001 /* DSItemTests.swift */; };
+		D5TE5T0000000000000C0002 /* CategoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5TE5T0000000000000B0002 /* CategoryTests.swift */; };
+		D5TE5T0000000000000C0003 /* CategoryColorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5TE5T0000000000000B0003 /* CategoryColorTests.swift */; };
+		D5TE5T0000000000000C0004 /* DSItemRemindersTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5TE5T0000000000000B0004 /* DSItemRemindersTests.swift */; };
+		D5TE5T0000000000000C0005 /* CalendarExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5TE5T0000000000000B0005 /* CalendarExtensionTests.swift */; };
+		D5TE5T0000000000000C0006 /* DateExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5TE5T0000000000000B0006 /* DateExtensionTests.swift */; };
+		D5TE5T0000000000000C0007 /* ArrayExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5TE5T0000000000000B0007 /* ArrayExtensionTests.swift */; };
+		D5TE5T0000000000000C0008 /* ColorExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5TE5T0000000000000B0008 /* ColorExtensionTests.swift */; };
+		D5TE5T0000000000000C0009 /* SortTypeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5TE5T0000000000000B0009 /* SortTypeTests.swift */; };
+		D5TE5T0000000000000C0010 /* AnalyticsTypeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5TE5T0000000000000B0010 /* AnalyticsTypeTests.swift */; };
+		D5TE5T0000000000000C0011 /* AlternativeIconTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5TE5T0000000000000B0011 /* AlternativeIconTests.swift */; };
+		D5TE5T0000000000000C0012 /* ColorThemeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5TE5T0000000000000B0012 /* ColorThemeTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -175,6 +192,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = C2B53DCA2869F6F200407F40;
 			remoteInfo = WidgetIntents;
+		};
+		D5TE5T00000000000000A00A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7A2A76E827F2446E006F0470 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7A2A76EF27F2446E006F0470;
+			remoteInfo = DaysSince;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -326,7 +350,25 @@
 		D4C0E2132DC7B3ED00673A5A /* CompactEventCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompactEventCardView.swift; sourceTree = "<group>"; };
 		D4D3FA9A2F6F4B39008967AC /* FeaturesPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeaturesPage.swift; sourceTree = "<group>"; };
 		D4D3FA9C2F6F4EC9008967AC /* LastPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LastPage.swift; sourceTree = "<group>"; };
+		D4A526CA2EA4534C000D80E0 /* calendar-purple.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = "calendar-purple.icon"; sourceTree = "<group>"; };
+		D4A526E02EA51E1B000D80E0 /* red-app-icon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = "red-app-icon.icon"; sourceTree = "<group>"; };
+		D4D0BB052EA44F2F00559A3C /* calendar-blue.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = "calendar-blue.icon"; sourceTree = "<group>"; };
+		D4D0BB062EA44F2F00559A3C /* calendar-orange.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = "calendar-orange.icon"; sourceTree = "<group>"; };
+		D4D0BB072EA44F2F00559A3C /* calendar-pink.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = "calendar-pink.icon"; sourceTree = "<group>"; };
 		D4DE5C942DA2A5A600C5EA63 /* Analytics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Analytics.swift; sourceTree = "<group>"; };
+		D5TE5T00000000000000A001 /* DaysSinceTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DaysSinceTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		D5TE5T0000000000000B0001 /* DSItemTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DSItemTests.swift; sourceTree = "<group>"; };
+		D5TE5T0000000000000B0002 /* CategoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryTests.swift; sourceTree = "<group>"; };
+		D5TE5T0000000000000B0003 /* CategoryColorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryColorTests.swift; sourceTree = "<group>"; };
+		D5TE5T0000000000000B0004 /* DSItemRemindersTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DSItemRemindersTests.swift; sourceTree = "<group>"; };
+		D5TE5T0000000000000B0005 /* CalendarExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarExtensionTests.swift; sourceTree = "<group>"; };
+		D5TE5T0000000000000B0006 /* DateExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtensionTests.swift; sourceTree = "<group>"; };
+		D5TE5T0000000000000B0007 /* ArrayExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayExtensionTests.swift; sourceTree = "<group>"; };
+		D5TE5T0000000000000B0008 /* ColorExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtensionTests.swift; sourceTree = "<group>"; };
+		D5TE5T0000000000000B0009 /* SortTypeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortTypeTests.swift; sourceTree = "<group>"; };
+		D5TE5T0000000000000B0010 /* AnalyticsTypeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsTypeTests.swift; sourceTree = "<group>"; };
+		D5TE5T0000000000000B0011 /* AlternativeIconTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlternativeIconTests.swift; sourceTree = "<group>"; };
+		D5TE5T0000000000000B0012 /* ColorThemeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorThemeTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -365,6 +407,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D5TE5T00000000000000A004 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -373,6 +422,7 @@
 			children = (
 				C2B53DE1286A002000407F40 /* WidgetExtension.entitlements */,
 				7A2A76F227F2446E006F0470 /* DaysSince */,
+				D5TE5T00000000000000A00B /* DaysSinceTests */,
 				C2B53DB22869F0CE00407F40 /* Widget */,
 				C2B53DCE2869F6F200407F40 /* WidgetIntents */,
 				C2B53DAD2869F0CE00407F40 /* Frameworks */,
@@ -384,6 +434,7 @@
 			isa = PBXGroup;
 			children = (
 				7A2A76F027F2446E006F0470 /* DaysSince.app */,
+				D5TE5T00000000000000A001 /* DaysSinceTests.xctest */,
 				C2B53DAC2869F0CE00407F40 /* WidgetExtension.appex */,
 				C2B53DCB2869F6F200407F40 /* WidgetIntents.appex */,
 			);
@@ -406,6 +457,11 @@
 				7A2A76F727F24470006F0470 /* Assets.xcassets */,
 				7A2A76F927F24470006F0470 /* Preview Content */,
 				4C169EB9291A97D700E2BBC1 /* Localizable.strings */,
+				D4D0BB052EA44F2F00559A3C /* calendar-blue.icon */,
+				D4D0BB062EA44F2F00559A3C /* calendar-orange.icon */,
+				D4A526CA2EA4534C000D80E0 /* calendar-purple.icon */,
+				D4D0BB072EA44F2F00559A3C /* calendar-pink.icon */,
+				D4A526E02EA51E1B000D80E0 /* red-app-icon.icon */,
 			);
 			path = DaysSince;
 			sourceTree = "<group>";
@@ -838,6 +894,25 @@
 			path = Components;
 			sourceTree = "<group>";
 		};
+		D5TE5T00000000000000A00B /* DaysSinceTests */ = {
+			isa = PBXGroup;
+			children = (
+				D5TE5T0000000000000B0001 /* DSItemTests.swift */,
+				D5TE5T0000000000000B0002 /* CategoryTests.swift */,
+				D5TE5T0000000000000B0003 /* CategoryColorTests.swift */,
+				D5TE5T0000000000000B0004 /* DSItemRemindersTests.swift */,
+				D5TE5T0000000000000B0005 /* CalendarExtensionTests.swift */,
+				D5TE5T0000000000000B0006 /* DateExtensionTests.swift */,
+				D5TE5T0000000000000B0007 /* ArrayExtensionTests.swift */,
+				D5TE5T0000000000000B0008 /* ColorExtensionTests.swift */,
+				D5TE5T0000000000000B0009 /* SortTypeTests.swift */,
+				D5TE5T0000000000000B0010 /* AnalyticsTypeTests.swift */,
+				D5TE5T0000000000000B0011 /* AlternativeIconTests.swift */,
+				D5TE5T0000000000000B0012 /* ColorThemeTests.swift */,
+			);
+			path = DaysSinceTests;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -914,6 +989,24 @@
 			productReference = C2B53DCB2869F6F200407F40 /* WidgetIntents.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
+		D5TE5T00000000000000A002 /* DaysSinceTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D5TE5T00000000000000A008 /* Build configuration list for PBXNativeTarget "DaysSinceTests" */;
+			buildPhases = (
+				D5TE5T00000000000000A003 /* Sources */,
+				D5TE5T00000000000000A004 /* Frameworks */,
+				D5TE5T00000000000000A005 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D5TE5T00000000000000A009 /* PBXTargetDependency */,
+			);
+			name = DaysSinceTests;
+			productName = DaysSinceTests;
+			productReference = D5TE5T00000000000000A001 /* DaysSinceTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -932,6 +1025,10 @@
 					};
 					C2B53DCA2869F6F200407F40 = {
 						CreatedOnToolsVersion = 13.3;
+					};
+					D5TE5T00000000000000A002 = {
+						CreatedOnToolsVersion = 16.0;
+						TestTargetID = 7A2A76EF27F2446E006F0470;
 					};
 				};
 			};
@@ -954,6 +1051,7 @@
 			projectRoot = "";
 			targets = (
 				7A2A76EF27F2446E006F0470 /* DaysSince */,
+				D5TE5T00000000000000A002 /* DaysSinceTests */,
 				C2B53DAB2869F0CE00407F40 /* WidgetExtension */,
 				C2B53DCA2869F6F200407F40 /* WidgetIntents */,
 			);
@@ -965,6 +1063,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D4D0BB092EA44F2F00559A3C /* calendar-blue.icon in Resources */,
+				D4D0BB0A2EA44F2F00559A3C /* calendar-orange.icon in Resources */,
+				D4A526E12EA51E1B000D80E0 /* red-app-icon.icon in Resources */,
+				D4D0BB0B2EA44F2F00559A3C /* calendar-pink.icon in Resources */,
 				7AF56ADB286F32CD0068B467 /* HighlightsOnly.json in Resources */,
 				7A2A76FB27F24470006F0470 /* Preview Assets.xcassets in Resources */,
 				7AF56ADC286F32CD0068B467 /* fullSample.json in Resources */,
@@ -972,6 +1074,7 @@
 				7AF56AD9286F32CD0068B467 /* CHANGELOG.md in Resources */,
 				4C169EBA291A97D700E2BBC1 /* Localizable.strings in Resources */,
 				7AF56ADA286F32CD0068B467 /* FAQOnly.json in Resources */,
+				D4A526CB2EA4534C000D80E0 /* calendar-purple.icon in Resources */,
 				7A2A76F827F24470006F0470 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -991,6 +1094,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				C2B53DE3286A080A00407F40 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D5TE5T00000000000000A005 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1170,6 +1280,25 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D5TE5T00000000000000A003 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D5TE5T0000000000000C0001 /* DSItemTests.swift in Sources */,
+				D5TE5T0000000000000C0002 /* CategoryTests.swift in Sources */,
+				D5TE5T0000000000000C0003 /* CategoryColorTests.swift in Sources */,
+				D5TE5T0000000000000C0004 /* DSItemRemindersTests.swift in Sources */,
+				D5TE5T0000000000000C0005 /* CalendarExtensionTests.swift in Sources */,
+				D5TE5T0000000000000C0006 /* DateExtensionTests.swift in Sources */,
+				D5TE5T0000000000000C0007 /* ArrayExtensionTests.swift in Sources */,
+				D5TE5T0000000000000C0008 /* ColorExtensionTests.swift in Sources */,
+				D5TE5T0000000000000C0009 /* SortTypeTests.swift in Sources */,
+				D5TE5T0000000000000C0010 /* AnalyticsTypeTests.swift in Sources */,
+				D5TE5T0000000000000C0011 /* AlternativeIconTests.swift in Sources */,
+				D5TE5T0000000000000C0012 /* ColorThemeTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -1182,6 +1311,11 @@
 			isa = PBXTargetDependency;
 			target = C2B53DCA2869F6F200407F40 /* WidgetIntents */;
 			targetProxy = C2B53DD22869F6F200407F40 /* PBXContainerItemProxy */;
+		};
+		D5TE5T00000000000000A009 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7A2A76EF27F2446E006F0470 /* DaysSince */;
+			targetProxy = D5TE5T00000000000000A00A /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1329,18 +1463,19 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DaysSince/Info.plist;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.7;
+				MARKETING_VERSION = 1.0.9;
 				PRODUCT_BUNDLE_IDENTIFIER = com.goodsnooze.dayssince;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -1367,18 +1502,19 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DaysSince/Info.plist;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.7;
+				MARKETING_VERSION = 1.0.9;
 				PRODUCT_BUNDLE_IDENTIFIER = com.goodsnooze.dayssince;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -1397,19 +1533,19 @@
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CODE_SIGN_ENTITLEMENTS = WidgetExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 8Q7TMPA46J;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Widget/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Widget;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.9;
 				PRODUCT_BUNDLE_IDENTIFIER = com.goodsnooze.dayssince.Widget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -1426,19 +1562,19 @@
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CODE_SIGN_ENTITLEMENTS = WidgetExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 8Q7TMPA46J;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Widget/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Widget;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.9;
 				PRODUCT_BUNDLE_IDENTIFIER = com.goodsnooze.dayssince.Widget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -1453,7 +1589,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = WidgetIntents/WidgetIntents.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 8Q7TMPA46J;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = WidgetIntents/Info.plist;
@@ -1465,7 +1601,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.9;
 				PRODUCT_BUNDLE_IDENTIFIER = com.goodsnooze.dayssince.WidgetIntents;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -1480,7 +1616,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = WidgetIntents/WidgetIntents.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 8Q7TMPA46J;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = WidgetIntents/Info.plist;
@@ -1492,13 +1628,51 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.9;
 				PRODUCT_BUNDLE_IDENTIFIER = com.goodsnooze.dayssince.WidgetIntents;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		D5TE5T00000000000000A006 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 8Q7TMPA46J;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.goodsnooze.dayssince.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DaysSince.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/DaysSince";
+			};
+			name = Debug;
+		};
+		D5TE5T00000000000000A007 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 8Q7TMPA46J;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.goodsnooze.dayssince.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DaysSince.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/DaysSince";
 			};
 			name = Release;
 		};
@@ -1537,6 +1711,15 @@
 			buildConfigurations = (
 				C2B53DD62869F6F200407F40 /* Debug */,
 				C2B53DD72869F6F200407F40 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D5TE5T00000000000000A008 /* Build configuration list for PBXNativeTarget "DaysSinceTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D5TE5T00000000000000A006 /* Debug */,
+				D5TE5T00000000000000A007 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
