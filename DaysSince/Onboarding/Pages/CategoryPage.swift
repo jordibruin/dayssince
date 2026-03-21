@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Defaults
 
 struct CategoryPage: View {
     @State private var counter = 0
@@ -30,6 +31,8 @@ struct CategoryPage: View {
             footer
         }
         CustomButton(action: nextPage, label: "Continue", color: .animalCrossingsGreen)
+            .opacity(selectedCategories.isEmpty ? 0.4 : 1.0)
+            .disabled(selectedCategories.isEmpty)
     }
 
     private var header: some View {
@@ -84,7 +87,7 @@ struct CategoryPage: View {
                     .foregroundColor(.primary)
                     .background(Color(.secondarySystemFill))
             }
-            .offset(y: -40)
+            .offset(y: -20)
         }
     }
 
@@ -97,8 +100,9 @@ struct CategoryPage: View {
     }
 
     private func nextPage() {
-        print("next page")
-        navigate(.screen3)
+        // Save selected categories to Defaults so they're available throughout the app
+        Defaults[.categories] = Array(selectedCategories)
+        navigate(.screen3(selectedCategories: Array(selectedCategories)))
     }
 }
 

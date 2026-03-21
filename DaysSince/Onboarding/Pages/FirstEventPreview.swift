@@ -20,15 +20,17 @@ struct FirstEventPreview: View {
     @State var counter: Int = 0
     @State var origin: CGPoint = .zero
     
-    // Dummy data
     @State private var editItemSheet = false
     @State private var tappedItem: DSItem = DSItem.placeholderItem()
     @State private var isDaysDisplayModeDetailed = false
-    @State private var items: [DSItem] = []
-    
+    @State private var previewItems: [DSItem] = []
+
     init(items: [DSItem]? = nil, navigate: @escaping (OnboardingScreen) -> Void) {
         self.injectedItems = items
         self.navigate = navigate
+        if let items {
+            self._previewItems = State(initialValue: items)
+        }
     }
 
     var body: some View {
@@ -42,7 +44,7 @@ struct FirstEventPreview: View {
                     tappedItem: $tappedItem,
                     isDaysDisplayModeDetailed: $isDaysDisplayModeDetailed,
                     itemID: item.id,
-                    items: $items,
+                    items: injectedItems != nil ? $previewItems : $storedItems,
                     colored: false
                 )
                 .fixedSize(horizontal: false, vertical: true)
@@ -97,8 +99,7 @@ struct FirstEventPreview: View {
         }
         .padding(.top)
         .onAppear {
-            items = injectedItems ?? storedItems
-            if let last = items.last {
+            if let last = (injectedItems ?? storedItems).last {
                 tappedItem = last
             }
         }

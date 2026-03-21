@@ -10,21 +10,59 @@ import SwiftUI
 struct PickFirstEventPage: View {
     @State private var selectedEvent: EventCardModel?
     @State private var tappedEvent: EventCardModel?
-    
+
+    let selectedCategories: [Category]
     let navigate: (OnboardingScreen) -> Void
     private static let gridLayout = Array(
         repeating: GridItem(.flexible(minimum: 100), spacing: 10),
         count: 2
     )
-    
-    private static let eventOptions: [EventCardModel] = [
-        .init(id: UUID(), dateLastDone: Calendar.daysAgo(37), name: "✂️ Haircut", color: .animalCrossingsGreen),
-        .init(id: UUID(), dateLastDone: Calendar.daysAgo(17), name: "🐾 Cat litter", color: .hobbiesColor),
-        .init(id: UUID(), dateLastDone: Calendar.daysAgo(1), name: "🏃‍♂️ Work out", color: .marioBlue),
-        .init(id: UUID(), dateLastDone: Calendar.daysAgo(5), name: "🧹 Vacuum", color: .workColor),
-        .init(id: UUID(), dateLastDone: Calendar.daysAgo(25*365+2*30+13), name: "🐣 I was born", color: .marioRed),
-        .init(id: UUID(), dateLastDone: Calendar.daysAgo(3), name: "👯 Hung out with friends", color: .lifeColor)
+
+    /// Maps category names to suggested events for that category
+    private static let eventsByCategory: [String: [EventCardModel]] = [
+        "Work": [
+            .init(dateLastDone: Calendar.daysAgo(30), name: "📊 Performance review", color: .workColor),
+            .init(dateLastDone: Calendar.daysAgo(90), name: "💼 Resume update", color: .workColor)
+        ],
+        "Life": [
+            .init(dateLastDone: Calendar.daysAgo(37), name: "✂️ Haircut", color: .lifeColor),
+            .init(dateLastDone: Calendar.daysAgo(3), name: "👯 Hung out with friends", color: .lifeColor)
+        ],
+        "Hobby": [
+            .init(dateLastDone: Calendar.daysAgo(1), name: "🏃‍♂️ Work out", color: .hobbiesColor),
+            .init(dateLastDone: Calendar.daysAgo(7), name: "🎮 Game night", color: .hobbiesColor)
+        ],
+        "Health": [
+            .init(dateLastDone: Calendar.daysAgo(180), name: "🏥 Dentist visit", color: .healthColor),
+            .init(dateLastDone: Calendar.daysAgo(30), name: "💊 Vitamins refill", color: .healthColor)
+        ],
+        "Home": [
+            .init(dateLastDone: Calendar.daysAgo(60), name: "💧 Water filter change", color: .marioBlue),
+            .init(dateLastDone: Calendar.daysAgo(30), name: "⛽ Gas meter reading", color: .marioBlue)
+        ],
+        "Pet": [
+            .init(dateLastDone: Calendar.daysAgo(17), name: "🐾 Cat litter", color: .animalCrossingsBrown),
+            .init(dateLastDone: Calendar.daysAgo(365), name: "💉 Dog vaccination", color: .animalCrossingsBrown)
+        ],
+        "Friends": [
+            .init(dateLastDone: Calendar.daysAgo(3), name: "👯 Hung out with friends", color: .animalCrossingsGreen),
+            .init(dateLastDone: Calendar.daysAgo(14), name: "🎁 Birthday gift", color: .animalCrossingsGreen)
+        ],
+        "Projects": [
+            .init(dateLastDone: Calendar.daysAgo(7), name: "🔨 Side project update", color: .zeldaYellow),
+            .init(dateLastDone: Calendar.daysAgo(30), name: "📝 Blog post", color: .zeldaYellow)
+        ],
+        "Journal": [
+            .init(dateLastDone: Calendar.daysAgo(1), name: "📓 Journaled", color: .marioRed),
+            .init(dateLastDone: Calendar.daysAgo(2), name: "🧘 Meditation", color: .marioRed)
+        ]
     ]
+
+    private var eventOptions: [EventCardModel] {
+        selectedCategories.flatMap { category in
+            Self.eventsByCategory[category.name] ?? []
+        }
+    }
     
     var body: some View {
         VStack {
@@ -41,6 +79,8 @@ struct PickFirstEventPage: View {
         }
         
         CustomButton(action: nextPage, label: "Continue", color: .animalCrossingsGreen)
+            .opacity(selectedEvent == nil ? 0.4 : 1.0)
+            .disabled(selectedEvent == nil)
     }
     
     private var header: some View {
@@ -56,7 +96,7 @@ struct PickFirstEventPage: View {
     
     private var eventGrid: some View {
         LazyVGrid(columns: Self.gridLayout, spacing: 12) {
-            ForEach(Self.eventOptions) { event in
+            ForEach(eventOptions) { event in
                 EventSelectionView(
                     model: event,
                     isSelected: selectedEvent?.id == event.id,
@@ -91,8 +131,10 @@ struct PickFirstEventPage: View {
 }
 
 #Preview {
-    PickFirstEventPage { _ in
-    }
+    PickFirstEventPage(selectedCategories: [
+        Category(name: "Pet", emoji: "dog", color: .animalCrossingsBrown),
+        Category(name: "Home", emoji: "house", color: .marioBlue)
+    ]) { _ in }
 }
 
 struct EventSelectionView: View {

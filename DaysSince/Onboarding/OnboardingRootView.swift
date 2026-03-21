@@ -19,8 +19,8 @@ struct OnboardingRootView: View {
                 switch screen {
                 case .screen2:
                     CategoryPage(navigate: navigate)
-                case .screen3:
-                    PickFirstEventPage(navigate: navigate)
+                case .screen3(let selectedCategories):
+                    PickFirstEventPage(selectedCategories: selectedCategories, navigate: navigate)
                 case .screen4(let initialEventName):
                     CreateFirstEvent(initialEventName: initialEventName, navigate: navigate)
                 case .screen5:
@@ -37,7 +37,7 @@ struct OnboardingRootView: View {
 
 enum OnboardingScreen: Hashable {
     case screen2
-    case screen3
+    case screen3(selectedCategories: [Category])
     case screen4(initialEventName: String)
     case screen5
     // Add more if needed
