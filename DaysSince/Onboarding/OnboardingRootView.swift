@@ -16,22 +16,25 @@ struct OnboardingRootView: View {
                 path.append(screen)
             })
             .navigationDestination(for: OnboardingScreen.self) { screen in
-                switch screen {
-                case .screen2:
-                    CategoryPage(navigate: navigate)
-                case .screen3(let selectedCategories):
-                    PickFirstEventPage(selectedCategories: selectedCategories, navigate: navigate)
-                case .screen4(let initialEventName):
-                    CreateFirstEvent(initialEventName: initialEventName, navigate: navigate)
-                case .screen5:
-                    FirstEventPreview(navigate: navigate)
-                case .screen6:
-                    WidgetPreviewScreen(navigate: navigate)
-                case .screen7:
-                    FeaturesPage(navigate: navigate)
-                case .screen8:
-                    LastPage(navigate: navigate)
+                Group {
+                    switch screen {
+                    case .screen2:
+                        CategoryPage(navigate: navigate)
+                    case .screen3(let selectedCategories):
+                        PickFirstEventPage(selectedCategories: selectedCategories, navigate: navigate)
+                    case .screen4(let initialEventName):
+                        CreateFirstEvent(initialEventName: initialEventName, navigate: navigate)
+                    case .screen5:
+                        FirstEventPreview(navigate: navigate)
+                    case .screen6:
+                        WidgetPreviewScreen(navigate: navigate)
+                    case .screen7:
+                        FeaturesPage(navigate: navigate)
+                    case .screen8:
+                        LastPage(navigate: navigate)
+                    }
                 }
+                .navigationBarBackButtonHidden(true)
             }
         }
     }

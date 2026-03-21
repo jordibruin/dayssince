@@ -55,6 +55,7 @@ struct CategoryFormSection: View {
                     .cornerRadius(16)
                 }
                 .foregroundColor(.primary)
+                .buttonStyle(BorderlessButtonStyle())
             }
         }
     }
