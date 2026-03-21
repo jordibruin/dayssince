@@ -15,4 +15,12 @@ extension Calendar {
 
         return numberOfDays.day!
     }
+    
+    static func daysAgo(_ days: Int) -> Date {
+        Calendar.current.date(byAdding: .day, value: -days, to: Date())!
+    }
+
+    static func yearsAgo(_ years: Int) -> Date {
+        Calendar.current.date(byAdding: .year, value: -years, to: Date())!
+    }
 }

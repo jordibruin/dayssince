@@ -23,8 +23,8 @@ struct AddCategorySheet: View {
     @State var emojis: [String] = ["lightbulb", "leaf", "gamecontroller", "heart.text.square", "graduationcap", "bell", "gift.fill", "heart", "laptopcomputer", "airplane"]
 
     var body: some View {
+        header
         ScrollView {
-            header
             name
             emoji
             color
@@ -94,7 +94,7 @@ struct AddCategorySheet: View {
 
                 Spacer()
             }
-            .padding(12)
+           
             .background(Color.secondary.opacity(0.1))
             .cornerRadius(20)
         }

@@ -275,3 +275,11 @@ class NotificationManager: ObservableObject {
         }
     }
 }
+
+extension NotificationManager {
+    static var previewInstance: NotificationManager {
+        let manager = NotificationManager()
+        // configure as needed
+        return manager
+    }
+}

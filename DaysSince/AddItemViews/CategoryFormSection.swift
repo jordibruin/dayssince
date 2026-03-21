@@ -14,7 +14,8 @@ struct CategoryFormSection: View {
 
     @Binding var selectedCategory: Category?
     @Binding var showCategorySheet: Bool
-
+    
+    var showHeader: Bool = true
     var accentColor: Color { selectedCategory == nil ? Color.primary :  selectedCategory?.color.color == .black && colorScheme == .dark ? Color.white : selectedCategory!.color.color }
     
 
@@ -23,33 +24,42 @@ struct CategoryFormSection: View {
             categoriesList
             addCategoryButton
         } header: {
-            Text("Category")
+            if showHeader {
+                Text("Category")
+            }
         }
     }
 
     var categoriesList: some View {
-        ForEach(categories, id: \.id) { category in
-            Button {
-                withAnimation { selectedCategory = category }
-            } label: {
-                HStack {
-                    Image(systemName: category.emoji)
-                        .foregroundColor(selectedCategory == category ? accentColor : .primary)
-                        .frame(width: 40)
+        VStack(spacing: 8) { // Adjust vertical spacing here
+            ForEach(categories, id: \.id) { category in
+                Button {
+                    withAnimation { selectedCategory = category }
+                } label: {
+                    HStack {
+                        Image(systemName: category.emoji)
+                            .foregroundColor(selectedCategory == category ? accentColor : .primary)
+                            .frame(width: 40)
 
-                    Text(category.name)
-                    Spacer()
+                        Text(category.name)
+                        Spacer()
 
-                    if selectedCategory == category {
-                        Image(systemName: "checkmark.circle.fill")
-                            .imageScale(.large)
-                            .foregroundColor(accentColor)
+                        if selectedCategory == category {
+                            Image(systemName: "checkmark.circle.fill")
+                                .imageScale(.large)
+                                .foregroundColor(accentColor)
+                        }
                     }
+                    .padding(12) // Inner padding
+                    .background(Color.secondary.opacity(0.1))
+                    .cornerRadius(16)
                 }
+                .foregroundColor(.primary)
+                .buttonStyle(BorderlessButtonStyle())
             }
-            .foregroundColor(.primary)
         }
     }
+
 
     var addCategoryButton: some View {
         HStack {
