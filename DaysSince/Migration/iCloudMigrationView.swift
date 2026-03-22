@@ -67,6 +67,7 @@ struct iCloudMigrationView: View {
                 .padding(.horizontal, 32)
 
                 if migrationDone {
+                    Spacer()
                     CustomButton(
                         action: { iCloudMigrationComplete = true },
                         label: "Continue",

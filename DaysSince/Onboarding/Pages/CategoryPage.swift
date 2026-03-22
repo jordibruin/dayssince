@@ -100,8 +100,11 @@ struct CategoryPage: View {
     }
 
     private func nextPage() {
-        // Save selected categories to Defaults so they're available throughout the app
-        Defaults[.categories] = Array(selectedCategories)
+        // Merge selected categories with any existing ones (e.g. restored from iCloud on reinstall)
+        let existingStableIDs = Set(Defaults[.categories].map(\.stableID))
+        let newCategories = selectedCategories.filter { !existingStableIDs.contains($0.stableID) }
+        Defaults[.categories].append(contentsOf: newCategories)
+
         navigate(.screen3(selectedCategories: Array(selectedCategories)))
     }
 }

@@ -19,18 +19,18 @@ struct CreateFirstEvent: View {
     @State var eventCategory: Category
     @State private var eventReminder: DSItemReminders = .none
 
-    init(initialEventName: String, navigate: @escaping (OnboardingScreen) -> Void) {
+    init(initialEventName: String, initialCategory: Category? = nil, navigate: @escaping (OnboardingScreen) -> Void) {
         self._eventName = State(initialValue: initialEventName)
         self.navigate = navigate
         self._showCategorySheet = State(initialValue: false)
-        
+
         var storedCategories = Defaults[.categories]
         if storedCategories.isEmpty {
             let fallback = Category(stableID: Category.stableIDWork, name: "Work", emoji: "lightbulb", color: .work)
             storedCategories.append(fallback)
             Defaults[.categories] = storedCategories
         }
-        self._eventCategory = State(initialValue: storedCategories.first!)
+        self._eventCategory = State(initialValue: initialCategory ?? storedCategories.first!)
     }
     
     var accentColor: Color { eventCategory.color.color == .black ? Color.primary :  eventCategory.color.color }

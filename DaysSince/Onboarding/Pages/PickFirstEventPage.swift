@@ -126,7 +126,13 @@ struct PickFirstEventPage: View {
     
     private func nextPage() {
         print("next page")
-        navigate(.screen4(initialEventName: selectedEvent?.name ?? " "))
+        // Find which category the selected event belongs to
+        let matchedCategory: Category? = selectedEvent.flatMap { event in
+            selectedCategories.first { category in
+                Self.eventsByCategory[category.name]?.contains(where: { $0.id == event.id }) == true
+            }
+        }
+        navigate(.screen4(initialEventName: selectedEvent?.name ?? " ", initialCategory: matchedCategory))
     }
 }
 
