@@ -38,7 +38,12 @@ enum AnalyticType: String, Hashable {
     case settingsReview
     case reviewPrompt
     case detailedModeOn
-    
+
+    case iCloudMigrationStarted
+    case iCloudMigrationCompleted
+    case iCloudSyncConflict
+    case iCloudDataSize
+
     //    case proTheme
     //    case proIcons
     //    case proSettings
@@ -70,6 +75,14 @@ enum AnalyticType: String, Hashable {
             return "settingsReview"
         case .detailedModeOn:
             return "detailedModeOn"
+        case .iCloudMigrationStarted:
+            return "iCloudMigrationStarted"
+        case .iCloudMigrationCompleted:
+            return "iCloudMigrationCompleted"
+        case .iCloudSyncConflict:
+            return "iCloudSyncConflict"
+        case .iCloudDataSize:
+            return "iCloudDataSize"
         }
     }
 }

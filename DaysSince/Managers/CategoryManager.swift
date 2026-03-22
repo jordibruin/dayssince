@@ -12,11 +12,17 @@ import Combine
 
 /// Manages anything related to the categories (adding, editing, deleting, etc.)
 class CategoryManager: ObservableObject {
-    
+
+    /// Reference to DataSyncManager for iCloud sync. Set by DaysSinceApp after init.
+    weak var dataSyncManager: DataSyncManager?
+
     // Computed property for categories
     private var categories: [Category] {
         get { Defaults[.categories] }
-        set { Defaults[.categories] = newValue }
+        set {
+            Defaults[.categories] = newValue
+            dataSyncManager?.syncCategories()
+        }
     }
 
     /// Create a new category

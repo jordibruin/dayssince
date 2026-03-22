@@ -12,10 +12,11 @@ import TelemetryDeck
 
 @main
 struct DaysSinceApp: App {
+    @StateObject var dataSyncManager = DataSyncManager()
     @StateObject var notificationManager = NotificationManager()
     @StateObject var categoryManager = CategoryManager()
     @StateObject var reviewManager: ReviewManager
-    
+
     init() {
         let reviewManager = ReviewManager()
         _reviewManager = StateObject(wrappedValue: reviewManager)
@@ -31,15 +32,23 @@ struct DaysSinceApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(dataSyncManager)
                 .environmentObject(notificationManager)
                 .environmentObject(categoryManager)
                 .environmentObject(reviewManager)
                 .onChange(of: self.scenePhase) {
                     switch $0 {
+                    case .active:
+                        // Trigger iCloud sync when app comes to foreground
+                        _ = NSUbiquitousKeyValueStore.default.synchronize()
                     case .background:
                         WidgetCenter.shared.reloadAllTimelines()
                     default: break
                     }
+                }
+                .onAppear {
+                    categoryManager.dataSyncManager = dataSyncManager
+                    dataSyncManager.startSync()
                 }
         }
     }

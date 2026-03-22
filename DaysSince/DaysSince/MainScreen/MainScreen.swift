@@ -17,12 +17,15 @@ struct MainScreen: View {
 
     @EnvironmentObject var notificationManager: NotificationManager
     @EnvironmentObject var categoryManager: CategoryManager
+    @EnvironmentObject var dataSyncManager: DataSyncManager
 
     @State var showAddItemSheet = false
     @State var showSettings = false
     @State var editItemSheet = false
     @State var tappedItem: DSItem = .placeholderItem()
     @State var showThemeSheet = false
+    @State var showiCloudStorageAlert = false
+    @State var showSupportScreen = false
 
     @Binding var items: [DSItem]
     @Binding var isDaysDisplayModeDetailed: Bool
@@ -101,6 +104,24 @@ struct MainScreen: View {
                 .presentationDetents([.medium])
                 .presentationCornerRadius(32)
                 .onDisappear { showThemeSheet = false }
+        }
+        .sheet(isPresented: $showSupportScreen) {
+            NavigationView {
+                SupportScreen()
+            }
+        }
+        .onChange(of: dataSyncManager.showiCloudStorageWarning) { warning in
+            if warning {
+                showiCloudStorageAlert = true
+            }
+        }
+        .alert("iCloud Storage Almost Full", isPresented: $showiCloudStorageAlert) {
+            Button("Contact Us") {
+                showSupportScreen = true
+            }
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text("Your events data is approaching the iCloud sync limit. Your events are safe on this device, but syncing to other devices may stop working. Please contact us so we can help.")
         }
     }
 

@@ -40,6 +40,9 @@ struct DSItem: Identifiable, Codable {
     /// The ID of the repeating notification reminder.
     var reminderNotificationID: String = UUID().uuidString
 
+    /// Timestamp of last modification, used for future conflict resolution.
+    var lastModified: Date = .now
+
     /// String for number of days since you did it.
     var daysAgo: Int {
         let daysSince = Calendar.current.numberOfDaysBetween(dateLastDone, and: Date.now)
@@ -54,6 +57,24 @@ struct DSItem: Identifiable, Codable {
     static func placeholderItem() -> DSItem {
         let category = Category.placeholderCategory()
         return DSItem(id: UUID(), name: "Placeholder", category: category, dateLastDone: Date.now, remindersEnabled: false)
+    }
+}
+
+// Custom decoder in an extension to preserve the memberwise init.
+// Auto-synthesized Decodable does NOT fall back to default values for missing keys,
+// so we must use decodeIfPresent for fields added after initial release.
+extension DSItem {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(UUID.self, forKey: .id)
+        name = try container.decode(String.self, forKey: .name)
+        category = try container.decode(Category.self, forKey: .category)
+        dateLastDone = try container.decode(Date.self, forKey: .dateLastDone)
+        remindersEnabled = try container.decode(Bool.self, forKey: .remindersEnabled)
+        reminder = try container.decodeIfPresent(DSItemReminders.self, forKey: .reminder) ?? .daily
+        dateCompleted = try container.decodeIfPresent(Date.self, forKey: .dateCompleted) ?? .now
+        reminderNotificationID = try container.decodeIfPresent(String.self, forKey: .reminderNotificationID) ?? UUID().uuidString
+        lastModified = try container.decodeIfPresent(Date.self, forKey: .lastModified) ?? .now
     }
 }
 

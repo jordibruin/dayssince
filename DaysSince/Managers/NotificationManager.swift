@@ -26,15 +26,29 @@ class NotificationManager: ObservableObject {
 
     @Published var pendingNotifications: [UNNotificationRequest] = []
 
-    @AppStorage("items", store: UserDefaults(suiteName: "group.goodsnooze.dayssince")) var items: [DSItem] = []
-
+    /// Items are now provided externally via refreshNotifications(items:).
+    /// On init we still do an initial refresh from App Group UserDefaults for backward compatibility.
     init() {
-        // Refresh notifications
-        refreshNotifications()
+        // Initial refresh from App Group UserDefaults
+        // @AppStorage stores arrays as JSON strings (via RawRepresentable), so read as String first.
+        let appGroupDefaults = UserDefaults(suiteName: "group.goodsnooze.dayssince")
+        let items: [DSItem] = {
+            if let jsonString = appGroupDefaults?.string(forKey: "items"),
+               let data = jsonString.data(using: .utf8),
+               let decoded = try? JSONDecoder().decode([DSItem].self, from: data) {
+                return decoded
+            }
+            if let data = appGroupDefaults?.data(forKey: "items"),
+               let decoded = try? JSONDecoder().decode([DSItem].self, from: data) {
+                return decoded
+            }
+            return []
+        }()
+        refreshNotifications(items: items)
     }
 
     /// Refresh the notifications. Delete all and reschedule them. Used when app is started and when a user edits an event to make sure the notifications stay up to date.
-    func refreshNotifications() {
+    func refreshNotifications(items: [DSItem]) {
         print("refresh notifications")
         // Remove all old pending requests to generate new ones
         center.removeAllPendingNotificationRequests()
