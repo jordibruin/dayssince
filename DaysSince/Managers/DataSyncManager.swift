@@ -39,9 +39,9 @@ class DataSyncManager: ObservableObject {
     // MARK: - Constants
 
     /// NSUbiquitousKeyValueStore has a hard 1 MB (1,048,576 bytes) limit.
-    private static let iCloudKVSLimit = 1_048_576
+    static let iCloudKVSLimit = 1_048_576
     /// Warn the user when usage exceeds 950 KB.
-    private static let iCloudKVSWarningThreshold = 950 * 1024
+    static let iCloudKVSWarningThreshold = 950 * 1024
 
     // MARK: - Keys
 

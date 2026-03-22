@@ -30,20 +30,14 @@ struct DetailedTimeDisplayModeCell: View {
     }
 
     var buttonImage: some View {
-        LinearGradient(colors: [mainColor, mainColor.lighter()], startPoint: .topLeading, endPoint: .bottomTrailing)
-            .frame(width: 30, height: 30)
-            .cornerRadius(8)
-            .overlay(
-                Image(systemName: "rectangle.and.pencil.and.ellipsis")
-                    .symbolRenderingMode(.hierarchical)
-                    .foregroundColor(.white)
-            )
-            .padding(.leading, -10)
+        Image(systemName: "rectangle.and.pencil.and.ellipsis")
+            .foregroundColor(mainColor)
+            .font(.system(.body, design: .rounded))
     }
 
     var buttonText: some View {
         // TODO: Current wording is poor.
-        Text("Detailed Time Display Mode")
+        Text("Detailed time display")
             .font(.system(.body, design: .rounded))
     }
 

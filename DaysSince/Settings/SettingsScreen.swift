@@ -24,6 +24,8 @@ struct SettingsScreen: View {
 
                 DetailedTimeDisplayModeCell(isDaysDisplayModeDetailed: $isDaysDisplayModeDetailed)
 
+                iCloudStorageCell()
+
                 Section {
                     WebsiteButton()
                     TwitterButton()

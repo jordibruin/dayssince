@@ -30,6 +30,7 @@
 		7A67C6E0280061FA0095675F /* Color+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A67C6DF280061FA0095675F /* Color+Extensions.swift */; };
 		7A7CD913287F2E760001C64F /* CreateFirstEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A7CD912287F2E760001C64F /* CreateFirstEvent.swift */; };
 		7A868D182890814A009C92D6 /* DetailedTimeDisplayMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A868D172890814A009C92D6 /* DetailedTimeDisplayMode.swift */; };
+		AA0000012603220000000002 /* iCloudStorageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000012603220000000001 /* iCloudStorageCell.swift */; };
 		7A9141B42B0EA6AF00F06CA2 /* CategoryColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9141B32B0EA6AF00F06CA2 /* CategoryColor.swift */; };
 		7A9141B52B0EA6AF00F06CA2 /* CategoryColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9141B32B0EA6AF00F06CA2 /* CategoryColor.swift */; };
 		7A9141B62B0EA6AF00F06CA2 /* CategoryColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9141B32B0EA6AF00F06CA2 /* CategoryColor.swift */; };
@@ -240,6 +241,7 @@
 		7A67C6DF280061FA0095675F /* Color+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Extensions.swift"; sourceTree = "<group>"; };
 		7A7CD912287F2E760001C64F /* CreateFirstEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateFirstEvent.swift; sourceTree = "<group>"; };
 		7A868D172890814A009C92D6 /* DetailedTimeDisplayMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailedTimeDisplayMode.swift; sourceTree = "<group>"; };
+		AA0000012603220000000001 /* iCloudStorageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iCloudStorageCell.swift; sourceTree = "<group>"; };
 		7A9141B32B0EA6AF00F06CA2 /* CategoryColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryColor.swift; sourceTree = "<group>"; };
 		7A9141B72B0EA6E300F06CA2 /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
 		7A9141C12B12555B00F06CA2 /* CategoryFormSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryFormSection.swift; sourceTree = "<group>"; };
@@ -567,6 +569,7 @@
 				7A65AB01286CFC53002D6DCA /* SupportButton.swift */,
 				7A227DD32B1BA21100C378A2 /* WishKitView.swift */,
 				7A868D172890814A009C92D6 /* DetailedTimeDisplayMode.swift */,
+				AA0000012603220000000001 /* iCloudStorageCell.swift */,
 				7AB3BC882AC0CB2300549CD9 /* ThemeView.swift */,
 				7AB3BC8A2AC0CBC300549CD9 /* ColorThemeView.swift */,
 			);
@@ -1195,6 +1198,7 @@
 				7AF56AFF286F32CD0068B467 /* SupportHeaderSection.swift in Sources */,
 				7AF56AD8286F32CD0068B467 /* Deeplink.swift in Sources */,
 				7A868D182890814A009C92D6 /* DetailedTimeDisplayMode.swift in Sources */,
+				AA0000012603220000000002 /* iCloudStorageCell.swift in Sources */,
 				D479C4322DC6DBD800631220 /* ChatBubble.swift in Sources */,
 				D479C4362DC6DD4A00631220 /* ProgressBar.swift in Sources */,
 				D4A926F12DCA4B2B0089F037 /* FirstEventPreview.swift in Sources */,
