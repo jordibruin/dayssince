@@ -126,14 +126,20 @@ struct PickFirstEventPage: View {
     
     private func nextPage() {
         print("next page")
-        navigate(.screen4(initialEventName: selectedEvent?.name ?? " "))
+        // Find which category the selected event belongs to
+        let matchedCategory: Category? = selectedEvent.flatMap { event in
+            selectedCategories.first { category in
+                Self.eventsByCategory[category.name]?.contains(where: { $0.id == event.id }) == true
+            }
+        }
+        navigate(.screen4(initialEventName: selectedEvent?.name ?? " ", initialCategory: matchedCategory))
     }
 }
 
 #Preview {
     PickFirstEventPage(selectedCategories: [
-        Category(name: "Pet", emoji: "dog", color: .animalCrossingsBrown),
-        Category(name: "Home", emoji: "house", color: .marioBlue)
+        Category(stableID: Category.stableIDPet, name: "Pet", emoji: "dog", color: .animalCrossingsBrown),
+        Category(stableID: Category.stableIDHome, name: "Home", emoji: "house", color: .marioBlue)
     ]) { _ in }
 }
 

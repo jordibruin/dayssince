@@ -15,8 +15,8 @@ extension Defaults.Keys {
     static let selectedThemeId = Key<String>("selectedThemeId", default: "default")
     
     static let categories = Key<[Category]>("categories", default: [
-        Category(name: "Work", emoji: "lightbulb", color: .work),
-        Category(name: "Life", emoji: "leaf", color: .life),
-        Category(name: "Hobby", emoji: "gamecontroller", color: .hobbies),
-        Category(name: "Health", emoji: "heart.text.square", color: .health)])
+        Category(stableID: Category.stableIDWork, name: "Work", emoji: "lightbulb", color: .work, sortOrder: 0),
+        Category(stableID: Category.stableIDLife, name: "Life", emoji: "leaf", color: .life, sortOrder: 1),
+        Category(stableID: Category.stableIDHobby, name: "Hobby", emoji: "gamecontroller", color: .hobbies, sortOrder: 2),
+        Category(stableID: Category.stableIDHealth, name: "Health", emoji: "heart.text.square", color: .health, sortOrder: 3)])
 }

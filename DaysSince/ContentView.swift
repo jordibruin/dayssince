@@ -11,14 +11,15 @@ import WishKit
 
 struct ContentView: View {
     @AppStorage("hasSeenOnboarding") var hasSeenOnboarding: Bool = false
+    @AppStorage("iCloudMigrationComplete") var iCloudMigrationComplete: Bool = false
+    @AppStorage("migratedFromOld") var migratedFromOld: Bool = false
 
-    @AppStorage("items", store: UserDefaults(suiteName: "group.goodsnooze.dayssince")) var items: [DSItem] = []
-
+    // Keep oldItems for legacy migration only
     @AppStorage("items", store: UserDefaults(suiteName: "group.goodsnooze.dayssince")) var oldItems: [oldDSItem] = []
 
     @AppStorage("isDaysDisplayModeDetailed", store: UserDefaults(suiteName: "group.goodsnooze.dayssince")) var isDaysDisplayModeDetailed: Bool = true
 
-    @AppStorage("migratedFromOld") var migratedFromOld: Bool = false
+    @EnvironmentObject var dataSyncManager: DataSyncManager
 
     @Default(.categories) var categories
     @Default(.mainColor) var mainColor
@@ -29,34 +30,54 @@ struct ContentView: View {
         WishKit.config.statusBadge = .show
     }
 
+    /// Binding that reads/writes items through DataSyncManager.
+    private var itemsBinding: Binding<[DSItem]> {
+        Binding(
+            get: { dataSyncManager.items },
+            set: { dataSyncManager.saveItems($0) }
+        )
+    }
+
     var body: some View {
         if hasSeenOnboarding {
-            MainScreen(items: $items,
-                       isDaysDisplayModeDetailed: $isDaysDisplayModeDetailed)
-                .onAppear {
-                    WishKit.theme.primaryColor = mainColor
-                    
-                    if !migratedFromOld {
-                        if !oldItems.isEmpty {
-                            let newItems = oldItems.map { oldItem in
-                                DSItem(
-                                    id: oldItem.id,
-                                    name: oldItem.name,
-                                    category: Category.placeholderCategory(),
-                                    dateLastDone: oldItem.dateLastDone,
-                                    remindersEnabled: oldItem.remindersEnabled,
-                                    reminder: oldItem.reminder,
-                                    reminderNotificationID: oldItem.reminderNotificationID
-                                )
+            if !iCloudMigrationComplete {
+                // State B: Existing user, first launch after iCloud update
+                iCloudMigrationView(iCloudMigrationComplete: $iCloudMigrationComplete)
+            } else {
+                MainScreen(items: itemsBinding,
+                           isDaysDisplayModeDetailed: $isDaysDisplayModeDetailed)
+                    .onAppear {
+                        WishKit.theme.primaryColor = mainColor
+
+                        // Legacy migration from old item format
+                        if !migratedFromOld {
+                            if !oldItems.isEmpty {
+                                let newItems = oldItems.map { oldItem in
+                                    DSItem(
+                                        id: oldItem.id,
+                                        name: oldItem.name,
+                                        category: Category.placeholderCategory(),
+                                        dateLastDone: oldItem.dateLastDone,
+                                        remindersEnabled: oldItem.remindersEnabled,
+                                        reminder: oldItem.reminder,
+                                        reminderNotificationID: oldItem.reminderNotificationID
+                                    )
+                                }
+                                dataSyncManager.saveItems(dataSyncManager.items + newItems)
+                                migratedFromOld = true
                             }
-                            items = items + newItems
-                            migratedFromOld = true
                         }
                     }
-                }
+            }
         } else {
-//            OnboardingScreen(hasSeenOnboarding: $hasSeenOnboarding, items: $items)
             OnboardingRootView()
+                .onDisappear {
+                    // When onboarding finishes, reload items from AppGroup
+                    // (onboarding writes items directly to AppStorage)
+                    dataSyncManager.reloadFromAppGroup()
+                    // Mark iCloud migration as complete for new users
+                    iCloudMigrationComplete = true
+                }
         }
     }
 }

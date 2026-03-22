@@ -14,7 +14,7 @@ struct TwitterButton: View {
         LinkButton(
             title: "Follow on Twitter",
             symbolName: "bird.fill",
-            urlString: "https://twitter.com/h"
+            urlString: "https://twitter.com/DaysSince_App"
         )
     }
 }

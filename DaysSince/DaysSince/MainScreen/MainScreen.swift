@@ -17,12 +17,16 @@ struct MainScreen: View {
 
     @EnvironmentObject var notificationManager: NotificationManager
     @EnvironmentObject var categoryManager: CategoryManager
+    @EnvironmentObject var dataSyncManager: DataSyncManager
 
     @State var showAddItemSheet = false
+    @State var showAddCategorySheet = false
     @State var showSettings = false
     @State var editItemSheet = false
     @State var tappedItem: DSItem = .placeholderItem()
     @State var showThemeSheet = false
+    @State var showiCloudStorageAlert = false
+    @State var showSupportScreen = false
 
     @Binding var items: [DSItem]
     @Binding var isDaysDisplayModeDetailed: Bool
@@ -79,17 +83,15 @@ struct MainScreen: View {
                     )
                 }
 
-                VStack {
-                    Spacer()
-                    addNewEventButton
-                }
             }
             .navigationTitle("Events")
             .navigationBarTitleDisplayMode(.inline)
-            .toolbar(content: {
+            .toolbar {
                 toolbarItems
-            })
+                bottomToolbarItems
+            }
         }
+        .navigationViewStyle(.stack)
         .sheet(isPresented: $showAddItemSheet) {
             AddItemSheet(selectedCategory: nil, remindersEnabled: false, items: $items)
         }
@@ -101,6 +103,27 @@ struct MainScreen: View {
                 .presentationDetents([.medium])
                 .presentationCornerRadius(32)
                 .onDisappear { showThemeSheet = false }
+        }
+        .sheet(isPresented: $showAddCategorySheet) {
+            AddCategorySheet()
+        }
+        .sheet(isPresented: $showSupportScreen) {
+            NavigationView {
+                SupportScreen()
+            }
+        }
+        .onChange(of: dataSyncManager.showiCloudStorageWarning) { warning in
+            if warning {
+                showiCloudStorageAlert = true
+            }
+        }
+        .alert("iCloud Storage Almost Full", isPresented: $showiCloudStorageAlert) {
+            Button("Contact Us") {
+                showSupportScreen = true
+            }
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text("Your events data is approaching the iCloud sync limit. Your events are safe on this device, but syncing to other devices may stop working. Please contact us so we can help.")
         }
     }
 
@@ -136,31 +159,26 @@ struct MainScreen: View {
         }
     }
 
-    var addNewEventButton: some View {
-        Button {
-            showAddItemSheet = true
-        } label: {
-            HStack {
-                Image(systemName: "plus")
-                    .font(.system(.title2, design: .rounded))
-                    .foregroundColor(.white)
-                Text("Add New Event")
-                    .font(.system(.title2, design: .rounded))
-                    .bold()
-                    .foregroundColor(.white)
+    var bottomToolbarItems: some ToolbarContent {
+        ToolbarItemGroup(placement: .bottomBar) {
+            Spacer()
+
+            Button {
+                showAddCategorySheet = true
+            } label: {
+                Label("New Category", systemImage: "folder.badge.plus")
             }
-            .padding()
-            .background(LinearGradient(
-                gradient: .init(colors: [colorScheme == .dark ? mainColor.opacity(0.85).darker(by: 0.1) : mainColor.opacity(0.85), colorScheme == .dark ? mainColor.darker(by: 0.2) : mainColor]),
-                startPoint: .init(x: 0.0, y: 0.5),
-                endPoint: .init(x: 0, y: 1)
-            ))
-            .background(colorScheme == .dark ? Color.black : Color.white)
-            .clipShape(Capsule())
-            .shadow(color: mainColor, radius: 10, x: 0, y: 5)
+
+//            Spacer()
+
+            Button {
+                showAddItemSheet = true
+            } label: {
+                Label("New Event", systemImage: "plus")
+            }
+
+            Spacer()
         }
-        .buttonStyle(PlainButtonStyle())
-        .padding(.bottom, 16)
     }
 }
 

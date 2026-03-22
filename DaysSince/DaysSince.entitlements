@@ -6,5 +6,7 @@
 	<array>
 		<string>group.goodsnooze.dayssince</string>
 	</array>
+	<key>com.apple.developer.ubiquity-kvstore-identifier</key>
+	<string>$(TeamIdentifierPrefix)com.goodsnooze.dayssince</string>
 </dict>
 </plist>

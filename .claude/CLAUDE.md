@@ -11,10 +11,11 @@ App Store: https://apps.apple.com/us/app/days-since-track-memories/id1634218216
 ```
 DaysSince/                  # Main app target
 ├── DaysSinceApp.swift      # Entry point, TelemetryDeck init, manager setup
-├── ContentView.swift       # Routes onboarding vs main app, WishKit config, legacy migration
+├── ContentView.swift       # Routes onboarding vs iCloud migration vs main app, WishKit config, legacy migration
 ├── Analytics.swift         # Analytics wrapper (AnalyticType enum + send method)
 ├── Model/                  # DSItem, Category, CategoryColor
-├── Managers/               # CategoryManager, NotificationManager, ReviewManager
+├── Managers/               # DataSyncManager, CategoryManager, NotificationManager, ReviewManager
+├── Migration/              # iCloudMigrationView (shown to existing users on first iCloud-enabled launch)
 ├── Extensions/             # Calendar, Color, Date, Defaults, Array, Binding, UIApplication
 ├── Settings/               # SettingsScreen, ThemeView, ColorThemeView, AppIcons
 ├── CategoriesViews/        # Category grid, filter, rectangle views
@@ -42,19 +43,46 @@ WidgetIntents/              # Widget intent configuration
 - **Widgets**: WidgetKit with App Groups (`group.goodsnooze.dayssince`)
 - **Notifications**: UNUserNotificationCenter for local reminders
 - **Reviews**: StoreKit for app review prompts (once per version)
-- **No backend, no CoreData/SwiftData, no CloudKit, no tests**
+- **iCloud Sync**: NSUbiquitousKeyValueStore (iCloud Key-Value Store) via `DataSyncManager`
+- **No backend, no CoreData/SwiftData, no CloudKit**
 
 ## Data Layer
 
 ### Persistence Strategy
 - **App settings & categories**: Use `Defaults` library with `@Default` property wrapper
-- **Items array**: `@AppStorage("items")` with shared App Group suite for widget access
-- **Widget shared data**: `UserDefaults(suiteName: "group.goodsnooze.dayssince")`
+- **Items (events)**: Owned by `DataSyncManager`, dual-written to App Group UserDefaults + iCloud KVS
+- **Widget shared data**: `UserDefaults(suiteName: "group.goodsnooze.dayssince")` — widgets read from here (unchanged)
 - All models are `Codable` structs serialized to UserDefaults
+- **Critical**: `@AppStorage` with arrays uses `RawRepresentable` (via `Array+Extensions.swift`) which stores arrays as **JSON strings**, not `Data`. Any code reading items from UserDefaults must use `.string(forKey:)` + `.data(using: .utf8)`, NOT `.data(forKey:)`. The latter returns nil for string values and causes data loss.
+
+### iCloud Sync (DataSyncManager)
+- Uses `NSUbiquitousKeyValueStore` (iCloud Key-Value Store) — 1 MB hard limit, last-writer-wins
+- **DataSyncManager** (`DaysSince/Managers/DataSyncManager.swift`) is the central sync coordinator
+  - Owns `@Published var items` and `@Published var categories`
+  - On local write: dual-writes to App Group UserDefaults (for widgets) AND KVS (for iCloud)
+  - On remote change: applies iCloud data locally, mirrors to App Group UserDefaults
+  - Never overwrites non-empty local items with empty remote items (safety guard)
+- **Sync flow on launch (`startSync()`):**
+  - If local items are empty (fresh install/reinstall): restores from iCloud, sets `iCloudMigrationComplete = true`
+  - If local items exist: pushes to iCloud
+- **Migration for existing users:** `iCloudMigrationView` shown when `hasSeenOnboarding && !iCloudMigrationComplete`
+- **Storage warning:** Alerts user when approaching 950 KB of the 1 MB KVS limit
+- iCloud KVS keys: `"items"` for events, `"icloud_categories"` for categories
+- `KeyValueStoreProtocol` abstracts KVS for testability
+
+### Codable Compatibility (DSItem & Category)
+- Both DSItem and Category have custom `init(from decoder:)` in extensions (preserves memberwise init)
+- Uses `decodeIfPresent` with defaults for fields added after initial release (`lastModified`, `stableID`, etc.)
+- **Important**: Swift's auto-synthesized Decodable does NOT use default property values as fallbacks for missing keys. Any new field added to DSItem or Category MUST use `decodeIfPresent` in the custom decoder, or existing stored data will fail to decode silently (`try?` returns nil).
 
 ### Key Models
-- **`DSItem`**: id, name, category, dateLastDone, remindersEnabled, reminder, reminderNotificationID. Computed: `daysAgo`
-- **`Category`**: id, name, emoji, color (CategoryColor). Conforms to `Defaults.Serializable`
+- **`DSItem`**: id, name, category, dateLastDone, remindersEnabled, reminder, reminderNotificationID, lastModified. Computed: `daysAgo`
+- **`Category`**: id (UUID), stableID (String), name, emoji, color (CategoryColor). Conforms to `Defaults.Serializable`
+  - **`stableID`** is the stable persistent identity (foreign key). Equality and hashing use `stableID`, NOT `id`.
+  - Built-in categories have hardcoded stableIDs: `"work"`, `"life"`, `"hobby"`, `"health"`, `"home"`, `"pet"`, `"friends"`, `"projects"`, `"journal"` (constants on `Category`)
+  - User-created categories get `UUID().uuidString` as stableID at creation time
+  - Custom decoder handles migration from pre-stableID data: maps known built-in names to their well-known stableIDs, generates a UUID string for unknown categories
+  - **When creating built-in categories**, always pass the corresponding `Category.stableID*` constant. Never create a built-in category without its stableID.
 - **`CategoryColor`**: 10 cases (work, life, health, hobbies, marioBlue, zeldaYellow, animalCrossingsGreen, marioRed, animalCrossingsBrown, black)
 - **`DSItemReminders`**: daily, weekly, monthly, none
 
@@ -72,8 +100,9 @@ WidgetIntents/              # Widget intent configuration
 - Uses older `ObservableObject` + `@Published` pattern (not @Observable)
 
 ### Managers
-- **CategoryManager**: Category CRUD, drag-and-drop reordering, fires analytics on add/update
-- **NotificationManager**: Schedules daily/weekly/monthly reminders at 10:00 AM, stores items in shared UserDefaults
+- **DataSyncManager**: Central data coordinator — owns items/categories, syncs to iCloud KVS and App Group UserDefaults. Injected as `@EnvironmentObject`.
+- **CategoryManager**: Category CRUD, drag-and-drop reordering, fires analytics on add/update. Has `weak var dataSyncManager` reference for triggering iCloud sync.
+- **NotificationManager**: Schedules daily/weekly/monthly reminders at 10:00 AM. Receives items externally via `refreshNotifications(items:)`.
 - **ReviewManager**: Prompts StoreKit review once per app version
 
 ## Analytics
@@ -84,7 +113,7 @@ Always fire analytics for user actions. Use the `Analytics.send()` wrapper:
 Analytics.send(.addNewEvent, with: ["remindersEnabled": String(remindersEnabled)])
 ```
 
-Tracked events: `launchApp`, `addNewEvent`, `editEvent`, `updateCategory`, `addNewCategory`, `chooseIcon`, `chooseTheme`, `settingsReview`, `reviewPrompt`, `detailedModeOn`
+Tracked events: `launchApp`, `addNewEvent`, `editEvent`, `updateCategory`, `addNewCategory`, `chooseIcon`, `chooseTheme`, `settingsReview`, `reviewPrompt`, `detailedModeOn`, `iCloudMigrationStarted`, `iCloudMigrationCompleted`, `iCloudSyncConflict`, `iCloudDataSize`
 
 ## Design System
 
@@ -171,7 +200,7 @@ Tracked events: `launchApp`, `addNewEvent`, `editEvent`, `updateCategory`, `addN
 - Run tests: `xcodebuild test -scheme DaysSince -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=latest' -only-testing:DaysSinceTests`
 - Or run from Xcode: Cmd+U with the DaysSince scheme
 - 12 test files covering: models (DSItem, Category, CategoryColor, DSItemReminders, AlternativeIcon), extensions (Calendar, Date, Array, Color), sorting (SortType), analytics (AnalyticType), and themes (ColorTheme)
-- 104 tests total
+- 107 tests total
 - Use `DaysSince.Category` (fully qualified) in tests to avoid ambiguity with system `Category` type
 - Tests use `@testable import DaysSince` for access to internal types
 
@@ -179,4 +208,20 @@ Tracked events: `launchApp`, `addNewEvent`, `editEvent`, `updateCategory`, `addN
 - Xcode project (DaysSince.xcodeproj), not SPM-based
 - SPM dependencies resolved via Xcode
 - App Group entitlement: `group.goodsnooze.dayssince`
+- iCloud Key-Value Store entitlement: `$(TeamIdentifierPrefix)com.goodsnooze.dayssince`
 - Alternate icons configured via `.icon` asset packages
+
+## User Scenarios & Migration States
+
+The app handles 3 user states via `hasSeenOnboarding` and `iCloudMigrationComplete` (both `@AppStorage`):
+
+| State | hasSeenOnboarding | iCloudMigrationComplete | Result |
+|-------|-------------------|-------------------------|--------|
+| New user | false | false | Onboarding → sets both to true |
+| Existing user, first iCloud launch | true | false | iCloudMigrationView → migrates data to iCloud |
+| Reinstall (iCloud data exists) | false | true (set by startSync) | Onboarding (iCloud data already restored) |
+| Normal launch | true | true | MainScreen |
+
+**Reinstall flow**: On app deletion, UserDefaults is wiped but iCloud KVS persists. On reinstall, `startSync()` detects empty local items, restores from iCloud, and sets `iCloudMigrationComplete = true`. The user still goes through onboarding (`hasSeenOnboarding` was wiped). The onboarding CategoryPage currently overwrites `Defaults[.categories]` — this is a known issue that needs a decision on how to merge onboarding selections with iCloud-restored categories.
+
+**Legacy migration (`oldDSItem`)**: ContentView still declares `@AppStorage("items") var oldItems: [oldDSItem]` for migrating from the old item format (which used `CategoryDSIte` enum). This shares the same `"items"` key as current items, so it always fails to decode (logging a `typeMismatch` error) and evaluates to `[]`. The migration is guarded by `migratedFromOld` flag. This is dead code for any user who has already launched the current app version and can be removed in a future cleanup.
