@@ -37,8 +37,8 @@ final class DataSyncManagerMergeTests: XCTestCase {
         )
     }
 
-    private func makeCategory(stableID: String, name: String, color: CategoryColor = .work) -> DaysSince.Category {
-        DaysSince.Category(id: UUID(), stableID: stableID, name: name, emoji: "lightbulb", color: color)
+    private func makeCategory(stableID: String, name: String, color: CategoryColor = .work, sortOrder: Int = 0, lastModified: Date? = nil) -> DaysSince.Category {
+        DaysSince.Category(id: UUID(), stableID: stableID, name: name, emoji: "lightbulb", color: color, sortOrder: sortOrder, lastModified: lastModified ?? fixedDate)
     }
 
     private func makeManager(
@@ -299,20 +299,99 @@ final class DataSyncManagerMergeTests: XCTestCase {
         XCTAssertTrue(stableIDs.contains("custom-a"), "Remote-only category should be merged in")
     }
 
-    func testCategoryMergeRemoteWinsForDuplicateStableID() {
+    func testCategoryMergeNewerWinsForDuplicateStableID() {
+        // Set local categories with older timestamp
+        Defaults[.categories] = [
+            makeCategory(stableID: "work", name: "Work Local", color: .work, lastModified: olderDate)
+        ]
         let remoteCategories = [
-            makeCategory(stableID: "work", name: "Work Remote", color: .life),
+            makeCategory(stableID: "work", name: "Work Remote", color: .life, lastModified: newerDate),
         ]
         let localItems = [makeItem(name: "Dummy")]
         let (manager, _, _) = makeManager(localItems: localItems, remoteCategories: remoteCategories)
 
         manager.performMigration()
 
-        // Remote should win for the "work" stableID
+        // Remote has newer lastModified, should win for the "work" stableID
         let workCat = manager.categories.first(where: { $0.stableID == "work" })
         XCTAssertNotNil(workCat)
         XCTAssertEqual(workCat?.name, "Work Remote")
         XCTAssertEqual(workCat?.color, .life)
+    }
+
+    func testCategoryMergeLocalWinsWhenNewer() {
+        // Local "work" is newer than remote
+        Defaults[.categories] = [
+            makeCategory(stableID: "work", name: "Work Local", color: .work, lastModified: newerDate)
+        ]
+        let remoteCategories = [
+            makeCategory(stableID: "work", name: "Work Remote", color: .life, lastModified: olderDate),
+        ]
+        let localItems = [makeItem(name: "Dummy")]
+        let (manager, _, _) = makeManager(localItems: localItems, remoteCategories: remoteCategories)
+
+        manager.performMigration()
+
+        let workCat = manager.categories.first(where: { $0.stableID == "work" })
+        XCTAssertNotNil(workCat)
+        XCTAssertEqual(workCat?.name, "Work Local")
+    }
+
+    func testCategoryMergePreservesSortOrder() {
+        Defaults[.categories] = [
+            makeCategory(stableID: "health", name: "Health", sortOrder: 0),
+            makeCategory(stableID: "work", name: "Work", sortOrder: 1),
+            makeCategory(stableID: "life", name: "Life", sortOrder: 2),
+        ]
+        let remoteCategories = [
+            makeCategory(stableID: "travel", name: "Travel", color: .life, sortOrder: 10),
+        ]
+        let localItems = [makeItem(name: "Dummy")]
+        let (manager, _, _) = makeManager(localItems: localItems, remoteCategories: remoteCategories)
+
+        manager.performMigration()
+
+        // Result should be sorted by sortOrder: Health(0), Work(1), Life(2), Travel(10)
+        XCTAssertEqual(manager.categories.map(\.stableID), ["health", "work", "life", "travel"])
+    }
+
+    func testAssignSequentialSortOrdersMigration() {
+        // Simulate pre-sortOrder data: all categories have sortOrder 0
+        Defaults[.categories] = [
+            makeCategory(stableID: "work", name: "Work", sortOrder: 0),
+            makeCategory(stableID: "life", name: "Life", sortOrder: 0),
+            makeCategory(stableID: "hobby", name: "Hobby", sortOrder: 0),
+        ]
+
+        let suiteName = "test.\(UUID().uuidString)"
+        let appGroupDefaults = UserDefaults(suiteName: suiteName)!
+        let mockStore = MockKeyValueStore()
+
+        let manager = DataSyncManager(appGroupDefaults: appGroupDefaults, iCloudStore: mockStore)
+
+        // init() calls assignSequentialSortOrdersIfNeeded — should assign 0, 1, 2
+        XCTAssertEqual(manager.categories[0].sortOrder, 0)
+        XCTAssertEqual(manager.categories[1].sortOrder, 1)
+        XCTAssertEqual(manager.categories[2].sortOrder, 2)
+    }
+
+    func testSortOrderNotReassignedWhenAlreadyDistinct() {
+        Defaults[.categories] = [
+            makeCategory(stableID: "work", name: "Work", sortOrder: 5),
+            makeCategory(stableID: "life", name: "Life", sortOrder: 10),
+            makeCategory(stableID: "hobby", name: "Hobby", sortOrder: 15),
+        ]
+
+        let suiteName = "test.\(UUID().uuidString)"
+        let appGroupDefaults = UserDefaults(suiteName: suiteName)!
+        let mockStore = MockKeyValueStore()
+
+        let manager = DataSyncManager(appGroupDefaults: appGroupDefaults, iCloudStore: mockStore)
+
+        // Should NOT reassign — values are already distinct
+        XCTAssertEqual(manager.categories[0].sortOrder, 5)
+        XCTAssertEqual(manager.categories[1].sortOrder, 10)
+        XCTAssertEqual(manager.categories[2].sortOrder, 15)
     }
 
     // MARK: - StableID Reconciliation

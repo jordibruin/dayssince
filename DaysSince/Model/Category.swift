@@ -27,12 +27,20 @@ struct Category: Identifiable, Codable, Equatable, Defaults.Serializable, Hashab
     var emoji: String
     var color: CategoryColor
 
-    init(id: UUID = UUID(), stableID: String = UUID().uuidString, name: String, emoji: String, color: CategoryColor) {
+    /// Display order in the category list. Lower values appear first.
+    var sortOrder: Int = 0
+
+    /// Timestamp of last modification, used for conflict resolution during sync.
+    var lastModified: Date = .now
+
+    init(id: UUID = UUID(), stableID: String = UUID().uuidString, name: String, emoji: String, color: CategoryColor, sortOrder: Int = 0, lastModified: Date = .now) {
         self.id = id
         self.stableID = stableID
         self.name = name
         self.emoji = emoji
         self.color = color
+        self.sortOrder = sortOrder
+        self.lastModified = lastModified
     }
 
     static func == (lhs: Category, rhs: Category) -> Bool {
@@ -94,5 +102,8 @@ extension Category {
             ]
             stableID = knownBuiltIns[name] ?? UUID().uuidString
         }
+
+        sortOrder = try container.decodeIfPresent(Int.self, forKey: .sortOrder) ?? 0
+        lastModified = try container.decodeIfPresent(Date.self, forKey: .lastModified) ?? .now
     }
 }

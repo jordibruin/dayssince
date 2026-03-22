@@ -63,6 +63,9 @@ class DataSyncManager: ObservableObject {
         // Load categories from Defaults library (current source of truth)
         self.categories = Defaults[.categories]
 
+        // Migrate pre-sortOrder data: assign sequential sort orders if all are 0
+        assignSequentialSortOrdersIfNeeded()
+
         // Fix stableID mismatches from pre-stableID data (custom categories)
         reconcileCategoryStableIDs()
     }
@@ -287,6 +290,22 @@ class DataSyncManager: ObservableObject {
         Analytics.send(.iCloudDataSize, with: ["bytes": String(usage)])
     }
 
+    // MARK: - Sort Order Migration
+
+    /// Assign sequential sort orders when all categories have the same value (pre-sortOrder migration).
+    /// Preserves the existing array order, which is the order the user last saw.
+    func assignSequentialSortOrdersIfNeeded() {
+        guard categories.count > 1 else { return }
+
+        let allSame = categories.allSatisfy { $0.sortOrder == categories[0].sortOrder }
+        guard allSame else { return }
+
+        for i in categories.indices {
+            categories[i].sortOrder = i
+        }
+        Defaults[.categories] = categories
+    }
+
     // MARK: - StableID Reconciliation
 
     /// Fix stableID mismatches between items' embedded categories and the canonical categories list.
@@ -384,20 +403,27 @@ class DataSyncManager: ObservableObject {
         return Array(itemsByID.values)
     }
 
-    /// Merge local and remote categories. Union by `stableID`; remote wins for duplicates.
-    private func mergeCategories(local: [Category], remote: [Category]) -> [Category] {
+    /// Merge local and remote categories. Union by `stableID`; for duplicates, keep the one
+    /// with the newer `lastModified`. Result is sorted by `sortOrder` to preserve display order.
+    func mergeCategories(local: [Category], remote: [Category]) -> [Category] {
         var categoryByStableID: [String: Category] = [:]
 
         for cat in local {
             categoryByStableID[cat.stableID] = cat
         }
 
-        // Remote wins for duplicates
         for cat in remote {
-            categoryByStableID[cat.stableID] = cat
+            if let existing = categoryByStableID[cat.stableID] {
+                // Keep the one with newer lastModified
+                if cat.lastModified > existing.lastModified {
+                    categoryByStableID[cat.stableID] = cat
+                }
+            } else {
+                categoryByStableID[cat.stableID] = cat
+            }
         }
 
-        return Array(categoryByStableID.values)
+        return Array(categoryByStableID.values).sorted { $0.sortOrder < $1.sortOrder }
     }
 
     // MARK: - Private Helpers

@@ -31,9 +31,10 @@ class CategoryManager: ObservableObject {
     ///   - emoji: String, sfSymbol of new category
     ///   - color: CategoryColor, color of the new category
     func addCategory(name: String, emoji: String, color: CategoryColor) {
-        let newCategory = Category(name: name, emoji: emoji, color: color)
+        let nextSortOrder = (categories.map(\.sortOrder).max() ?? -1) + 1
+        let newCategory = Category(name: name, emoji: emoji, color: color, sortOrder: nextSortOrder)
         categories.append(newCategory)
-        
+
         Analytics.send(.addNewCategory, with: ["emoji": emoji, "color": color.id])
     }
 
@@ -82,6 +83,7 @@ class CategoryManager: ObservableObject {
             categories[indexToUpdate].name = name
             categories[indexToUpdate].emoji = emoji
             categories[indexToUpdate].color = color
+            categories[indexToUpdate].lastModified = .now
 
             // Structs (Category) are value based, need to update the item's category too
             for index in items.indices {
@@ -138,7 +140,18 @@ class CategoryManager: ObservableObject {
                     }
                 }
             }
+
+            // Reassign sort orders to match new array positions
+            reassignSortOrders()
         }
         objectWillChange.send()
+    }
+
+    /// Reassign sequential sortOrder values (0, 1, 2, ...) to match current array order.
+    private func reassignSortOrders() {
+        for i in categories.indices {
+            categories[i].sortOrder = i
+            categories[i].lastModified = .now
+        }
     }
 }
