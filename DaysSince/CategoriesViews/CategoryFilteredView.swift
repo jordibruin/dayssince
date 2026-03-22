@@ -14,7 +14,7 @@ struct CategoryFilteredView: View {
     
     @Default(.categories) var categories
     
-    let categoryID: UUID
+    let categoryStableID: String
 
     @State var showAddItemSheet: Bool
     @State var editItemSheet: Bool
@@ -28,9 +28,9 @@ struct CategoryFilteredView: View {
 
     @EnvironmentObject var categoryManager: CategoryManager
 
-    
+
     private var currentCategory: Category? {
-        categories.first { $0.id == categoryID }
+        categories.first { $0.stableID == categoryStableID }
     }
     
     var accentColor: Color { currentCategory?.color.color ?? Color.workColor}
@@ -172,12 +172,12 @@ struct CategoryFilteredView: View {
 }
 
 struct CategoryFilteredView_Previews: PreviewProvider {
-    static let mockCategory = Category(id: UUID(), name: "Dreams", emoji: "cloud", color: .marioBlue)
+    static let mockCategory = Category(stableID: "dreams", name: "Dreams", emoji: "cloud", color: .marioBlue)
     static let mockItems = [DSItem.placeholderItem()]
-    
+
     static var previews: some View {
         CategoryFilteredView(
-            categoryID: mockCategory.id,
+            categoryStableID: mockCategory.stableID,
             showAddItemSheet: false,
             editItemSheet: false,
             tappedItem: DSItem.placeholderItem(),

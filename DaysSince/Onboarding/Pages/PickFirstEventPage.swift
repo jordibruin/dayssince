@@ -132,8 +132,8 @@ struct PickFirstEventPage: View {
 
 #Preview {
     PickFirstEventPage(selectedCategories: [
-        Category(name: "Pet", emoji: "dog", color: .animalCrossingsBrown),
-        Category(name: "Home", emoji: "house", color: .marioBlue)
+        Category(stableID: Category.stableIDPet, name: "Pet", emoji: "dog", color: .animalCrossingsBrown),
+        Category(stableID: Category.stableIDHome, name: "Home", emoji: "house", color: .marioBlue)
     ]) { _ in }
 }
 

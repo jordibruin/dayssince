@@ -9,14 +9,14 @@ import Foundation
 
 extension Category {
     static let sampleList: [Category] = [
-        .init(name: "Work", emoji: "lightbulb", color: .work),
-        .init(name: "Life", emoji: "leaf", color: .life),
-        .init(name: "Hobby", emoji: "gamecontroller", color: .hobbies),
-        .init(name: "Health", emoji: "heart.text.square", color: .health),
-        .init(name: "Home", emoji: "house", color: .marioBlue),
-        .init(name: "Pet", emoji: "dog", color: .animalCrossingsBrown),
-        .init(name: "Friends", emoji: "heart", color: .animalCrossingsGreen),
-        .init(name: "Projects", emoji: "lightbulb", color: .zeldaYellow),
-        .init(name: "Journal", emoji: "pencil", color: .marioRed)
+        .init(stableID: stableIDWork, name: "Work", emoji: "lightbulb", color: .work),
+        .init(stableID: stableIDLife, name: "Life", emoji: "leaf", color: .life),
+        .init(stableID: stableIDHobby, name: "Hobby", emoji: "gamecontroller", color: .hobbies),
+        .init(stableID: stableIDHealth, name: "Health", emoji: "heart.text.square", color: .health),
+        .init(stableID: stableIDHome, name: "Home", emoji: "house", color: .marioBlue),
+        .init(stableID: stableIDPet, name: "Pet", emoji: "dog", color: .animalCrossingsBrown),
+        .init(stableID: stableIDFriends, name: "Friends", emoji: "heart", color: .animalCrossingsGreen),
+        .init(stableID: stableIDProjects, name: "Projects", emoji: "lightbulb", color: .zeldaYellow),
+        .init(stableID: stableIDJournal, name: "Journal", emoji: "pencil", color: .marioRed)
     ]
 }

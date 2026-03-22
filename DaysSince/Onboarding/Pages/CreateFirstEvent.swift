@@ -26,7 +26,7 @@ struct CreateFirstEvent: View {
         
         var storedCategories = Defaults[.categories]
         if storedCategories.isEmpty {
-            let fallback = Category(name: "Work", emoji: "lightbulb", color: .work)
+            let fallback = Category(stableID: Category.stableIDWork, name: "Work", emoji: "lightbulb", color: .work)
             storedCategories.append(fallback)
             Defaults[.categories] = storedCategories
         }
@@ -156,7 +156,7 @@ struct CreateFirstEvent_Previews: PreviewProvider {
     static var previews: some View {
         // Ensure preview doesn't crash on empty categories
         if Defaults[.categories].isEmpty {
-            let fallback = Category(name: "Work", emoji: "💡", color: .work)
+            let fallback = Category(stableID: Category.stableIDWork, name: "Work", emoji: "💡", color: .work)
             Defaults[.categories] = [fallback]
         }
 

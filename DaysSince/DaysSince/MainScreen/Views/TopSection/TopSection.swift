@@ -34,7 +34,7 @@ struct TopSection: View {
 
                     NavigationLink(
                         destination: CategoryFilteredView(
-                            categoryID: category.id,
+                            categoryStableID: category.stableID,
                             showAddItemSheet: false,
                             editItemSheet: false,
                             items: $items,

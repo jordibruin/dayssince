@@ -83,6 +83,13 @@ class DataSyncManager: ObservableObject {
         // categories always have 4 defaults from the Defaults library, so checking
         // categories.isEmpty would never detect a fresh install.
         if items.isEmpty {
+            // Also restore categories from iCloud on fresh install
+            let remoteCategories = loadCategoriesFromiCloud()
+            if !remoteCategories.isEmpty {
+                categories = remoteCategories
+                Defaults[.categories] = remoteCategories
+            }
+
             let remoteItems = loadItemsFromiCloud()
             if !remoteItems.isEmpty {
                 items = remoteItems
@@ -90,13 +97,6 @@ class DataSyncManager: ObservableObject {
 
                 // Mark migration as complete — data is already in iCloud
                 UserDefaults.standard.set(true, forKey: "iCloudMigrationComplete")
-            }
-
-            // Also restore categories from iCloud on fresh install
-            let remoteCategories = loadCategoriesFromiCloud()
-            if !remoteCategories.isEmpty {
-                categories = remoteCategories
-                Defaults[.categories] = remoteCategories
             }
 
             WidgetCenter.shared.reloadAllTimelines()
