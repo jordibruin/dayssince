@@ -70,14 +70,19 @@ WidgetIntents/              # Widget intent configuration
 - iCloud KVS keys: `"items"` for events, `"icloud_categories"` for categories
 - `KeyValueStoreProtocol` abstracts KVS for testability
 
-### DSItem Codable Compatibility
-- DSItem has a custom `init(from decoder:)` in an extension (preserves memberwise init)
-- Uses `decodeIfPresent` with defaults for fields added after initial release (`lastModified`, etc.)
-- **Important**: Swift's auto-synthesized Decodable does NOT use default property values as fallbacks for missing keys. Any new field added to DSItem MUST use `decodeIfPresent` in the custom decoder, or existing stored data will fail to decode silently (`try?` returns nil).
+### Codable Compatibility (DSItem & Category)
+- Both DSItem and Category have custom `init(from decoder:)` in extensions (preserves memberwise init)
+- Uses `decodeIfPresent` with defaults for fields added after initial release (`lastModified`, `stableID`, etc.)
+- **Important**: Swift's auto-synthesized Decodable does NOT use default property values as fallbacks for missing keys. Any new field added to DSItem or Category MUST use `decodeIfPresent` in the custom decoder, or existing stored data will fail to decode silently (`try?` returns nil).
 
 ### Key Models
 - **`DSItem`**: id, name, category, dateLastDone, remindersEnabled, reminder, reminderNotificationID, lastModified. Computed: `daysAgo`
-- **`Category`**: id, name, emoji, color (CategoryColor). Conforms to `Defaults.Serializable`
+- **`Category`**: id (UUID), stableID (String), name, emoji, color (CategoryColor). Conforms to `Defaults.Serializable`
+  - **`stableID`** is the stable persistent identity (foreign key). Equality and hashing use `stableID`, NOT `id`.
+  - Built-in categories have hardcoded stableIDs: `"work"`, `"life"`, `"hobby"`, `"health"`, `"home"`, `"pet"`, `"friends"`, `"projects"`, `"journal"` (constants on `Category`)
+  - User-created categories get `UUID().uuidString` as stableID at creation time
+  - Custom decoder handles migration from pre-stableID data: maps known built-in names to their well-known stableIDs, generates a UUID string for unknown categories
+  - **When creating built-in categories**, always pass the corresponding `Category.stableID*` constant. Never create a built-in category without its stableID.
 - **`CategoryColor`**: 10 cases (work, life, health, hobbies, marioBlue, zeldaYellow, animalCrossingsGreen, marioRed, animalCrossingsBrown, black)
 - **`DSItemReminders`**: daily, weekly, monthly, none
 
@@ -195,7 +200,7 @@ Tracked events: `launchApp`, `addNewEvent`, `editEvent`, `updateCategory`, `addN
 - Run tests: `xcodebuild test -scheme DaysSince -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=latest' -only-testing:DaysSinceTests`
 - Or run from Xcode: Cmd+U with the DaysSince scheme
 - 12 test files covering: models (DSItem, Category, CategoryColor, DSItemReminders, AlternativeIcon), extensions (Calendar, Date, Array, Color), sorting (SortType), analytics (AnalyticType), and themes (ColorTheme)
-- 104 tests total
+- 107 tests total
 - Use `DaysSince.Category` (fully qualified) in tests to avoid ambiguity with system `Category` type
 - Tests use `@testable import DaysSince` for access to internal types
 
@@ -218,3 +223,5 @@ The app handles 3 user states via `hasSeenOnboarding` and `iCloudMigrationComple
 | Normal launch | true | true | MainScreen |
 
 **Reinstall flow**: On app deletion, UserDefaults is wiped but iCloud KVS persists. On reinstall, `startSync()` detects empty local items, restores from iCloud, and sets `iCloudMigrationComplete = true`. The user still goes through onboarding (`hasSeenOnboarding` was wiped). The onboarding CategoryPage currently overwrites `Defaults[.categories]` — this is a known issue that needs a decision on how to merge onboarding selections with iCloud-restored categories.
+
+**Legacy migration (`oldDSItem`)**: ContentView still declares `@AppStorage("items") var oldItems: [oldDSItem]` for migrating from the old item format (which used `CategoryDSIte` enum). This shares the same `"items"` key as current items, so it always fails to decode (logging a `typeMismatch` error) and evaluates to `[]`. The migration is guarded by `migratedFromOld` flag. This is dead code for any user who has already launched the current app version and can be removed in a future cleanup.
