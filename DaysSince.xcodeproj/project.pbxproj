@@ -177,6 +177,7 @@
 		D5TE5T0000000000000C0010 /* AnalyticsTypeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5TE5T0000000000000B0010 /* AnalyticsTypeTests.swift */; };
 		D5TE5T0000000000000C0011 /* AlternativeIconTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5TE5T0000000000000B0011 /* AlternativeIconTests.swift */; };
 		D5TE5T0000000000000C0012 /* ColorThemeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5TE5T0000000000000B0012 /* ColorThemeTests.swift */; };
+		D5TE5T0000000000000C0013 /* DataSyncManagerMergeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5TE5T0000000000000B0013 /* DataSyncManagerMergeTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -371,6 +372,7 @@
 		D5TE5T0000000000000B0010 /* AnalyticsTypeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsTypeTests.swift; sourceTree = "<group>"; };
 		D5TE5T0000000000000B0011 /* AlternativeIconTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlternativeIconTests.swift; sourceTree = "<group>"; };
 		D5TE5T0000000000000B0012 /* ColorThemeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorThemeTests.swift; sourceTree = "<group>"; };
+		D5TE5T0000000000000B0013 /* DataSyncManagerMergeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataSyncManagerMergeTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -920,6 +922,7 @@
 				D5TE5T0000000000000B0010 /* AnalyticsTypeTests.swift */,
 				D5TE5T0000000000000B0011 /* AlternativeIconTests.swift */,
 				D5TE5T0000000000000B0012 /* ColorThemeTests.swift */,
+				D5TE5T0000000000000B0013 /* DataSyncManagerMergeTests.swift */,
 			);
 			path = DaysSinceTests;
 			sourceTree = "<group>";
@@ -1308,6 +1311,7 @@
 				D5TE5T0000000000000C0010 /* AnalyticsTypeTests.swift in Sources */,
 				D5TE5T0000000000000C0011 /* AlternativeIconTests.swift in Sources */,
 				D5TE5T0000000000000C0012 /* ColorThemeTests.swift in Sources */,
+				D5TE5T0000000000000C0013 /* DataSyncManagerMergeTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

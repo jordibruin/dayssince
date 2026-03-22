@@ -101,8 +101,20 @@ class DataSyncManager: ObservableObject {
 
             WidgetCenter.shared.reloadAllTimelines()
         } else {
-            // Normal launch with existing local data — push to iCloud
+            // Normal launch with existing local data — merge with iCloud before pushing.
+            // This handles the case where two devices with different local data both
+            // update to the iCloud-enabled version: the second device to sync will
+            // merge its local events with the first device's data instead of overwriting.
+            let remoteItems = loadItemsFromiCloud()
+            let mergedItems = mergeItems(local: items, remote: remoteItems)
+            items = mergedItems
+            writeItemsToAppGroup(mergedItems)
             pushItemsToiCloud()
+
+            let remoteCategories = loadCategoriesFromiCloud()
+            let mergedCategories = mergeCategories(local: categories, remote: remoteCategories)
+            categories = mergedCategories
+            Defaults[.categories] = mergedCategories
             pushCategoriesToiCloud()
         }
     }
@@ -143,14 +155,23 @@ class DataSyncManager: ObservableObject {
     func performMigration() -> (items: Int, categories: Int) {
         Analytics.send(.iCloudMigrationStarted)
 
-        // Load current items from App Group UserDefaults
-        let currentItems = Self.loadItems(from: appGroupDefaults)
-        items = currentItems
+        // Load current local items from App Group UserDefaults
+        let localItems = Self.loadItems(from: appGroupDefaults)
+        let localCategories = Defaults[.categories]
 
-        // Load current categories from Defaults
-        categories = Defaults[.categories]
+        // Merge with any data already in iCloud (e.g. another device migrated first)
+        let remoteItems = loadItemsFromiCloud()
+        let remoteCategories = loadCategoriesFromiCloud()
 
-        // Push to iCloud
+        let mergedItems = mergeItems(local: localItems, remote: remoteItems)
+        let mergedCategories = mergeCategories(local: localCategories, remote: remoteCategories)
+
+        // Apply merged data locally and push to iCloud
+        items = mergedItems
+        writeItemsToAppGroup(mergedItems)
+        categories = mergedCategories
+        Defaults[.categories] = mergedCategories
+
         pushItemsToiCloud()
         pushCategoriesToiCloud()
 
@@ -158,11 +179,11 @@ class DataSyncManager: ObservableObject {
         _ = iCloudStore.synchronize()
 
         Analytics.send(.iCloudMigrationCompleted, with: [
-            "itemCount": String(currentItems.count),
-            "categoryCount": String(categories.count)
+            "itemCount": String(mergedItems.count),
+            "categoryCount": String(mergedCategories.count)
         ])
 
-        return (currentItems.count, categories.count)
+        return (mergedItems.count, mergedCategories.count)
     }
 
     // MARK: - iCloud Availability
@@ -251,6 +272,46 @@ class DataSyncManager: ObservableObject {
 
         // Log data size for telemetry
         Analytics.send(.iCloudDataSize, with: ["bytes": String(usage)])
+    }
+
+    // MARK: - Merge Helpers
+
+    /// Merge local and remote items. Union by `id`; for duplicates, keep the one with newer `lastModified`.
+    private func mergeItems(local: [DSItem], remote: [DSItem]) -> [DSItem] {
+        var itemsByID: [UUID: DSItem] = [:]
+
+        for item in remote {
+            itemsByID[item.id] = item
+        }
+
+        for item in local {
+            if let existing = itemsByID[item.id] {
+                // Keep the one with newer lastModified
+                if item.lastModified > existing.lastModified {
+                    itemsByID[item.id] = item
+                }
+            } else {
+                itemsByID[item.id] = item
+            }
+        }
+
+        return Array(itemsByID.values)
+    }
+
+    /// Merge local and remote categories. Union by `stableID`; remote wins for duplicates.
+    private func mergeCategories(local: [Category], remote: [Category]) -> [Category] {
+        var categoryByStableID: [String: Category] = [:]
+
+        for cat in local {
+            categoryByStableID[cat.stableID] = cat
+        }
+
+        // Remote wins for duplicates
+        for cat in remote {
+            categoryByStableID[cat.stableID] = cat
+        }
+
+        return Array(categoryByStableID.values)
     }
 
     // MARK: - Private Helpers
