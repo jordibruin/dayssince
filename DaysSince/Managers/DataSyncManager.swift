@@ -62,6 +62,9 @@ class DataSyncManager: ObservableObject {
 
         // Load categories from Defaults library (current source of truth)
         self.categories = Defaults[.categories]
+
+        // Fix stableID mismatches from pre-stableID data (custom categories)
+        reconcileCategoryStableIDs()
     }
 
     // MARK: - Sync Lifecycle
@@ -99,6 +102,9 @@ class DataSyncManager: ObservableObject {
                 UserDefaults.standard.set(true, forKey: "iCloudMigrationComplete")
             }
 
+            // Reconcile in case iCloud data was from a pre-stableID migration
+            reconcileCategoryStableIDs()
+
             WidgetCenter.shared.reloadAllTimelines()
         } else {
             // Normal launch with existing local data — merge with iCloud before pushing.
@@ -116,6 +122,10 @@ class DataSyncManager: ObservableObject {
             categories = mergedCategories
             Defaults[.categories] = mergedCategories
             pushCategoriesToiCloud()
+
+            // Reconcile in case merged data contains pre-stableID items
+            reconcileCategoryStableIDs()
+            pushItemsToiCloud()
         }
     }
 
@@ -171,6 +181,9 @@ class DataSyncManager: ObservableObject {
         writeItemsToAppGroup(mergedItems)
         categories = mergedCategories
         Defaults[.categories] = mergedCategories
+
+        // Reconcile stableIDs before pushing to iCloud
+        reconcileCategoryStableIDs()
 
         pushItemsToiCloud()
         pushCategoriesToiCloud()
@@ -272,6 +285,79 @@ class DataSyncManager: ObservableObject {
 
         // Log data size for telemetry
         Analytics.send(.iCloudDataSize, with: ["bytes": String(usage)])
+    }
+
+    // MARK: - StableID Reconciliation
+
+    /// Fix stableID mismatches between items' embedded categories and the canonical categories list.
+    ///
+    /// When upgrading from pre-stableID data, `Category.init(from decoder:)` generates a random UUID
+    /// for custom categories. Since items and categories are decoded independently, the same custom
+    /// category gets different random stableIDs in each context. This method reconciles them by
+    /// matching on category name (with color+emoji tiebreaker for duplicate names).
+    ///
+    /// Safe to call on every launch — it's a no-op when all stableIDs already match.
+    func reconcileCategoryStableIDs() {
+        let knownStableIDs = Set(categories.map(\.stableID))
+
+        // Find items whose embedded category stableID doesn't match any known category
+        let orphanedIndices = items.indices.filter { !knownStableIDs.contains(items[$0].category.stableID) }
+        guard !orphanedIndices.isEmpty else { return }
+
+        // Build lookup: (name, color, emoji) → stableID for precise matching
+        var exactMatch: [String: String] = [:]
+        // Track ambiguous exact keys so we skip them entirely
+        var ambiguousExactKeys: Set<String> = []
+        // Fallback: name-only → stableID (used when exact match fails)
+        var nameOnly: [String: String] = [:]
+        // Track ambiguous names so we don't use name-only for them
+        var ambiguousNames: Set<String> = []
+
+        for cat in categories {
+            let key = "\(cat.name)|\(cat.color)|\(cat.emoji)"
+
+            if exactMatch[key] != nil {
+                ambiguousExactKeys.insert(key)
+            } else {
+                exactMatch[key] = cat.stableID
+            }
+
+            if nameOnly[cat.name] != nil {
+                ambiguousNames.insert(cat.name)
+            } else {
+                nameOnly[cat.name] = cat.stableID
+            }
+        }
+
+        var updated = false
+        for i in orphanedIndices {
+            let itemCat = items[i].category
+            let exactKey = "\(itemCat.name)|\(itemCat.color)|\(itemCat.emoji)"
+
+            let resolvedStableID: String?
+            if !ambiguousExactKeys.contains(exactKey), let sid = exactMatch[exactKey] {
+                resolvedStableID = sid
+            } else if !ambiguousNames.contains(itemCat.name), let sid = nameOnly[itemCat.name] {
+                resolvedStableID = sid
+            } else {
+                resolvedStableID = nil
+            }
+
+            if let stableID = resolvedStableID {
+                items[i].category = Category(
+                    id: itemCat.id,
+                    stableID: stableID,
+                    name: itemCat.name,
+                    emoji: itemCat.emoji,
+                    color: itemCat.color
+                )
+                updated = true
+            }
+        }
+
+        if updated {
+            writeItemsToAppGroup(items)
+        }
     }
 
     // MARK: - Merge Helpers

@@ -1,4 +1,5 @@
 @testable import DaysSince
+import Defaults
 import XCTest
 
 // MARK: - Mock Key-Value Store
@@ -312,6 +313,198 @@ final class DataSyncManagerMergeTests: XCTestCase {
         XCTAssertNotNil(workCat)
         XCTAssertEqual(workCat?.name, "Work Remote")
         XCTAssertEqual(workCat?.color, .life)
+    }
+
+    // MARK: - StableID Reconciliation
+
+    func testReconcileFixesMismatchedCustomCategoryStableID() {
+        // Simulate pre-stableID upgrade: item's embedded category has a random stableID
+        // that doesn't match the canonical category list's stableID for the same category.
+        let canonicalStableID = "canonical-travel-id"
+        let orphanedStableID = "random-uuid-from-decoder"
+
+        let travelCategory = DaysSince.Category(
+            stableID: canonicalStableID, name: "Travel", emoji: "airplane", color: .life
+        )
+        let orphanedCategory = DaysSince.Category(
+            stableID: orphanedStableID, name: "Travel", emoji: "airplane", color: .life
+        )
+        let item = DSItem(
+            id: UUID(), name: "Trip to Paris", category: orphanedCategory,
+            dateLastDone: fixedDate, remindersEnabled: false, lastModified: fixedDate
+        )
+
+        let suiteName = "test.\(UUID().uuidString)"
+        let appGroupDefaults = UserDefaults(suiteName: suiteName)!
+        let mockStore = MockKeyValueStore()
+
+        // Write item with orphaned stableID to local storage
+        let jsonString = String(data: try! JSONEncoder().encode([item]), encoding: .utf8)!
+        appGroupDefaults.set(jsonString, forKey: DataSyncManager.itemsKey)
+
+        // Set canonical categories via Defaults
+        Defaults[.categories] = [travelCategory]
+
+        let manager = DataSyncManager(appGroupDefaults: appGroupDefaults, iCloudStore: mockStore)
+
+        // init() calls reconcileCategoryStableIDs — item should now match canonical stableID
+        XCTAssertEqual(manager.items.count, 1)
+        XCTAssertEqual(manager.items.first?.category.stableID, canonicalStableID)
+        XCTAssertEqual(manager.items.first?.name, "Trip to Paris")
+    }
+
+    func testReconcileDoesNotTouchBuiltInCategories() {
+        let workCategory = DaysSince.Category(
+            stableID: DaysSince.Category.stableIDWork, name: "Work", emoji: "lightbulb", color: .work
+        )
+        let item = DSItem(
+            id: UUID(), name: "Meeting", category: workCategory,
+            dateLastDone: fixedDate, remindersEnabled: false, lastModified: fixedDate
+        )
+
+        let suiteName = "test.\(UUID().uuidString)"
+        let appGroupDefaults = UserDefaults(suiteName: suiteName)!
+        let mockStore = MockKeyValueStore()
+        let jsonString = String(data: try! JSONEncoder().encode([item]), encoding: .utf8)!
+        appGroupDefaults.set(jsonString, forKey: DataSyncManager.itemsKey)
+
+        Defaults[.categories] = [workCategory]
+
+        let manager = DataSyncManager(appGroupDefaults: appGroupDefaults, iCloudStore: mockStore)
+
+        // Built-in category should be untouched
+        XCTAssertEqual(manager.items.first?.category.stableID, DaysSince.Category.stableIDWork)
+    }
+
+    func testReconcileDoesNotTouchAlreadyMatchingItems() {
+        let stableID = "my-custom-id"
+        let category = DaysSince.Category(stableID: stableID, name: "Cooking", emoji: "fork.knife", color: .hobbies)
+        let item = DSItem(
+            id: UUID(), name: "Made pasta", category: category,
+            dateLastDone: fixedDate, remindersEnabled: false, lastModified: fixedDate
+        )
+
+        let suiteName = "test.\(UUID().uuidString)"
+        let appGroupDefaults = UserDefaults(suiteName: suiteName)!
+        let mockStore = MockKeyValueStore()
+        let jsonString = String(data: try! JSONEncoder().encode([item]), encoding: .utf8)!
+        appGroupDefaults.set(jsonString, forKey: DataSyncManager.itemsKey)
+
+        Defaults[.categories] = [category]
+
+        let manager = DataSyncManager(appGroupDefaults: appGroupDefaults, iCloudStore: mockStore)
+
+        XCTAssertEqual(manager.items.first?.category.stableID, stableID)
+    }
+
+    func testReconcileFixesMultipleItemsInSameCustomCategory() {
+        let canonicalStableID = "canonical-fitness"
+        let fitnessCategory = DaysSince.Category(
+            stableID: canonicalStableID, name: "Fitness", emoji: "figure.run", color: .health
+        )
+
+        // Each item gets a different orphaned stableID (simulating independent decoder runs)
+        let items = (0 ..< 3).map { i in
+            DSItem(
+                id: UUID(), name: "Workout \(i)",
+                category: DaysSince.Category(
+                    stableID: "orphan-\(i)", name: "Fitness", emoji: "figure.run", color: .health
+                ),
+                dateLastDone: fixedDate, remindersEnabled: false, lastModified: fixedDate
+            )
+        }
+
+        let suiteName = "test.\(UUID().uuidString)"
+        let appGroupDefaults = UserDefaults(suiteName: suiteName)!
+        let mockStore = MockKeyValueStore()
+        let jsonString = String(data: try! JSONEncoder().encode(items), encoding: .utf8)!
+        appGroupDefaults.set(jsonString, forKey: DataSyncManager.itemsKey)
+
+        Defaults[.categories] = [fitnessCategory]
+
+        let manager = DataSyncManager(appGroupDefaults: appGroupDefaults, iCloudStore: mockStore)
+
+        // All 3 items should now have the canonical stableID
+        for item in manager.items {
+            XCTAssertEqual(item.category.stableID, canonicalStableID, "Item '\(item.name)' should be reconciled")
+        }
+    }
+
+    func testReconcileUsesExactMatchForDuplicateCategoryNames() {
+        // Two categories with the same name but different colors
+        let redTravel = DaysSince.Category(stableID: "travel-red", name: "Travel", emoji: "airplane", color: .marioRed)
+        let blueTravel = DaysSince.Category(stableID: "travel-blue", name: "Travel", emoji: "airplane", color: .marioBlue)
+
+        // Item belongs to the blue variant
+        let item = DSItem(
+            id: UUID(), name: "Trip",
+            category: DaysSince.Category(stableID: "orphan-id", name: "Travel", emoji: "airplane", color: .marioBlue),
+            dateLastDone: fixedDate, remindersEnabled: false, lastModified: fixedDate
+        )
+
+        let suiteName = "test.\(UUID().uuidString)"
+        let appGroupDefaults = UserDefaults(suiteName: suiteName)!
+        let mockStore = MockKeyValueStore()
+        let jsonString = String(data: try! JSONEncoder().encode([item]), encoding: .utf8)!
+        appGroupDefaults.set(jsonString, forKey: DataSyncManager.itemsKey)
+
+        Defaults[.categories] = [redTravel, blueTravel]
+
+        let manager = DataSyncManager(appGroupDefaults: appGroupDefaults, iCloudStore: mockStore)
+
+        // Should match to the blue variant, not the red one
+        XCTAssertEqual(manager.items.first?.category.stableID, "travel-blue")
+    }
+
+    func testReconcileSkipsFullyAmbiguousCategories() {
+        // Two categories with identical name, emoji, AND color — cannot safely pick one
+        let travelA = DaysSince.Category(stableID: "travel-a", name: "Travel", emoji: "airplane", color: .life)
+        let travelB = DaysSince.Category(stableID: "travel-b", name: "Travel", emoji: "airplane", color: .life)
+
+        let orphanedStableID = "orphan-id"
+        let item = DSItem(
+            id: UUID(), name: "Trip",
+            category: DaysSince.Category(stableID: orphanedStableID, name: "Travel", emoji: "airplane", color: .life),
+            dateLastDone: fixedDate, remindersEnabled: false, lastModified: fixedDate
+        )
+
+        let suiteName = "test.\(UUID().uuidString)"
+        let appGroupDefaults = UserDefaults(suiteName: suiteName)!
+        let mockStore = MockKeyValueStore()
+        let jsonString = String(data: try! JSONEncoder().encode([item]), encoding: .utf8)!
+        appGroupDefaults.set(jsonString, forKey: DataSyncManager.itemsKey)
+
+        Defaults[.categories] = [travelA, travelB]
+
+        let manager = DataSyncManager(appGroupDefaults: appGroupDefaults, iCloudStore: mockStore)
+
+        // Should NOT reassign — ambiguous, so leave the original stableID untouched
+        XCTAssertEqual(manager.items.first?.category.stableID, orphanedStableID)
+    }
+
+    func testReconcilePersistedToAppGroup() {
+        // Verify that reconciled items are written back to UserDefaults
+        let canonicalStableID = "canonical-cooking"
+        let category = DaysSince.Category(stableID: canonicalStableID, name: "Cooking", emoji: "fork.knife", color: .hobbies)
+        let item = DSItem(
+            id: UUID(), name: "Made soup",
+            category: DaysSince.Category(stableID: "orphan", name: "Cooking", emoji: "fork.knife", color: .hobbies),
+            dateLastDone: fixedDate, remindersEnabled: false, lastModified: fixedDate
+        )
+
+        let suiteName = "test.\(UUID().uuidString)"
+        let appGroupDefaults = UserDefaults(suiteName: suiteName)!
+        let mockStore = MockKeyValueStore()
+        let jsonString = String(data: try! JSONEncoder().encode([item]), encoding: .utf8)!
+        appGroupDefaults.set(jsonString, forKey: DataSyncManager.itemsKey)
+
+        Defaults[.categories] = [category]
+
+        let _ = DataSyncManager(appGroupDefaults: appGroupDefaults, iCloudStore: mockStore)
+
+        // Re-load from UserDefaults to verify persistence
+        let reloadedItems = DataSyncManager.loadItems(from: appGroupDefaults)
+        XCTAssertEqual(reloadedItems.first?.category.stableID, canonicalStableID)
     }
 
     // MARK: - startSync Merge

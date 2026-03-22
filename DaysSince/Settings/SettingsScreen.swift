@@ -16,6 +16,10 @@ struct SettingsScreen: View {
     @Binding var isDaysDisplayModeDetailed: Bool
     @Binding var showSettings: Bool
 
+    #if DEBUG
+    @State private var iCloudDataCleared = false
+    #endif
+
     var body: some View {
         NavigationView {
             List {
@@ -37,6 +41,26 @@ struct SettingsScreen: View {
                 } footer: {
                     footer
                 }
+
+                #if DEBUG
+                Section("Debug") {
+                    Button(role: .destructive) {
+                        let store = NSUbiquitousKeyValueStore.default
+                        store.removeObject(forKey: "items")
+                        store.removeObject(forKey: "icloud_categories")
+                        store.synchronize()
+                        iCloudDataCleared = true
+                    } label: {
+                        Label("Clear iCloud Data", systemImage: "trash")
+                            .foregroundColor(.red)
+                    }
+                    .alert("iCloud Data Cleared", isPresented: $iCloudDataCleared) {
+                        Button("OK", role: .cancel) {}
+                    } message: {
+                        Text("Items and categories have been removed from iCloud KVS. Local data is unchanged.")
+                    }
+                }
+                #endif
             }
             .navigationTitle("Settings")
             .navigationBarTitleDisplayMode(.inline)
