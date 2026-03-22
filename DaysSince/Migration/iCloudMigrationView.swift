@@ -66,6 +66,15 @@ struct iCloudMigrationView: View {
                 )
                 .padding(.horizontal, 32)
 
+                if migrationDone {
+                    CustomButton(
+                        action: { iCloudMigrationComplete = true },
+                        label: "Continue",
+                        color: mainColor
+                    )
+                    .transition(.opacity)
+                }
+
                 Spacer()
             }
         }
@@ -99,11 +108,6 @@ struct iCloudMigrationView: View {
                 itemCount = result.items
                 categoryCount = result.categories
                 migrationDone = true
-            }
-
-            // Auto-dismiss after showing completion
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                iCloudMigrationComplete = true
             }
         }
     }
