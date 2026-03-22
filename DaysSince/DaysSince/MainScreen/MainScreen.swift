@@ -93,6 +93,7 @@ struct MainScreen: View {
                 toolbarItems
             })
         }
+        .navigationViewStyle(.stack)
         .sheet(isPresented: $showAddItemSheet) {
             AddItemSheet(selectedCategory: nil, remindersEnabled: false, items: $items)
         }
