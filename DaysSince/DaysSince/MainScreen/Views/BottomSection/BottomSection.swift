@@ -16,13 +16,15 @@ struct BottomSection: View {
     @Binding var editItemSheet: Bool
     @Binding var tappedItem: DSItem
     @Binding var isDaysDisplayModeDetailed: Bool
+    @Binding var showPaywall: Bool
 
     var body: some View {
         DSItemListView(
             items: $items,
             editItemSheet: $editItemSheet,
             tappedItem: $tappedItem,
-            isDaysDisplayModeDetailed: $isDaysDisplayModeDetailed
+            isDaysDisplayModeDetailed: $isDaysDisplayModeDetailed,
+            showPaywall: $showPaywall
         )
 
         // Add some space after the items for the button.
@@ -37,6 +39,7 @@ struct BottomSection_Previews: PreviewProvider {
         BottomSection(items: .constant([.placeholderItem()]),
                       editItemSheet: .constant(false),
                       tappedItem: .constant(DSItem.placeholderItem()),
-                      isDaysDisplayModeDetailed: .constant(false))
+                      isDaysDisplayModeDetailed: .constant(false),
+                      showPaywall: .constant(false))
     }
 }

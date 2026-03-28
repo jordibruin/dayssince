@@ -15,6 +15,7 @@ import SwiftUI
 struct TopSection: View {
     @EnvironmentObject var categoryManager: CategoryManager
     @EnvironmentObject var reviewManager: ReviewManager
+    @EnvironmentObject var subscriptionManager: SubscriptionManager
 
     @Default(.categories) var categories
 
@@ -25,6 +26,7 @@ struct TopSection: View {
     @State var showUnableToDeleteCategory: Bool = false
     @State var selectedCategory: Category? = nil
     @State var showEditCategory: Bool = false
+    @State var showPaywall: Bool = false
     @State private var draggedCategory: Category?
 
     var body: some View {
@@ -58,18 +60,26 @@ struct TopSection: View {
                     .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: 20))
                     .contextMenu {
                         Button {
-                            selectedCategory = category
-                            showEditCategory = true
+                            if subscriptionManager.isSubscribed {
+                                selectedCategory = category
+                                showEditCategory = true
+                            } else {
+                                showPaywall = true
+                            }
                         } label: {
                             Label("Edit Category", systemImage: "rectangle.and.pencil.and.ellipsis")
                         }
 
                         Button {
-                            if categoryManager.isCategoryEmpty(category: category, items: items) {
-                                selectedCategory = category
-                                showDeleteCategoryAlert = true
+                            if subscriptionManager.isSubscribed {
+                                if categoryManager.isCategoryEmpty(category: category, items: items) {
+                                    selectedCategory = category
+                                    showDeleteCategoryAlert = true
+                                } else {
+                                    showUnableToDeleteCategory = true
+                                }
                             } else {
-                                showUnableToDeleteCategory = true
+                                showPaywall = true
                             }
                         } label: {
                             Label("Delete Category", systemImage: "trash")
@@ -113,6 +123,9 @@ struct TopSection: View {
             if let index = selectedCategory {
                 EditCategorySheet(items: $items, category: index)
             }
+        }
+        .sheet(isPresented: $showPaywall) {
+            PaywallScreen(isDismissable: true)
         }
     }
 }

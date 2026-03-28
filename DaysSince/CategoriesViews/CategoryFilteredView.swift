@@ -16,17 +16,19 @@ struct CategoryFilteredView: View {
     
     let categoryStableID: String
 
+    @EnvironmentObject var categoryManager: CategoryManager
+    @EnvironmentObject var subscriptionManager: SubscriptionManager
+
     @State var showAddItemSheet: Bool
     @State var editItemSheet: Bool
     @State var tappedItem: DSItem = .placeholderItem()
     @State var showConfirmDelete = false
     @State var showUnableToDelete = false
     @State var showEditCategory: Bool = false
+    @State var showPaywall: Bool = false
 
     @Binding var items: [DSItem]
     @Binding var isDaysDisplayModeDetailed: Bool
-
-    @EnvironmentObject var categoryManager: CategoryManager
 
 
     private var currentCategory: Category? {
@@ -46,6 +48,7 @@ struct CategoryFilteredView: View {
                         editItemSheet: $editItemSheet,
                         tappedItem: $tappedItem,
                         isDaysDisplayModeDetailed: $isDaysDisplayModeDetailed,
+                        showPaywall: $showPaywall,
                         isCategoryView: true,
                         category: category
                     )
@@ -92,6 +95,9 @@ struct CategoryFilteredView: View {
             .alert("Delete Category", isPresented: $showUnableToDelete) {} message: {
                 Text("Can't delete category. Category contains existing events.")
             }
+            .sheet(isPresented: $showPaywall) {
+                PaywallScreen(isDismissable: true)
+            }
         }
     }
         
@@ -99,10 +105,14 @@ struct CategoryFilteredView: View {
         Group {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
-                    if categoryManager.isCategoryEmpty(category: category, items: items) {
-                        showConfirmDelete = true
+                    if subscriptionManager.isSubscribed {
+                        if categoryManager.isCategoryEmpty(category: category, items: items) {
+                            showConfirmDelete = true
+                        } else {
+                            showUnableToDelete = true
+                        }
                     } else {
-                        showUnableToDelete = true
+                        showPaywall = true
                     }
                 } label: {
                     Image(systemName: "trash")
@@ -112,10 +122,14 @@ struct CategoryFilteredView: View {
                         .font(.title3)
                 }
             }
-            
+
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
-                    showEditCategory = true
+                    if subscriptionManager.isSubscribed {
+                        showEditCategory = true
+                    } else {
+                        showPaywall = true
+                    }
                 } label: {
                     Image(systemName: "rectangle.and.pencil.and.ellipsis")
                         .foregroundColor(colorScheme == .dark ? .primary : accentColor)
@@ -151,7 +165,11 @@ struct CategoryFilteredView: View {
         VStack {
             Spacer()
             Button {
-                showAddItemSheet = true
+                if subscriptionManager.isSubscribed {
+                    showAddItemSheet = true
+                } else {
+                    showPaywall = true
+                }
             } label: {
                 HStack {
                     Image(systemName: "plus")

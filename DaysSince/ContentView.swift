@@ -13,6 +13,7 @@ struct ContentView: View {
     @AppStorage("hasSeenOnboarding") var hasSeenOnboarding: Bool = false
     @AppStorage("iCloudMigrationComplete") var iCloudMigrationComplete: Bool = false
     @AppStorage("migratedFromOld") var migratedFromOld: Bool = false
+    @AppStorage("hasSeenPaywall") var hasSeenPaywall: Bool = false
 
     // Keep oldItems for legacy migration only
     @AppStorage("items", store: UserDefaults(suiteName: "group.goodsnooze.dayssince")) var oldItems: [oldDSItem] = []
@@ -20,10 +21,14 @@ struct ContentView: View {
     @AppStorage("isDaysDisplayModeDetailed", store: UserDefaults(suiteName: "group.goodsnooze.dayssince")) var isDaysDisplayModeDetailed: Bool = true
 
     @EnvironmentObject var dataSyncManager: DataSyncManager
+    @EnvironmentObject var subscriptionManager: SubscriptionManager
 
     @Default(.categories) var categories
     @Default(.mainColor) var mainColor
     @Default(.backgroundColor) var backgroundColor
+
+    @State private var showPaywallSheet = false
+    @State private var justFinishedOnboarding = false
 
     init() {
         WishKit.configure(with: "6443C4AA-4663-4A27-89E5-846598908A4E")
@@ -67,6 +72,15 @@ struct ContentView: View {
                                 migratedFromOld = true
                             }
                         }
+
+                        // Show paywall once for all users
+                        if !hasSeenPaywall {
+                            showPaywallSheet = true
+                            hasSeenPaywall = true
+                        }
+                    }
+                    .sheet(isPresented: $showPaywallSheet) {
+                        PaywallScreen(isDismissable: !justFinishedOnboarding)
                     }
             }
         } else {
@@ -77,6 +91,7 @@ struct ContentView: View {
                     dataSyncManager.reloadFromAppGroup()
                     // Mark iCloud migration as complete for new users
                     iCloudMigrationComplete = true
+                    justFinishedOnboarding = true
                 }
         }
     }

@@ -89,14 +89,11 @@ struct AddCategorySheet: View {
                 .opacity(0.6)
                 .padding(.leading, 20)
 
-            HStack {
-                TextField("Enter category name", text: $selectedName)
-
-                Spacer()
-            }
-           
-            .background(Color.secondary.opacity(0.1))
-            .cornerRadius(20)
+            TextField("Enter category name", text: $selectedName)
+                .font(.system(.body, design: .rounded))
+                .padding(16)
+                .background(Color.secondary.opacity(0.1))
+                .cornerRadius(20)
         }
         .padding(.bottom, 8)
     }

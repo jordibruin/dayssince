@@ -44,15 +44,13 @@ enum AnalyticType: String, Hashable {
     case iCloudSyncConflict
     case iCloudDataSize
 
-    //    case proTheme
-    //    case proIcons
-    //    case proSettings
-    //    case proHome
-    //    case proOnboarding
-    //    case proStartPurchase
-    //    case proPurchasedInOnboarding
-    //    case proPurchased
-    
+    case proSettings
+    case proOnboarding
+    case proStartPurchase
+    case proPurchasedInOnboarding
+    case proPurchased
+    case exportData
+
     func stringValue() -> String {
         switch self {
         case .launchApp:
@@ -83,6 +81,18 @@ enum AnalyticType: String, Hashable {
             return "iCloudSyncConflict"
         case .iCloudDataSize:
             return "iCloudDataSize"
+        case .proSettings:
+            return "proSettings"
+        case .proOnboarding:
+            return "proOnboarding"
+        case .proStartPurchase:
+            return "proStartPurchase"
+        case .proPurchasedInOnboarding:
+            return "proPurchasedInOnboarding"
+        case .proPurchased:
+            return "proPurchased"
+        case .exportData:
+            return "exportData"
         }
     }
 }
