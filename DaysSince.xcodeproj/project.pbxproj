@@ -136,7 +136,6 @@
 		C2B53DE3286A080A00407F40 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7A2A76F727F24470006F0470 /* Assets.xcassets */; };
 		D438F05F2DA3D5C600A1DE20 /* WidgetContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = D438F05E2DA3D5C600A1DE20 /* WidgetContent.swift */; };
 		D43DE5662DA32960008A5A8D /* SingleEventWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D43DE5652DA32960008A5A8D /* SingleEventWidgetView.swift */; };
-		D4WL0001AAA0000000000001 /* WidgetLockedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4WL0001AAA0000000000002 /* WidgetLockedView.swift */; };
 		D43DE5682DA32C51008A5A8D /* MultipleEventsWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D43DE5672DA32C51008A5A8D /* MultipleEventsWidgetView.swift */; };
 		D47457F42DA112DF00561C4E /* Bundle+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47457F32DA112DF00561C4E /* Bundle+Extensions.swift */; };
 		D479C3EB2DC6557100631220 /* LinkButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D479C3EA2DC6557100631220 /* LinkButton.swift */; };
@@ -167,6 +166,7 @@
 		D4D3FA9D2F6F4EC9008967AC /* LastPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4D3FA9C2F6F4EC9008967AC /* LastPage.swift */; };
 		D4DE5C932DA2A43300C5EA63 /* TelemetryDeck in Frameworks */ = {isa = PBXBuildFile; productRef = D4DE5C922DA2A43300C5EA63 /* TelemetryDeck */; };
 		D4DE5C952DA2A5A600C5EA63 /* Analytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4DE5C942DA2A5A600C5EA63 /* Analytics.swift */; };
+		D4WL0001AAA0000000000001 /* WidgetLockedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4WL0001AAA0000000000002 /* WidgetLockedView.swift */; };
 		D5TE5T0000000000000C0001 /* DSItemTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5TE5T0000000000000B0001 /* DSItemTests.swift */; };
 		D5TE5T0000000000000C0002 /* CategoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5TE5T0000000000000B0002 /* CategoryTests.swift */; };
 		D5TE5T0000000000000C0003 /* CategoryColorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5TE5T0000000000000B0003 /* CategoryColorTests.swift */; };
@@ -335,7 +335,6 @@
 		C2B53DE1286A002000407F40 /* WidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = WidgetExtension.entitlements; sourceTree = "<group>"; };
 		D438F05E2DA3D5C600A1DE20 /* WidgetContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetContent.swift; sourceTree = "<group>"; };
 		D43DE5652DA32960008A5A8D /* SingleEventWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleEventWidgetView.swift; sourceTree = "<group>"; };
-		D4WL0001AAA0000000000002 /* WidgetLockedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetLockedView.swift; sourceTree = "<group>"; };
 		D43DE5672DA32C51008A5A8D /* MultipleEventsWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipleEventsWidgetView.swift; sourceTree = "<group>"; };
 		D47457F32DA112DF00561C4E /* Bundle+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+Extensions.swift"; sourceTree = "<group>"; };
 		D479C3EA2DC6557100631220 /* LinkButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkButton.swift; sourceTree = "<group>"; };
@@ -363,6 +362,7 @@
 		D4D3FA9A2F6F4B39008967AC /* FeaturesPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeaturesPage.swift; sourceTree = "<group>"; };
 		D4D3FA9C2F6F4EC9008967AC /* LastPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LastPage.swift; sourceTree = "<group>"; };
 		D4DE5C942DA2A5A600C5EA63 /* Analytics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Analytics.swift; sourceTree = "<group>"; };
+		D4WL0001AAA0000000000002 /* WidgetLockedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetLockedView.swift; sourceTree = "<group>"; };
 		D5TE5T00000000000000A001 /* DaysSinceTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DaysSinceTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D5TE5T0000000000000B0001 /* DSItemTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DSItemTests.swift; sourceTree = "<group>"; };
 		D5TE5T0000000000000B0002 /* CategoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryTests.swift; sourceTree = "<group>"; };
@@ -1502,7 +1502,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.0;
+				MARKETING_VERSION = 2.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.goodsnooze.dayssince;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -1541,7 +1541,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.0;
+				MARKETING_VERSION = 2.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.goodsnooze.dayssince;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -1572,7 +1572,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.1.0;
+				MARKETING_VERSION = 2.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.goodsnooze.dayssince.Widget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -1601,7 +1601,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.1.0;
+				MARKETING_VERSION = 2.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.goodsnooze.dayssince.Widget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -1628,7 +1628,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0.9;
+				MARKETING_VERSION = 2.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.goodsnooze.dayssince.WidgetIntents;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -1655,7 +1655,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0.9;
+				MARKETING_VERSION = 2.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.goodsnooze.dayssince.WidgetIntents;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
