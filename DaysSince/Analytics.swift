@@ -49,7 +49,8 @@ enum AnalyticType: String, Hashable {
     case proStartPurchase
     case proPurchasedInOnboarding
     case proPurchased
-    
+    case exportData
+
     func stringValue() -> String {
         switch self {
         case .launchApp:
@@ -90,6 +91,8 @@ enum AnalyticType: String, Hashable {
             return "proPurchasedInOnboarding"
         case .proPurchased:
             return "proPurchased"
+        case .exportData:
+            return "exportData"
         }
     }
 }

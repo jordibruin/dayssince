@@ -18,6 +18,7 @@ struct SettingsScreen: View {
     @Binding var showSettings: Bool
 
     @State private var showPaywall = false
+    @State private var showExport = false
 
     #if DEBUG
     @State private var iCloudDataCleared = false
@@ -32,6 +33,37 @@ struct SettingsScreen: View {
                 DetailedTimeDisplayModeCell(isDaysDisplayModeDetailed: $isDaysDisplayModeDetailed)
 
                 iCloudStorageCell()
+
+                Section {
+                    Button {
+                        showExport = true
+                    } label: {
+                        HStack {
+                            LinearGradient(
+                                colors: [mainColor, mainColor.lighter()],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                            .frame(width: 34, height: 34)
+                            .cornerRadius(8)
+                            .overlay(
+                                Image(systemName: "square.and.arrow.up")
+                                    .symbolRenderingMode(.hierarchical)
+                                    .foregroundColor(.white)
+                            )
+                            Text("Export Data")
+                                .font(.system(.body, design: .rounded))
+                            Spacer()
+                            Image(systemName: "chevron.right")
+                                .foregroundColor(.secondary)
+                                .font(.caption)
+                        }
+                    }
+                    .foregroundColor(.primary)
+                }
+                .sheet(isPresented: $showExport) {
+                    ExportDataView()
+                }
 
                 Section {
                     WebsiteButton()
