@@ -12,9 +12,12 @@ struct SettingsScreen: View {
     @Default(.mainColor) var mainColor
 
     @Environment(\.dismiss) var dismiss
+    @EnvironmentObject var subscriptionManager: SubscriptionManager
 
     @Binding var isDaysDisplayModeDetailed: Bool
     @Binding var showSettings: Bool
+
+    @State private var showPaywall = false
 
     #if DEBUG
     @State private var iCloudDataCleared = false
@@ -23,7 +26,7 @@ struct SettingsScreen: View {
     var body: some View {
         NavigationView {
             List {
-//                daysSinceProSection
+                daysSinceProSection
                 appIconsSection
 
                 DetailedTimeDisplayModeCell(isDaysDisplayModeDetailed: $isDaysDisplayModeDetailed)
@@ -83,31 +86,33 @@ struct SettingsScreen: View {
     var daysSinceProSection: some View {
         Section {
             Button {
-//                Analytics.hit(.proSettings)
-//                showPaywall = true
-            } label: {}
-                .frame(height: 120)
-                .listRowBackground(
-                    ZStack(alignment: .leading) {
-                        mainColor
-
-                        Text("Days Since\nPro")
-                            .font(.system(.title, design: .rounded))
+                Analytics.send(.proSettings)
+                showPaywall = true
+            } label: {
+                HStack {
+                    Label("Days Since Pro", systemImage: "star.fill")
+                        .font(.system(.title3, design: .rounded))
+                        .foregroundColor(mainColor)
+                    Spacer()
+                    if subscriptionManager.isSubscribed {
+                        Text("Active")
+                            .foregroundColor(.green)
+                            .font(.system(.caption, design: .rounded))
+                    } else {
+                        Text("Upgrade")
+                            .foregroundColor(mainColor)
+                            .font(.system(.caption, design: .rounded))
                             .bold()
-                            .foregroundColor(.white)
-                            .padding(.vertical)
-                            .fixedSize(horizontal: false, vertical: true)
-                            .padding(.leading)
                     }
-                    .frame(height: 120)
-                    .accessibilityElement()
-                    .accessibilityLabel("Days Since Pro")
-                )
-                .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                    Image(systemName: "chevron.right")
+                        .foregroundColor(.secondary)
+                        .font(.caption)
+                }
+            }
         }
-//        .sheet(isPresented: $showPaywall) {
-//            PurchasesView(inOnboarding: false)
-//        }
+        .sheet(isPresented: $showPaywall) {
+            PaywallScreen(isDismissable: true)
+        }
     }
 
     var appIconsSection: some View {

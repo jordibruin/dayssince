@@ -6,6 +6,7 @@
 //
 
 import Defaults
+import StoreKit
 import SwiftUI
 import WidgetKit
 import TelemetryDeck
@@ -15,6 +16,7 @@ struct DaysSinceApp: App {
     @StateObject var dataSyncManager = DataSyncManager()
     @StateObject var notificationManager = NotificationManager()
     @StateObject var categoryManager = CategoryManager()
+    @StateObject var subscriptionManager = SubscriptionManager()
     @StateObject var reviewManager: ReviewManager
 
     init() {
@@ -38,6 +40,7 @@ struct DaysSinceApp: App {
                 .environmentObject(dataSyncManager)
                 .environmentObject(notificationManager)
                 .environmentObject(categoryManager)
+                .environmentObject(subscriptionManager)
                 .environmentObject(reviewManager)
                 .onChange(of: self.scenePhase) {
                     switch $0 {

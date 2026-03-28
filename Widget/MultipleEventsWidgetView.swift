@@ -15,6 +15,7 @@ struct MultipleEventsWidgetView: View {
     @Environment(\.widgetRenderingMode) var renderingMode
 
     @AppStorage("isDaysDisplayModeDetailed", store: UserDefaults(suiteName: "group.goodsnooze.dayssince")) var isDaysDisplayModeDetailed: Bool = true
+    @AppStorage("dayssince_subscribed", store: UserDefaults(suiteName: "group.goodsnooze.dayssince")) var isSubscribed: Bool = false
 
     private var backgroundColor: Color {
         entry.events.first?.color.lighter(by: 0.04) ?? Color(.systemBackground)
@@ -29,8 +30,16 @@ struct MultipleEventsWidgetView: View {
     }
 
     var body: some View {
+        if !isSubscribed {
+            WidgetLockedView()
+        } else {
+            mainContent
+        }
+    }
+
+    private var mainContent: some View {
         GeometryReader { geometry in
-            VStack(alignment: .leading, spacing: 2) { 
+            VStack(alignment: .leading, spacing: 2) {
                 // Iterate over all available events (up to 5), removing the prefix limit
                 ForEach(entry.events) { event in
                     itemContent(for: event)

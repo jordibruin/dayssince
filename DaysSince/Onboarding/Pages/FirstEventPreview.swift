@@ -45,7 +45,8 @@ struct FirstEventPreview: View {
                     isDaysDisplayModeDetailed: $isDaysDisplayModeDetailed,
                     itemID: item.id,
                     items: injectedItems != nil ? $previewItems : $storedItems,
-                    colored: false
+                    colored: false,
+                    showPaywall: .constant(false)
                 )
                 .fixedSize(horizontal: false, vertical: true)
                 .padding(.horizontal)

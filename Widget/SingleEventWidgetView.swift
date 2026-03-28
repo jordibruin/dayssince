@@ -12,20 +12,25 @@ struct EventCardWidgetView: View {
     let event: WidgetContent
 
     @Environment(\.widgetFamily) var family
+    @AppStorage("dayssince_subscribed", store: UserDefaults(suiteName: "group.goodsnooze.dayssince")) var isSubscribed: Bool = false
 
     @ViewBuilder
     var body: some View {
-        switch family {
-        case .accessoryCircular:
-            SingleEventWidget_Circular(event: event)
-        case .accessoryInline:
-            SingleEventWidget_Inline(event: event)
-        case .accessoryRectangular:
-            SingleEventWidget_Rectangular(event: event)
-        case .systemSmall, .systemMedium:
-            SingleEventWidget_Standard(event: event)
-        default:
-            Text("Some other WidgetFamily in the future.")
+        if !isSubscribed && (family == .systemSmall || family == .systemMedium) {
+            WidgetLockedView()
+        } else {
+            switch family {
+            case .accessoryCircular:
+                SingleEventWidget_Circular(event: event)
+            case .accessoryInline:
+                SingleEventWidget_Inline(event: event)
+            case .accessoryRectangular:
+                SingleEventWidget_Rectangular(event: event)
+            case .systemSmall, .systemMedium:
+                SingleEventWidget_Standard(event: event)
+            default:
+                Text("Some other WidgetFamily in the future.")
+            }
         }
     }
 }

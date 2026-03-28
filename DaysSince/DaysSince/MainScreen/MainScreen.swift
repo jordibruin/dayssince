@@ -18,6 +18,7 @@ struct MainScreen: View {
     @EnvironmentObject var notificationManager: NotificationManager
     @EnvironmentObject var categoryManager: CategoryManager
     @EnvironmentObject var dataSyncManager: DataSyncManager
+    @EnvironmentObject var subscriptionManager: SubscriptionManager
 
     @State var showAddItemSheet = false
     @State var showAddCategorySheet = false
@@ -27,6 +28,7 @@ struct MainScreen: View {
     @State var showThemeSheet = false
     @State var showiCloudStorageAlert = false
     @State var showSupportScreen = false
+    @State var showPaywall = false
 
     @Binding var items: [DSItem]
     @Binding var isDaysDisplayModeDetailed: Bool
@@ -72,7 +74,8 @@ struct MainScreen: View {
                         items: $items,
                         editItemSheet: $editItemSheet,
                         tappedItem: $tappedItem,
-                        isDaysDisplayModeDetailed: $isDaysDisplayModeDetailed
+                        isDaysDisplayModeDetailed: $isDaysDisplayModeDetailed,
+                        showPaywall: $showPaywall
                     )
                 }
                 .sheet(isPresented: $editItemSheet) {
@@ -112,6 +115,9 @@ struct MainScreen: View {
                 SupportScreen()
             }
         }
+        .sheet(isPresented: $showPaywall) {
+            PaywallScreen(isDismissable: true)
+        }
         .onChange(of: dataSyncManager.showiCloudStorageWarning) { warning in
             if warning {
                 showiCloudStorageAlert = true
@@ -147,7 +153,11 @@ struct MainScreen: View {
 
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
-                    showThemeSheet = true
+                    if subscriptionManager.isSubscribed {
+                        showThemeSheet = true
+                    } else {
+                        showPaywall = true
+                    }
                 } label: {
                     Image(systemName: "paintpalette.fill")
                         .foregroundColor(colorScheme == .dark ? .primary : mainColor.opacity(0.8))
@@ -164,7 +174,11 @@ struct MainScreen: View {
             Spacer()
 
             Button {
-                showAddCategorySheet = true
+                if subscriptionManager.isSubscribed {
+                    showAddCategorySheet = true
+                } else {
+                    showPaywall = true
+                }
             } label: {
                 Label("New Category", systemImage: "folder.badge.plus")
             }
@@ -172,7 +186,11 @@ struct MainScreen: View {
 //            Spacer()
 
             Button {
-                showAddItemSheet = true
+                if subscriptionManager.isSubscribed {
+                    showAddItemSheet = true
+                } else {
+                    showPaywall = true
+                }
             } label: {
                 Label("New Event", systemImage: "plus")
             }

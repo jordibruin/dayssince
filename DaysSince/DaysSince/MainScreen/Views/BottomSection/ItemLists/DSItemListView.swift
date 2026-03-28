@@ -17,6 +17,7 @@ struct DSItemListView: View {
     @Binding var editItemSheet: Bool
     @Binding var tappedItem: DSItem
     @Binding var isDaysDisplayModeDetailed: Bool
+    @Binding var showPaywall: Bool
 
     @State var showingDeleteAlert: Bool = false
     @State var itemToDelete: DSItem? = nil
@@ -40,7 +41,8 @@ struct DSItemListView: View {
                 isDaysDisplayModeDetailed: $isDaysDisplayModeDetailed,
                 itemID: item.id,
                 items: items,
-                colored: true
+                colored: true,
+                showPaywall: $showPaywall
             )
             .contextMenu {
                 Button {
@@ -99,7 +101,8 @@ struct DSItemListView: View {
                 isDaysDisplayModeDetailed: $isDaysDisplayModeDetailed,
                 itemID: item.id,
                 items: items,
-                colored: false
+                colored: false,
+                showPaywall: $showPaywall
             )
             .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: 22.2))
             .contextMenu {
@@ -194,7 +197,7 @@ struct DSItemListView: View {
 
 struct NormalItemsList_Previews: PreviewProvider {
     static var previews: some View {
-        DSItemListView(items: .constant([]), editItemSheet: .constant(false), tappedItem: .constant(.placeholderItem()), isDaysDisplayModeDetailed: .constant(false), category: Category.placeholderCategory())
+        DSItemListView(items: .constant([]), editItemSheet: .constant(false), tappedItem: .constant(.placeholderItem()), isDaysDisplayModeDetailed: .constant(false), showPaywall: .constant(false), category: Category.placeholderCategory())
           .environmentObject(NotificationManager())
           .environmentObject(ReviewManager())
     }

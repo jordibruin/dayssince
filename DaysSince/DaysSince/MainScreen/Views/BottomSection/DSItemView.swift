@@ -10,15 +10,17 @@ import SwiftUI
 
 struct DSItemView: View {
     @Environment(\.colorScheme) var colorScheme
+    @EnvironmentObject var subscriptionManager: SubscriptionManager
 
     @Binding var editItemSheet: Bool
     @Binding var tappedItem: DSItem
     @Binding var isDaysDisplayModeDetailed: Bool
-    
+
     let itemID: UUID
     @Binding var items: [DSItem]
-    
+
     var colored: Bool
+    @Binding var showPaywall: Bool
     
     private var currentItem: DSItem? {
         items.first { $0.id == itemID }
@@ -51,8 +53,12 @@ struct DSItemView: View {
         .padding(.vertical, 1.61)
         .shadow(color: Color.black.opacity(0.05), radius: 20, x: 0, y: 0)
         .onTapGesture {
-            editItemSheet = true
-            tappedItem = item
+            if subscriptionManager.isSubscribed {
+                editItemSheet = true
+                tappedItem = item
+            } else {
+                showPaywall = true
+            }
         }
     }
 
@@ -171,17 +177,19 @@ struct DSItemView_Preview: PreviewProvider {
                    isDaysDisplayModeDetailed: .constant(false),
                    itemID: mockItemID,
                    items: $mockItems,
-                   colored: true)
+                   colored: true,
+                   showPaywall: .constant(false))
             .padding()
             .previewLayout(.sizeThatFits)
             .environment(\.colorScheme, .light)
-        
+
         DSItemView(editItemSheet: .constant(false),
                    tappedItem: $mockTappedItem,
                    isDaysDisplayModeDetailed: .constant(false),
                    itemID: mockItemID,
                    items: $mockItems,
-                   colored: true)
+                   colored: true,
+                   showPaywall: .constant(false))
             .padding()
             .previewLayout(.sizeThatFits)
             .background(Color.black)
