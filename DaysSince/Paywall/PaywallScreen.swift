@@ -108,11 +108,11 @@ struct PaywallScreen: View {
     private var pricingCards: some View {
         VStack(spacing: 10) {
             if let weekly = subscriptionManager.product(for: "dayssince.weekly") {
-                let introLabel = subscriptionManager.isEligibleForIntro ? introOfferLabel(for: weekly) : nil
                 PricingCard(
                     product: weekly,
-                    label: introLabel ?? "\(weekly.displayPrice)/week",
-                    secondaryLabel: introLabel != nil ? "then \(weekly.displayPrice)/week" : nil,
+                    billedAmount: weekly.displayPrice,
+                    period: "week",
+                    introLabel: subscriptionManager.isEligibleForIntro ? introOfferLabel(for: weekly) : nil,
                     badge: "Most Popular",
                     isProminent: true,
                     isSelected: selectedProductID == weekly.id,
@@ -122,11 +122,11 @@ struct PaywallScreen: View {
             }
 
             if let monthly = subscriptionManager.product(for: "dayssince.monthly") {
-                let monthlyIntroLabel = subscriptionManager.isEligibleForIntro ? introOfferLabel(for: monthly) : nil
                 PricingCard(
                     product: monthly,
-                    label: monthlyIntroLabel ?? "\(monthly.displayPrice)/month",
-                    secondaryLabel: monthlyIntroLabel != nil ? "then \(monthly.displayPrice)/month" : nil,
+                    billedAmount: monthly.displayPrice,
+                    period: "month",
+                    introLabel: subscriptionManager.isEligibleForIntro ? introOfferLabel(for: monthly) : nil,
                     badge: nil,
                     isProminent: false,
                     isSelected: selectedProductID == monthly.id,
@@ -136,11 +136,11 @@ struct PaywallScreen: View {
             }
 
             if let annual = subscriptionManager.product(for: "dayssince.annual") {
-                let annualIntroLabel = subscriptionManager.isEligibleForIntro ? introOfferLabel(for: annual) : nil
                 PricingCard(
                     product: annual,
-                    label: annualIntroLabel ?? "\(annual.displayPrice)/year",
-                    secondaryLabel: annualIntroLabel != nil ? "then \(annual.displayPrice)/year" : nil,
+                    billedAmount: annual.displayPrice,
+                    period: "year",
+                    introLabel: subscriptionManager.isEligibleForIntro ? introOfferLabel(for: annual) : nil,
                     badge: "Best Value",
                     isProminent: false,
                     isSelected: selectedProductID == annual.id,
@@ -281,8 +281,9 @@ struct PaywallScreen: View {
 private struct PricingCard: View {
     @Environment(\.colorScheme) private var colorScheme
     let product: Product
-    let label: String
-    var secondaryLabel: String? = nil
+    let billedAmount: String
+    let period: String
+    var introLabel: String? = nil
     let badge: String?
     let isProminent: Bool
     let isSelected: Bool
@@ -295,30 +296,38 @@ private struct PricingCard: View {
     var body: some View {
         HStack {
             VStack(alignment: .leading, spacing: 2) {
-                Text(product.displayName)
-                    .font(.system(.headline, design: .rounded))
-                    .foregroundColor(.primary)
-                Text(label)
-                    .font(.system(.subheadline, design: .rounded))
-                    .foregroundColor(.secondary)
-                if let secondaryLabel {
-                    Text(secondaryLabel)
+                HStack(spacing: 6) {
+                    Text(product.displayName)
+                        .font(.system(.headline, design: .rounded))
+                        .foregroundColor(.primary)
+                    if let badge {
+                        Text(badge)
+                            .font(.system(.caption2, design: .rounded))
+                            .bold()
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 4)
+                            .background(isProminent ? accentColor : Color.green.opacity(0.8))
+                            .foregroundColor(.white)
+                            .cornerRadius(6)
+                    }
+                }
+                if let introLabel {
+                    Text(introLabel)
                         .font(.system(.caption, design: .rounded))
-                        .foregroundColor(.secondary.opacity(0.7))
+                        .foregroundColor(.secondary)
                 }
             }
 
             Spacer()
 
-            if let badge {
-                Text(badge)
-                    .font(.system(.caption2, design: .rounded))
+            VStack(alignment: .trailing, spacing: 0) {
+                Text(billedAmount)
+                    .font(.system(.title3, design: .rounded))
                     .bold()
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 4)
-                    .background(isProminent ? accentColor : Color.green.opacity(0.8))
-                    .foregroundColor(.white)
-                    .cornerRadius(6)
+                    .foregroundColor(.primary)
+                Text("/\(period)")
+                    .font(.system(.caption, design: .rounded))
+                    .foregroundColor(.secondary)
             }
         }
         .padding(16)
