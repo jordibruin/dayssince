@@ -229,7 +229,15 @@ struct PaywallScreen: View {
                 .font(.system(.caption2, design: .rounded))
                 .foregroundColor(.secondary.opacity(0.6))
                 .multilineTextAlignment(.center)
-                .padding(.bottom, 0)
+
+            HStack(spacing: 4) {
+                Link("Terms of Use", destination: URL(string: "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/")!)
+                Text("and")
+                    .foregroundColor(.secondary.opacity(0.6))
+                Link("Privacy Policy", destination: URL(string: "https://www.notion.so/jordibruin/Days-Since-Privacy-a5e0d3b91d6b41359af6613b94dc7778")!)
+            }
+            .font(.system(.caption2, design: .rounded))
+            .padding(.bottom, 0)
         }
     }
 
