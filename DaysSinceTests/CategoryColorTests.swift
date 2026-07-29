@@ -1,96 +1,106 @@
 @testable import DaysSince
+import Foundation
 import SwiftUI
-import XCTest
+import Testing
 
-final class CategoryColorTests: XCTestCase {
+@Suite("CategoryColor")
+struct CategoryColorTests {
     // MARK: - All Cases
 
-    func testAllCasesCount() {
-        XCTAssertEqual(CategoryColor.allCases.count, 10)
+    @Test("There are 10 category colors")
+    func allCasesCount() {
+        #expect(CategoryColor.allCases.count == 10)
     }
 
-    func testAllCasesContainsExpectedValues() {
+    @Test("allCases lists every color in display order")
+    func allCasesContainsExpectedValues() {
         let expected: [CategoryColor] = [
             .work, .life, .hobbies, .health, .marioBlue, .zeldaYellow,
             .animalCrossingsGreen, .marioRed, .animalCrossingsBrown, .black,
         ]
-        XCTAssertEqual(CategoryColor.allCases, expected)
+        #expect(CategoryColor.allCases == expected)
     }
 
     // MARK: - ID
 
-    func testIDValues() {
-        XCTAssertEqual(CategoryColor.work.id, "Work")
-        XCTAssertEqual(CategoryColor.life.id, "Life")
-        XCTAssertEqual(CategoryColor.health.id, "Health")
-        XCTAssertEqual(CategoryColor.hobbies.id, "Hobby")
-        XCTAssertEqual(CategoryColor.marioBlue.id, "MarioBlue")
-        XCTAssertEqual(CategoryColor.zeldaYellow.id, "ZeldaYellow")
-        XCTAssertEqual(CategoryColor.animalCrossingsGreen.id, "AnimalCrossingsGreen")
-        XCTAssertEqual(CategoryColor.marioRed.id, "MarioRed")
-        XCTAssertEqual(CategoryColor.animalCrossingsBrown.id, "AnimalCrossingsBrown")
-        XCTAssertEqual(CategoryColor.black.id, "Black")
+    @Test(
+        "Each color exposes its stable id string",
+        arguments: [
+            (CategoryColor.work, "Work"),
+            (CategoryColor.life, "Life"),
+            (CategoryColor.health, "Health"),
+            (CategoryColor.hobbies, "Hobby"),
+            (CategoryColor.marioBlue, "MarioBlue"),
+            (CategoryColor.zeldaYellow, "ZeldaYellow"),
+            (CategoryColor.animalCrossingsGreen, "AnimalCrossingsGreen"),
+            (CategoryColor.marioRed, "MarioRed"),
+            (CategoryColor.animalCrossingsBrown, "AnimalCrossingsBrown"),
+            (CategoryColor.black, "Black"),
+        ]
+    )
+    func idValue(color: CategoryColor, expectedID: String) {
+        #expect(color.id == expectedID)
     }
 
     // MARK: - Color
 
-    func testColorPropertyReturnsNonNilForAllCases() {
-        for colorCase in CategoryColor.allCases {
-            // Just ensure accessing the color doesn't crash
-            _ = colorCase.color
-        }
+    @Test("Resolving the color of every case does not crash", arguments: CategoryColor.allCases)
+    func colorPropertyResolves(colorCase: CategoryColor) {
+        // Asset-backed colors: the point is that lookup succeeds for every case.
+        _ = colorCase.color
     }
 
-    func testBlackColorIsBlack() {
-        XCTAssertEqual(CategoryColor.black.color, Color.black)
+    @Test("Black maps to Color.black")
+    func blackColorIsBlack() {
+        #expect(CategoryColor.black.color == Color.black)
     }
 
     // MARK: - Foreground Color
 
-    func testForegroundColorBlackInDarkMode() {
-        let color = CategoryColor.black.foregroundColor(for: .dark)
-        XCTAssertEqual(color, Color.white)
+    @Test(
+        "Black inverts for legibility per color scheme",
+        arguments: zip([ColorScheme.dark, ColorScheme.light], [Color.white, Color.black])
+    )
+    func foregroundColorForBlack(scheme: ColorScheme, expected: Color) {
+        #expect(CategoryColor.black.foregroundColor(for: scheme) == expected)
     }
 
-    func testForegroundColorBlackInLightMode() {
-        let color = CategoryColor.black.foregroundColor(for: .light)
-        XCTAssertEqual(color, Color.black)
-    }
-
-    func testForegroundColorNonBlackInDarkMode() {
-        let color = CategoryColor.work.foregroundColor(for: .dark)
-        XCTAssertEqual(color, CategoryColor.work.color)
-    }
-
-    func testForegroundColorNonBlackInLightMode() {
-        let color = CategoryColor.life.foregroundColor(for: .light)
-        XCTAssertEqual(color, CategoryColor.life.color)
+    @Test(
+        "Non-black colors keep their own color in either scheme",
+        arguments: [
+            (CategoryColor.work, ColorScheme.dark),
+            (CategoryColor.life, ColorScheme.light),
+        ]
+    )
+    func foregroundColorForNonBlack(color: CategoryColor, scheme: ColorScheme) {
+        #expect(color.foregroundColor(for: scheme) == color.color)
     }
 
     // MARK: - Codable
 
-    func testCodableRoundTrip() throws {
-        for colorCase in CategoryColor.allCases {
-            let data = try JSONEncoder().encode(colorCase)
-            let decoded = try JSONDecoder().decode(CategoryColor.self, from: data)
-            XCTAssertEqual(decoded, colorCase)
-        }
+    @Test("Every color survives a JSON round trip", arguments: CategoryColor.allCases)
+    func codableRoundTrip(colorCase: CategoryColor) throws {
+        let data = try JSONEncoder().encode(colorCase)
+        let decoded = try JSONDecoder().decode(CategoryColor.self, from: data)
+        #expect(decoded == colorCase)
     }
 
     // MARK: - Equatable
 
-    func testEquatable() {
-        XCTAssertEqual(CategoryColor.work, CategoryColor.work)
-        XCTAssertNotEqual(CategoryColor.work, CategoryColor.life)
+    @Test("Equatable compares cases")
+    func equatable() {
+        #expect(CategoryColor.work == CategoryColor.work)
+        #expect(CategoryColor.work != CategoryColor.life)
     }
 
     // MARK: - Hashable
 
-    func testHashable() {
+    @Test("All 10 cases hash distinctly")
+    func hashable() {
         var set = Set<CategoryColor>()
         for colorCase in CategoryColor.allCases {
             set.insert(colorCase)
         }
-        XCTAssertEqual(set.count, 10)
+        #expect(set.count == 10)
     }
 }

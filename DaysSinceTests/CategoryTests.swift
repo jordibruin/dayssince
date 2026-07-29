@@ -1,86 +1,97 @@
 @testable import DaysSince
-import XCTest
+import Foundation
+import Testing
 
-
-final class CategoryTests: XCTestCase {
+@Suite("Category model")
+struct CategoryTests {
     // MARK: - Creation
 
-    func testCategoryCreation() {
+    @Test("Creation stores name, emoji, color and generates a stableID")
+    func categoryCreation() {
         let category = DaysSince.Category(name: "Work", emoji: "lightbulb", color: .work)
-        XCTAssertEqual(category.name, "Work")
-        XCTAssertEqual(category.emoji, "lightbulb")
-        XCTAssertEqual(category.color, .work)
-        XCTAssertFalse(category.stableID.isEmpty)
+        #expect(category.name == "Work")
+        #expect(category.emoji == "lightbulb")
+        #expect(category.color == .work)
+        #expect(!category.stableID.isEmpty)
     }
 
-    func testCategoryCreationWithCustomID() {
+    @Test("Creation honors an explicit id and stableID")
+    func categoryCreationWithCustomID() {
         let id = UUID()
         let category = DaysSince.Category(id: id, stableID: "custom", name: "Test", emoji: "star", color: .life)
-        XCTAssertEqual(category.id, id)
-        XCTAssertEqual(category.stableID, "custom")
+        #expect(category.id == id)
+        #expect(category.stableID == "custom")
     }
 
-    func testPlaceholderCategory() {
+    @Test("Placeholder category has known values")
+    func placeholderCategory() {
         let placeholder = DaysSince.Category.placeholderCategory()
-        XCTAssertEqual(placeholder.name, "Placeholder")
-        XCTAssertEqual(placeholder.emoji, "placeholder")
-        XCTAssertEqual(placeholder.color, .work)
-        XCTAssertEqual(placeholder.stableID, "placeholder")
+        #expect(placeholder.name == "Placeholder")
+        #expect(placeholder.emoji == "placeholder")
+        #expect(placeholder.color == .work)
+        #expect(placeholder.stableID == "placeholder")
     }
 
     // MARK: - Equality (based on stableID)
 
-    func testEqualityBasedOnStableID() {
+    @Test("Categories with the same stableID are equal")
+    func equalityBasedOnStableID() {
         let cat1 = DaysSince.Category(stableID: "work", name: "Work", emoji: "lightbulb", color: .work)
         let cat2 = DaysSince.Category(stableID: "work", name: "Different Name", emoji: "star", color: .life)
-        XCTAssertEqual(cat1, cat2, "Categories with the same stableID should be equal")
+        #expect(cat1 == cat2, "Categories with the same stableID should be equal")
     }
 
-    func testInequalityWithDifferentStableIDs() {
+    @Test("Categories with different stableIDs are not equal")
+    func inequalityWithDifferentStableIDs() {
         let cat1 = DaysSince.Category(name: "Work", emoji: "lightbulb", color: .work)
         let cat2 = DaysSince.Category(name: "Work", emoji: "lightbulb", color: .work)
-        XCTAssertNotEqual(cat1, cat2, "Categories with different stableIDs should not be equal")
+        #expect(cat1 != cat2, "Categories with different stableIDs should not be equal")
     }
 
-    func testEqualityIgnoresUUID() {
+    @Test("Equality ignores the UUID")
+    func equalityIgnoresUUID() {
         let cat1 = DaysSince.Category(id: UUID(), stableID: "same", name: "A", emoji: "a", color: .work)
         let cat2 = DaysSince.Category(id: UUID(), stableID: "same", name: "B", emoji: "b", color: .life)
-        XCTAssertEqual(cat1, cat2, "UUID should not affect equality — only stableID matters")
+        #expect(cat1 == cat2, "UUID should not affect equality — only stableID matters")
     }
 
     // MARK: - Hashable Identifier
 
-    func testHashableIdentifier() {
+    @Test("hashableIdentifier combines stableID, name, emoji and color")
+    func hashableIdentifier() {
         let category = DaysSince.Category(stableID: "work", name: "Work", emoji: "lightbulb", color: .work)
         let expected = "work-Work-lightbulb-\(CategoryColor.work)"
-        XCTAssertEqual(category.hashableIdentifier, expected)
+        #expect(category.hashableIdentifier == expected)
     }
 
-    func testHashableIdentifierChangesWithProperties() {
+    @Test("hashableIdentifier changes when a property changes")
+    func hashableIdentifierChangesWithProperties() {
         var category = DaysSince.Category(stableID: "test", name: "Work", emoji: "lightbulb", color: .work)
         let hash1 = category.hashableIdentifier
 
         category.name = "Life"
         let hash2 = category.hashableIdentifier
 
-        XCTAssertNotEqual(hash1, hash2)
+        #expect(hash1 != hash2)
     }
 
     // MARK: - Codable
 
-    func testCodableRoundTrip() throws {
+    @Test("Category survives a JSON encode/decode round trip")
+    func codableRoundTrip() throws {
         let original = DaysSince.Category(stableID: "health", name: "Health", emoji: "heart.text.square", color: .health)
         let data = try JSONEncoder().encode(original)
         let decoded = try JSONDecoder().decode(DaysSince.Category.self, from: data)
 
-        XCTAssertEqual(decoded.id, original.id)
-        XCTAssertEqual(decoded.stableID, original.stableID)
-        XCTAssertEqual(decoded.name, original.name)
-        XCTAssertEqual(decoded.emoji, original.emoji)
-        XCTAssertEqual(decoded.color, original.color)
+        #expect(decoded.id == original.id)
+        #expect(decoded.stableID == original.stableID)
+        #expect(decoded.name == original.name)
+        #expect(decoded.emoji == original.emoji)
+        #expect(decoded.color == original.color)
     }
 
-    func testCodableArrayRoundTrip() throws {
+    @Test("Array of categories round trips in order")
+    func codableArrayRoundTrip() throws {
         let categories = [
             DaysSince.Category(stableID: "work", name: "Work", emoji: "lightbulb", color: .work),
             DaysSince.Category(stableID: "life", name: "Life", emoji: "leaf", color: .life),
@@ -90,27 +101,43 @@ final class CategoryTests: XCTestCase {
         let data = try JSONEncoder().encode(categories)
         let decoded = try JSONDecoder().decode([DaysSince.Category].self, from: data)
 
-        XCTAssertEqual(decoded.count, 3)
-        XCTAssertEqual(decoded[0].stableID, "work")
-        XCTAssertEqual(decoded[1].stableID, "life")
-        XCTAssertEqual(decoded[2].stableID, "health")
+        #expect(decoded.count == 3)
+        #expect(decoded[0].stableID == "work")
+        #expect(decoded[1].stableID == "life")
+        #expect(decoded[2].stableID == "health")
     }
 
     // MARK: - Migration (decoding without stableID)
 
-    func testDecodingWithoutStableIDUsesBuiltInMapping() throws {
-        // Simulate stored data from before stableID was added
+    /// Simulates stored data from before `stableID` was added: every built-in
+    /// category name must map to its well-known stableID.
+    @Test(
+        "Decoding legacy data maps built-in names to well-known stableIDs",
+        arguments: [
+            ("Work", DaysSince.Category.stableIDWork),
+            ("Life", DaysSince.Category.stableIDLife),
+            ("Hobby", DaysSince.Category.stableIDHobby),
+            ("Health", DaysSince.Category.stableIDHealth),
+            ("Home", DaysSince.Category.stableIDHome),
+            ("Pet", DaysSince.Category.stableIDPet),
+            ("Friends", DaysSince.Category.stableIDFriends),
+            ("Projects", DaysSince.Category.stableIDProjects),
+            ("Journal", DaysSince.Category.stableIDJournal),
+        ]
+    )
+    func decodingWithoutStableIDUsesBuiltInMapping(name: String, expectedStableID: String) throws {
         let json = """
-        {"id":"550e8400-e29b-41d4-a716-446655440000","name":"Work","emoji":"lightbulb","color":{"work":{}}}
+        {"id":"550e8400-e29b-41d4-a716-446655440000","name":"\(name)","emoji":"lightbulb","color":{"work":{}}}
         """
         let data = json.data(using: .utf8)!
         let decoded = try JSONDecoder().decode(DaysSince.Category.self, from: data)
 
-        XCTAssertEqual(decoded.stableID, "work", "Built-in category should get well-known stableID from name")
-        XCTAssertEqual(decoded.name, "Work")
+        #expect(decoded.stableID == expectedStableID, "Built-in category should get well-known stableID from name")
+        #expect(decoded.name == name)
     }
 
-    func testDecodingWithoutStableIDGeneratesUUIDForUnknown() throws {
+    @Test("Decoding legacy data generates a stableID for unknown categories")
+    func decodingWithoutStableIDGeneratesUUIDForUnknown() throws {
         // Simulate a user-created category stored before stableID existed
         let json = """
         {"id":"550e8400-e29b-41d4-a716-446655440000","name":"My Custom","emoji":"star","color":{"life":{}}}
@@ -118,21 +145,22 @@ final class CategoryTests: XCTestCase {
         let data = json.data(using: .utf8)!
         let decoded = try JSONDecoder().decode(DaysSince.Category.self, from: data)
 
-        XCTAssertFalse(decoded.stableID.isEmpty, "Unknown category should get a generated stableID")
-        XCTAssertNotEqual(decoded.stableID, "work")
-        XCTAssertNotEqual(decoded.stableID, "life")
+        #expect(!decoded.stableID.isEmpty, "Unknown category should get a generated stableID")
+        #expect(decoded.stableID != "work")
+        #expect(decoded.stableID != "life")
     }
 
     // MARK: - Mutability
 
-    func testMutableProperties() {
+    @Test("Name, emoji and color are mutable")
+    func mutableProperties() {
         var category = DaysSince.Category(name: "Work", emoji: "lightbulb", color: .work)
         category.name = "Updated"
         category.emoji = "star"
         category.color = .health
 
-        XCTAssertEqual(category.name, "Updated")
-        XCTAssertEqual(category.emoji, "star")
-        XCTAssertEqual(category.color, .health)
+        #expect(category.name == "Updated")
+        #expect(category.emoji == "star")
+        #expect(category.color == .health)
     }
 }

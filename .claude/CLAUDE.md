@@ -196,13 +196,38 @@ Tracked events: `launchApp`, `addNewEvent`, `editEvent`, `updateCategory`, `addN
 - Color names: descriptive game/theme references (marioBlue, zeldaYellow, animalCrossingsGreen)
 
 ## Testing
-- Test target: `DaysSinceTests` (unit test bundle hosted by the app)
-- Run tests: `xcodebuild test -scheme DaysSince -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=latest' -only-testing:DaysSinceTests`
-- Or run from Xcode: Cmd+U with the DaysSince scheme
-- 12 test files covering: models (DSItem, Category, CategoryColor, DSItemReminders, AlternativeIcon), extensions (Calendar, Date, Array, Color), sorting (SortType), analytics (AnalyticType), and themes (ColorTheme)
-- 107 tests total
-- Use `DaysSince.Category` (fully qualified) in tests to avoid ambiguity with system `Category` type
-- Tests use `@testable import DaysSince` for access to internal types
+
+### Framework
+- **Swift Testing** (`import Testing`) is the standard for all tests. Do not add new XCTest files. Use `@Suite` / `@Test` / `#expect` / `try #require`, and `@Test(arguments:)` for table-driven cases.
+- XCTest remains only for UI tests (`DaysSinceUITests`), because XCUITest has no Swift Testing equivalent.
+
+### Targets
+- `DaysSinceTests` — unit tests, hosted by the app
+- `DaysSinceUITests` — XCUITest target
+- Both are `PBXFileSystemSynchronizedRootGroup`s: **files added under those folders are compiled automatically. Never hand-edit the .pbxproj to add a test file.**
+
+### Running
+- `xcodebuild test -scheme DaysSince -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=latest' -only-testing:DaysSinceTests`
+- Or Cmd+U in Xcode with the DaysSince scheme
+
+### Test isolation (this is the anti-flake contract)
+Swift Testing runs tests **in parallel by default**, and this app keeps a lot of state in `UserDefaults.standard` via `Defaults[...]`, `@Default`, and `@AppStorage`. Pick a tier per suite:
+- **Pure** — models, extensions, sorting, formatting. No traits, fully parallel. Keep this tier as large as possible by extracting pure functions out of views/managers.
+- **Injected suite** — inject a per-test `UserDefaults` suite via `IsolatedDefaults`. Parallel-safe.
+- **Global** — only when a suite genuinely must touch process-global state (`.standard`, `Analytics.sink`, `SKTestSession`). Declare it nested inside `GlobalStateSuite` (`extension GlobalStateSuite { @Suite struct ... }`), which carries `.serialized`, and save/restore whatever it mutates in `init`/`deinit` (see `DataSyncManagerMergeTests`). `.serialized` does **not** serialize across sibling top-level suites — that is why the umbrella exists, so never declare a global-state suite at top level.
+
+### Shared support layer — `DaysSinceTests/Support/`
+- `IsolatedDefaults` — per-test `UserDefaults` suite that deletes its persistent domain on `deinit`. Always use this instead of creating a suite inline, or every run leaks a plist into the test host container.
+- `Fixtures` — `Fixtures.item(...)`, `Fixtures.category(...)`, fixed reference dates, `gmtCalendar`. Never build fixtures from `Date.now`: `DSItem.daysAgo` uses `Calendar.current` internally, so dates near midnight make assertions flaky.
+- `Mocks/MockKeyValueStore` — in-memory `KeyValueStoreProtocol`. Support types must **not** be declared `private` in a test file; a file-private type still occupies module scope and collides with the shared one.
+- `Mocks/SpyAnalytics` + `withAnalyticsSpy { spy in ... }` — swaps `Analytics.sink` for the duration of the closure and restores it afterwards. Production code keeps calling `Analytics.send(...)`, so no call site changes.
+- `Mocks/MockCategoryStore`, `Mocks/SpyWidgetReloader` (+ `StubUbiquityChecker`), `Mocks/MockNotificationScheduler` — doubles for the manager DI seams. `MockNotificationScheduler` fires every completion **synchronously**, so assert on the mock rather than on `NotificationManager.pendingNotifications`, which is published via `DispatchQueue.main.async`.
+- `LegacyPayloads` — builds legacy JSON by encoding a real model and *removing* keys, so fixtures stay honest as the models change. Don't hand-write stored-shape JSON.
+
+### Conventions
+- Use `DaysSince.Category` (fully qualified) to avoid ambiguity with the system `Category` type
+- `@testable import DaysSince` for access to internal types
+- Items are persisted as JSON **strings**, so write test fixtures with `.set(jsonString, forKey:)` and read with `.string(forKey:)` — `.data(forKey:)` returns nil and silently produces empty results
 
 ## Build & Run
 - Xcode project (DaysSince.xcodeproj), not SPM-based

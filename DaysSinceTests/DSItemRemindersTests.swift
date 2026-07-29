@@ -1,68 +1,71 @@
 @testable import DaysSince
+import Foundation
+import Testing
 
-import XCTest
-
-final class DSItemRemindersTests: XCTestCase {
+@Suite("DSItemReminders")
+struct DSItemRemindersTests {
     // MARK: - All Cases
 
-    func testAllCasesCount() {
-        XCTAssertEqual(DSItemReminders.allCases.count, 4)
+    @Test("There are 4 reminder options")
+    func allCasesCount() {
+        #expect(DSItemReminders.allCases.count == 4)
     }
 
-    func testAllCasesOrder() {
+    @Test("allCases is ordered daily, weekly, monthly, none")
+    func allCasesOrder() {
         let expected: [DSItemReminders] = [.daily, .weekly, .monthly, .none]
-        XCTAssertEqual(DSItemReminders.allCases, expected)
+        #expect(DSItemReminders.allCases == expected)
     }
 
     // MARK: - Name
 
-    func testDailyName() {
-        XCTAssertEqual(DSItemReminders.daily.name, "Daily")
-    }
-
-    func testWeeklyName() {
-        XCTAssertEqual(DSItemReminders.weekly.name, "Weekly")
-    }
-
-    func testMonthlyName() {
-        XCTAssertEqual(DSItemReminders.monthly.name, "Monthly")
-    }
-
-    func testNoneName() {
-        XCTAssertEqual(DSItemReminders.none.name, "No reminders")
+    @Test(
+        "Each reminder has a display name",
+        arguments: [
+            (DSItemReminders.daily, "Daily"),
+            (DSItemReminders.weekly, "Weekly"),
+            (DSItemReminders.monthly, "Monthly"),
+            (DSItemReminders.none, "No reminders"),
+        ]
+    )
+    func name(reminder: DSItemReminders, expectedName: String) {
+        #expect(reminder.name == expectedName)
     }
 
     // MARK: - Codable
 
-    func testCodableRoundTrip() throws {
-        for reminder in DSItemReminders.allCases {
-            let data = try JSONEncoder().encode(reminder)
-            let decoded = try JSONDecoder().decode(DSItemReminders.self, from: data)
-            XCTAssertEqual(decoded, reminder)
-        }
+    @Test("Every reminder survives a JSON round trip", arguments: DSItemReminders.allCases)
+    func codableRoundTrip(reminder: DSItemReminders) throws {
+        let data = try JSONEncoder().encode(reminder)
+        let decoded = try JSONDecoder().decode(DSItemReminders.self, from: data)
+        #expect(decoded == reminder)
     }
 
     // MARK: - Equatable
 
-    func testEquatable() {
-        XCTAssertEqual(DSItemReminders.daily, DSItemReminders.daily)
-        XCTAssertNotEqual(DSItemReminders.daily, DSItemReminders.weekly)
-        XCTAssertNotEqual(DSItemReminders.monthly, DSItemReminders.none)
+    @Test("Equatable compares cases")
+    func equatable() {
+        #expect(DSItemReminders.daily == DSItemReminders.daily)
+        #expect(DSItemReminders.daily != DSItemReminders.weekly)
+        #expect(DSItemReminders.monthly != DSItemReminders.none)
     }
 
     // MARK: - Hashable
 
-    func testHashable() {
+    @Test("All 4 cases hash distinctly")
+    func hashable() {
         var set = Set<DSItemReminders>()
         for reminder in DSItemReminders.allCases {
             set.insert(reminder)
         }
-        XCTAssertEqual(set.count, 4)
+        #expect(set.count == 4)
     }
 
     // MARK: - Default Value in DSItem
 
-    func testDefaultReminderInDSItem() {
+    @Test("A new DSItem defaults to daily reminders")
+    func defaultReminderInDSItem() {
+        // Memberwise init on purpose: this asserts the default value of `reminder`.
         let item = DSItem(
             id: UUID(),
             name: "Test",
@@ -70,6 +73,6 @@ final class DSItemRemindersTests: XCTestCase {
             dateLastDone: Date.now,
             remindersEnabled: true
         )
-        XCTAssertEqual(item.reminder, .daily)
+        #expect(item.reminder == .daily)
     }
 }
