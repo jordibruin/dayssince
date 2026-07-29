@@ -32,9 +32,7 @@ struct Provider: IntentTimelineProvider {
         in _: Context,
         completion: @escaping (Timeline<WidgetContent>) -> Void
     ) {
-        let eventId = configuration.event?.identifier ?? ""
-
-        if let matchingEvent = items.first(where: { $0.id.uuidString == eventId }) {
+        if let matchingEvent = DSItem.first(matching: configuration.event?.identifier, in: items) {
             let content = WidgetContent(item: matchingEvent)
             completion(Timeline(entries: [content], policy: .atEnd))
         } else {

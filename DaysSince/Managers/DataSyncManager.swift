@@ -19,6 +19,28 @@ protocol KeyValueStoreProtocol {
 
 extension NSUbiquitousKeyValueStore: KeyValueStoreProtocol {}
 
+/// Widget timeline invalidation, so tests can observe reloads instead of poking WidgetKit.
+protocol WidgetReloading {
+    func reloadAllTimelines()
+}
+
+struct WidgetCenterReloader: WidgetReloading {
+    func reloadAllTimelines() {
+        WidgetCenter.shared.reloadAllTimelines()
+    }
+}
+
+/// Whether the device is signed in to iCloud.
+protocol UbiquityChecking {
+    var isUbiquityAvailable: Bool { get }
+}
+
+struct FileManagerUbiquityChecker: UbiquityChecking {
+    var isUbiquityAvailable: Bool {
+        FileManager.default.ubiquityIdentityToken != nil
+    }
+}
+
 /// Central coordinator for syncing data between App Group UserDefaults, iCloud (NSUbiquitousKeyValueStore),
 /// and the in-memory published properties that drive the UI.
 class DataSyncManager: ObservableObject {
@@ -35,6 +57,9 @@ class DataSyncManager: ObservableObject {
 
     private let appGroupDefaults: UserDefaults
     private let iCloudStore: KeyValueStoreProtocol
+    private var categoryStore: CategoryStoring
+    private let widgetReloader: WidgetReloading
+    private let ubiquity: UbiquityChecking
 
     // MARK: - Constants
 
@@ -52,16 +77,22 @@ class DataSyncManager: ObservableObject {
 
     init(
         appGroupDefaults: UserDefaults? = UserDefaults(suiteName: "group.goodsnooze.dayssince"),
-        iCloudStore: KeyValueStoreProtocol = NSUbiquitousKeyValueStore.default
+        iCloudStore: KeyValueStoreProtocol = NSUbiquitousKeyValueStore.default,
+        categoryStore: CategoryStoring = DefaultsCategoryStore(),
+        widgetReloader: WidgetReloading = WidgetCenterReloader(),
+        ubiquity: UbiquityChecking = FileManagerUbiquityChecker()
     ) {
         self.appGroupDefaults = appGroupDefaults ?? .standard
         self.iCloudStore = iCloudStore
+        self.categoryStore = categoryStore
+        self.widgetReloader = widgetReloader
+        self.ubiquity = ubiquity
 
         // Load items from App Group UserDefaults (source of truth for initial load)
         self.items = Self.loadItems(from: self.appGroupDefaults)
 
         // Load categories from Defaults library (current source of truth)
-        self.categories = Defaults[.categories]
+        self.categories = categoryStore.categories
 
         // Migrate pre-sortOrder data: assign sequential sort orders if all are 0
         assignSequentialSortOrdersIfNeeded()
@@ -93,7 +124,7 @@ class DataSyncManager: ObservableObject {
             let remoteCategories = loadCategoriesFromiCloud()
             if !remoteCategories.isEmpty {
                 categories = remoteCategories
-                Defaults[.categories] = remoteCategories
+                categoryStore.categories = remoteCategories
             }
 
             let remoteItems = loadItemsFromiCloud()
@@ -108,7 +139,7 @@ class DataSyncManager: ObservableObject {
             // Reconcile in case iCloud data was from a pre-stableID migration
             reconcileCategoryStableIDs()
 
-            WidgetCenter.shared.reloadAllTimelines()
+            widgetReloader.reloadAllTimelines()
         } else {
             // Normal launch with existing local data — merge with iCloud before pushing.
             // This handles the case where two devices with different local data both
@@ -123,7 +154,7 @@ class DataSyncManager: ObservableObject {
             let remoteCategories = loadCategoriesFromiCloud()
             let mergedCategories = mergeCategories(local: categories, remote: remoteCategories)
             categories = mergedCategories
-            Defaults[.categories] = mergedCategories
+            categoryStore.categories = mergedCategories
             pushCategoriesToiCloud()
 
             // Reconcile in case merged data contains pre-stableID items
@@ -139,7 +170,7 @@ class DataSyncManager: ObservableObject {
         items = newItems
         writeItemsToAppGroup(newItems)
         pushItemsToiCloud()
-        WidgetCenter.shared.reloadAllTimelines()
+        widgetReloader.reloadAllTimelines()
     }
 
     /// Reload items from App Group UserDefaults (e.g., after onboarding writes directly to AppStorage).
@@ -148,7 +179,7 @@ class DataSyncManager: ObservableObject {
         items = freshItems
         pushItemsToiCloud()
 
-        categories = Defaults[.categories]
+        categories = categoryStore.categories
         pushCategoriesToiCloud()
     }
 
@@ -156,7 +187,7 @@ class DataSyncManager: ObservableObject {
 
     /// Sync categories to iCloud after a local change.
     func syncCategories() {
-        categories = Defaults[.categories]
+        categories = categoryStore.categories
         pushCategoriesToiCloud()
     }
 
@@ -170,7 +201,7 @@ class DataSyncManager: ObservableObject {
 
         // Load current local items from App Group UserDefaults
         let localItems = Self.loadItems(from: appGroupDefaults)
-        let localCategories = Defaults[.categories]
+        let localCategories = categoryStore.categories
 
         // Merge with any data already in iCloud (e.g. another device migrated first)
         let remoteItems = loadItemsFromiCloud()
@@ -183,7 +214,7 @@ class DataSyncManager: ObservableObject {
         items = mergedItems
         writeItemsToAppGroup(mergedItems)
         categories = mergedCategories
-        Defaults[.categories] = mergedCategories
+        categoryStore.categories = mergedCategories
 
         // Reconcile stableIDs before pushing to iCloud
         reconcileCategoryStableIDs()
@@ -206,65 +237,67 @@ class DataSyncManager: ObservableObject {
 
     /// Whether iCloud is available for the current user.
     var isiCloudAvailable: Bool {
-        FileManager.default.ubiquityIdentityToken != nil
+        ubiquity.isUbiquityAvailable
     }
 
     // MARK: - Remote Change Handling
 
     @objc private func handleRemoteChange(_ notification: Notification) {
         guard let userInfo = notification.userInfo,
-              let reasonRaw = userInfo[NSUbiquitousKeyValueStoreChangeReasonKey] as? Int else {
+              let reason = userInfo[NSUbiquitousKeyValueStoreChangeReasonKey] as? Int else {
             return
         }
 
-        let reason = reasonRaw
-
         DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
+            self?.applyRemoteChange(reason: reason)
+        }
+    }
+
+    /// Applies an iCloud change synchronously. Split out of `handleRemoteChange` so it
+    /// can be driven directly with an `NSUbiquitousKeyValueStore*Change` reason.
+    func applyRemoteChange(reason: Int) {
+        if reason == NSUbiquitousKeyValueStoreServerChange {
+            let localCount = items.count
+            let remoteItems = loadItemsFromiCloud()
+            let remoteCount = remoteItems.count
 
             // Log conflicts
-            if reason == NSUbiquitousKeyValueStoreServerChange {
-                let localCount = self.items.count
-                let remoteItems = self.loadItemsFromiCloud()
-                let remoteCount = remoteItems.count
-
-                if localCount != remoteCount {
-                    Analytics.send(.iCloudSyncConflict, with: [
-                        "localCount": String(localCount),
-                        "remoteCount": String(remoteCount)
-                    ])
-                }
-
-                // Apply remote items — but never overwrite local data with empty remote data
-                if !remoteItems.isEmpty || self.items.isEmpty {
-                    self.items = remoteItems
-                    self.writeItemsToAppGroup(remoteItems)
-                }
-
-                // Apply remote categories
-                let remoteCategories = self.loadCategoriesFromiCloud()
-                if !remoteCategories.isEmpty {
-                    self.categories = remoteCategories
-                    Defaults[.categories] = remoteCategories
-                }
-
-                WidgetCenter.shared.reloadAllTimelines()
-            } else if reason == NSUbiquitousKeyValueStoreInitialSyncChange {
-                // Initial sync after iCloud account change — merge remote data
-                let remoteItems = self.loadItemsFromiCloud()
-                if !remoteItems.isEmpty {
-                    self.items = remoteItems
-                    self.writeItemsToAppGroup(remoteItems)
-                }
-
-                let remoteCategories = self.loadCategoriesFromiCloud()
-                if !remoteCategories.isEmpty {
-                    self.categories = remoteCategories
-                    Defaults[.categories] = remoteCategories
-                }
-
-                WidgetCenter.shared.reloadAllTimelines()
+            if localCount != remoteCount {
+                Analytics.send(.iCloudSyncConflict, with: [
+                    "localCount": String(localCount),
+                    "remoteCount": String(remoteCount)
+                ])
             }
+
+            // Apply remote items — but never overwrite local data with empty remote data
+            if !remoteItems.isEmpty || items.isEmpty {
+                items = remoteItems
+                writeItemsToAppGroup(remoteItems)
+            }
+
+            // Apply remote categories
+            let remoteCategories = loadCategoriesFromiCloud()
+            if !remoteCategories.isEmpty {
+                categories = remoteCategories
+                categoryStore.categories = remoteCategories
+            }
+
+            widgetReloader.reloadAllTimelines()
+        } else if reason == NSUbiquitousKeyValueStoreInitialSyncChange {
+            // Initial sync after iCloud account change — merge remote data
+            let remoteItems = loadItemsFromiCloud()
+            if !remoteItems.isEmpty {
+                items = remoteItems
+                writeItemsToAppGroup(remoteItems)
+            }
+
+            let remoteCategories = loadCategoriesFromiCloud()
+            if !remoteCategories.isEmpty {
+                categories = remoteCategories
+                categoryStore.categories = remoteCategories
+            }
+
+            widgetReloader.reloadAllTimelines()
         }
     }
 
@@ -277,10 +310,15 @@ class DataSyncManager: ObservableObject {
         return itemsSize + categoriesSize
     }
 
+    /// Whether `usage` bytes is close enough to the 1 MB KVS limit to warn the user.
+    static func shouldWarnAboutStorage(usage: Int) -> Bool {
+        usage >= iCloudKVSWarningThreshold
+    }
+
     /// Checks if iCloud KVS usage is approaching the 1 MB limit and updates the warning flag.
     private func checkStorageUsage() {
         let usage = iCloudUsageBytes
-        let shouldWarn = usage >= Self.iCloudKVSWarningThreshold
+        let shouldWarn = Self.shouldWarnAboutStorage(usage: usage)
 
         if shouldWarn != showiCloudStorageWarning {
             showiCloudStorageWarning = shouldWarn
@@ -303,7 +341,7 @@ class DataSyncManager: ObservableObject {
         for i in categories.indices {
             categories[i].sortOrder = i
         }
-        Defaults[.categories] = categories
+        categoryStore.categories = categories
     }
 
     // MARK: - StableID Reconciliation

@@ -8,19 +8,28 @@
 import Foundation
 import TelemetryDeck
 
-struct Analytics {
-    
-    static func send(_ option: AnalyticType, with additionalParameters: [String: String]? = nil) {
-        
+protocol AnalyticsSending {
+    func send(_ option: AnalyticType, with additionalParameters: [String: String]?)
+}
+
+struct TelemetryDeckSink: AnalyticsSending {
+    func send(_ option: AnalyticType, with additionalParameters: [String: String]?) {
         if let additionalParameters {
             TelemetryDeck.signal(option.rawValue, parameters: additionalParameters)
         } else {
             TelemetryDeck.signal(option.rawValue)
         }
-//        debugPrint("📊 \(option.rawValue) \(additionalParameters?["recipeID"] ?? "")")
-//        debugPrint(📊 \(option.rawValue) \(additionalParameters))
     }
-    
+}
+
+struct Analytics {
+
+    static var sink: AnalyticsSending = TelemetryDeckSink()
+
+    static func send(_ option: AnalyticType, with additionalParameters: [String: String]? = nil) {
+        sink.send(option, with: additionalParameters)
+    }
+
 }
 
 enum AnalyticType: String, Hashable {
