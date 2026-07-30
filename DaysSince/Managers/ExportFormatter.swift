@@ -10,13 +10,14 @@ import Foundation
 /// file-system-synchronized group and `Settings` is not.
 enum ExportFormatter {
 
-    /// Medium style in the user's locale — what the app exports with. Callers can pass a
-    /// pinned formatter instead when the output shape has to be stable.
-    static var defaultDateFormatter: DateFormatter {
+    /// Medium style in the user's locale — what the app exports with. Callers pass a pinned
+    /// formatter instead when the output shape has to be stable. Shared rather than built per
+    /// call: `DateFormatter` is expensive to construct, and formatting never mutates it.
+    static let defaultDateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateStyle = .medium
         return formatter
-    }
+    }()
 
     static func json(
         items: [DSItem],
@@ -43,15 +44,19 @@ enum ExportFormatter {
         return string
     }
 
-    static func csv(items: [DSItem], dateFormatter: DateFormatter? = nil) -> String {
-        let dateFormatter = dateFormatter ?? defaultDateFormatter
+    static func csv(items: [DSItem], dateFormatter: DateFormatter = defaultDateFormatter) -> String {
         var lines = ["Name,Category,Emoji,Date,Days Ago,Reminders,Reminder Frequency"]
 
-        for item in items.sorted(by: { $0.category.name < $1.category.name }) {
+        // Name breaks the tie because `sorted(by:)` is not stable: two events in one category
+        // would otherwise swap places between exports, making diffs of successive exports noise.
+        for item in items.sorted(by: { ($0.category.name, $0.name) < ($1.category.name, $1.name) }) {
             let name = csvEscape(item.name)
             let category = csvEscape(item.category.name)
             let emoji = item.emoji
-            let date = dateFormatter.string(from: item.dateLastDone)
+            // Escaped like every other field: medium style in most locales renders as
+            // "Jan 12, 1970", and an unquoted comma there splits the row into 8 fields
+            // against a 7-column header.
+            let date = csvEscape(dateFormatter.string(from: item.dateLastDone))
             let daysAgo = "\(item.daysAgo)"
             let reminders = item.remindersEnabled ? "Yes" : "No"
             let frequency = item.remindersEnabled ? "\(item.reminder)" : ""
@@ -72,9 +77,8 @@ enum ExportFormatter {
         items: [DSItem],
         categories: [Category],
         exportDate: Date = .now,
-        dateFormatter: DateFormatter? = nil
+        dateFormatter: DateFormatter = defaultDateFormatter
     ) -> String {
-        let dateFormatter = dateFormatter ?? defaultDateFormatter
         var lines: [String] = []
 
         lines.append("DAYS SINCE — Export")
@@ -111,7 +115,11 @@ enum ExportFormatter {
 
     private static func entries(for items: [DSItem], dateFormatter: DateFormatter) -> [String] {
         items
-            .sorted { $0.daysAgo > $1.daysAgo }
+            .sorted { lhs, rhs in
+                // Name breaks the tie, since `sorted(by:)` is not stable and two events sharing
+                // a date would otherwise swap places between exports.
+                lhs.daysAgo == rhs.daysAgo ? lhs.name < rhs.name : lhs.daysAgo > rhs.daysAgo
+            }
             .map { "  \($0.name) — \($0.daysAgo) days ago (\(dateFormatter.string(from: $0.dateLastDone)))" }
     }
 }

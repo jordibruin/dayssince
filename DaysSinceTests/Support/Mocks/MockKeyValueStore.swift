@@ -25,6 +25,9 @@ final class MockKeyValueStore: KeyValueStoreProtocol {
 
     // MARK: - Convenience
 
+    /// `try!` deliberately: the only way this throws is if a model stops being encodable, which
+    /// is a programming error every caller shares, and a trap here names it immediately. Making it
+    /// throwing would push `try` through 20 harness call sites to no benefit.
     func encode(_ value: some Encodable, forKey key: String) {
         storage[key] = try! JSONEncoder().encode(value)
     }

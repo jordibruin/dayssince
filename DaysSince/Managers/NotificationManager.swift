@@ -36,8 +36,8 @@ class NotificationManager: ObservableObject {
     ) {
         self.scheduler = scheduler
 
-        guard autoRefresh else { return }
-        refreshNotifications(items: Self.storedItems(in: appGroupDefaults))
+        guard autoRefresh, let appGroupDefaults else { return }
+        refreshNotifications(items: DataSyncManager.loadItems(from: appGroupDefaults))
     }
 
     /// Refresh the notifications. Delete all and reschedule them. Used when app is started and when a user edits an event to make sure the notifications stay up to date.
@@ -97,21 +97,6 @@ class NotificationManager: ObservableObject {
             let matching = ReminderRequestBuilder.identifiers(matching: item, in: requests.map(\.identifier))
             self.scheduler.removePending(identifiers: matching)
         }
-    }
-
-    /// `@AppStorage` stores arrays as JSON strings (via `RawRepresentable`), so read as
-    /// `String` first — `.data(forKey:)` returns nil for a string value.
-    private static func storedItems(in defaults: UserDefaults?) -> [DSItem] {
-        if let jsonString = defaults?.string(forKey: "items"),
-           let data = jsonString.data(using: .utf8),
-           let decoded = try? JSONDecoder().decode([DSItem].self, from: data) {
-            return decoded
-        }
-        if let data = defaults?.data(forKey: "items"),
-           let decoded = try? JSONDecoder().decode([DSItem].self, from: data) {
-            return decoded
-        }
-        return []
     }
 }
 

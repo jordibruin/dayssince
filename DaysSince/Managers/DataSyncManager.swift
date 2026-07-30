@@ -30,17 +30,6 @@ struct WidgetCenterReloader: WidgetReloading {
     }
 }
 
-/// Whether the device is signed in to iCloud.
-protocol UbiquityChecking {
-    var isUbiquityAvailable: Bool { get }
-}
-
-struct FileManagerUbiquityChecker: UbiquityChecking {
-    var isUbiquityAvailable: Bool {
-        FileManager.default.ubiquityIdentityToken != nil
-    }
-}
-
 /// Central coordinator for syncing data between App Group UserDefaults, iCloud (NSUbiquitousKeyValueStore),
 /// and the in-memory published properties that drive the UI.
 class DataSyncManager: ObservableObject {
@@ -59,7 +48,6 @@ class DataSyncManager: ObservableObject {
     private let iCloudStore: KeyValueStoreProtocol
     private var categoryStore: CategoryStoring
     private let widgetReloader: WidgetReloading
-    private let ubiquity: UbiquityChecking
 
     // MARK: - Constants
 
@@ -79,14 +67,12 @@ class DataSyncManager: ObservableObject {
         appGroupDefaults: UserDefaults? = UserDefaults(suiteName: "group.goodsnooze.dayssince"),
         iCloudStore: KeyValueStoreProtocol = NSUbiquitousKeyValueStore.default,
         categoryStore: CategoryStoring = DefaultsCategoryStore(),
-        widgetReloader: WidgetReloading = WidgetCenterReloader(),
-        ubiquity: UbiquityChecking = FileManagerUbiquityChecker()
+        widgetReloader: WidgetReloading = WidgetCenterReloader()
     ) {
         self.appGroupDefaults = appGroupDefaults ?? .standard
         self.iCloudStore = iCloudStore
         self.categoryStore = categoryStore
         self.widgetReloader = widgetReloader
-        self.ubiquity = ubiquity
 
         // Load items from App Group UserDefaults (source of truth for initial load)
         self.items = Self.loadItems(from: self.appGroupDefaults)
@@ -235,9 +221,10 @@ class DataSyncManager: ObservableObject {
 
     // MARK: - iCloud Availability
 
-    /// Whether iCloud is available for the current user.
+    /// Whether iCloud is available for the current user. No caller today; kept because the
+    /// migration screen is the obvious future consumer.
     var isiCloudAvailable: Bool {
-        ubiquity.isUbiquityAvailable
+        FileManager.default.ubiquityIdentityToken != nil
     }
 
     // MARK: - Remote Change Handling

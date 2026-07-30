@@ -11,19 +11,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  # The app target deploys to iOS 26.0, which needs Xcode 26 and a matching simulator runtime.
-  # Whether the hosted image carries either is not something we can assume, so this reports it
-  # rather than letting the test job fail with a confusing destination error.
-  probe:
-    runs-on: macos-latest
-    steps:
-      - run: xcodebuild -version
-      - run: xcrun simctl list runtimes
-      - run: ls /Applications | grep -i xcode
-
   unit-tests:
     runs-on: macos-latest
-    needs: probe
     # A hung simulator otherwise runs until the 6-hour default. The suite itself is seconds; the
     # rest is a cold build.
     timeout-minutes: 20
@@ -33,8 +22,12 @@ jobs:
       - name: Cache SPM
         uses: actions/cache@v6
         with:
-          path: ~/Library/Developer/Xcode/DerivedData/**/SourcePackages
+          # Pinned by Scripts/test.sh via -clonedSourcePackagesDirPath.
+          path: build/SourcePackages
           key: spm-${{ hashFiles('DaysSince.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved') }}
+          # Both Defaults and WishKit track `main`, so Package.resolved changes on every bump.
+          # Without a prefix fallback each bump would re-clone every dependency from scratch.
+          restore-keys: spm-
 
       - name: Unit tests
         run: Scripts/test.sh --unit-only
@@ -46,14 +39,20 @@ jobs:
           name: xcresult
           path: build/TestResults
 
-  # ~20 minutes of simulator time, so it is not on the PR path. Run it before a release.
+  # ~8 minutes across 4 simulator clones, so it is not on the PR path. Run it before a release.
   ui-tests:
     runs-on: macos-latest
-    needs: probe
     if: github.event_name == 'workflow_dispatch'
     timeout-minutes: 45
     steps:
       - uses: actions/checkout@v7
+
+      - name: Cache SPM
+        uses: actions/cache@v6
+        with:
+          path: build/SourcePackages
+          key: spm-${{ hashFiles('DaysSince.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved') }}
+          restore-keys: spm-
 
       - name: UI tests
         run: Scripts/test.sh --ui-only
@@ -64,3 +63,15 @@ jobs:
         with:
           name: xcresult-ui
           path: build/TestResults
+
+  # Reports what the hosted image actually carries. Dispatch-only: it answered its original
+  # question (Xcode 26.5, iOS runtimes 26.2/26.4/26.5) and billing a second macOS runner boot on
+  # every PR for two diagnostic commands is not worth it. Run it when a destination error appears.
+  probe:
+    runs-on: macos-latest
+    if: github.event_name == 'workflow_dispatch'
+    timeout-minutes: 10
+    steps:
+      - run: xcodebuild -version
+      - run: xcrun simctl list runtimes
+      - run: ls /Applications | grep -i xcode

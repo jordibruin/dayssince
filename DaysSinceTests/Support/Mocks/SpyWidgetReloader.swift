@@ -8,7 +8,3 @@ final class SpyWidgetReloader: WidgetReloading {
         reloadCount += 1
     }
 }
-
-struct StubUbiquityChecker: UbiquityChecking {
-    var isUbiquityAvailable: Bool
-}

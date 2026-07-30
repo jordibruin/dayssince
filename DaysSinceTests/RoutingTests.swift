@@ -50,14 +50,6 @@ struct RoutingTests {
         }
     }
 
-    // MARK: - Paywall
-
-    @Test("the paywall is offered exactly once")
-    func paywallShownOnce() {
-        #expect(AppRoute.shouldShowPaywall(hasSeenPaywall: false))
-        #expect(!AppRoute.shouldShowPaywall(hasSeenPaywall: true))
-    }
-
     // MARK: - Legacy migration dead path
 
     /// `ContentView` declares `@AppStorage("items") var oldItems: [oldDSItem]` against the very

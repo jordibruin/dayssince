@@ -60,7 +60,38 @@ struct ExportFormatterTests {
 
         #expect(rows.count == 2)
         let row = try #require(rows.last)
-        #expect(row == "Dentist,Health,heart,\(referenceDateText),\(item.daysAgo),Yes,weekly")
+        #expect(row == "Dentist,Health,heart,\"\(referenceDateText)\",\(item.daysAgo),Yes,weekly")
+    }
+
+    /// Medium style renders as "Jan 12, 1970" in most locales, so the date is the one field
+    /// that carries a comma for *every* user rather than only for oddly-named events. It went
+    /// out unescaped for years: the row then had 8 fields against a 7-column header and every
+    /// spreadsheet shifted Days Ago onwards by one column.
+    @Test("a date containing a comma stays a single field")
+    func csvDateIsEscaped() throws {
+        let csv = ExportFormatter.csv(items: [Fixtures.item(name: "Dentist")], dateFormatter: formatter)
+        let rows = csv.components(separatedBy: "\n")
+        let header = try #require(rows.first)
+        let row = try #require(rows.last)
+
+        #expect(referenceDateText.contains(","))
+        #expect(row.contains("\"\(referenceDateText)\""))
+        #expect(fieldCount(of: row) == fieldCount(of: header))
+    }
+
+    /// Counts comma-separated fields the way a CSV reader does: commas inside a quoted field
+    /// are literal. Splitting on "," alone is exactly the mistake this test exists to catch.
+    private func fieldCount(of row: String) -> Int {
+        var fields = 1
+        var insideQuotes = false
+        for character in row {
+            switch character {
+            case "\"": insideQuotes.toggle()
+            case "," where !insideQuotes: fields += 1
+            default: break
+            }
+        }
+        return fields
     }
 
     @Test("an item without reminders leaves the frequency column empty")
@@ -82,6 +113,29 @@ struct ExportFormatterTests {
         let rows = ExportFormatter.csv(items: items, dateFormatter: formatter).components(separatedBy: "\n").dropFirst()
 
         #expect(rows.map { String($0.prefix(4)) } == ["Code", "Walk"])
+    }
+
+    /// `sorted(by:)` is not stable, so a single sort key leaves events sharing that key in
+    /// whatever order the sort happens to land on. Asserted by sorting the same set twice from
+    /// different starting orders: with only `category.name` as the key these two disagree.
+    @Test("rows sharing a category are ordered by name, not by input order")
+    func csvSortIsDeterministic() {
+        let shared = Fixtures.category(stableID: "a", name: "Apps")
+        let forward = [
+            Fixtures.item(name: "Alpha", category: shared),
+            Fixtures.item(name: "Beta", category: shared),
+            Fixtures.item(name: "Gamma", category: shared),
+        ]
+
+        let names: ([DSItem]) -> [String] = { items in
+            ExportFormatter.csv(items: items, dateFormatter: self.formatter)
+                .components(separatedBy: "\n")
+                .dropFirst()
+                .map { String($0.prefix(while: { $0 != "," })) }
+        }
+
+        #expect(names(forward) == ["Alpha", "Beta", "Gamma"])
+        #expect(names(forward.reversed()) == ["Alpha", "Beta", "Gamma"])
     }
 
     @Test("a name containing a comma does not add a column")
@@ -217,6 +271,30 @@ struct ExportFormatterTests {
         let older = try #require(text.range(of: "Older")?.lowerBound)
         let recent = try #require(text.range(of: "Recent")?.lowerBound)
         #expect(older < recent)
+    }
+
+    @Test("events sharing a date are ordered by name, not by input order")
+    func plainTextSortIsDeterministic() {
+        let category = Fixtures.category()
+        let items = [
+            Fixtures.item(name: "Alpha", category: category, dateLastDone: Fixtures.olderDate),
+            Fixtures.item(name: "Beta", category: category, dateLastDone: Fixtures.olderDate),
+        ]
+
+        let eventLines: ([DSItem]) -> [String] = { items in
+            ExportFormatter.plainText(
+                items: items,
+                categories: [category],
+                exportDate: Fixtures.referenceDate,
+                dateFormatter: self.formatter
+            )
+            .components(separatedBy: "\n")
+            .filter { $0.hasPrefix("  ") }
+            .map { $0.trimmingCharacters(in: .whitespaces).components(separatedBy: " —")[0] }
+        }
+
+        #expect(eventLines(items) == ["Alpha", "Beta"])
+        #expect(eventLines(items.reversed()) == ["Alpha", "Beta"])
     }
 
     @Test("an event line carries the name, day count and date")

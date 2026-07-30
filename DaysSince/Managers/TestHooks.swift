@@ -17,7 +17,7 @@ enum TestHooks {
 
     /// A UI test run: state is reset at launch, iCloud is in-memory, no network calls are made,
     /// and no system permission prompt is shown.
-    static var isUITest: Bool { isSet("-uiTest") }
+    static let isUITest = isSet("-uiTest")
 
     /// The once-per-install paywall is *off* by default under `-uiTest` and opted back in with
     /// `-showPaywall`. Inverted deliberately: almost every suite needs to reach the main screen,

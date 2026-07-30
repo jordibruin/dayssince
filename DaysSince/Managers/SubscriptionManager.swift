@@ -53,17 +53,13 @@ class SubscriptionManager: ObservableObject {
         do {
             let storeProducts = try await Product.products(for: Self.productIDs)
             await MainActor.run {
-                self.products = Self.sorted(storeProducts)
+                // Cheapest first, which is the order the paywall's pricing cards expect.
+                self.products = storeProducts.sorted { $0.price < $1.price }
             }
             await checkIntroEligibility()
         } catch {
             print("[SubscriptionManager] Failed to load products: \(error)")
         }
-    }
-
-    /// Cheapest first, which is the order the paywall's pricing cards expect.
-    static func sorted(_ products: [Product]) -> [Product] {
-        products.sorted { $0.price < $1.price }
     }
 
     private func checkIntroEligibility() async {

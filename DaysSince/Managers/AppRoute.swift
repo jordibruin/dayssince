@@ -19,9 +19,4 @@ enum AppRoute: Equatable {
         guard hasSeenOnboarding else { return .onboarding }
         return iCloudMigrationComplete ? .main : .iCloudMigration
     }
-
-    /// The paywall is offered once per install, on the first arrival at `.main`.
-    static func shouldShowPaywall(hasSeenPaywall: Bool) -> Bool {
-        !hasSeenPaywall
-    }
 }

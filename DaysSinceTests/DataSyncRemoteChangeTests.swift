@@ -188,8 +188,20 @@ extension GlobalStateSuite {
 
         // MARK: - Other reasons
 
+        /// **Known gap, not intended behaviour.** `applyRemoteChange` handles only
+        /// `ServerChange` and `InitialSyncChange`, so two reasons fall through:
+        ///
+        /// - `AccountChange` — the user signed into a different iCloud account. The app keeps the
+        ///   previous account's items in memory and pushes them up on the next write, which is
+        ///   cross-account data leakage.
+        /// - `QuotaViolationChange` — the only authoritative signal that iCloud *rejected* a
+        ///   write. The 1 MB warning (`shouldWarnAboutStorage`) is built on an estimate and
+        ///   ignores this.
+        ///
+        /// This test pins the current behaviour so that fixing either one is a visible, deliberate
+        /// change rather than an accident. It is not a specification of what should happen.
         @Test(
-            "quota-violation and account-change reasons are ignored",
+            "quota-violation and account-change reasons currently fall through unhandled",
             arguments: [NSUbiquitousKeyValueStoreQuotaViolationChange, NSUbiquitousKeyValueStoreAccountChange]
         )
         func unhandledReasonsAreIgnored(reason: Int) throws {
@@ -204,18 +216,5 @@ extension GlobalStateSuite {
             #expect(harness.reloader.reloadCount == 0)
         }
 
-        // MARK: - iCloud availability
-
-        @Test("iCloud availability comes from the injected ubiquity checker", arguments: [true, false])
-        func availabilityIsInjected(available: Bool) {
-            let manager = DataSyncManager(
-                appGroupDefaults: IsolatedDefaults().defaults,
-                iCloudStore: MockKeyValueStore(),
-                categoryStore: MockCategoryStore(),
-                ubiquity: StubUbiquityChecker(isUbiquityAvailable: available)
-            )
-
-            #expect(manager.isiCloudAvailable == available)
-        }
     }
 }

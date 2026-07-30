@@ -24,6 +24,10 @@ OS_VERSION="${OS_VERSION:-}"
 UI_PARALLEL="${UI_PARALLEL:-YES}"
 WORKER_COUNT="${WORKER_COUNT:-4}"
 
+# Package checkouts go to a fixed path so CI can cache them. DerivedData's folder name carries a
+# hash of the project location, so caching it means globbing, and a glob does not restore reliably.
+SPM_DIR="${SPM_DIR:-$PWD/build/SourcePackages}"
+
 TARGETS=(DaysSinceTests DaysSinceUITests)
 case "${1:-}" in
     --unit-only) TARGETS=(DaysSinceTests) ;;
@@ -95,6 +99,7 @@ run_target() {
         -scheme DaysSince \
         -destination "platform=iOS Simulator,id=${SIMULATOR_ID}" \
         -onlyUsePackageVersionsFromResolvedFile \
+        -clonedSourcePackagesDirPath "$SPM_DIR" \
         -parallel-testing-enabled "$parallel" \
         -parallel-testing-worker-count "$WORKER_COUNT" \
         -enableCodeCoverage YES \

@@ -89,8 +89,8 @@ struct ContentView: View {
                         }
                     }
 
-                    if !TestHooks.introPaywallSuppressed,
-                       AppRoute.shouldShowPaywall(hasSeenPaywall: hasSeenPaywall) {
+                    // Offered once per install, on the first arrival at the main screen.
+                    if !TestHooks.introPaywallSuppressed, !hasSeenPaywall {
                         showPaywallSheet = true
                         hasSeenPaywall = true
                     }
