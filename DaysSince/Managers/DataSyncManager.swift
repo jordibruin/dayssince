@@ -219,14 +219,6 @@ class DataSyncManager: ObservableObject {
         return (mergedItems.count, mergedCategories.count)
     }
 
-    // MARK: - iCloud Availability
-
-    /// Whether iCloud is available for the current user. No caller today; kept because the
-    /// migration screen is the obvious future consumer.
-    var isiCloudAvailable: Bool {
-        FileManager.default.ubiquityIdentityToken != nil
-    }
-
     // MARK: - Remote Change Handling
 
     @objc private func handleRemoteChange(_ notification: Notification) {
