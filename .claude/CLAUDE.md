@@ -210,7 +210,12 @@ Tracked events: `launchApp`, `addNewEvent`, `editEvent`, `updateCategory`, `addN
 - Both are `PBXFileSystemSynchronizedRootGroup`s: **files added under those folders are compiled automatically. Never hand-edit the .pbxproj to add a test file.**
 
 ### Running
-- `xcodebuild test -scheme DaysSince -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=latest' -only-testing:DaysSinceTests`
+- `Scripts/test.sh --unit-only` — 299 unit tests in ~5 seconds. This is the default while iterating.
+- `Scripts/test.sh --ui-only` / `Scripts/test.sh` — the UI suites cost ~20 minutes serially, which is
+  all app launches and UI settling, not test logic. Don't run them on every edit: run the one suite
+  covering what you touched (`-only-testing:DaysSinceUITests/ThemeTests`), and the full set before a
+  release. CI runs the unit target on every PR and the UI target only on `workflow_dispatch`.
+- The script resolves the simulator udid itself; override with `DEVICE_NAME` / `OS_VERSION` / `SIMULATOR_ID`.
 - Or Cmd+U in Xcode with the DaysSince scheme
 
 ### Test isolation (this is the anti-flake contract)
@@ -233,6 +238,45 @@ Swift Testing runs tests **in parallel by default**, and this app keeps a lot of
 - `SKTestSession` mutations reach `Transaction.currentEntitlements` **asynchronously**. Drain entitlements (poll until empty) before asserting, or the suite passes on one run and fails the next.
 - **Never assign `session.failTransactionsEnabled`.** The setter wedges the session: writing even `false` makes the next `purchase()` throw `StoreKitError.unknown`, so a test built on it passes for the wrong reason while breaking every other purchase in the process. `askToBuyEnabled` is safe to assign.
 - `expireSubscription(productIdentifier:)` and `refundTransaction(identifier:)` are silent no-ops here (the transaction keeps a future expiry and a nil revocation date). Simulate losing access with `clearTransactions()`, which is the same thing our code sees: an empty `currentEntitlements`.
+
+### UI tests (`DaysSinceUITests`)
+
+XCTest + page objects ("robots") under `Robots/`, shared harness in `Support/`. Every test class and robot is `@MainActor`.
+
+**Launch harness** — `TestHooks.swift` (app target) reads the flags; `UITestCase.launch(...)` passes them.
+- `-uiTest` is passed on every launch and means "this is a UI test run": wipe `UserDefaults.standard` + the App Group, swap `NSUbiquitousKeyValueStore` for an in-memory `KeyValueStoreProtocol`, skip `TelemetryDeck`/`WishKit`/ntfy, stub the notification permission prompt, suppress the StoreKit review alert, disable animations. **Never point a UI test at the real KVS** — it holds real data on the dev iCloud account, and a UI-test write would push junk into it.
+- Per-test opt-ins: `-seedDemoData` (16 events / 9 categories — mirrored in `Support/SeedData.swift`), `-showOnboarding`, `-showICloudMigration`, `-showPaywall`, `-keepState` (skip the reset, for relaunch assertions), `UITEST_SUBSCRIBED=0|1`.
+- The state reset must be the **first statement of `DaysSinceApp.init()`**: `@StateObject` property initializers run before the init body, so `dataSyncManager` has no default value and is constructed inside `init()`.
+
+**Accessibility identifiers** — `screen.element[.qualifier]`, with data-derived suffixes: `event.name.<name>`, `event.days.<name>`, `category.pill.<name>`, `sort.<SortType.rawValue>`, `theme.<id>`, `paywall.product.<productID>`.
+
+**Gotchas that cost real debugging time:**
+- A SwiftUI `Toggle` in a `Form` publishes the **whole row** as the `Switch`, so its centre is the label and `tap()` silently changes nothing. Use `XCUIElement.flipSwitch()`, which taps the trailing edge by coordinate.
+- Segmented `Picker` segments are `Button`s addressed by **label text** ("Daily"/"Weekly"/"Monthly"), and expose `isSelected`.
+- A `Form` row below the fold does not exist in the hierarchy at all — scroll to it (`app.scrollTo(_:)`), don't just wait.
+- The category strip is a `LazyHStack`: a pill past the fold genuinely doesn't exist yet. This looks exactly like a data bug. Use `MainScreenRobot.scrollToCategory(_:)`.
+- `app.scrollViews.firstMatch` is **not** the horizontal strip — the full-screen vertical event list precedes it and also contains the pills, so swiping it scrolls nothing and fails silently. Pick the strip by frame height.
+- Querying `isHittable` on an element whose frame lies outside the window **raises** ("activation point invalid") instead of returning false, so horizontal scroll loops compare `app.frame.contains(element.frame)`.
+- After a data change, `ForEach` children are replaced wholesale — re-query elements, never cache an `XCUIElement`, and poll for the expected ordering (see `SortingTests.awaitOrder`).
+- `NavigationStack` keeps earlier pages in the hierarchy, so onboarding needs per-screen identifiers rather than one shared "Continue".
+- The graphical `DatePicker` has no addressable field — set dates through the event context menu's Today/Yesterday or through seeded data.
+
+**Running** — use `Scripts/test.sh --ui-only`. It runs **4 parallel simulator clones** (~8 min for all
+54 tests, vs ~19 serial). Parallel testing is safe for the UI target despite the launch-time state
+reset: each clone is a separate device with its own app container and App Group, so nothing leaks
+between them — verified with all 54 green across 4 clones. An earlier note in this file claimed the
+opposite; it was wrong. Drop to `UI_PARALLEL=NO` only to make a failure easier to read, since
+parallel output interleaves and reports as `passed on 'Clone N of ...'` rather than `Test Case '-[...]'`.
+
+**Never parallelize the unit target.** `-parallel-testing-enabled` is per-invocation, not per-target,
+so the script runs the two targets as two invocations. Under a clone,
+`GlobalStateSuite/AnalyticsEnvironmentTests/isSimulatorOrTestFlightUnderTest` fails, because
+`isSimulatorOrTestFlight()` reads `Bundle.main.appStoreReceiptURL` and a clone's differs. The unit
+suite is ~5 seconds serially, so there is nothing to gain anyway.
+
+The destination is always an explicit `id=`: `name` + `OS=latest` is ambiguous with both iOS 26.0 and
+26.1 installed. Unit tests are Swift Testing, so they log `✔`/`✘` — a grep for `Test Case` silently
+matches none of them and makes a green unit run look like it never happened.
 
 ### Conventions
 - Use `DaysSince.Category` (fully qualified) to avoid ambiguity with the system `Category` type
@@ -257,6 +301,6 @@ The app handles 3 user states via `hasSeenOnboarding` and `iCloudMigrationComple
 | Reinstall (iCloud data exists) | false | true (set by startSync) | Onboarding (iCloud data already restored) |
 | Normal launch | true | true | MainScreen |
 
-**Reinstall flow**: On app deletion, UserDefaults is wiped but iCloud KVS persists. On reinstall, `startSync()` detects empty local items, restores from iCloud, and sets `iCloudMigrationComplete = true`. The user still goes through onboarding (`hasSeenOnboarding` was wiped). The onboarding CategoryPage currently overwrites `Defaults[.categories]` — this is a known issue that needs a decision on how to merge onboarding selections with iCloud-restored categories.
+**Reinstall flow**: On app deletion, UserDefaults is wiped but iCloud KVS persists. On reinstall, `startSync()` detects empty local items, restores from iCloud, and sets `iCloudMigrationComplete = true`. The user still goes through onboarding (`hasSeenOnboarding` was wiped). `CategoryPage.nextPage()` appends only the selections whose `stableID` is not already stored, so iCloud-restored categories survive — a selection matching a restored built-in is dropped rather than duplicated.
 
 **Legacy migration (`oldDSItem`)**: ContentView still declares `@AppStorage("items") var oldItems: [oldDSItem]` for migrating from the old item format (which used `CategoryDSIte` enum). This shares the same `"items"` key as current items, so it always fails to decode (logging a `typeMismatch` error) and evaluates to `[]`. The migration is guarded by `migratedFromOld` flag. This is dead code for any user who has already launched the current app version and can be removed in a future cleanup.

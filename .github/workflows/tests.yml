@@ -1,0 +1,62 @@
+name: Tests
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # The app target deploys to iOS 26.0, which needs Xcode 26 and a matching simulator runtime.
+  # Whether the hosted image carries either is not something we can assume, so this reports it
+  # rather than letting the test job fail with a confusing destination error.
+  probe:
+    runs-on: macos-latest
+    steps:
+      - run: xcodebuild -version
+      - run: xcrun simctl list runtimes
+      - run: ls /Applications | grep -i xcode
+
+  unit-tests:
+    runs-on: macos-latest
+    needs: probe
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cache SPM
+        uses: actions/cache@v4
+        with:
+          path: ~/Library/Developer/Xcode/DerivedData/**/SourcePackages
+          key: spm-${{ hashFiles('DaysSince.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved') }}
+
+      - name: Unit tests
+        run: Scripts/test.sh --unit-only
+
+      - name: Upload result bundle
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: xcresult
+          path: build/TestResults
+
+  # ~20 minutes of simulator time, so it is not on the PR path. Run it before a release.
+  ui-tests:
+    runs-on: macos-latest
+    needs: probe
+    if: github.event_name == 'workflow_dispatch'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: UI tests
+        run: Scripts/test.sh --ui-only
+
+      - name: Upload result bundle
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: xcresult-ui
+          path: build/TestResults
