@@ -24,6 +24,9 @@ jobs:
   unit-tests:
     runs-on: macos-latest
     needs: probe
+    # A hung simulator otherwise runs until the 6-hour default. The suite itself is seconds; the
+    # rest is a cold build.
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
 
@@ -48,6 +51,7 @@ jobs:
     runs-on: macos-latest
     needs: probe
     if: github.event_name == 'workflow_dispatch'
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
 

@@ -12,6 +12,14 @@ import Testing
 /// the session — writing even `false` makes the next `purchase()` throw `StoreKitError.unknown`,
 /// which reads as a legitimate purchase failure. A "failed purchase" test built on it passes
 /// vacuously while quietly breaking every other purchase in the process.
+/// `Scripts/test.sh` skips this whole suite when `$CI` is set. A hosted runner cannot host a
+/// StoreKit test environment: `SKTestSession` constructs, but every mutation then fails with
+/// `SKInternalErrorDomain Code=3` ("Error saving configuration file") and the `purchase()` that
+/// follows never returns — a job hung for 23 minutes before being cancelled rather than failing.
+/// The skip lives in the script rather than in a `.disabled(if:)` trait because the condition
+/// cannot be read from here: tests run in a separate process inside the simulator, which inherits
+/// neither the shell's environment nor `TEST_RUNNER_`-prefixed settings.
+/// Entitlement mirroring is covered without StoreKit by `SubscriptionEntitlementTests`.
 extension GlobalStateSuite {
 
     @Suite("Subscription StoreKit")

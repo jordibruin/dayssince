@@ -76,6 +76,17 @@ mkdir -p "$RESULT_DIR"
 run_target() {
     local target="$1" parallel="$2"
     local bundle="${RESULT_DIR}/${target}.xcresult"
+    local skips=()
+
+    # A hosted runner cannot host a StoreKit test environment: SKTestSession's mutations fail with
+    # SKInternalErrorDomain Code=3 and the purchase() that follows never returns, hanging the job
+    # instead of failing it. Skipped from here rather than with a `.disabled(if:)` trait because
+    # tests run in their own process inside the simulator and see neither this shell's environment
+    # nor TEST_RUNNER_-prefixed settings.
+    if [[ -n "${CI:-}" && "$target" == "DaysSinceTests" ]]; then
+        skips+=("-skip-testing:DaysSinceTests/GlobalStateSuite/SubscriptionStoreKitTests")
+        echo "CI: skipping the StoreKit suite (SKTestSession is unavailable on hosted runners)"
+    fi
 
     echo "Testing ${target} on ${DESTINATION_LABEL} (${SIMULATOR_ID}), parallel=${parallel}"
 
@@ -89,6 +100,7 @@ run_target() {
         -enableCodeCoverage YES \
         -resultBundlePath "$bundle" \
         "-only-testing:${target}" \
+        ${skips+"${skips[@]}"} \
         CODE_SIGNING_ALLOWED=NO
     local status=$?
     set -e
