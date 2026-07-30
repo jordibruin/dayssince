@@ -56,12 +56,20 @@ struct AnalyticsTypeTests {
         #expect(set.count == 2)
     }
 
-    // MARK: - isSimulatorOrTestFlight
+}
 
-    @Test("isSimulatorOrTestFlight() is true under test")
-    func isSimulatorOrTestFlightReturnsBoolean() {
-        // In test environment, this should return true (simulator)
-        let result = isSimulatorOrTestFlight()
-        #expect(result, "Tests run in simulator should return true")
+/// Global tier, despite looking pure: `isSimulatorOrTestFlight()` reads
+/// `Bundle.main.appStoreReceiptURL`, and an active `SKTestSession` swaps that receipt for a
+/// StoreKit-test one whose path matches neither marker. Run in parallel with
+/// `SubscriptionStoreKitTests` it fails roughly one run in three.
+extension GlobalStateSuite {
+
+    @Suite("Analytics environment")
+    struct AnalyticsEnvironmentTests {
+
+        @Test("the simulator is treated as a non-production environment")
+        func isSimulatorOrTestFlightUnderTest() {
+            #expect(isSimulatorOrTestFlight())
+        }
     }
 }

@@ -167,6 +167,7 @@
 		D4DE5C932DA2A43300C5EA63 /* TelemetryDeck in Frameworks */ = {isa = PBXBuildFile; productRef = D4DE5C922DA2A43300C5EA63 /* TelemetryDeck */; };
 		D4DE5C952DA2A5A600C5EA63 /* Analytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4DE5C942DA2A5A600C5EA63 /* Analytics.swift */; };
 		D4WL0001AAA0000000000001 /* WidgetLockedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4WL0001AAA0000000000002 /* WidgetLockedView.swift */; };
+		D5K1T000000000000000B003 /* DaysSince.storekit in Resources */ = {isa = PBXBuildFile; fileRef = D5K1T000000000000000B002 /* DaysSince.storekit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -358,6 +359,7 @@
 		D4D3FA9C2F6F4EC9008967AC /* LastPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LastPage.swift; sourceTree = "<group>"; };
 		D4DE5C942DA2A5A600C5EA63 /* Analytics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Analytics.swift; sourceTree = "<group>"; };
 		D4WL0001AAA0000000000002 /* WidgetLockedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetLockedView.swift; sourceTree = "<group>"; };
+		D5K1T000000000000000B002 /* DaysSince.storekit */ = {isa = PBXFileReference; lastKnownFileType = text.json.storekit; path = DaysSince.storekit; sourceTree = "<group>"; };
 		D5TE5T00000000000000A001 /* DaysSinceTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DaysSinceTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -426,6 +428,7 @@
 				C2B53DB22869F0CE00407F40 /* Widget */,
 				C2B53DCE2869F6F200407F40 /* WidgetIntents */,
 				D42422C2301AAC1F0082807F /* DaysSinceUITests */,
+				D5K1T000000000000000B001 /* Configuration */,
 				C2B53DAD2869F0CE00407F40 /* Frameworks */,
 				7A2A76F127F2446E006F0470 /* Products */,
 			);
@@ -908,6 +911,14 @@
 			path = Migration;
 			sourceTree = "<group>";
 		};
+		D5K1T000000000000000B001 /* Configuration */ = {
+			isa = PBXGroup;
+			children = (
+				D5K1T000000000000000B002 /* DaysSince.storekit */,
+			);
+			path = Configuration;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1135,6 +1146,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D5K1T000000000000000B003 /* DaysSince.storekit in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

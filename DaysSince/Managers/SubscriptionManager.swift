@@ -21,9 +21,21 @@ class SubscriptionManager: ObservableObject {
     @Published private(set) var activeTransaction: StoreKit.Transaction?
 
     private var transactionListener: Task<Void, Never>?
-    private let sharedDefaults = UserDefaults(suiteName: "group.goodsnooze.dayssince")
+    private let sharedDefaults: UserDefaults?
+    private let notifier: PurchaseNotifying
 
-    init() {
+    /// `autoStart: false` skips the `Transaction.updates` listener and the initial product
+    /// load. Tests must pass it, or every instance leaks a task that outlives the test.
+    init(
+        sharedDefaults: UserDefaults? = UserDefaults(suiteName: "group.goodsnooze.dayssince"),
+        notifier: PurchaseNotifying = NtfyNotifier(),
+        autoStart: Bool = true
+    ) {
+        self.sharedDefaults = sharedDefaults
+        self.notifier = notifier
+
+        guard autoStart else { return }
+
         transactionListener = listenForTransactions()
         Task {
             await loadProducts()
@@ -41,12 +53,17 @@ class SubscriptionManager: ObservableObject {
         do {
             let storeProducts = try await Product.products(for: Self.productIDs)
             await MainActor.run {
-                self.products = storeProducts.sorted { $0.price < $1.price }
+                self.products = Self.sorted(storeProducts)
             }
             await checkIntroEligibility()
         } catch {
             print("[SubscriptionManager] Failed to load products: \(error)")
         }
+    }
+
+    /// Cheapest first, which is the order the paywall's pricing cards expect.
+    static func sorted(_ products: [Product]) -> [Product] {
+        products.sorted { $0.price < $1.price }
     }
 
     private func checkIntroEligibility() async {
@@ -101,11 +118,16 @@ class SubscriptionManager: ObservableObject {
             }
         }
 
-        await MainActor.run {
-            self.isSubscribed = hasActiveEntitlement
-            self.activeTransaction = latest
-            self.sharedDefaults?.set(hasActiveEntitlement, forKey: "dayssince_subscribed")
-        }
+        await applyEntitlement(hasActive: hasActiveEntitlement, latest: latest)
+    }
+
+    /// Mirrors entitlement into the App Group under the key the widgets read
+    /// (`Widget/SingleEventWidgetView.swift`), so a widget can gate on Pro without StoreKit.
+    @MainActor
+    func applyEntitlement(hasActive: Bool, latest: StoreKit.Transaction? = nil) {
+        isSubscribed = hasActive
+        activeTransaction = latest
+        sharedDefaults?.set(hasActive, forKey: "dayssince_subscribed")
     }
 
     // MARK: - Transaction Listener
@@ -140,30 +162,14 @@ class SubscriptionManager: ObservableObject {
 
     // MARK: - Ntfy Notifications
 
-    private static let ntfyTopic = "https://ntfy.sh/dayssince-kahwn82"
-
     func sendPurchaseNotification(for product: Product) {
-        sendNtfy(
+        notifier.send(
             title: "New Subscription",
             body: "\(product.displayName) — \(product.displayPrice)"
         )
     }
 
     static func sendNewUserNotification() {
-        sendNtfy(title: "New User", body: "Someone just opened Days Since for the first time")
-    }
-
-    private func sendNtfy(title: String, body: String) {
-        Self.sendNtfy(title: title, body: body)
-    }
-
-    private static func sendNtfy(title: String, body: String) {
-        guard let url = URL(string: ntfyTopic) else { return }
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.httpBody = body.data(using: .utf8)
-        request.setValue(title, forHTTPHeaderField: "Title")
-        request.setValue("DaysSince", forHTTPHeaderField: "Tags")
-        URLSession.shared.dataTask(with: request).resume()
+        NtfyNotifier().send(title: "New User", body: "Someone just opened Days Since for the first time")
     }
 }

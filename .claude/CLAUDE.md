@@ -221,8 +221,15 @@ Swift Testing runs tests **in parallel by default**, and this app keeps a lot of
 - `Fixtures` — `Fixtures.item(...)`, `Fixtures.category(...)`, fixed reference dates, `gmtCalendar`. Never build fixtures from `Date.now`: `DSItem.daysAgo` uses `Calendar.current` internally, so dates near midnight make assertions flaky.
 - `Mocks/MockKeyValueStore` — in-memory `KeyValueStoreProtocol`. Support types must **not** be declared `private` in a test file; a file-private type still occupies module scope and collides with the shared one.
 - `Mocks/SpyAnalytics` + `withAnalyticsSpy { spy in ... }` — swaps `Analytics.sink` for the duration of the closure and restores it afterwards. Production code keeps calling `Analytics.send(...)`, so no call site changes.
-- `Mocks/MockCategoryStore`, `Mocks/SpyWidgetReloader` (+ `StubUbiquityChecker`), `Mocks/MockNotificationScheduler` — doubles for the manager DI seams. `MockNotificationScheduler` fires every completion **synchronously**, so assert on the mock rather than on `NotificationManager.pendingNotifications`, which is published via `DispatchQueue.main.async`.
+- `Mocks/MockCategoryStore`, `Mocks/SpyWidgetReloader` (+ `StubUbiquityChecker`), `Mocks/MockNotificationScheduler`, `Mocks/SpyPurchaseNotifier` — doubles for the manager DI seams. `MockNotificationScheduler` fires every completion **synchronously**, so assert on the mock rather than on `NotificationManager.pendingNotifications`, which is published via `DispatchQueue.main.async`. `SpyPurchaseNotifier` keeps tests from POSTing to the live ntfy topic.
 - `LegacyPayloads` — builds legacy JSON by encoding a real model and *removing* keys, so fixtures stay honest as the models change. Don't hand-write stored-shape JSON.
+
+### StoreKit tests
+- Products come from `Configuration/DaysSince.storekit` (weekly $2.99 with a 1-week free trial, monthly $4.99, annual $19.99, one subscription group). It is a **resource of `DaysSinceTests`**, which is what lets `SKTestSession(configurationFileNamed: "DaysSince")` find it. The `DaysSince` scheme's Run action points at it too, so the paywall works when running the app locally.
+- Always construct `SubscriptionManager` with `autoStart: false` in tests, or each instance leaks a `Transaction.updates` task that outlives the test.
+- `SKTestSession` mutations reach `Transaction.currentEntitlements` **asynchronously**. Drain entitlements (poll until empty) before asserting, or the suite passes on one run and fails the next.
+- **Never assign `session.failTransactionsEnabled`.** The setter wedges the session: writing even `false` makes the next `purchase()` throw `StoreKitError.unknown`, so a test built on it passes for the wrong reason while breaking every other purchase in the process. `askToBuyEnabled` is safe to assign.
+- `expireSubscription(productIdentifier:)` and `refundTransaction(identifier:)` are silent no-ops here (the transaction keeps a future expiry and a nil revocation date). Simulate losing access with `clearTransactions()`, which is the same thing our code sees: an empty `currentEntitlements`.
 
 ### Conventions
 - Use `DaysSince.Category` (fully qualified) to avoid ambiguity with the system `Category` type
