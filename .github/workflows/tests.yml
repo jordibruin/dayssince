@@ -28,10 +28,10 @@ jobs:
     # rest is a cold build.
     timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Cache SPM
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: ~/Library/Developer/Xcode/DerivedData/**/SourcePackages
           key: spm-${{ hashFiles('DaysSince.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved') }}
@@ -41,7 +41,7 @@ jobs:
 
       - name: Upload result bundle
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: xcresult
           path: build/TestResults
@@ -53,14 +53,14 @@ jobs:
     if: github.event_name == 'workflow_dispatch'
     timeout-minutes: 45
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: UI tests
         run: Scripts/test.sh --ui-only
 
       - name: Upload result bundle
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: xcresult-ui
           path: build/TestResults
