@@ -48,7 +48,9 @@ jobs:
   # A new test *class* must be added to a shard below or it silently stops running here.
   ui-tests:
     runs-on: macos-latest
-    timeout-minutes: 60
+    # Per shard, not for the matrix. The slowest observed shard is ~16 minutes including a cold
+    # build, so this is headroom for a hang rather than for a slow run.
+    timeout-minutes: 25
     strategy:
       # One shard failing should not cancel the rest — a partial report is what makes a UI failure
       # diagnosable, and the shards are independent.
