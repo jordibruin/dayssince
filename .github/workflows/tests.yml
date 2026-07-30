@@ -39,19 +39,19 @@ jobs:
           name: xcresult
           path: build/TestResults
 
-  # Not on the PR path: it is all app launches and UI settling, so run it before a release.
-  #
   # Sharded across runners rather than across simulator clones on one runner. Four clones on a
   # hosted runner spent 15 minutes creating devices and then managed 7 launches in 19 minutes,
   # blowing a 45-minute timeout with ~54 launches still to go — a laptop has the cores for that
   # and a runner does not. Each shard therefore runs serially against a single simulator, and the
   # 9 test classes are split into 4 roughly equal groups (13/14/12/15 of the 54 tests).
+  #
+  # A new test *class* must be added to a shard below or it silently stops running here.
   ui-tests:
     runs-on: macos-latest
-    if: github.event_name == 'workflow_dispatch'
     timeout-minutes: 60
     strategy:
-      # One shard failing should not cancel the rest; the point of a dispatch run is a full report.
+      # One shard failing should not cancel the rest — a partial report is what makes a UI failure
+      # diagnosable, and the shards are independent.
       fail-fast: false
       matrix:
         include:

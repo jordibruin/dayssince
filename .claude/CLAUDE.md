@@ -213,8 +213,9 @@ Tracked events: `launchApp`, `addNewEvent`, `editEvent`, `updateCategory`, `addN
 - `Scripts/test.sh --unit-only` — 299 unit tests in ~5 seconds. This is the default while iterating.
 - `Scripts/test.sh --ui-only` / `Scripts/test.sh` — the UI suites cost ~20 minutes serially, which is
   all app launches and UI settling, not test logic. Don't run them on every edit: run the one suite
-  covering what you touched (`-only-testing:DaysSinceUITests/ThemeTests`), and the full set before a
-  release. CI runs the unit target on every PR and the UI target only on `workflow_dispatch`.
+  covering what you touched (`UI_SUITES=ThemeTests Scripts/test.sh --ui-only`) and leave the full set
+  to CI, which runs **both** targets on every PR — the unit target reports in ~4 minutes and the four
+  UI shards in ~17. `probe` is the only `workflow_dispatch`-only job.
 - The script resolves the simulator udid itself; override with `DEVICE_NAME` / `OS_VERSION` / `SIMULATOR_ID`.
 - Or Cmd+U in Xcode with the DaysSince scheme
 
@@ -272,9 +273,9 @@ parallel output interleaves and reports as `passed on 'Clone N of ...'` rather t
 **Never use clone parallelism on a hosted runner.** `WORKER_COUNT=4` on `macos-latest` spent 15
 minutes just creating the four devices, then managed 7 app launches in 19 minutes, and blew a
 45-minute timeout with most of the 54 launches still pending — a laptop has the cores for four
-simulators and a runner does not. CI **shards across runners** instead: `ui-tests` is a 4-way matrix,
-each shard `UI_PARALLEL=NO` with `UI_SUITES` naming its classes, so every machine boots one
-simulator. `UI_SUITES` is a space-separated list of XCUITest class names and works locally too
+simulators and a runner does not. CI **shards across runners** instead: `ui-tests` is a 4-way matrix
+running on every PR, each shard `UI_PARALLEL=NO` with `UI_SUITES` naming its classes, so every
+machine boots one simulator (~17 min wall clock for all 54). `UI_SUITES` is a space-separated list of XCUITest class names and works locally too
 (`UI_SUITES="ThemeTests SortingTests" Scripts/test.sh --ui-only`). **When adding a UI test class, add
 it to one of the four shards in `.github/workflows/tests.yml`** or it silently stops running in CI.
 
