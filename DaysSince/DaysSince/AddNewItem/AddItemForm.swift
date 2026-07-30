@@ -63,6 +63,7 @@ struct AddItemForm: View {
             TextField("Name your event", text: $name)
                 .focused($nameIsFocused)
                 .submitLabel(.done)
+                .accessibilityIdentifier("addItem.name")
         } header: {
             Text("Event Info")
         }
@@ -82,14 +83,18 @@ struct AddItemForm: View {
         Section {
             Toggle("Reminders", isOn: $remindersEnabled.animation())
                 .tint(accentColor)
+                .accessibilityIdentifier("addItem.remindersToggle")
             // Select type of reminder
             if remindersEnabled {
                 Picker("Remind me", selection: $selectedReminder) {
+                    // Segments are addressed by their label text; an identifier on the Text
+                    // inside a segmented Picker is not surfaced to XCUITest.
                     ForEach(DSItemReminders.allCases.filter { $0 != .none }, id: \.self) {
                         Text($0.name)
                     }
                 }
                 .pickerStyle(SegmentedPickerStyle())
+                .accessibilityIdentifier("addItem.reminderPicker")
             }
         } header: {
             Text("Reminders")

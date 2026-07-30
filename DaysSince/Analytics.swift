@@ -22,9 +22,17 @@ struct TelemetryDeckSink: AnalyticsSending {
     }
 }
 
+/// Drops every signal. Needed because `TelemetryDeck.signal` fatal-errors when the SDK was never
+/// initialized, so skipping `TelemetryDeck.initialize` is not on its own enough to go offline.
+struct NoOpAnalyticsSink: AnalyticsSending {
+    func send(_: AnalyticType, with _: [String: String]?) {}
+}
+
 struct Analytics {
 
-    static var sink: AnalyticsSending = TelemetryDeckSink()
+    static var sink: AnalyticsSending = TestHooks.networkDisabled
+        ? NoOpAnalyticsSink()
+        : TelemetryDeckSink()
 
     static func send(_ option: AnalyticType, with additionalParameters: [String: String]? = nil) {
         sink.send(option, with: additionalParameters)

@@ -71,7 +71,8 @@ struct iCloudMigrationView: View {
                     CustomButton(
                         action: { iCloudMigrationComplete = true },
                         label: "Continue",
-                        color: mainColor
+                        color: mainColor,
+                        identifier: "migration.continue"
                     )
                     .transition(.opacity)
                 }

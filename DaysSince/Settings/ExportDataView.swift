@@ -66,6 +66,7 @@ struct ExportDataView: View {
                             }
                         }
                         .foregroundColor(.primary)
+                        .accessibilityIdentifier("export.\(format.fileExtension)")
                     }
                 } header: {
                     Text("Choose a format")
@@ -73,6 +74,7 @@ struct ExportDataView: View {
                 } footer: {
                     Text("\(dataSyncManager.items.count) events in \(dataSyncManager.categories.count) categories")
                         .font(.system(.caption, design: .rounded))
+                        .accessibilityIdentifier("export.counts")
                 }
             }
             .navigationTitle("Export Data")
@@ -87,6 +89,7 @@ struct ExportDataView: View {
                             .foregroundColor(mainColor.opacity(0.8))
                             .accessibilityLabel("Dismiss")
                     }
+                    .accessibilityIdentifier("export.close")
                 }
             }
             .sheet(isPresented: $showShareSheet) {

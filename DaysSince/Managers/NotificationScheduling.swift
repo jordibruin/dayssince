@@ -58,10 +58,21 @@ struct UserNotificationCenterScheduler: NotificationScheduling {
     }
 
     func authorizationStatus(completion: @escaping (NotificationAuthorization) -> Void) {
+        // Reporting `.authorized` is what keeps the system permission alert — which lives
+        // outside the app and would block every UI test that touches a reminder — from ever
+        // being requested. Adds still go to the real center and simply aren't delivered.
+        if TestHooks.notificationPromptSuppressed {
+            completion(.authorized)
+            return
+        }
         center.getNotificationSettings { completion(NotificationAuthorization($0.authorizationStatus)) }
     }
 
     func requestAuthorization(completion: @escaping (Bool) -> Void) {
+        guard !TestHooks.notificationPromptSuppressed else {
+            completion(true)
+            return
+        }
         center.requestAuthorization(options: [.alert, .badge, .sound]) { granted, _ in completion(granted) }
     }
 }

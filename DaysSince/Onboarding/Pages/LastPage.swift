@@ -53,7 +53,7 @@ struct LastPage: View {
                 
                 Spacer()
                 
-                CustomButton(action: nextPage, label: "Let's go!", color: .animalCrossingsGreen)
+                CustomButton(action: nextPage, label: "Let's go!", color: .animalCrossingsGreen, identifier: "onboarding.letsGo")
             }
             .padding()
         }

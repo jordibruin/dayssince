@@ -57,6 +57,7 @@ struct TopSection: View {
                         .onDrop(of: [.text],
                                 delegate: DropViewDelegate(destinationCategory: category, categoryManager: categoryManager, draggedCategory: $draggedCategory))
                     }
+                    .accessibilityIdentifier("category.pill.\(category.name)")
                     .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: 20))
                     .contextMenu {
                         Button {
@@ -69,6 +70,7 @@ struct TopSection: View {
                         } label: {
                             Label("Edit Category", systemImage: "rectangle.and.pencil.and.ellipsis")
                         }
+                        .accessibilityIdentifier("category.menu.edit")
 
                         Button {
                             if subscriptionManager.isSubscribed {
@@ -84,6 +86,7 @@ struct TopSection: View {
                         } label: {
                             Label("Delete Category", systemImage: "trash")
                         }
+                        .accessibilityIdentifier("category.menu.delete")
                     }
                 }
             }

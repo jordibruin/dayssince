@@ -14,7 +14,7 @@ struct NtfyNotifier: PurchaseNotifying {
     static let topic = "https://ntfy.sh/dayssince-kahwn82"
 
     func send(title: String, body: String) {
-        guard let url = URL(string: Self.topic) else { return }
+        guard !TestHooks.networkDisabled, let url = URL(string: Self.topic) else { return }
 
         var request = URLRequest(url: url)
         request.httpMethod = "POST"

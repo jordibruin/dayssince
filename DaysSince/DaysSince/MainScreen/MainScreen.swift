@@ -145,6 +145,7 @@ struct MainScreen: View {
                         .accessibilityLabel("Settings")
                         .font(.title2)
                 }
+                .accessibilityIdentifier("main.settings")
             }
 
             ToolbarItem(placement: .navigationBarLeading) {
@@ -165,6 +166,7 @@ struct MainScreen: View {
                         .accessibilityLabel("Change theme")
                         .font(.title2)
                 }
+                .accessibilityIdentifier("main.theme")
             }
         }
     }
@@ -182,6 +184,7 @@ struct MainScreen: View {
             } label: {
                 Label("New Category", systemImage: "folder.badge.plus")
             }
+            .accessibilityIdentifier("main.newCategory")
 
 //            Spacer()
 
@@ -194,6 +197,7 @@ struct MainScreen: View {
             } label: {
                 Label("New Event", systemImage: "plus")
             }
+            .accessibilityIdentifier("main.newEvent")
 
             Spacer()
         }

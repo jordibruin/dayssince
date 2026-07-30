@@ -31,8 +31,10 @@ struct ContentView: View {
     @State private var justFinishedOnboarding = false
 
     init() {
-        WishKit.configure(with: "6443C4AA-4663-4A27-89E5-846598908A4E")
-        WishKit.config.statusBadge = .show
+        if !TestHooks.networkDisabled {
+            WishKit.configure(with: "6443C4AA-4663-4A27-89E5-846598908A4E")
+            WishKit.config.statusBadge = .show
+        }
     }
 
     /// Binding that reads/writes items through DataSyncManager.
@@ -87,7 +89,8 @@ struct ContentView: View {
                         }
                     }
 
-                    if AppRoute.shouldShowPaywall(hasSeenPaywall: hasSeenPaywall) {
+                    if !TestHooks.introPaywallSuppressed,
+                       AppRoute.shouldShowPaywall(hasSeenPaywall: hasSeenPaywall) {
                         showPaywallSheet = true
                         hasSeenPaywall = true
                     }

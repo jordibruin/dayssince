@@ -76,6 +76,7 @@ struct AddCategorySheet: View {
                         .background(isCategoryCreationValid ? accentColor.opacity(0.16).cornerRadius(20) : Color.gray.opacity(0.16).cornerRadius(20))
                 }
                 .disabled(selectedName.isEmpty)
+                .accessibilityIdentifier("addCategory.add")
             }
         }
         .padding(.vertical, 12)
@@ -94,6 +95,7 @@ struct AddCategorySheet: View {
                 .padding(16)
                 .background(Color.secondary.opacity(0.1))
                 .cornerRadius(20)
+                .accessibilityIdentifier("addCategory.name")
         }
         .padding(.bottom, 8)
     }
@@ -126,6 +128,7 @@ struct AddCategorySheet: View {
                                 .background(accentColor.opacity(0.16).opacity(selectedEmoji == emoji ? 1 : 0))
                                 .cornerRadius(20)
                         }
+                        .accessibilityIdentifier("addCategory.emoji.\(emoji)")
                     }
                 }
                 .padding(.vertical, 6)
@@ -143,6 +146,7 @@ struct AddCategorySheet: View {
                         .foregroundColor(.primary)
                         .bold()
                 }
+                .accessibilityIdentifier("addCategory.more")
                 .padding()
                 .background(Color.primary.opacity(0.1))
                 .cornerRadius(16)
@@ -172,6 +176,7 @@ struct AddCategorySheet: View {
                             .bold()
                             .foregroundColor(color.color)
                     }
+                    .accessibilityIdentifier("addCategory.color.\(color.id)")
                 }
             }
             .padding(12)

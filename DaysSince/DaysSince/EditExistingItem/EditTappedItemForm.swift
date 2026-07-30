@@ -79,6 +79,7 @@ struct EditTappedItemForm: View {
                 UIApplication.shared.endEditing()
             }
             .focused($nameIsFocused)
+            .accessibilityIdentifier("editItem.name")
         } header: {
             Text("Name")
         }
@@ -88,6 +89,7 @@ struct EditTappedItemForm: View {
         Section {
             Toggle("Reminders", isOn: $tappedItem.remindersEnabled.animation())
                 .tint(accentColor)
+                .accessibilityIdentifier("editItem.remindersToggle")
 //                .onChange(of: tappedItem.remindersEnabled) { remindersEnabled in
 //
 //                    if remindersEnabled {
@@ -112,6 +114,7 @@ struct EditTappedItemForm: View {
                     }
                 }
                 .pickerStyle(SegmentedPickerStyle())
+                .accessibilityIdentifier("editItem.reminderPicker")
             }
 
 //            if notificationManager.notificationPermissionGiven {

@@ -30,7 +30,7 @@ struct CategoryPage: View {
             Spacer()
             footer
         }
-        CustomButton(action: nextPage, label: "Continue", color: .animalCrossingsGreen)
+        CustomButton(action: nextPage, label: "Continue", color: .animalCrossingsGreen, identifier: "onboarding.categories.continue")
             .opacity(selectedCategories.isEmpty ? 0.4 : 1.0)
             .disabled(selectedCategories.isEmpty)
     }
@@ -135,5 +135,10 @@ struct CategorySelectionView: View {
             }
             .aspectRatio(1.0, contentMode: .fit)
             .onTapGesture(perform: onTap)
+            // Combined so the block is one tappable element: without this the ZStack has no
+            // element of its own and only the labels inside it are addressable.
+            .accessibilityElement(children: .combine)
+            .accessibilityAddTraits(.isButton)
+            .accessibilityIdentifier("onboarding.category.\(category.name)")
     }
 }

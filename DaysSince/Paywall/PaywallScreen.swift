@@ -81,6 +81,7 @@ struct PaywallScreen: View {
                 .font(.system(.largeTitle, design: .rounded))
                 .bold()
                 .foregroundColor(mainColor)
+                .accessibilityIdentifier("paywall.title")
 
             Text("Get the most out of your tracking experience.")
                 .font(.system(.subheadline, design: .rounded))
@@ -210,6 +211,7 @@ struct PaywallScreen: View {
                 .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
             }
             .disabled(selectedProductID == nil || isPurchasing)
+            .accessibilityIdentifier("paywall.continue")
             .padding(.horizontal, 12)
 
             Button {
@@ -224,6 +226,7 @@ struct PaywallScreen: View {
                     .font(.system(.subheadline, design: .rounded))
                     .foregroundColor(.secondary)
             }
+            .accessibilityIdentifier("paywall.restore")
 
             Text("Auto-renews unless cancelled. Cancel anytime in Settings.")
                 .font(.system(.caption2, design: .rounded))
@@ -253,7 +256,9 @@ struct PaywallScreen: View {
                     Image(systemName: "xmark.circle.fill")
                         .font(.title2)
                         .foregroundColor(.secondary)
+                        .accessibilityLabel("Dismiss")
                 }
+                .accessibilityIdentifier("paywall.close")
                 .padding(.trailing, 20)
                 .padding(.top, 16)
             }
@@ -351,6 +356,9 @@ private struct PricingCard: View {
                     lineWidth: isSelected ? 2 : 0
                 )
         )
+        .accessibilityElement(children: .combine)
+        .accessibilityIdentifier("paywall.product.\(product.id)")
+        .accessibilityValue(isSelected ? "selected" : "unselected")
     }
 }
 

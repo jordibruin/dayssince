@@ -121,6 +121,7 @@ struct CategoryFilteredView: View {
                         .accessibilityLabel("Delete Category")
                         .font(.title3)
                 }
+                .accessibilityIdentifier("categoryFilter.delete")
             }
 
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -137,6 +138,7 @@ struct CategoryFilteredView: View {
                         .accessibilityLabel("Edit Category")
                         .font(.title3)
                 }
+                .accessibilityIdentifier("categoryFilter.edit")
             }
         }
     }
@@ -185,6 +187,8 @@ struct CategoryFilteredView: View {
                 .clipShape(Capsule())
                 .shadow(color: items.filter { $0.category.color.color == category.color.color }.count < 5 ? category.color.color : .white, radius: 10, x: 0, y: 5)
             }
+            .accessibilityLabel("Add Event")
+            .accessibilityIdentifier("categoryFilter.addEvent")
         }
     }
 }

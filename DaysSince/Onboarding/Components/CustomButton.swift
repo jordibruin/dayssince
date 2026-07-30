@@ -11,7 +11,8 @@ struct CustomButton: View {
     var action: () -> Void
     var label: String
     var color: Color = Color.workColor
-    
+    var identifier: String? = nil
+
     var body: some View {
         Button(action: action) {
             HStack {
@@ -28,6 +29,7 @@ struct CustomButton: View {
         .background(color)
         .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
         .padding(.horizontal, 32)
+        .accessibilityIdentifier(identifier ?? "")
     }
 }
 

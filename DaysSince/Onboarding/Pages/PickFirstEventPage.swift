@@ -78,7 +78,7 @@ struct PickFirstEventPage: View {
             Spacer()
         }
         
-        CustomButton(action: nextPage, label: "Continue", color: .animalCrossingsGreen)
+        CustomButton(action: nextPage, label: "Continue", color: .animalCrossingsGreen, identifier: "onboarding.pickEvent.continue")
             .opacity(selectedEvent == nil ? 0.4 : 1.0)
             .disabled(selectedEvent == nil)
     }
@@ -164,6 +164,9 @@ struct EventSelectionView: View {
             }
             .aspectRatio(1.0, contentMode: .fit)
             .onTapGesture(perform: onTap)
+            .accessibilityElement(children: .combine)
+            .accessibilityAddTraits(.isButton)
+            .accessibilityIdentifier("onboarding.event.\(model.name)")
     }
 }
 

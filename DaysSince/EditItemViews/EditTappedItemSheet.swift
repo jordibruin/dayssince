@@ -62,6 +62,7 @@ struct EditTappedItemSheet: View {
                 }
                 .font(.title2)
                 .foregroundColor(tappedItem.category.color.foregroundColor(for: colorScheme))
+                .accessibilityIdentifier("editItem.close")
             }
 
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -101,6 +102,7 @@ struct EditTappedItemSheet: View {
                 }
                 .foregroundColor(tappedItem.name.isEmpty ? Color.gray : tappedItem.category.color.foregroundColor(for: colorScheme))
                 .disabled(tappedItem.name.isEmpty)
+                .accessibilityIdentifier("editItem.save")
             }
 
             // Add a button to close the keyboard

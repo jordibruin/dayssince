@@ -67,6 +67,7 @@ struct AddItemSheet: View {
                 }
                 .font(.title3)
                 .foregroundColor(accentColor)
+                .accessibilityIdentifier("addItem.close")
             }
 
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -96,6 +97,7 @@ struct AddItemSheet: View {
                 }
                 .foregroundColor(accentColor)
                 .disabled(name.isEmpty)
+                .accessibilityIdentifier("addItem.save")
             }
 
             ToolbarItem(placement: .navigationBarTrailing) {
