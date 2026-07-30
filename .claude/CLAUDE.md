@@ -14,7 +14,10 @@ DaysSince/                  # Main app target
 ├── ContentView.swift       # Routes onboarding vs iCloud migration vs main app, WishKit config, legacy migration
 ├── Analytics.swift         # Analytics wrapper (AnalyticType enum + send method)
 ├── Model/                  # DSItem, Category, CategoryColor
-├── Managers/               # DataSyncManager, CategoryManager, NotificationManager, ReviewManager
+├── Managers/               # Managers + their extracted pure logic (AppRoute, ExportFormatter,
+│                           # ReminderRequestBuilder) and DI protocols (CategoryStore,
+│                           # NotificationScheduling, PurchaseNotifying). New non-view code
+│                           # belongs here: it is a synchronized group, so no pbxproj edit.
 ├── Migration/              # iCloudMigrationView (shown to existing users on first iCloud-enabled launch)
 ├── Extensions/             # Calendar, Color, Date, Defaults, Array, Binding, UIApplication
 ├── Settings/               # SettingsScreen, ThemeView, ColorThemeView, AppIcons
@@ -103,7 +106,7 @@ WidgetIntents/              # Widget intent configuration
 - **DataSyncManager**: Central data coordinator — owns items/categories, syncs to iCloud KVS and App Group UserDefaults. Injected as `@EnvironmentObject`.
 - **CategoryManager**: Category CRUD, drag-and-drop reordering, fires analytics on add/update. Has `weak var dataSyncManager` reference for triggering iCloud sync.
 - **NotificationManager**: Schedules daily/weekly/monthly reminders at 10:00 AM. Receives items externally via `refreshNotifications(items:)`.
-- **ReviewManager**: Prompts StoreKit review once per app version
+- **ReviewManager**: Prompts StoreKit review once per app version. `presentReview` returns whether the sheet was actually shown — StoreKit declines silently without a foreground-active window scene, and `.reviewPrompt` analytics must not claim a prompt that never happened. Note the stored version advances even on a decline, which spends that version's single chance (pinned by `ReviewManagerTests`, not a fix).
 
 ## Analytics
 
@@ -245,7 +248,7 @@ Swift Testing runs tests **in parallel by default**, and this app keeps a lot of
 
 ## User Scenarios & Migration States
 
-The app handles 3 user states via `hasSeenOnboarding` and `iCloudMigrationComplete` (both `@AppStorage`):
+The app handles 3 user states via `hasSeenOnboarding` and `iCloudMigrationComplete` (both `@AppStorage`). The decision itself lives in `AppRoute.route(hasSeenOnboarding:iCloudMigrationComplete:)` (`Managers/AppRoute.swift`), which `ContentView.body` switches over — **change the table here and `RoutingTests` together, they pin each other.**
 
 | State | hasSeenOnboarding | iCloudMigrationComplete | Result |
 |-------|-------------------|-------------------------|--------|
