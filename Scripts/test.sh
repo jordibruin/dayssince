@@ -13,7 +13,9 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 
 DEVICE_NAME="${DEVICE_NAME:-iPhone 17 Pro}"
-OS_VERSION="${OS_VERSION:-26.1}"
+# Deliberately unpinned: CI runners carry whatever runtimes their Xcode ships (26.2/26.4/26.5 at
+# time of writing), so a hardcoded version fails there. Unset means "newest installed".
+OS_VERSION="${OS_VERSION:-}"
 
 # Parallel testing clones the simulator, taking the UI suite from ~19 to ~8 minutes. Clones are
 # separate devices with their own app containers, so the launch-time state reset stays isolated.
@@ -30,25 +32,41 @@ case "${1:-}" in
     *) echo "unknown option: $1" >&2; exit 64 ;;
 esac
 
-# The destination is always an explicit udid: `name` plus `OS=latest` is ambiguous with both
-# iOS 26.0 and 26.1 installed, and resolves to whichever xcodebuild feels like.
+DEVICE_LIST=$(xcrun simctl list devices available)
+
+# The destination is always an explicit udid: `name` plus `OS=latest` is ambiguous whenever two iOS
+# runtimes are installed, and resolves to whichever xcodebuild feels like.
+# Every lookup ends in `|| true`, because a non-matching grep under `set -o pipefail` would abort
+# the script and swallow the diagnostic below.
+udid_for_os() {
+    printf '%s\n' "$DEVICE_LIST" \
+        | sed -n "/^-- iOS $1 --/,/^-- /p" \
+        | grep -m1 "^ *${DEVICE_NAME} (" \
+        | grep -oE "[0-9A-Fa-f-]{36}" \
+        | head -1 || true
+}
+
 if [[ -n "${SIMULATOR_ID:-}" ]]; then
     DESTINATION_LABEL="$SIMULATOR_ID"
-else
+elif [[ -n "$OS_VERSION" ]]; then
+    SIMULATOR_ID=$(udid_for_os "$OS_VERSION")
     DESTINATION_LABEL="${DEVICE_NAME} / iOS ${OS_VERSION}"
-    SIMULATOR_ID=$(
-        xcrun simctl list devices available \
-            | sed -n "/^-- iOS ${OS_VERSION} --/,/^-- iOS /p" \
-            | grep -m1 "^ *${DEVICE_NAME} (" \
-            | grep -oE "[0-9A-Fa-f-]{36}" \
-            | head -1
-    )
+else
+    INSTALLED=$(printf '%s\n' "$DEVICE_LIST" | sed -n 's/^-- iOS \(.*\) --$/\1/p' | sort -t. -k1,1nr -k2,2nr)
+    for candidate in $INSTALLED; do
+        SIMULATOR_ID=$(udid_for_os "$candidate")
+        if [[ -n "$SIMULATOR_ID" ]]; then
+            OS_VERSION="$candidate"
+            break
+        fi
+    done
+    DESTINATION_LABEL="${DEVICE_NAME} / iOS ${OS_VERSION:-none}"
 fi
 
-if [[ -z "$SIMULATOR_ID" ]]; then
-    echo "No available simulator matching '${DEVICE_NAME}' on iOS ${OS_VERSION}." >&2
-    echo "Installed:" >&2
-    xcrun simctl list devices available >&2
+if [[ -z "${SIMULATOR_ID:-}" ]]; then
+    echo "No available simulator named '${DEVICE_NAME}'${OS_VERSION:+ on iOS $OS_VERSION}." >&2
+    echo "Available:" >&2
+    printf '%s\n' "$DEVICE_LIST" >&2
     exit 1
 fi
 
