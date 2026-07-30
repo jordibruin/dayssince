@@ -262,12 +262,21 @@ XCTest + page objects ("robots") under `Robots/`, shared harness in `Support/`. 
 - `NavigationStack` keeps earlier pages in the hierarchy, so onboarding needs per-screen identifiers rather than one shared "Continue".
 - The graphical `DatePicker` has no addressable field — set dates through the event context menu's Today/Yesterday or through seeded data.
 
-**Running** — use `Scripts/test.sh --ui-only`. It runs **4 parallel simulator clones** (~8 min for all
-54 tests, vs ~19 serial). Parallel testing is safe for the UI target despite the launch-time state
-reset: each clone is a separate device with its own app container and App Group, so nothing leaks
-between them — verified with all 54 green across 4 clones. An earlier note in this file claimed the
-opposite; it was wrong. Drop to `UI_PARALLEL=NO` only to make a failure easier to read, since
+**Running** — use `Scripts/test.sh --ui-only`. Locally it runs **4 parallel simulator clones** (~8 min
+for all 54 tests, vs ~19 serial). Parallel testing is safe for the UI target despite the launch-time
+state reset: each clone is a separate device with its own app container and App Group, so nothing
+leaks between them — verified with all 54 green across 4 clones. An earlier note in this file claimed
+the opposite; it was wrong. Drop to `UI_PARALLEL=NO` only to make a failure easier to read, since
 parallel output interleaves and reports as `passed on 'Clone N of ...'` rather than `Test Case '-[...]'`.
+
+**Never use clone parallelism on a hosted runner.** `WORKER_COUNT=4` on `macos-latest` spent 15
+minutes just creating the four devices, then managed 7 app launches in 19 minutes, and blew a
+45-minute timeout with most of the 54 launches still pending — a laptop has the cores for four
+simulators and a runner does not. CI **shards across runners** instead: `ui-tests` is a 4-way matrix,
+each shard `UI_PARALLEL=NO` with `UI_SUITES` naming its classes, so every machine boots one
+simulator. `UI_SUITES` is a space-separated list of XCUITest class names and works locally too
+(`UI_SUITES="ThemeTests SortingTests" Scripts/test.sh --ui-only`). **When adding a UI test class, add
+it to one of the four shards in `.github/workflows/tests.yml`** or it silently stops running in CI.
 
 **Never parallelize the unit target.** `-parallel-testing-enabled` is per-invocation, not per-target,
 so the script runs the two targets as two invocations. Under a clone,

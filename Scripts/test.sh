@@ -6,7 +6,9 @@
 #   Scripts/test.sh --unit-only     299 unit tests, ~5 seconds
 #   Scripts/test.sh --ui-only       54 UI tests, ~8 minutes across 4 simulator clones
 #
-# Overrides: DEVICE_NAME, OS_VERSION, SIMULATOR_ID, WORKER_COUNT, UI_PARALLEL.
+# Overrides: DEVICE_NAME, OS_VERSION, SIMULATOR_ID, WORKER_COUNT, UI_PARALLEL, UI_SUITES.
+#
+#   UI_SUITES="ThemeTests SortingTests" Scripts/test.sh --ui-only
 
 set -euo pipefail
 
@@ -17,12 +19,21 @@ DEVICE_NAME="${DEVICE_NAME:-iPhone 17 Pro}"
 # time of writing), so a hardcoded version fails there. Unset means "newest installed".
 OS_VERSION="${OS_VERSION:-}"
 
-# Parallel testing clones the simulator, taking the UI suite from ~19 to ~8 minutes. Clones are
-# separate devices with their own app containers, so the launch-time state reset stays isolated.
-# It is applied to the UI target *only*: under a clone the unit target's
+# Parallel testing clones the simulator, taking the UI suite from ~19 to ~8 minutes on a developer
+# Mac. Clones are separate devices with their own app containers, so the launch-time state reset
+# stays isolated. It is applied to the UI target *only*: under a clone the unit target's
 # `isSimulatorOrTestFlightUnderTest` fails, because `Bundle.main.appStoreReceiptURL` differs there.
+#
+# Do not raise WORKER_COUNT on a hosted runner. Four clones on a GitHub macOS runner spent 15
+# minutes just creating the devices and then managed 7 app launches in 19 minutes, because the
+# clones contend for far fewer cores than a laptop has. CI shards across runners instead and sets
+# UI_PARALLEL=NO, so each machine boots exactly one simulator.
 UI_PARALLEL="${UI_PARALLEL:-YES}"
 WORKER_COUNT="${WORKER_COUNT:-4}"
+
+# Space-separated XCUITest class names to run instead of the whole UI target, which is how CI
+# shards the suite across runners. Empty means the entire target.
+UI_SUITES="${UI_SUITES:-}"
 
 # Package checkouts go to a fixed path so CI can cache them. DerivedData's folder name carries a
 # hash of the project location, so caching it means globbing, and a glob does not restore reliably.
@@ -92,7 +103,17 @@ run_target() {
         echo "CI: skipping the StoreKit suite (SKTestSession is unavailable on hosted runners)"
     fi
 
+    # One entry per shard class, or the whole target when UI_SUITES is empty.
+    local only=("-only-testing:${target}")
+    if [[ -n "$UI_SUITES" && "$target" == "DaysSinceUITests" ]]; then
+        only=()
+        for suite in $UI_SUITES; do
+            only+=("-only-testing:${target}/${suite}")
+        done
+    fi
+
     echo "Testing ${target} on ${DESTINATION_LABEL} (${SIMULATOR_ID}), parallel=${parallel}"
+    echo "  ${only[*]}"
 
     set +e
     xcodebuild test \
@@ -104,7 +125,7 @@ run_target() {
         -parallel-testing-worker-count "$WORKER_COUNT" \
         -enableCodeCoverage YES \
         -resultBundlePath "$bundle" \
-        "-only-testing:${target}" \
+        "${only[@]}" \
         ${skips+"${skips[@]}"} \
         CODE_SIGNING_ALLOWED=NO
     local status=$?
