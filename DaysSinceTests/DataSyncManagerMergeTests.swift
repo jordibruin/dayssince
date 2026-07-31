@@ -1,618 +1,569 @@
 @testable import DaysSince
 import Defaults
-import XCTest
+import Foundation
+import Testing
 
-// MARK: - Mock Key-Value Store
+/// `DataSyncManager` reads and writes the global `Defaults[.categories]` (i.e.
+/// `UserDefaults.standard`) and fires analytics through the global `Analytics.sink`,
+/// so it lives in the serialized umbrella. Each test starts from the built-in category
+/// defaults and the original value is restored afterwards.
+extension GlobalStateSuite {
 
-private class MockKeyValueStore: KeyValueStoreProtocol {
-    var storage: [String: Any] = [:]
+    @Suite("DataSyncManager sync and merge")
+    final class DataSyncManagerMergeTests {
 
-    func data(forKey key: String) -> Data? {
-        storage[key] as? Data
-    }
+        private let fixedDate = Fixtures.referenceDate
+        private let olderDate = Fixtures.olderDate
+        private let newerDate = Fixtures.newerDate
 
-    func set(_ value: Any?, forKey key: String) {
-        storage[key] = value
-    }
+        private let savedCategories: [DaysSince.Category]
 
-    func synchronize() -> Bool { true }
-}
+        /// Retains the per-test suites so their `deinit` deletes the backing plists.
+        private var isolatedSuites: [IsolatedDefaults] = []
 
-// MARK: - Tests
-
-final class DataSyncManagerMergeTests: XCTestCase {
-
-    private let fixedDate = Date(timeIntervalSince1970: 1_000_000)
-    private let olderDate = Date(timeIntervalSince1970: 900_000)
-    private let newerDate = Date(timeIntervalSince1970: 1_100_000)
-
-    private func makeItem(id: UUID = UUID(), name: String, lastModified: Date? = nil) -> DSItem {
-        DSItem(
-            id: id,
-            name: name,
-            category: DaysSince.Category(name: "Work", emoji: "lightbulb", color: .work),
-            dateLastDone: fixedDate,
-            remindersEnabled: false,
-            lastModified: lastModified ?? fixedDate
-        )
-    }
-
-    private func makeCategory(stableID: String, name: String, color: CategoryColor = .work, sortOrder: Int = 0, lastModified: Date? = nil) -> DaysSince.Category {
-        DaysSince.Category(id: UUID(), stableID: stableID, name: name, emoji: "lightbulb", color: color, sortOrder: sortOrder, lastModified: lastModified ?? fixedDate)
-    }
-
-    private func makeManager(
-        localItems: [DSItem] = [],
-        remoteItems: [DSItem] = [],
-        remoteCategories: [DaysSince.Category] = []
-    ) -> (DataSyncManager, MockKeyValueStore, UserDefaults) {
-        let mockStore = MockKeyValueStore()
-        let suiteName = "test.\(UUID().uuidString)"
-        let appGroupDefaults = UserDefaults(suiteName: suiteName)!
-
-        if !remoteItems.isEmpty {
-            mockStore.set(try! JSONEncoder().encode(remoteItems), forKey: DataSyncManager.itemsKey)
-        }
-        if !remoteCategories.isEmpty {
-            mockStore.set(try! JSONEncoder().encode(remoteCategories), forKey: DataSyncManager.categoriesKey)
-        }
-        if !localItems.isEmpty {
-            let localString = String(data: try! JSONEncoder().encode(localItems), encoding: .utf8)!
-            appGroupDefaults.set(localString, forKey: DataSyncManager.itemsKey)
+        init() {
+            savedCategories = Defaults[.categories]
+            Defaults.reset(.categories)
         }
 
-        let manager = DataSyncManager(appGroupDefaults: appGroupDefaults, iCloudStore: mockStore)
-        return (manager, mockStore, appGroupDefaults)
-    }
-
-    // MARK: - 1. Existing User Migration
-
-    func testMigrationFirstDevicePushesToEmptyiCloud() {
-        let localItems = [makeItem(name: "My Event"), makeItem(name: "Another Event")]
-        let (manager, mockStore, _) = makeManager(localItems: localItems)
-
-        let result = manager.performMigration()
-
-        XCTAssertEqual(result.items, 2)
-        XCTAssertNotNil(mockStore.storage[DataSyncManager.itemsKey], "Items should be pushed to iCloud")
-        XCTAssertNotNil(mockStore.storage[DataSyncManager.categoriesKey], "Categories should be pushed to iCloud")
-    }
-
-    func testMigrationSecondDeviceMergesWithiCloud() {
-        // Device A already migrated: iCloud has {A1, A2}
-        let idA1 = UUID(), idA2 = UUID()
-        let remoteItems = [makeItem(id: idA1, name: "Event A1"), makeItem(id: idA2, name: "Event A2")]
-        // Device B has local items {B1, B2}
-        let idB1 = UUID(), idB2 = UUID()
-        let localItems = [makeItem(id: idB1, name: "Event B1"), makeItem(id: idB2, name: "Event B2")]
-
-        let (manager, _, _) = makeManager(localItems: localItems, remoteItems: remoteItems)
-        let result = manager.performMigration()
-
-        XCTAssertEqual(result.items, 4)
-        let names = Set(manager.items.map(\.name))
-        XCTAssertTrue(names.contains("Event A1"))
-        XCTAssertTrue(names.contains("Event A2"))
-        XCTAssertTrue(names.contains("Event B1"))
-        XCTAssertTrue(names.contains("Event B2"))
-    }
-
-    // MARK: - 2. New User (Fresh Install)
-
-    func testFreshInstallWithEmptyiCloud() {
-        let (manager, _, _) = makeManager()
-        manager.startSync()
-
-        // No items, no crash
-        XCTAssertTrue(manager.items.isEmpty)
-    }
-
-    // MARK: - 3. Two-Device Sync (CRUD)
-
-    func testSaveItemsWritesToBothLocalAndiCloud() {
-        let (manager, mockStore, appGroupDefaults) = makeManager()
-
-        let newItem = makeItem(name: "New Event")
-        manager.saveItems([newItem])
-
-        // Verify in-memory
-        XCTAssertEqual(manager.items.count, 1)
-        XCTAssertEqual(manager.items.first?.name, "New Event")
-
-        // Verify pushed to iCloud
-        let iCloudData = mockStore.storage[DataSyncManager.itemsKey] as? Data
-        XCTAssertNotNil(iCloudData)
-        let iCloudItems = try! JSONDecoder().decode([DSItem].self, from: iCloudData!)
-        XCTAssertEqual(iCloudItems.count, 1)
-        XCTAssertEqual(iCloudItems.first?.name, "New Event")
-
-        // Verify written to App Group
-        let localItems = DataSyncManager.loadItems(from: appGroupDefaults)
-        XCTAssertEqual(localItems.count, 1)
-        XCTAssertEqual(localItems.first?.name, "New Event")
-    }
-
-    func testEditItemPropagates() {
-        let itemID = UUID()
-        let original = makeItem(id: itemID, name: "Original", lastModified: olderDate)
-        let (manager, mockStore, _) = makeManager(localItems: [original], remoteItems: [original])
-
-        // Edit the item
-        var edited = original
-        edited.name = "Edited"
-        edited.lastModified = newerDate
-        manager.saveItems([edited])
-
-        // Verify iCloud has the edit
-        let iCloudData = mockStore.storage[DataSyncManager.itemsKey] as! Data
-        let iCloudItems = try! JSONDecoder().decode([DSItem].self, from: iCloudData)
-        XCTAssertEqual(iCloudItems.count, 1)
-        XCTAssertEqual(iCloudItems.first?.name, "Edited")
-    }
-
-    func testDeleteItemPropagates() {
-        let item1 = makeItem(name: "Keep")
-        let item2 = makeItem(name: "Delete")
-        let (manager, mockStore, _) = makeManager(localItems: [item1, item2])
-
-        // Delete item2 by saving only item1
-        manager.saveItems([item1])
-
-        let iCloudData = mockStore.storage[DataSyncManager.itemsKey] as! Data
-        let iCloudItems = try! JSONDecoder().decode([DSItem].self, from: iCloudData)
-        XCTAssertEqual(iCloudItems.count, 1)
-        XCTAssertEqual(iCloudItems.first?.name, "Keep")
-    }
-
-    // MARK: - 8. Delete and Reinstall (Restore from iCloud)
-
-    func testFreshInstallRestoresFromiCloud() {
-        // iCloud has data from previous install
-        let remoteItems = [makeItem(name: "Restored Event")]
-        let remoteCategories = [makeCategory(stableID: "custom-travel", name: "Travel")]
-
-        let (manager, _, _) = makeManager(remoteItems: remoteItems, remoteCategories: remoteCategories)
-
-        // Local is empty (fresh install) — startSync should restore
-        manager.startSync()
-
-        XCTAssertEqual(manager.items.count, 1)
-        XCTAssertEqual(manager.items.first?.name, "Restored Event")
-
-        let stableIDs = Set(manager.categories.map(\.stableID))
-        XCTAssertTrue(stableIDs.contains("custom-travel"))
-    }
-
-    func testFreshInstallWithEmptyiCloudDoesNotCrash() {
-        let (manager, _, _) = makeManager()
-        manager.startSync()
-
-        XCTAssertTrue(manager.items.isEmpty)
-    }
-
-    // MARK: - 9. Conflict / Simultaneous Edits
-
-    func testConflictKeepsNewerLocalItem() {
-        let sharedID = UUID()
-        let remoteItems = [makeItem(id: sharedID, name: "Remote Version", lastModified: olderDate)]
-        let localItems = [makeItem(id: sharedID, name: "Local Version", lastModified: newerDate)]
-
-        let (manager, _, _) = makeManager(localItems: localItems, remoteItems: remoteItems)
-        manager.performMigration()
-
-        XCTAssertEqual(manager.items.count, 1)
-        XCTAssertEqual(manager.items.first?.name, "Local Version")
-    }
-
-    func testConflictKeepsNewerRemoteItem() {
-        let sharedID = UUID()
-        let remoteItems = [makeItem(id: sharedID, name: "Remote Version", lastModified: newerDate)]
-        let localItems = [makeItem(id: sharedID, name: "Local Version", lastModified: olderDate)]
-
-        let (manager, _, _) = makeManager(localItems: localItems, remoteItems: remoteItems)
-        manager.performMigration()
-
-        XCTAssertEqual(manager.items.count, 1)
-        XCTAssertEqual(manager.items.first?.name, "Remote Version")
-    }
-
-    func testConflictMixedMerge() {
-        // Some items unique to each side, one shared item with conflict
-        let sharedID = UUID()
-        let localOnly = makeItem(name: "Local Only")
-        let remoteOnly = makeItem(name: "Remote Only")
-        let localVersion = makeItem(id: sharedID, name: "Shared - Local Edit", lastModified: newerDate)
-        let remoteVersion = makeItem(id: sharedID, name: "Shared - Remote Edit", lastModified: olderDate)
-
-        let (manager, _, _) = makeManager(
-            localItems: [localOnly, localVersion],
-            remoteItems: [remoteOnly, remoteVersion]
-        )
-        manager.startSync()
-
-        XCTAssertEqual(manager.items.count, 3)
-        let names = Set(manager.items.map(\.name))
-        XCTAssertTrue(names.contains("Local Only"))
-        XCTAssertTrue(names.contains("Remote Only"))
-        XCTAssertTrue(names.contains("Shared - Local Edit"), "Newer local version should win")
-    }
-
-    // MARK: - 10. Storage Limit Warning
-
-    func testStorageWarningTriggersAboveThreshold() {
-        let (manager, _, _) = makeManager()
-
-        // Create enough items to exceed the warning threshold
-        // Each item is ~200-300 bytes encoded. Threshold is 950KB.
-        // Instead, test the iCloudUsageBytes property directly.
-        let items = (0 ..< 5).map { makeItem(name: "Event \($0)") }
-        manager.saveItems(items)
-
-        // Verify usage is calculated (non-zero)
-        XCTAssertGreaterThan(manager.iCloudUsageBytes, 0)
-    }
-
-    func testStorageUsageBytesReflectsData() {
-        let (manager, _, _) = makeManager()
-
-        let emptyUsage = manager.iCloudUsageBytes
-
-        let items = (0 ..< 10).map { makeItem(name: "Event \($0) with a longer name to take up space") }
-        manager.items = items
-
-        let loadedUsage = manager.iCloudUsageBytes
-        XCTAssertGreaterThan(loadedUsage, emptyUsage)
-    }
-
-    // MARK: - Safety Guard: Never Overwrite Non-Empty Local with Empty Remote
-
-    func testSafetyGuardNeverOverwritesLocalWithEmptyRemote() {
-        // This tests handleRemoteChange behavior indirectly.
-        // The guard is: if !remoteItems.isEmpty || self.items.isEmpty
-        // We verify that startSync with existing local data and empty iCloud
-        // does NOT wipe local data.
-        let localItems = [makeItem(name: "Important Local Event")]
-        let (manager, _, _) = makeManager(localItems: localItems)
-
-        // iCloud is empty, local has data
-        manager.startSync()
-
-        // Local data should be preserved
-        XCTAssertEqual(manager.items.count, 1)
-        XCTAssertEqual(manager.items.first?.name, "Important Local Event")
-    }
-
-    // MARK: - Category Merge
-
-    func testCategoryMergeUnionsByStableID() {
-        let remoteCategories = [
-            makeCategory(stableID: "work", name: "Work"),
-            makeCategory(stableID: "custom-a", name: "Travel"),
-        ]
-        let localItems = [makeItem(name: "Dummy")]
-        let (manager, _, _) = makeManager(localItems: localItems, remoteCategories: remoteCategories)
-
-        manager.performMigration()
-
-        let stableIDs = Set(manager.categories.map(\.stableID))
-        XCTAssertTrue(stableIDs.contains("work"))
-        XCTAssertTrue(stableIDs.contains("custom-a"), "Remote-only category should be merged in")
-    }
-
-    func testCategoryMergeNewerWinsForDuplicateStableID() {
-        // Set local categories with older timestamp
-        Defaults[.categories] = [
-            makeCategory(stableID: "work", name: "Work Local", color: .work, lastModified: olderDate)
-        ]
-        let remoteCategories = [
-            makeCategory(stableID: "work", name: "Work Remote", color: .life, lastModified: newerDate),
-        ]
-        let localItems = [makeItem(name: "Dummy")]
-        let (manager, _, _) = makeManager(localItems: localItems, remoteCategories: remoteCategories)
-
-        manager.performMigration()
-
-        // Remote has newer lastModified, should win for the "work" stableID
-        let workCat = manager.categories.first(where: { $0.stableID == "work" })
-        XCTAssertNotNil(workCat)
-        XCTAssertEqual(workCat?.name, "Work Remote")
-        XCTAssertEqual(workCat?.color, .life)
-    }
-
-    func testCategoryMergeLocalWinsWhenNewer() {
-        // Local "work" is newer than remote
-        Defaults[.categories] = [
-            makeCategory(stableID: "work", name: "Work Local", color: .work, lastModified: newerDate)
-        ]
-        let remoteCategories = [
-            makeCategory(stableID: "work", name: "Work Remote", color: .life, lastModified: olderDate),
-        ]
-        let localItems = [makeItem(name: "Dummy")]
-        let (manager, _, _) = makeManager(localItems: localItems, remoteCategories: remoteCategories)
-
-        manager.performMigration()
-
-        let workCat = manager.categories.first(where: { $0.stableID == "work" })
-        XCTAssertNotNil(workCat)
-        XCTAssertEqual(workCat?.name, "Work Local")
-    }
-
-    func testCategoryMergePreservesSortOrder() {
-        Defaults[.categories] = [
-            makeCategory(stableID: "health", name: "Health", sortOrder: 0),
-            makeCategory(stableID: "work", name: "Work", sortOrder: 1),
-            makeCategory(stableID: "life", name: "Life", sortOrder: 2),
-        ]
-        let remoteCategories = [
-            makeCategory(stableID: "travel", name: "Travel", color: .life, sortOrder: 10),
-        ]
-        let localItems = [makeItem(name: "Dummy")]
-        let (manager, _, _) = makeManager(localItems: localItems, remoteCategories: remoteCategories)
-
-        manager.performMigration()
-
-        // Result should be sorted by sortOrder: Health(0), Work(1), Life(2), Travel(10)
-        XCTAssertEqual(manager.categories.map(\.stableID), ["health", "work", "life", "travel"])
-    }
-
-    func testAssignSequentialSortOrdersMigration() {
-        // Simulate pre-sortOrder data: all categories have sortOrder 0
-        Defaults[.categories] = [
-            makeCategory(stableID: "work", name: "Work", sortOrder: 0),
-            makeCategory(stableID: "life", name: "Life", sortOrder: 0),
-            makeCategory(stableID: "hobby", name: "Hobby", sortOrder: 0),
-        ]
-
-        let suiteName = "test.\(UUID().uuidString)"
-        let appGroupDefaults = UserDefaults(suiteName: suiteName)!
-        let mockStore = MockKeyValueStore()
-
-        let manager = DataSyncManager(appGroupDefaults: appGroupDefaults, iCloudStore: mockStore)
-
-        // init() calls assignSequentialSortOrdersIfNeeded — should assign 0, 1, 2
-        XCTAssertEqual(manager.categories[0].sortOrder, 0)
-        XCTAssertEqual(manager.categories[1].sortOrder, 1)
-        XCTAssertEqual(manager.categories[2].sortOrder, 2)
-    }
-
-    func testSortOrderNotReassignedWhenAlreadyDistinct() {
-        Defaults[.categories] = [
-            makeCategory(stableID: "work", name: "Work", sortOrder: 5),
-            makeCategory(stableID: "life", name: "Life", sortOrder: 10),
-            makeCategory(stableID: "hobby", name: "Hobby", sortOrder: 15),
-        ]
-
-        let suiteName = "test.\(UUID().uuidString)"
-        let appGroupDefaults = UserDefaults(suiteName: suiteName)!
-        let mockStore = MockKeyValueStore()
-
-        let manager = DataSyncManager(appGroupDefaults: appGroupDefaults, iCloudStore: mockStore)
-
-        // Should NOT reassign — values are already distinct
-        XCTAssertEqual(manager.categories[0].sortOrder, 5)
-        XCTAssertEqual(manager.categories[1].sortOrder, 10)
-        XCTAssertEqual(manager.categories[2].sortOrder, 15)
-    }
-
-    // MARK: - StableID Reconciliation
-
-    func testReconcileFixesMismatchedCustomCategoryStableID() {
-        // Simulate pre-stableID upgrade: item's embedded category has a random stableID
-        // that doesn't match the canonical category list's stableID for the same category.
-        let canonicalStableID = "canonical-travel-id"
-        let orphanedStableID = "random-uuid-from-decoder"
-
-        let travelCategory = DaysSince.Category(
-            stableID: canonicalStableID, name: "Travel", emoji: "airplane", color: .life
-        )
-        let orphanedCategory = DaysSince.Category(
-            stableID: orphanedStableID, name: "Travel", emoji: "airplane", color: .life
-        )
-        let item = DSItem(
-            id: UUID(), name: "Trip to Paris", category: orphanedCategory,
-            dateLastDone: fixedDate, remindersEnabled: false, lastModified: fixedDate
-        )
-
-        let suiteName = "test.\(UUID().uuidString)"
-        let appGroupDefaults = UserDefaults(suiteName: suiteName)!
-        let mockStore = MockKeyValueStore()
-
-        // Write item with orphaned stableID to local storage
-        let jsonString = String(data: try! JSONEncoder().encode([item]), encoding: .utf8)!
-        appGroupDefaults.set(jsonString, forKey: DataSyncManager.itemsKey)
-
-        // Set canonical categories via Defaults
-        Defaults[.categories] = [travelCategory]
-
-        let manager = DataSyncManager(appGroupDefaults: appGroupDefaults, iCloudStore: mockStore)
-
-        // init() calls reconcileCategoryStableIDs — item should now match canonical stableID
-        XCTAssertEqual(manager.items.count, 1)
-        XCTAssertEqual(manager.items.first?.category.stableID, canonicalStableID)
-        XCTAssertEqual(manager.items.first?.name, "Trip to Paris")
-    }
-
-    func testReconcileDoesNotTouchBuiltInCategories() {
-        let workCategory = DaysSince.Category(
-            stableID: DaysSince.Category.stableIDWork, name: "Work", emoji: "lightbulb", color: .work
-        )
-        let item = DSItem(
-            id: UUID(), name: "Meeting", category: workCategory,
-            dateLastDone: fixedDate, remindersEnabled: false, lastModified: fixedDate
-        )
-
-        let suiteName = "test.\(UUID().uuidString)"
-        let appGroupDefaults = UserDefaults(suiteName: suiteName)!
-        let mockStore = MockKeyValueStore()
-        let jsonString = String(data: try! JSONEncoder().encode([item]), encoding: .utf8)!
-        appGroupDefaults.set(jsonString, forKey: DataSyncManager.itemsKey)
-
-        Defaults[.categories] = [workCategory]
-
-        let manager = DataSyncManager(appGroupDefaults: appGroupDefaults, iCloudStore: mockStore)
-
-        // Built-in category should be untouched
-        XCTAssertEqual(manager.items.first?.category.stableID, DaysSince.Category.stableIDWork)
-    }
-
-    func testReconcileDoesNotTouchAlreadyMatchingItems() {
-        let stableID = "my-custom-id"
-        let category = DaysSince.Category(stableID: stableID, name: "Cooking", emoji: "fork.knife", color: .hobbies)
-        let item = DSItem(
-            id: UUID(), name: "Made pasta", category: category,
-            dateLastDone: fixedDate, remindersEnabled: false, lastModified: fixedDate
-        )
-
-        let suiteName = "test.\(UUID().uuidString)"
-        let appGroupDefaults = UserDefaults(suiteName: suiteName)!
-        let mockStore = MockKeyValueStore()
-        let jsonString = String(data: try! JSONEncoder().encode([item]), encoding: .utf8)!
-        appGroupDefaults.set(jsonString, forKey: DataSyncManager.itemsKey)
-
-        Defaults[.categories] = [category]
-
-        let manager = DataSyncManager(appGroupDefaults: appGroupDefaults, iCloudStore: mockStore)
-
-        XCTAssertEqual(manager.items.first?.category.stableID, stableID)
-    }
-
-    func testReconcileFixesMultipleItemsInSameCustomCategory() {
-        let canonicalStableID = "canonical-fitness"
-        let fitnessCategory = DaysSince.Category(
-            stableID: canonicalStableID, name: "Fitness", emoji: "figure.run", color: .health
-        )
-
-        // Each item gets a different orphaned stableID (simulating independent decoder runs)
-        let items = (0 ..< 3).map { i in
-            DSItem(
-                id: UUID(), name: "Workout \(i)",
-                category: DaysSince.Category(
-                    stableID: "orphan-\(i)", name: "Fitness", emoji: "figure.run", color: .health
-                ),
-                dateLastDone: fixedDate, remindersEnabled: false, lastModified: fixedDate
+        deinit {
+            Defaults[.categories] = savedCategories
+        }
+
+        // MARK: - Helpers
+
+        private func makeItem(id: UUID = UUID(), name: String, lastModified: Date? = nil) -> DSItem {
+            Fixtures.item(
+                id: id,
+                name: name,
+                category: Fixtures.category(name: "Work"),
+                dateLastDone: fixedDate,
+                lastModified: lastModified ?? fixedDate
             )
         }
 
-        let suiteName = "test.\(UUID().uuidString)"
-        let appGroupDefaults = UserDefaults(suiteName: suiteName)!
-        let mockStore = MockKeyValueStore()
-        let jsonString = String(data: try! JSONEncoder().encode(items), encoding: .utf8)!
-        appGroupDefaults.set(jsonString, forKey: DataSyncManager.itemsKey)
+        private func makeCategory(
+            stableID: String,
+            name: String,
+            color: CategoryColor = .work,
+            sortOrder: Int = 0,
+            lastModified: Date? = nil
+        ) -> DaysSince.Category {
+            Fixtures.category(
+                stableID: stableID,
+                name: name,
+                color: color,
+                sortOrder: sortOrder,
+                lastModified: lastModified ?? fixedDate
+            )
+        }
 
-        Defaults[.categories] = [fitnessCategory]
+        /// A fresh App Group stand-in, cleaned up when this test instance is released.
+        private func makeAppGroupDefaults() -> UserDefaults {
+            let isolated = IsolatedDefaults()
+            isolatedSuites.append(isolated)
+            return isolated.defaults
+        }
 
-        let manager = DataSyncManager(appGroupDefaults: appGroupDefaults, iCloudStore: mockStore)
+        private func writeLocalItems(_ items: [DSItem], to defaults: UserDefaults) {
+            // Items are stored as a JSON *string*, not Data — see Array+Extensions.
+            let json = String(data: try! JSONEncoder().encode(items), encoding: .utf8)!
+            defaults.set(json, forKey: DataSyncManager.itemsKey)
+        }
 
-        // All 3 items should now have the canonical stableID
-        for item in manager.items {
-            XCTAssertEqual(item.category.stableID, canonicalStableID, "Item '\(item.name)' should be reconciled")
+        private func makeManager(
+            localItems: [DSItem] = [],
+            remoteItems: [DSItem] = [],
+            remoteCategories: [DaysSince.Category] = []
+        ) -> (manager: DataSyncManager, store: MockKeyValueStore, defaults: UserDefaults) {
+            let store = MockKeyValueStore()
+            let appGroupDefaults = makeAppGroupDefaults()
+
+            if !remoteItems.isEmpty {
+                store.encode(remoteItems, forKey: DataSyncManager.itemsKey)
+            }
+            if !remoteCategories.isEmpty {
+                store.encode(remoteCategories, forKey: DataSyncManager.categoriesKey)
+            }
+            if !localItems.isEmpty {
+                writeLocalItems(localItems, to: appGroupDefaults)
+            }
+
+            let manager = DataSyncManager(appGroupDefaults: appGroupDefaults, iCloudStore: store)
+            return (manager, store, appGroupDefaults)
+        }
+
+        private func iCloudItems(in store: MockKeyValueStore) throws -> [DSItem] {
+            let data = try #require(store.data(forKey: DataSyncManager.itemsKey))
+            return try JSONDecoder().decode([DSItem].self, from: data)
+        }
+
+        // MARK: - 1. Existing User Migration
+
+        @Test("First device pushes local data to an empty iCloud")
+        func migrationFirstDevicePushesToEmptyiCloud() {
+            let localItems = [makeItem(name: "My Event"), makeItem(name: "Another Event")]
+            let (manager, store, _) = makeManager(localItems: localItems)
+
+            let result = manager.performMigration()
+
+            #expect(result.items == 2)
+            #expect(store.storage[DataSyncManager.itemsKey] != nil, "Items should be pushed to iCloud")
+            #expect(store.storage[DataSyncManager.categoriesKey] != nil, "Categories should be pushed to iCloud")
+        }
+
+        @Test("Second device merges its local data with what iCloud already has")
+        func migrationSecondDeviceMergesWithiCloud() {
+            // Device A already migrated: iCloud has {A1, A2}
+            let remoteItems = [makeItem(name: "Event A1"), makeItem(name: "Event A2")]
+            // Device B has local items {B1, B2}
+            let localItems = [makeItem(name: "Event B1"), makeItem(name: "Event B2")]
+
+            let (manager, _, _) = makeManager(localItems: localItems, remoteItems: remoteItems)
+            let result = manager.performMigration()
+
+            #expect(result.items == 4)
+            let names = Set(manager.items.map(\.name))
+            #expect(names.contains("Event A1"))
+            #expect(names.contains("Event A2"))
+            #expect(names.contains("Event B1"))
+            #expect(names.contains("Event B2"))
+        }
+
+        // MARK: - 2. New User (Fresh Install)
+
+        @Test("Fresh install with empty iCloud yields no items and does not crash")
+        func freshInstallWithEmptyiCloud() {
+            let (manager, _, _) = makeManager()
+            manager.startSync()
+
+            #expect(manager.items.isEmpty)
+        }
+
+        // MARK: - 3. Two-Device Sync (CRUD)
+
+        @Test("Saving items dual-writes to the App Group and iCloud")
+        func saveItemsWritesToBothLocalAndiCloud() throws {
+            let (manager, store, appGroupDefaults) = makeManager()
+
+            let newItem = makeItem(name: "New Event")
+            manager.saveItems([newItem])
+
+            #expect(manager.items.count == 1)
+            #expect(manager.items.first?.name == "New Event")
+
+            let remote = try iCloudItems(in: store)
+            #expect(remote.count == 1)
+            #expect(remote.first?.name == "New Event")
+
+            let local = DataSyncManager.loadItems(from: appGroupDefaults)
+            #expect(local.count == 1)
+            #expect(local.first?.name == "New Event")
+        }
+
+        @Test("Editing an item propagates to iCloud")
+        func editItemPropagates() throws {
+            let itemID = UUID()
+            let original = makeItem(id: itemID, name: "Original", lastModified: olderDate)
+            let (manager, store, _) = makeManager(localItems: [original], remoteItems: [original])
+
+            var edited = original
+            edited.name = "Edited"
+            edited.lastModified = newerDate
+            manager.saveItems([edited])
+
+            let remote = try iCloudItems(in: store)
+            #expect(remote.count == 1)
+            #expect(remote.first?.name == "Edited")
+        }
+
+        @Test("Deleting an item propagates to iCloud")
+        func deleteItemPropagates() throws {
+            let item1 = makeItem(name: "Keep")
+            let item2 = makeItem(name: "Delete")
+            let (manager, store, _) = makeManager(localItems: [item1, item2])
+
+            manager.saveItems([item1])
+
+            let remote = try iCloudItems(in: store)
+            #expect(remote.count == 1)
+            #expect(remote.first?.name == "Keep")
+        }
+
+        // MARK: - 4. Delete and Reinstall (Restore from iCloud)
+
+        @Test("Fresh install restores items and categories from iCloud")
+        func freshInstallRestoresFromiCloud() {
+            let remoteItems = [makeItem(name: "Restored Event")]
+            let remoteCategories = [makeCategory(stableID: "custom-travel", name: "Travel")]
+
+            let (manager, _, _) = makeManager(remoteItems: remoteItems, remoteCategories: remoteCategories)
+
+            // Local is empty (fresh install) — startSync should restore
+            manager.startSync()
+
+            #expect(manager.items.count == 1)
+            #expect(manager.items.first?.name == "Restored Event")
+            #expect(Set(manager.categories.map(\.stableID)).contains("custom-travel"))
+        }
+
+        // MARK: - 5. Conflict / Simultaneous Edits
+
+        @Test("Conflict on the same item keeps the newer local version")
+        func conflictKeepsNewerLocalItem() {
+            let sharedID = UUID()
+            let remoteItems = [makeItem(id: sharedID, name: "Remote Version", lastModified: olderDate)]
+            let localItems = [makeItem(id: sharedID, name: "Local Version", lastModified: newerDate)]
+
+            let (manager, _, _) = makeManager(localItems: localItems, remoteItems: remoteItems)
+            manager.performMigration()
+
+            #expect(manager.items.count == 1)
+            #expect(manager.items.first?.name == "Local Version")
+        }
+
+        @Test("Conflict on the same item keeps the newer remote version")
+        func conflictKeepsNewerRemoteItem() {
+            let sharedID = UUID()
+            let remoteItems = [makeItem(id: sharedID, name: "Remote Version", lastModified: newerDate)]
+            let localItems = [makeItem(id: sharedID, name: "Local Version", lastModified: olderDate)]
+
+            let (manager, _, _) = makeManager(localItems: localItems, remoteItems: remoteItems)
+            manager.performMigration()
+
+            #expect(manager.items.count == 1)
+            #expect(manager.items.first?.name == "Remote Version")
+        }
+
+        @Test("Mixed merge keeps both unique sides and the newer conflicting item")
+        func conflictMixedMerge() {
+            let sharedID = UUID()
+            let localOnly = makeItem(name: "Local Only")
+            let remoteOnly = makeItem(name: "Remote Only")
+            let localVersion = makeItem(id: sharedID, name: "Shared - Local Edit", lastModified: newerDate)
+            let remoteVersion = makeItem(id: sharedID, name: "Shared - Remote Edit", lastModified: olderDate)
+
+            let (manager, _, _) = makeManager(
+                localItems: [localOnly, localVersion],
+                remoteItems: [remoteOnly, remoteVersion]
+            )
+            manager.startSync()
+
+            #expect(manager.items.count == 3)
+            let names = Set(manager.items.map(\.name))
+            #expect(names.contains("Local Only"))
+            #expect(names.contains("Remote Only"))
+            #expect(names.contains("Shared - Local Edit"), "Newer local version should win")
+        }
+
+        // MARK: - 6. Storage Limit Warning
+
+        @Test("iCloud usage is measured once items are saved")
+        func storageUsageIsMeasuredAfterSave() {
+            let (manager, _, _) = makeManager()
+
+            let items = (0 ..< 5).map { makeItem(name: "Event \($0)") }
+            manager.saveItems(items)
+
+            #expect(manager.iCloudUsageBytes > 0)
+        }
+
+        @Test("iCloud usage grows with the amount of data")
+        func storageUsageBytesReflectsData() {
+            let (manager, _, _) = makeManager()
+
+            let emptyUsage = manager.iCloudUsageBytes
+
+            manager.items = (0 ..< 10).map {
+                makeItem(name: "Event \($0) with a longer name to take up space")
+            }
+
+            #expect(manager.iCloudUsageBytes > emptyUsage)
+        }
+
+        // MARK: - 7. Safety Guard
+
+        @Test("Empty remote never wipes non-empty local items")
+        func safetyGuardNeverOverwritesLocalWithEmptyRemote() {
+            let localItems = [makeItem(name: "Important Local Event")]
+            let (manager, _, _) = makeManager(localItems: localItems)
+
+            // iCloud is empty, local has data
+            manager.startSync()
+
+            #expect(manager.items.count == 1)
+            #expect(manager.items.first?.name == "Important Local Event")
+        }
+
+        // MARK: - 8. Category Merge
+
+        @Test("Category merge unions local and remote by stableID")
+        func categoryMergeUnionsByStableID() {
+            let remoteCategories = [
+                makeCategory(stableID: "work", name: "Work"),
+                makeCategory(stableID: "custom-a", name: "Travel"),
+            ]
+            let (manager, _, _) = makeManager(
+                localItems: [makeItem(name: "Dummy")],
+                remoteCategories: remoteCategories
+            )
+
+            manager.performMigration()
+
+            let stableIDs = Set(manager.categories.map(\.stableID))
+            #expect(stableIDs.contains("work"))
+            #expect(stableIDs.contains("custom-a"), "Remote-only category should be merged in")
+        }
+
+        @Test("For a duplicate stableID the newer remote category wins")
+        func categoryMergeNewerRemoteWins() {
+            Defaults[.categories] = [
+                makeCategory(stableID: "work", name: "Work Local", color: .work, lastModified: olderDate),
+            ]
+            let remoteCategories = [
+                makeCategory(stableID: "work", name: "Work Remote", color: .life, lastModified: newerDate),
+            ]
+            let (manager, _, _) = makeManager(
+                localItems: [makeItem(name: "Dummy")],
+                remoteCategories: remoteCategories
+            )
+
+            manager.performMigration()
+
+            let workCategory = manager.categories.first { $0.stableID == "work" }
+            #expect(workCategory != nil)
+            #expect(workCategory?.name == "Work Remote")
+            #expect(workCategory?.color == .life)
+        }
+
+        @Test("For a duplicate stableID the newer local category wins")
+        func categoryMergeLocalWinsWhenNewer() {
+            Defaults[.categories] = [
+                makeCategory(stableID: "work", name: "Work Local", color: .work, lastModified: newerDate),
+            ]
+            let remoteCategories = [
+                makeCategory(stableID: "work", name: "Work Remote", color: .life, lastModified: olderDate),
+            ]
+            let (manager, _, _) = makeManager(
+                localItems: [makeItem(name: "Dummy")],
+                remoteCategories: remoteCategories
+            )
+
+            manager.performMigration()
+
+            let workCategory = manager.categories.first { $0.stableID == "work" }
+            #expect(workCategory != nil)
+            #expect(workCategory?.name == "Work Local")
+        }
+
+        @Test("Merged categories come back ordered by sortOrder")
+        func categoryMergePreservesSortOrder() {
+            Defaults[.categories] = [
+                makeCategory(stableID: "health", name: "Health", sortOrder: 0),
+                makeCategory(stableID: "work", name: "Work", sortOrder: 1),
+                makeCategory(stableID: "life", name: "Life", sortOrder: 2),
+            ]
+            let remoteCategories = [
+                makeCategory(stableID: "travel", name: "Travel", color: .life, sortOrder: 10),
+            ]
+            let (manager, _, _) = makeManager(
+                localItems: [makeItem(name: "Dummy")],
+                remoteCategories: remoteCategories
+            )
+
+            manager.performMigration()
+
+            #expect(manager.categories.map(\.stableID) == ["health", "work", "life", "travel"])
+        }
+
+        // MARK: - 9. Sort Order Migration
+
+        @Test("Pre-sortOrder data gets sequential sort orders assigned on init")
+        func assignSequentialSortOrdersMigration() {
+            // Simulate pre-sortOrder data: every category has sortOrder 0
+            Defaults[.categories] = [
+                makeCategory(stableID: "work", name: "Work", sortOrder: 0),
+                makeCategory(stableID: "life", name: "Life", sortOrder: 0),
+                makeCategory(stableID: "hobby", name: "Hobby", sortOrder: 0),
+            ]
+
+            let manager = DataSyncManager(
+                appGroupDefaults: makeAppGroupDefaults(),
+                iCloudStore: MockKeyValueStore()
+            )
+
+            #expect(manager.categories.map(\.sortOrder) == [0, 1, 2])
+        }
+
+        @Test("Distinct sort orders are left alone on init")
+        func sortOrderNotReassignedWhenAlreadyDistinct() {
+            Defaults[.categories] = [
+                makeCategory(stableID: "work", name: "Work", sortOrder: 5),
+                makeCategory(stableID: "life", name: "Life", sortOrder: 10),
+                makeCategory(stableID: "hobby", name: "Hobby", sortOrder: 15),
+            ]
+
+            let manager = DataSyncManager(
+                appGroupDefaults: makeAppGroupDefaults(),
+                iCloudStore: MockKeyValueStore()
+            )
+
+            #expect(manager.categories.map(\.sortOrder) == [5, 10, 15])
+        }
+
+        // MARK: - 10. StableID Reconciliation
+
+        /// Builds a manager whose local store holds `items` and whose canonical category
+        /// list is `categories`, mirroring the pre-stableID upgrade path.
+        private func makeReconcilingManager(
+            items: [DSItem],
+            categories: [DaysSince.Category]
+        ) -> (manager: DataSyncManager, defaults: UserDefaults) {
+            let appGroupDefaults = makeAppGroupDefaults()
+            writeLocalItems(items, to: appGroupDefaults)
+            Defaults[.categories] = categories
+
+            // init() runs reconcileCategoryStableIDs
+            let manager = DataSyncManager(appGroupDefaults: appGroupDefaults, iCloudStore: MockKeyValueStore())
+            return (manager, appGroupDefaults)
+        }
+
+        @Test("A custom category's orphaned stableID is reconciled to the canonical one")
+        func reconcileFixesMismatchedCustomCategoryStableID() {
+            let canonicalStableID = "canonical-travel-id"
+            let travel = makeCategory(stableID: canonicalStableID, name: "Travel", color: .life)
+            let orphaned = makeCategory(stableID: "random-uuid-from-decoder", name: "Travel", color: .life)
+
+            let item = Fixtures.item(name: "Trip to Paris", category: orphaned, dateLastDone: fixedDate)
+            let (manager, _) = makeReconcilingManager(items: [item], categories: [travel])
+
+            #expect(manager.items.count == 1)
+            #expect(manager.items.first?.category.stableID == canonicalStableID)
+            #expect(manager.items.first?.name == "Trip to Paris")
+        }
+
+        @Test("Built-in categories are left untouched by reconciliation")
+        func reconcileDoesNotTouchBuiltInCategories() {
+            let work = makeCategory(stableID: DaysSince.Category.stableIDWork, name: "Work")
+            let item = Fixtures.item(name: "Meeting", category: work, dateLastDone: fixedDate)
+
+            let (manager, _) = makeReconcilingManager(items: [item], categories: [work])
+
+            #expect(manager.items.first?.category.stableID == DaysSince.Category.stableIDWork)
+        }
+
+        @Test("Already-matching items are left untouched by reconciliation")
+        func reconcileDoesNotTouchAlreadyMatchingItems() {
+            let stableID = "my-custom-id"
+            let cooking = makeCategory(stableID: stableID, name: "Cooking", color: .hobbies)
+            let item = Fixtures.item(name: "Made pasta", category: cooking, dateLastDone: fixedDate)
+
+            let (manager, _) = makeReconcilingManager(items: [item], categories: [cooking])
+
+            #expect(manager.items.first?.category.stableID == stableID)
+        }
+
+        @Test("Every item in the same custom category is reconciled")
+        func reconcileFixesMultipleItemsInSameCustomCategory() {
+            let canonicalStableID = "canonical-fitness"
+            let fitness = makeCategory(stableID: canonicalStableID, name: "Fitness", color: .health)
+
+            // Each item carries a different orphaned stableID, as independent decoder runs produce
+            let items = (0 ..< 3).map { index in
+                Fixtures.item(
+                    name: "Workout \(index)",
+                    category: makeCategory(stableID: "orphan-\(index)", name: "Fitness", color: .health),
+                    dateLastDone: fixedDate
+                )
+            }
+
+            let (manager, _) = makeReconcilingManager(items: items, categories: [fitness])
+
+            for item in manager.items {
+                #expect(
+                    item.category.stableID == canonicalStableID,
+                    "Item '\(item.name)' should be reconciled"
+                )
+            }
+        }
+
+        @Test("Duplicate category names are disambiguated by color")
+        func reconcileUsesExactMatchForDuplicateCategoryNames() {
+            let redTravel = makeCategory(stableID: "travel-red", name: "Travel", color: .marioRed)
+            let blueTravel = makeCategory(stableID: "travel-blue", name: "Travel", color: .marioBlue)
+
+            // Item belongs to the blue variant
+            let item = Fixtures.item(
+                name: "Trip",
+                category: makeCategory(stableID: "orphan-id", name: "Travel", color: .marioBlue),
+                dateLastDone: fixedDate
+            )
+
+            let (manager, _) = makeReconcilingManager(items: [item], categories: [redTravel, blueTravel])
+
+            #expect(manager.items.first?.category.stableID == "travel-blue")
+        }
+
+        @Test("Fully ambiguous categories are skipped rather than guessed")
+        func reconcileSkipsFullyAmbiguousCategories() {
+            // Identical name, emoji and color — there is no safe choice
+            let travelA = makeCategory(stableID: "travel-a", name: "Travel", color: .life)
+            let travelB = makeCategory(stableID: "travel-b", name: "Travel", color: .life)
+
+            let orphanedStableID = "orphan-id"
+            let item = Fixtures.item(
+                name: "Trip",
+                category: makeCategory(stableID: orphanedStableID, name: "Travel", color: .life),
+                dateLastDone: fixedDate
+            )
+
+            let (manager, _) = makeReconcilingManager(items: [item], categories: [travelA, travelB])
+
+            #expect(manager.items.first?.category.stableID == orphanedStableID)
+        }
+
+        @Test("Reconciled items are written back to the App Group")
+        func reconcilePersistedToAppGroup() {
+            let canonicalStableID = "canonical-cooking"
+            let cooking = makeCategory(stableID: canonicalStableID, name: "Cooking", color: .hobbies)
+            let item = Fixtures.item(
+                name: "Made soup",
+                category: makeCategory(stableID: "orphan", name: "Cooking", color: .hobbies),
+                dateLastDone: fixedDate
+            )
+
+            let (_, appGroupDefaults) = makeReconcilingManager(items: [item], categories: [cooking])
+
+            let reloaded = DataSyncManager.loadItems(from: appGroupDefaults)
+            #expect(reloaded.first?.category.stableID == canonicalStableID)
+        }
+
+        // MARK: - 11. startSync Merge
+
+        @Test("startSync merges local and remote instead of overwriting")
+        func startSyncMergesInsteadOfOverwriting() {
+            let remoteItems = [makeItem(name: "Device A Event")]
+            let localItems = [makeItem(name: "Device B Event")]
+
+            let (manager, _, _) = makeManager(localItems: localItems, remoteItems: remoteItems)
+            manager.startSync()
+
+            #expect(manager.items.count == 2)
+            let names = Set(manager.items.map(\.name))
+            #expect(names.contains("Device A Event"))
+            #expect(names.contains("Device B Event"))
+        }
+
+        @Test("startSync pushes the merged result back to iCloud")
+        func startSyncPushesMergedDataToiCloud() throws {
+            let remoteItems = [makeItem(name: "Device A Event")]
+            let localItems = [makeItem(name: "Device B Event")]
+
+            let (manager, store, _) = makeManager(localItems: localItems, remoteItems: remoteItems)
+            manager.startSync()
+
+            #expect(try iCloudItems(in: store).count == 2)
         }
     }
 
-    func testReconcileUsesExactMatchForDuplicateCategoryNames() {
-        // Two categories with the same name but different colors
-        let redTravel = DaysSince.Category(stableID: "travel-red", name: "Travel", emoji: "airplane", color: .marioRed)
-        let blueTravel = DaysSince.Category(stableID: "travel-blue", name: "Travel", emoji: "airplane", color: .marioBlue)
-
-        // Item belongs to the blue variant
-        let item = DSItem(
-            id: UUID(), name: "Trip",
-            category: DaysSince.Category(stableID: "orphan-id", name: "Travel", emoji: "airplane", color: .marioBlue),
-            dateLastDone: fixedDate, remindersEnabled: false, lastModified: fixedDate
-        )
-
-        let suiteName = "test.\(UUID().uuidString)"
-        let appGroupDefaults = UserDefaults(suiteName: suiteName)!
-        let mockStore = MockKeyValueStore()
-        let jsonString = String(data: try! JSONEncoder().encode([item]), encoding: .utf8)!
-        appGroupDefaults.set(jsonString, forKey: DataSyncManager.itemsKey)
-
-        Defaults[.categories] = [redTravel, blueTravel]
-
-        let manager = DataSyncManager(appGroupDefaults: appGroupDefaults, iCloudStore: mockStore)
-
-        // Should match to the blue variant, not the red one
-        XCTAssertEqual(manager.items.first?.category.stableID, "travel-blue")
-    }
-
-    func testReconcileSkipsFullyAmbiguousCategories() {
-        // Two categories with identical name, emoji, AND color — cannot safely pick one
-        let travelA = DaysSince.Category(stableID: "travel-a", name: "Travel", emoji: "airplane", color: .life)
-        let travelB = DaysSince.Category(stableID: "travel-b", name: "Travel", emoji: "airplane", color: .life)
-
-        let orphanedStableID = "orphan-id"
-        let item = DSItem(
-            id: UUID(), name: "Trip",
-            category: DaysSince.Category(stableID: orphanedStableID, name: "Travel", emoji: "airplane", color: .life),
-            dateLastDone: fixedDate, remindersEnabled: false, lastModified: fixedDate
-        )
-
-        let suiteName = "test.\(UUID().uuidString)"
-        let appGroupDefaults = UserDefaults(suiteName: suiteName)!
-        let mockStore = MockKeyValueStore()
-        let jsonString = String(data: try! JSONEncoder().encode([item]), encoding: .utf8)!
-        appGroupDefaults.set(jsonString, forKey: DataSyncManager.itemsKey)
-
-        Defaults[.categories] = [travelA, travelB]
-
-        let manager = DataSyncManager(appGroupDefaults: appGroupDefaults, iCloudStore: mockStore)
-
-        // Should NOT reassign — ambiguous, so leave the original stableID untouched
-        XCTAssertEqual(manager.items.first?.category.stableID, orphanedStableID)
-    }
-
-    func testReconcilePersistedToAppGroup() {
-        // Verify that reconciled items are written back to UserDefaults
-        let canonicalStableID = "canonical-cooking"
-        let category = DaysSince.Category(stableID: canonicalStableID, name: "Cooking", emoji: "fork.knife", color: .hobbies)
-        let item = DSItem(
-            id: UUID(), name: "Made soup",
-            category: DaysSince.Category(stableID: "orphan", name: "Cooking", emoji: "fork.knife", color: .hobbies),
-            dateLastDone: fixedDate, remindersEnabled: false, lastModified: fixedDate
-        )
-
-        let suiteName = "test.\(UUID().uuidString)"
-        let appGroupDefaults = UserDefaults(suiteName: suiteName)!
-        let mockStore = MockKeyValueStore()
-        let jsonString = String(data: try! JSONEncoder().encode([item]), encoding: .utf8)!
-        appGroupDefaults.set(jsonString, forKey: DataSyncManager.itemsKey)
-
-        Defaults[.categories] = [category]
-
-        let _ = DataSyncManager(appGroupDefaults: appGroupDefaults, iCloudStore: mockStore)
-
-        // Re-load from UserDefaults to verify persistence
-        let reloadedItems = DataSyncManager.loadItems(from: appGroupDefaults)
-        XCTAssertEqual(reloadedItems.first?.category.stableID, canonicalStableID)
-    }
-
-    // MARK: - startSync Merge
-
-    func testStartSyncMergesInsteadOfOverwriting() {
-        let idA = UUID(), idB = UUID()
-        let remoteItems = [makeItem(id: idA, name: "Device A Event")]
-        let localItems = [makeItem(id: idB, name: "Device B Event")]
-
-        let (manager, _, _) = makeManager(localItems: localItems, remoteItems: remoteItems)
-        manager.startSync()
-
-        XCTAssertEqual(manager.items.count, 2)
-        let names = Set(manager.items.map(\.name))
-        XCTAssertTrue(names.contains("Device A Event"))
-        XCTAssertTrue(names.contains("Device B Event"))
-    }
-
-    func testStartSyncPushesMergedDataToiCloud() {
-        let idA = UUID(), idB = UUID()
-        let remoteItems = [makeItem(id: idA, name: "Device A Event")]
-        let localItems = [makeItem(id: idB, name: "Device B Event")]
-
-        let (manager, mockStore, _) = makeManager(localItems: localItems, remoteItems: remoteItems)
-        manager.startSync()
-
-        // Verify merged data was pushed back to iCloud
-        let iCloudData = mockStore.storage[DataSyncManager.itemsKey] as! Data
-        let iCloudItems = try! JSONDecoder().decode([DSItem].self, from: iCloudData)
-        XCTAssertEqual(iCloudItems.count, 2)
-    }
 }

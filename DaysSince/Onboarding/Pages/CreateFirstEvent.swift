@@ -44,7 +44,7 @@ struct CreateFirstEvent: View {
             reminderHeader
         }
         .padding()
-        CustomButton(action: nextPage, label: "Create Event", color: .animalCrossingsGreen)
+        CustomButton(action: nextPage, label: "Create Event", color: .animalCrossingsGreen, identifier: "onboarding.createEvent")
             .sheet(isPresented: $showCategorySheet) {
                 AddCategorySheet()
                     .presentationDragIndicator(.hidden)
@@ -64,6 +64,7 @@ struct CreateFirstEvent: View {
 
             HStack {
                 TextField("Enter event name", text: $eventName)
+                    .accessibilityIdentifier("onboarding.eventName")
             }
                 .padding(12)
                 .background(Color.secondary.opacity(0.1))
@@ -202,6 +203,7 @@ struct ReminderFormSection: View {
                         .cornerRadius(16)
                     }
                     .foregroundColor(.primary)
+                    .accessibilityIdentifier("onboarding.reminder.\(reminderOption.name)")
                 }
             }
         }

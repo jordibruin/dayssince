@@ -87,6 +87,7 @@ struct EditCategorySheet: View {
                         .background(isCategoryCreationValid ? accentColor.opacity(0.16).cornerRadius(20) : Color.gray.opacity(0.16).cornerRadius(20))
                 }
                 .disabled(selectedName.isEmpty)
+                .accessibilityIdentifier("editCategory.save")
             }
         }
         .padding(.vertical, 12)
@@ -102,6 +103,7 @@ struct EditCategorySheet: View {
 
             HStack {
                 TextField("Enter category name", text: $selectedName)
+                    .accessibilityIdentifier("editCategory.name")
 
                 Spacer()
             }
@@ -140,6 +142,7 @@ struct EditCategorySheet: View {
                                 .background(accentColor.opacity(0.16).opacity(selectedEmoji == emoji ? 1 : 0))
                                 .cornerRadius(20)
                         }
+                        .accessibilityIdentifier("editCategory.emoji.\(emoji)")
                     }
                 }
                 .padding(.vertical, 6)
@@ -157,6 +160,7 @@ struct EditCategorySheet: View {
                         .foregroundColor(.primary)
                         .bold()
                 }
+                .accessibilityIdentifier("editCategory.more")
                 .padding()
                 .background(Color.primary.opacity(0.1))
                 .cornerRadius(16)
@@ -186,6 +190,7 @@ struct EditCategorySheet: View {
                             .bold()
                             .foregroundColor(color.color)
                     }
+                    .accessibilityIdentifier("editCategory.color.\(color.id)")
                 }
             }
             .padding(12)

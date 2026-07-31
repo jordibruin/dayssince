@@ -1,35 +1,48 @@
 @testable import DaysSince
-import XCTest
+import Foundation
+import Testing
 
-final class AlternativeIconTests: XCTestCase {
-    func testIDComputation() {
+@Suite("AlternativeIcon")
+struct AlternativeIconTests {
+    @Test("ID is the name concatenated with the icon name")
+    func idComputation() {
         let icon = AlternativeIcon(name: "Purple", iconName: "calendar-purple", premium: false, original: false)
-        XCTAssertEqual(icon.id, "Purplecalendar-purple")
+        #expect(icon.id == "Purplecalendar-purple")
     }
 
-    func testIDIsUnique() {
+    @Test("Different icons have different ids")
+    func idIsUnique() {
         let icon1 = AlternativeIcon(name: "Purple", iconName: "calendar-purple", premium: false, original: false)
         let icon2 = AlternativeIcon(name: "Blue", iconName: "calendar-blue", premium: false, original: false)
-        XCTAssertNotEqual(icon1.id, icon2.id)
+        #expect(icon1.id != icon2.id)
     }
 
-    func testPremiumProperty() {
-        let premiumIcon = AlternativeIcon(name: "Premium", iconName: "premium-icon", premium: true, original: false)
-        let freeIcon = AlternativeIcon(name: "Free", iconName: "free-icon", premium: false, original: false)
-        XCTAssertTrue(premiumIcon.premium)
-        XCTAssertFalse(freeIcon.premium)
+    @Test("Premium flag is stored as given", arguments: [true, false])
+    func premiumProperty(premium: Bool) {
+        let icon = AlternativeIcon(
+            name: premium ? "Premium" : "Free",
+            iconName: premium ? "premium-icon" : "free-icon",
+            premium: premium,
+            original: false
+        )
+        #expect(icon.premium == premium)
     }
 
-    func testOriginalProperty() {
-        let originalIcon = AlternativeIcon(name: "Default", iconName: "AppIcon", premium: false, original: true)
-        let altIcon = AlternativeIcon(name: "Alt", iconName: "alt-icon", premium: false, original: false)
-        XCTAssertTrue(originalIcon.original)
-        XCTAssertFalse(altIcon.original)
+    @Test("Original flag is stored as given", arguments: [true, false])
+    func originalProperty(original: Bool) {
+        let icon = AlternativeIcon(
+            name: original ? "Default" : "Alt",
+            iconName: original ? "AppIcon" : "alt-icon",
+            premium: false,
+            original: original
+        )
+        #expect(icon.original == original)
     }
 
-    func testProperties() {
+    @Test("Name and icon name are stored as given")
+    func properties() {
         let icon = AlternativeIcon(name: "TestName", iconName: "test-icon", premium: true, original: false)
-        XCTAssertEqual(icon.name, "TestName")
-        XCTAssertEqual(icon.iconName, "test-icon")
+        #expect(icon.name == "TestName")
+        #expect(icon.iconName == "test-icon")
     }
 }

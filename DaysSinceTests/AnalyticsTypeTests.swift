@@ -1,69 +1,75 @@
 @testable import DaysSince
-import XCTest
+import Foundation
+import Testing
 
-final class AnalyticsTypeTests: XCTestCase {
+/// The analytics events covered by this suite, paired with the exact string sent
+/// to TelemetryDeck. Renaming any of these silently breaks dashboards, so the
+/// strings are spelled out rather than derived from the enum.
+private let trackedAnalyticCases: [(AnalyticType, String)] = [
+    (.launchApp, "launchApp"),
+    (.addNewEvent, "addNewEvent"),
+    (.editEvent, "editEvent"),
+    (.updateCategory, "updateCategory"),
+    (.addNewCategory, "addNewCategory"),
+    (.chooseIcon, "chooseIcon"),
+    (.chooseTheme, "chooseTheme"),
+    (.settingsReview, "settingsReview"),
+    (.reviewPrompt, "reviewPrompt"),
+    (.detailedModeOn, "detailedModeOn"),
+]
+
+@Suite("AnalyticType")
+struct AnalyticsTypeTests {
     // MARK: - Raw Values
 
-    func testRawValues() {
-        XCTAssertEqual(AnalyticType.launchApp.rawValue, "launchApp")
-        XCTAssertEqual(AnalyticType.addNewEvent.rawValue, "addNewEvent")
-        XCTAssertEqual(AnalyticType.editEvent.rawValue, "editEvent")
-        XCTAssertEqual(AnalyticType.updateCategory.rawValue, "updateCategory")
-        XCTAssertEqual(AnalyticType.addNewCategory.rawValue, "addNewCategory")
-        XCTAssertEqual(AnalyticType.chooseIcon.rawValue, "chooseIcon")
-        XCTAssertEqual(AnalyticType.chooseTheme.rawValue, "chooseTheme")
-        XCTAssertEqual(AnalyticType.settingsReview.rawValue, "settingsReview")
-        XCTAssertEqual(AnalyticType.reviewPrompt.rawValue, "reviewPrompt")
-        XCTAssertEqual(AnalyticType.detailedModeOn.rawValue, "detailedModeOn")
+    @Test("raw values are stable", arguments: trackedAnalyticCases)
+    func rawValues(analyticType: AnalyticType, expectedRawValue: String) {
+        #expect(analyticType.rawValue == expectedRawValue)
     }
 
     // MARK: - String Value Consistency
 
-    func testStringValueMatchesRawValue() {
-        let allCases: [AnalyticType] = [
-            .launchApp, .addNewEvent, .editEvent,
-            .updateCategory, .addNewCategory,
-            .chooseIcon, .chooseTheme,
-            .settingsReview, .reviewPrompt, .detailedModeOn,
-        ]
+    @Test("stringValue() matches rawValue", arguments: trackedAnalyticCases.map(\.0))
+    func stringValueMatchesRawValue(analyticType: AnalyticType) {
+        #expect(
+            analyticType.stringValue() == analyticType.rawValue,
+            "stringValue() should match rawValue for \(analyticType)"
+        )
+    }
 
-        for analyticType in allCases {
-            XCTAssertEqual(
-                analyticType.stringValue(),
-                analyticType.rawValue,
-                "stringValue() should match rawValue for \(analyticType)"
-            )
-        }
+    // MARK: - All Events Covered
+
+    @Test("ten events are covered by these tests")
+    func totalEventCount() {
+        #expect(trackedAnalyticCases.count == 10)
     }
 
     // MARK: - Hashable
 
-    func testHashable() {
+    @Test("duplicates collapse in a Set")
+    func hashable() {
         var set = Set<AnalyticType>()
         set.insert(.launchApp)
         set.insert(.addNewEvent)
         set.insert(.launchApp) // duplicate
 
-        XCTAssertEqual(set.count, 2)
+        #expect(set.count == 2)
     }
 
-    // MARK: - All Events Covered
+}
 
-    func testTotalEventCount() {
-        let allCases: [AnalyticType] = [
-            .launchApp, .addNewEvent, .editEvent,
-            .updateCategory, .addNewCategory,
-            .chooseIcon, .chooseTheme,
-            .settingsReview, .reviewPrompt, .detailedModeOn,
-        ]
-        XCTAssertEqual(allCases.count, 10)
-    }
+/// Global tier, despite looking pure: `isSimulatorOrTestFlight()` reads
+/// `Bundle.main.appStoreReceiptURL`, and an active `SKTestSession` swaps that receipt for a
+/// StoreKit-test one whose path matches neither marker. Run in parallel with
+/// `SubscriptionStoreKitTests` it fails roughly one run in three.
+extension GlobalStateSuite {
 
-    // MARK: - isSimulatorOrTestFlight
+    @Suite("Analytics environment")
+    struct AnalyticsEnvironmentTests {
 
-    func testIsSimulatorOrTestFlightReturnsBoolean() {
-        // In test environment, this should return true (simulator)
-        let result = isSimulatorOrTestFlight()
-        XCTAssertTrue(result, "Tests run in simulator should return true")
+        @Test("the simulator is treated as a non-production environment")
+        func isSimulatorOrTestFlightUnderTest() {
+            #expect(isSimulatorOrTestFlight())
+        }
     }
 }

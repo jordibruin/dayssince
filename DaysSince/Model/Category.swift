@@ -70,6 +70,15 @@ struct Category: Identifiable, Codable, Equatable, Defaults.Serializable, Hashab
     static let stableIDFriends = "friends"
     static let stableIDProjects = "projects"
     static let stableIDJournal = "journal"
+
+    /// The categories a fresh install starts with. Single source of truth for both
+    /// `Defaults.Keys.categories` and any per-suite key built by `DefaultsCategoryStore`.
+    static let builtInDefaults: [Category] = [
+        Category(stableID: stableIDWork, name: "Work", emoji: "lightbulb", color: .work, sortOrder: 0),
+        Category(stableID: stableIDLife, name: "Life", emoji: "leaf", color: .life, sortOrder: 1),
+        Category(stableID: stableIDHobby, name: "Hobby", emoji: "gamecontroller", color: .hobbies, sortOrder: 2),
+        Category(stableID: stableIDHealth, name: "Health", emoji: "heart.text.square", color: .health, sortOrder: 3),
+    ]
 }
 
 // Custom decoder in an extension to preserve the memberwise init.

@@ -52,6 +52,7 @@ struct DSItemListView: View {
                 } label: {
                     Label("Today", systemImage: "calendar")
                 }
+                .accessibilityIdentifier("event.menu.today")
 
                 Button {
                     if let index = items.wrappedValue.firstIndex(where: { $0.id == item.id }) {
@@ -60,6 +61,7 @@ struct DSItemListView: View {
                 } label: {
                     Label("Yesterday", systemImage: "clock.arrow.circlepath")
                 }
+                .accessibilityIdentifier("event.menu.yesterday")
 
                 Button {
                     showingDeleteAlert = true
@@ -68,6 +70,7 @@ struct DSItemListView: View {
                     Label("Delete Event", systemImage: "trash")
                         .tint(.red)
                 }
+                .accessibilityIdentifier("event.menu.delete")
             }
             .confirmationDialog(
                 Text("Are you sure you want to delete this event?"),
@@ -113,6 +116,7 @@ struct DSItemListView: View {
                 } label: {
                     Label("Today", systemImage: "calendar")
                 }
+                .accessibilityIdentifier("event.menu.today")
 
                 Button {
                     if let index = items.wrappedValue.firstIndex(where: { $0.id == item.id }) {
@@ -121,6 +125,7 @@ struct DSItemListView: View {
                 } label: {
                     Label("Yesterday", systemImage: "clock.arrow.circlepath")
                 }
+                .accessibilityIdentifier("event.menu.yesterday")
 
                 Button {
                     showingDeleteAlert = true
@@ -129,6 +134,7 @@ struct DSItemListView: View {
                     Label("Delete Event", systemImage: "trash")
                         .tint(.red)
                 }
+                .accessibilityIdentifier("event.menu.delete")
             }
             .confirmationDialog(
                 Text("Are you sure you want to delete this event?"),

@@ -1,89 +1,107 @@
 @testable import DaysSince
+import Foundation
+import Testing
 
-import XCTest
-
-final class ArrayExtensionTests: XCTestCase {
+/// These tests exercise `Array: RawRepresentable` directly and never touch
+/// `UserDefaults` / `Defaults`, so the suite is safe to run in parallel.
+@Suite("Array RawRepresentable (JSON string) conformance")
+struct ArrayExtensionTests {
     // MARK: - String Array
 
-    func testStringArrayRoundTrip() {
+    @Test("string array round-trips through rawValue")
+    func stringArrayRoundTrip() {
         let original = ["hello", "world", "test"]
         let rawValue = original.rawValue
         let decoded = [String](rawValue: rawValue)
-        XCTAssertEqual(decoded, original)
+        #expect(decoded == original)
     }
 
     // MARK: - Int Array
 
-    func testIntArrayRoundTrip() {
+    @Test("int array round-trips through rawValue")
+    func intArrayRoundTrip() {
         let original = [1, 2, 3, 4, 5]
         let rawValue = original.rawValue
         let decoded = [Int](rawValue: rawValue)
-        XCTAssertEqual(decoded, original)
+        #expect(decoded == original)
     }
 
     // MARK: - Empty Array
 
-    func testEmptyArrayRoundTrip() {
+    @Test("empty array round-trips through rawValue")
+    func emptyArrayRoundTrip() {
         let original: [String] = []
         let rawValue = original.rawValue
         let decoded = [String](rawValue: rawValue)
-        XCTAssertEqual(decoded, original)
+        #expect(decoded == original)
     }
 
     // MARK: - DSItem Array
 
-    func testDSItemArrayRoundTrip() {
-        let category = DaysSince.Category(name: "Work", emoji: "lightbulb", color: .work)
+    @Test("DSItem array round-trips through rawValue")
+    func dsItemArrayRoundTrip() {
+        let category = Fixtures.category()
         let items = [
-            DSItem(id: UUID(), name: "Event 1", category: category, dateLastDone: Date.now, remindersEnabled: true),
-            DSItem(id: UUID(), name: "Event 2", category: category, dateLastDone: Date.now, remindersEnabled: false),
+            Fixtures.item(name: "Event 1", category: category, remindersEnabled: true),
+            Fixtures.item(name: "Event 2", category: category, remindersEnabled: false),
         ]
 
         let rawValue = items.rawValue
         let decoded = [DSItem](rawValue: rawValue)
 
-        XCTAssertNotNil(decoded)
-        XCTAssertEqual(decoded?.count, 2)
-        XCTAssertEqual(decoded?[0].name, "Event 1")
-        XCTAssertEqual(decoded?[1].name, "Event 2")
+        #expect(decoded != nil)
+        #expect(decoded?.count == 2)
+        #expect(decoded?[0].name == "Event 1")
+        #expect(decoded?[1].name == "Event 2")
     }
 
     // MARK: - Invalid Data
 
-    func testInvalidRawValueReturnsNil() {
+    @Test("non-JSON raw value decodes to nil")
+    func invalidRawValueReturnsNil() {
         let decoded = [String](rawValue: "not valid json")
-        XCTAssertNil(decoded)
+        #expect(decoded == nil)
     }
 
-    func testEmptyStringReturnsNil() {
+    @Test("empty raw value decodes to nil")
+    func emptyStringReturnsNil() {
         let decoded = [String](rawValue: "")
-        XCTAssertNil(decoded)
+        #expect(decoded == nil)
     }
 
     // MARK: - Raw Value Format
 
-    func testRawValueIsValidJSON() {
+    /// Load-bearing invariant: `@AppStorage`-backed arrays are persisted as JSON
+    /// *strings*, not `Data`. Widget code reads them with `.string(forKey:)`.
+    @Test("rawValue is a JSON string, not Data")
+    func rawValueIsValidJSON() {
         let array = ["a", "b", "c"]
         let rawValue = array.rawValue
         let data = rawValue.data(using: .utf8)!
         let json = try? JSONSerialization.jsonObject(with: data)
-        XCTAssertNotNil(json)
+        #expect(json != nil)
     }
 
     // MARK: - Category Array
 
-    func testCategoryArrayRoundTrip() {
+    @Test("Category array round-trips through rawValue")
+    func categoryArrayRoundTrip() {
         let categories = [
-            DaysSince.Category(name: "Work", emoji: "lightbulb", color: .work),
-            DaysSince.Category(name: "Life", emoji: "leaf", color: .life),
+            Fixtures.category(),
+            Fixtures.category(
+                stableID: DaysSince.Category.stableIDLife,
+                name: "Life",
+                emoji: "leaf",
+                color: .life
+            ),
         ]
 
         let rawValue = categories.rawValue
         let decoded = [DaysSince.Category](rawValue: rawValue)
 
-        XCTAssertNotNil(decoded)
-        XCTAssertEqual(decoded?.count, 2)
-        XCTAssertEqual(decoded?[0].name, "Work")
-        XCTAssertEqual(decoded?[1].name, "Life")
+        #expect(decoded != nil)
+        #expect(decoded?.count == 2)
+        #expect(decoded?[0].name == "Work")
+        #expect(decoded?[1].name == "Life")
     }
 }

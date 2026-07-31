@@ -1,18 +1,23 @@
 @testable import DaysSince
-import XCTest
+import Foundation
+import Testing
 
-
-final class DSItemTests: XCTestCase {
+@Suite("DSItem model")
+struct DSItemTests {
     // MARK: - Creation
 
-    func testPlaceholderItem() {
+    @Test("Placeholder item has placeholder name, category and no reminders")
+    func placeholderItem() {
         let item = DSItem.placeholderItem()
-        XCTAssertEqual(item.name, "Placeholder")
-        XCTAssertFalse(item.remindersEnabled)
-        XCTAssertEqual(item.category.name, "Placeholder")
+        #expect(item.name == "Placeholder")
+        #expect(!item.remindersEnabled)
+        #expect(item.category.name == "Placeholder")
     }
 
-    func testItemCreationWithDefaults() {
+    @Test("Item creation stores values and defaults reminder to daily")
+    func itemCreationWithDefaults() {
+        // Uses the memberwise init directly: this test exercises the default
+        // value of `reminder`, so it must not go through a fixture helper.
         let category = DaysSince.Category(name: "Work", emoji: "lightbulb", color: .work)
         let item = DSItem(
             id: UUID(),
@@ -22,78 +27,50 @@ final class DSItemTests: XCTestCase {
             remindersEnabled: true
         )
 
-        XCTAssertEqual(item.name, "Test Event")
-        XCTAssertEqual(item.category, category)
-        XCTAssertTrue(item.remindersEnabled)
-        XCTAssertEqual(item.reminder, .daily)
+        #expect(item.name == "Test Event")
+        #expect(item.category == category)
+        #expect(item.remindersEnabled)
+        #expect(item.reminder == .daily)
     }
 
     // MARK: - Emoji
 
-    func testEmojiComesFromCategory() {
-        let category = DaysSince.Category(name: "Health", emoji: "heart", color: .health)
-        let item = DSItem(
-            id: UUID(),
+    @Test("Emoji comes from the item's category")
+    func emojiComesFromCategory() {
+        let item = Fixtures.item(
             name: "Gym",
-            category: category,
-            dateLastDone: Date.now,
-            remindersEnabled: false
+            category: Fixtures.category(
+                stableID: DaysSince.Category.stableIDHealth,
+                name: "Health",
+                emoji: "heart",
+                color: .health
+            )
         )
-        XCTAssertEqual(item.emoji, "heart")
+        #expect(item.emoji == "heart")
     }
 
     // MARK: - Days Ago
 
-    func testDaysAgoForToday() {
+    // Deliberately relative to `Date.now`, matching the original tests: `daysAgo`
+    // is defined against the current date, so pinning a fixed date would not
+    // exercise the same behavior.
+    @Test("daysAgo counts whole days since dateLastDone", arguments: [0, 1, 3, 365])
+    func daysAgo(dayOffset: Int) {
+        let date = Calendar.current.date(byAdding: .day, value: -dayOffset, to: Date.now)!
         let item = DSItem(
             id: UUID(),
-            name: "Today",
+            name: "Event",
             category: DaysSince.Category.placeholderCategory(),
-            dateLastDone: Date.now,
+            dateLastDone: date,
             remindersEnabled: false
         )
-        XCTAssertEqual(item.daysAgo, 0)
-    }
-
-    func testDaysAgoForPastDate() {
-        let threeDaysAgo = Calendar.current.date(byAdding: .day, value: -3, to: Date.now)!
-        let item = DSItem(
-            id: UUID(),
-            name: "Past",
-            category: DaysSince.Category.placeholderCategory(),
-            dateLastDone: threeDaysAgo,
-            remindersEnabled: false
-        )
-        XCTAssertEqual(item.daysAgo, 3)
-    }
-
-    func testDaysAgoForYesterday() {
-        let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: Date.now)!
-        let item = DSItem(
-            id: UUID(),
-            name: "Yesterday",
-            category: DaysSince.Category.placeholderCategory(),
-            dateLastDone: yesterday,
-            remindersEnabled: false
-        )
-        XCTAssertEqual(item.daysAgo, 1)
-    }
-
-    func testDaysAgoForDistantPast() {
-        let longAgo = Calendar.current.date(byAdding: .day, value: -365, to: Date.now)!
-        let item = DSItem(
-            id: UUID(),
-            name: "Long Ago",
-            category: DaysSince.Category.placeholderCategory(),
-            dateLastDone: longAgo,
-            remindersEnabled: false
-        )
-        XCTAssertEqual(item.daysAgo, 365)
+        #expect(item.daysAgo == dayOffset)
     }
 
     // MARK: - Completed Days Ago
 
-    func testCompletedDaysAgoForToday() {
+    @Test("completedDaysAgo is zero when completed today")
+    func completedDaysAgoForToday() {
         var item = DSItem(
             id: UUID(),
             name: "Completed",
@@ -102,18 +79,21 @@ final class DSItemTests: XCTestCase {
             remindersEnabled: false
         )
         item.dateCompleted = Date.now
-        XCTAssertEqual(item.completedDaysAgo, 0)
+        #expect(item.completedDaysAgo == 0)
     }
 
     // MARK: - Codable
 
-    func testCodableRoundTrip() throws {
-        let category = DaysSince.Category(name: "Life", emoji: "leaf", color: .life)
-        let original = DSItem(
-            id: UUID(),
+    @Test("Item survives a JSON encode/decode round trip")
+    func codableRoundTrip() throws {
+        let original = Fixtures.item(
             name: "Codable Test",
-            category: category,
-            dateLastDone: Date.now,
+            category: Fixtures.category(
+                stableID: DaysSince.Category.stableIDLife,
+                name: "Life",
+                emoji: "leaf",
+                color: .life
+            ),
             remindersEnabled: true,
             reminder: .weekly
         )
@@ -121,31 +101,34 @@ final class DSItemTests: XCTestCase {
         let data = try JSONEncoder().encode(original)
         let decoded = try JSONDecoder().decode(DSItem.self, from: data)
 
-        XCTAssertEqual(decoded.id, original.id)
-        XCTAssertEqual(decoded.name, original.name)
-        XCTAssertEqual(decoded.category, original.category)
-        XCTAssertEqual(decoded.remindersEnabled, original.remindersEnabled)
-        XCTAssertEqual(decoded.reminder, original.reminder)
+        #expect(decoded.id == original.id)
+        #expect(decoded.name == original.name)
+        #expect(decoded.category == original.category)
+        #expect(decoded.remindersEnabled == original.remindersEnabled)
+        #expect(decoded.reminder == original.reminder)
     }
 
     // MARK: - Identifiable
 
-    func testIdentifiable() {
+    @Test("Item exposes a valid UUID identity")
+    func identifiable() {
         let item = DSItem.placeholderItem()
-        XCTAssertNotNil(item.id)
+        #expect(UUID(uuidString: item.id.uuidString) != nil)
     }
 
-    func testUniqueIDs() {
+    @Test("Each item gets a unique id")
+    func uniqueIDs() {
         let item1 = DSItem.placeholderItem()
         let item2 = DSItem.placeholderItem()
-        XCTAssertNotEqual(item1.id, item2.id)
+        #expect(item1.id != item2.id)
     }
 
     // MARK: - Reminder Notification ID
 
-    func testReminderNotificationIDIsUnique() {
+    @Test("Each item gets a unique reminder notification id")
+    func reminderNotificationIDIsUnique() {
         let item1 = DSItem.placeholderItem()
         let item2 = DSItem.placeholderItem()
-        XCTAssertNotEqual(item1.reminderNotificationID, item2.reminderNotificationID)
+        #expect(item1.reminderNotificationID != item2.reminderNotificationID)
     }
 }

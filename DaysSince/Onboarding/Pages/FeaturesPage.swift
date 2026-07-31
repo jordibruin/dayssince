@@ -45,7 +45,8 @@ struct FeaturesPage: View {
                 CustomButton(
                     action: nextPage,
                     label: "Exciting!",
-                    color: .animalCrossingsGreen
+                    color: .animalCrossingsGreen,
+                    identifier: "onboarding.features.continue"
                 )
                 .padding(.horizontal)
                 .padding(.bottom)

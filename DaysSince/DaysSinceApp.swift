@@ -13,20 +13,45 @@ import TelemetryDeck
 
 @main
 struct DaysSinceApp: App {
-    @StateObject var dataSyncManager = DataSyncManager()
-    @StateObject var notificationManager = NotificationManager()
-    @StateObject var categoryManager = CategoryManager()
-    @StateObject var subscriptionManager = SubscriptionManager()
+    // Every manager is constructed in `init()` rather than inline, because property
+    // initializers run *before* the init body and would read storage ahead of the UI-test reset.
+    @StateObject var dataSyncManager: DataSyncManager
+    @StateObject var notificationManager: NotificationManager
+    @StateObject var categoryManager: CategoryManager
+    @StateObject var subscriptionManager: SubscriptionManager
     @StateObject var reviewManager: ReviewManager
 
     init() {
-        let reviewManager = ReviewManager()
-        _reviewManager = StateObject(wrappedValue: reviewManager)
-        let config = TelemetryDeck.Config(appID: "FBE58244-22B0-4207-9ED7-052DEB5B8A26")
-        config.defaultSignalPrefix = "DaysSince."
-        config.testMode = isSimulatorOrTestFlight()
-        TelemetryDeck.initialize(config: config)
+        TestHooks.resetStateIfRequested()
+
+        let dataSync = DataSyncManager(iCloudStore: TestHooks.makeICloudStore())
+        _dataSyncManager = StateObject(wrappedValue: dataSync)
+        _notificationManager = StateObject(wrappedValue: NotificationManager())
+        _categoryManager = StateObject(wrappedValue: CategoryManager())
+        _subscriptionManager = StateObject(
+            wrappedValue: SubscriptionManager(autoStart: TestHooks.forcedSubscription == nil)
+        )
+        _reviewManager = StateObject(
+            wrappedValue: TestHooks.reviewPromptSuppressed
+                ? ReviewManager(presentReview: { false })
+                : ReviewManager()
+        )
+
+        if TestHooks.animationsDisabled {
+            UIView.setAnimationsEnabled(false)
+        }
+
+        if !TestHooks.networkDisabled {
+            let config = TelemetryDeck.Config(appID: "FBE58244-22B0-4207-9ED7-052DEB5B8A26")
+            config.defaultSignalPrefix = "DaysSince."
+            config.testMode = isSimulatorOrTestFlight()
+            TelemetryDeck.initialize(config: config)
+        }
 //        Analytics.send(.launchApp)
+
+        #if DEBUG
+        Self.applyDebugLaunchFlags(dataSyncManager: dataSync)
+        #endif
     }
 
     @AppStorage("hasSeenOnboarding") var hasSeenOnboarding = false
@@ -56,28 +81,37 @@ struct DaysSinceApp: App {
                     categoryManager.dataSyncManager = dataSyncManager
                     dataSyncManager.startSync()
 
-                    #if DEBUG
-                    if CommandLine.arguments.contains("-seedDemoData") {
-                        seedDemoData()
+                    if let forced = TestHooks.forcedSubscription {
+                        subscriptionManager.applyEntitlement(hasActive: forced)
                     }
-                    if CommandLine.arguments.contains("-showOnboarding") {
-                        hasSeenOnboarding = false
-                    }
-                    if CommandLine.arguments.contains("-showICloudMigration") {
-                        hasSeenOnboarding = true
-                        iCloudMigrationComplete = false
-                    }
-                    #endif
                 }
         }
     }
 
     #if DEBUG
-    private func seedDemoData() {
-        // Set flags so we skip onboarding and migration, going straight to MainScreen
-        hasSeenOnboarding = true
-        iCloudMigrationComplete = true
+    /// The routing flags have to be written *before the first render*. Flipping them afterwards
+    /// makes `ContentView` leave its onboarding branch, and `OnboardingRootView.onDisappear` sets
+    /// `iCloudMigrationComplete = true` on the way out — which silently skipped the migration
+    /// screen a test had asked for.
+    private static func applyDebugLaunchFlags(dataSyncManager: DataSyncManager) {
+        let arguments = CommandLine.arguments
+        let defaults = UserDefaults.standard
 
+        if arguments.contains("-seedDemoData") {
+            seedDemoData(into: dataSyncManager)
+            defaults.set(true, forKey: "hasSeenOnboarding")
+            defaults.set(true, forKey: "iCloudMigrationComplete")
+        }
+        if arguments.contains("-showOnboarding") {
+            defaults.set(false, forKey: "hasSeenOnboarding")
+        }
+        if arguments.contains("-showICloudMigration") {
+            defaults.set(true, forKey: "hasSeenOnboarding")
+            defaults.set(false, forKey: "iCloudMigrationComplete")
+        }
+    }
+
+    private static func seedDemoData(into dataSyncManager: DataSyncManager) {
         // Seed all sample categories
         let categories = Category.sampleList
         Defaults[.categories] = categories

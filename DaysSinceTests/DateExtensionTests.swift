@@ -1,10 +1,13 @@
 @testable import DaysSince
-import XCTest
+import Foundation
+import Testing
 
-final class DateExtensionTests: XCTestCase {
+@Suite("Date.dayBefore")
+struct DateExtensionTests {
     let calendar = Calendar.current
 
-    func testDayBefore() {
+    @Test("mid-month date steps back one day")
+    func dayBefore() {
         var components = DateComponents()
         components.year = 2024
         components.month = 3
@@ -14,12 +17,13 @@ final class DateExtensionTests: XCTestCase {
         let dayBefore = date.dayBefore
 
         let dayBeforeComponents = calendar.dateComponents([.year, .month, .day], from: dayBefore)
-        XCTAssertEqual(dayBeforeComponents.year, 2024)
-        XCTAssertEqual(dayBeforeComponents.month, 3)
-        XCTAssertEqual(dayBeforeComponents.day, 14)
+        #expect(dayBeforeComponents.year == 2024)
+        #expect(dayBeforeComponents.month == 3)
+        #expect(dayBeforeComponents.day == 14)
     }
 
-    func testDayBeforeFirstOfMonth() {
+    @Test("first of month steps back into the previous month")
+    func dayBeforeFirstOfMonth() {
         var components = DateComponents()
         components.year = 2024
         components.month = 3
@@ -29,12 +33,13 @@ final class DateExtensionTests: XCTestCase {
         let dayBefore = date.dayBefore
 
         let dayBeforeComponents = calendar.dateComponents([.year, .month, .day], from: dayBefore)
-        XCTAssertEqual(dayBeforeComponents.year, 2024)
-        XCTAssertEqual(dayBeforeComponents.month, 2)
-        XCTAssertEqual(dayBeforeComponents.day, 29, "2024 is a leap year")
+        #expect(dayBeforeComponents.year == 2024)
+        #expect(dayBeforeComponents.month == 2)
+        #expect(dayBeforeComponents.day == 29, "2024 is a leap year")
     }
 
-    func testDayBeforeFirstOfYear() {
+    @Test("first of year steps back into the previous year")
+    func dayBeforeFirstOfYear() {
         var components = DateComponents()
         components.year = 2024
         components.month = 1
@@ -44,15 +49,16 @@ final class DateExtensionTests: XCTestCase {
         let dayBefore = date.dayBefore
 
         let dayBeforeComponents = calendar.dateComponents([.year, .month, .day], from: dayBefore)
-        XCTAssertEqual(dayBeforeComponents.year, 2023)
-        XCTAssertEqual(dayBeforeComponents.month, 12)
-        XCTAssertEqual(dayBeforeComponents.day, 31)
+        #expect(dayBeforeComponents.year == 2023)
+        #expect(dayBeforeComponents.month == 12)
+        #expect(dayBeforeComponents.day == 31)
     }
 
-    func testDayBeforeIsExactlyOneDayApart() {
+    @Test("dayBefore is exactly one day before today")
+    func dayBeforeIsExactlyOneDayApart() {
         let today = Date.now
         let dayBefore = today.dayBefore
         let days = calendar.numberOfDaysBetween(dayBefore, and: today)
-        XCTAssertEqual(days, 1)
+        #expect(days == 1)
     }
 }

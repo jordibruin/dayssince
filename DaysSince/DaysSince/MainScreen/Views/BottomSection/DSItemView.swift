@@ -67,6 +67,10 @@ struct DSItemView: View {
             .font(.system(.title2, design: .rounded))
             .bold()
             .foregroundColor(colored || colorScheme == .dark ? .white : item.category.color.color)
+            // UI tests tap this rather than the card: the card is a ZStack with an
+            // `onTapGesture`, so it has no accessibility element of its own, and a tap on the
+            // name still reaches the card's gesture. The days text has its own gesture.
+            .accessibilityIdentifier("event.name.\(item.name)")
     }
 
     @ViewBuilder
@@ -161,6 +165,8 @@ struct DSItemView: View {
                         isDaysDisplayModeDetailed.toggle()
                     }
                 }
+                .accessibilityElement(children: .combine)
+                .accessibilityIdentifier("event.days.\(item.name)")
         }
         .padding()
     }

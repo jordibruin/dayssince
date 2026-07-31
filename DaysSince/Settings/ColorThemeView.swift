@@ -56,6 +56,13 @@ struct ColorThemeView: View {
                 reviewManager.promptReviewAlert()
             }
             .transition(.opacity)
+            // A Shape with an `onTapGesture` is not an accessibility element on its own, so the
+            // swatch has to be promoted to one before XCUITest can see or tap it. The value is
+            // what lets a test assert which theme survived a relaunch.
+            .accessibilityElement()
+            .accessibilityAddTraits(.isButton)
+            .accessibilityIdentifier("theme.\(themeId)")
+            .accessibilityValue(isThemeSelected ? "selected" : "unselected")
     }
 
     // MARK: - Actions

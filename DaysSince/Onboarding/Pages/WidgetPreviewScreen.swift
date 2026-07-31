@@ -47,7 +47,7 @@ struct WidgetPreviewScreen: View {
                 .padding(.vertical, 1)
         }
         .padding(.vertical)
-        CustomButton(action: nextPage, label: "Looks great!", color: .workColor)
+        CustomButton(action: nextPage, label: "Looks great!", color: .workColor, identifier: "onboarding.widgetPreview.continue")
         .padding(.horizontal)
         .padding(.vertical, 0)
     }

@@ -39,6 +39,17 @@
                ReferencedContainer = "container:DaysSince.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "D42422C0301AAC1F0082807F"
+               BuildableName = "DaysSinceUITests.xctest"
+               BlueprintName = "DaysSinceUITests"
+               ReferencedContainer = "container:DaysSince.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
@@ -75,6 +86,9 @@
             isEnabled = "NO">
          </CommandLineArgument>
       </CommandLineArguments>
+      <StoreKitConfigurationFileReference
+         identifier = "../../../Configuration/DaysSince.storekit">
+      </StoreKitConfigurationFileReference>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"

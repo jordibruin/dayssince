@@ -89,6 +89,7 @@ struct MenuBlockView: View {
     var itemCount: some View {
         Text("^[\(findItemCount()) \("event")](inflect: true)")
             .font(.system(.caption, design: .rounded))
+            .accessibilityIdentifier("category.count.\(category.name)")
     }
 
     func findItemCount() -> Int {

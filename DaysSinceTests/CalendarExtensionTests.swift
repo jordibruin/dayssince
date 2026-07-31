@@ -1,53 +1,39 @@
 @testable import DaysSince
-import XCTest
+import Foundation
+import Testing
 
-final class CalendarExtensionTests: XCTestCase {
+@Suite("Calendar.numberOfDaysBetween")
+struct CalendarExtensionTests {
     let calendar = Calendar.current
 
     // MARK: - Number of Days Between
 
-    func testSameDay() {
+    @Test("same date is zero days apart")
+    func sameDay() {
         let date = Date.now
         let days = calendar.numberOfDaysBetween(date, and: date)
-        XCTAssertEqual(days, 0)
+        #expect(days == 0)
     }
 
-    func testOneDayApart() {
+    /// Table collapses the former one/seven/thirty/365-day and negative-day tests.
+    /// `offsetDays` is applied to "now" with `Calendar.current`, then compared
+    /// against "now" — preserving the original (relative-to-today) behavior.
+    @Test(
+        "day offsets from today produce the expected delta",
+        arguments: zip(
+            [-1, -7, -30, -365, 1],
+            [1, 7, 30, 365, -1]
+        )
+    )
+    func dayDelta(offsetDays: Int, expectedDays: Int) {
         let today = Date.now
-        let yesterday = calendar.date(byAdding: .day, value: -1, to: today)!
-        let days = calendar.numberOfDaysBetween(yesterday, and: today)
-        XCTAssertEqual(days, 1)
+        let other = calendar.date(byAdding: .day, value: offsetDays, to: today)!
+        let days = calendar.numberOfDaysBetween(other, and: today)
+        #expect(days == expectedDays)
     }
 
-    func testSevenDaysApart() {
-        let today = Date.now
-        let weekAgo = calendar.date(byAdding: .day, value: -7, to: today)!
-        let days = calendar.numberOfDaysBetween(weekAgo, and: today)
-        XCTAssertEqual(days, 7)
-    }
-
-    func testThirtyDaysApart() {
-        let today = Date.now
-        let monthAgo = calendar.date(byAdding: .day, value: -30, to: today)!
-        let days = calendar.numberOfDaysBetween(monthAgo, and: today)
-        XCTAssertEqual(days, 30)
-    }
-
-    func testYearApart() {
-        let today = Date.now
-        let yearAgo = calendar.date(byAdding: .day, value: -365, to: today)!
-        let days = calendar.numberOfDaysBetween(yearAgo, and: today)
-        XCTAssertEqual(days, 365)
-    }
-
-    func testNegativeDays() {
-        let today = Date.now
-        let tomorrow = calendar.date(byAdding: .day, value: 1, to: today)!
-        let days = calendar.numberOfDaysBetween(tomorrow, and: today)
-        XCTAssertEqual(days, -1)
-    }
-
-    func testSpecificDates() {
+    @Test("two fixed dates in the same month")
+    func specificDates() {
         var components1 = DateComponents()
         components1.year = 2024
         components1.month = 1
@@ -62,17 +48,19 @@ final class CalendarExtensionTests: XCTestCase {
         let date2 = calendar.date(from: components2)!
 
         let days = calendar.numberOfDaysBetween(date1, and: date2)
-        XCTAssertEqual(days, 14)
+        #expect(days == 14)
     }
 
-    func testIgnoresTimeComponent() {
+    @Test("time of day is ignored")
+    func ignoresTimeComponent() {
         let todayMorning = calendar.startOfDay(for: Date.now)
         let todayEvening = calendar.date(byAdding: .hour, value: 23, to: todayMorning)!
         let days = calendar.numberOfDaysBetween(todayMorning, and: todayEvening)
-        XCTAssertEqual(days, 0, "Time of day should not affect the day count")
+        #expect(days == 0, "Time of day should not affect the day count")
     }
 
-    func testCrossMonthBoundary() {
+    @Test("crosses a month boundary")
+    func crossMonthBoundary() {
         var jan31 = DateComponents()
         jan31.year = 2024
         jan31.month = 1
@@ -87,10 +75,11 @@ final class CalendarExtensionTests: XCTestCase {
         let date2 = calendar.date(from: feb1)!
 
         let days = calendar.numberOfDaysBetween(date1, and: date2)
-        XCTAssertEqual(days, 1)
+        #expect(days == 1)
     }
 
-    func testLeapYear() {
+    @Test("counts the leap day in 2024")
+    func leapYear() {
         var feb28 = DateComponents()
         feb28.year = 2024
         feb28.month = 2
@@ -105,6 +94,6 @@ final class CalendarExtensionTests: XCTestCase {
         let date2 = calendar.date(from: mar1)!
 
         let days = calendar.numberOfDaysBetween(date1, and: date2)
-        XCTAssertEqual(days, 2, "2024 is a leap year, Feb has 29 days")
+        #expect(days == 2, "2024 is a leap year, Feb has 29 days")
     }
 }

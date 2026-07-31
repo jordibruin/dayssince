@@ -80,6 +80,7 @@ struct SortingMenuView: View {
                         }
                     }
                 }
+                .accessibilityIdentifier("sort.\(type.rawValue)")
             }
         } label: {
             Image(systemName: "arrow.up.arrow.down.circle.fill")
@@ -89,6 +90,7 @@ struct SortingMenuView: View {
         }
         .foregroundColor(.primary)
         .accessibilityLabel("Sorting Menu")
+        .accessibilityIdentifier("main.sortMenu")
     }
 }
 

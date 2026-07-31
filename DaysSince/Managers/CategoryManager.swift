@@ -16,11 +16,17 @@ class CategoryManager: ObservableObject {
     /// Reference to DataSyncManager for iCloud sync. Set by DaysSinceApp after init.
     weak var dataSyncManager: DataSyncManager?
 
+    private var store: CategoryStoring
+
+    init(store: CategoryStoring = DefaultsCategoryStore()) {
+        self.store = store
+    }
+
     // Computed property for categories
     private var categories: [Category] {
-        get { Defaults[.categories] }
+        get { store.categories }
         set {
-            Defaults[.categories] = newValue
+            store.categories = newValue
             dataSyncManager?.syncCategories()
         }
     }

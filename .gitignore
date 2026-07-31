@@ -5,6 +5,9 @@
 ## User settings
 xcuserdata/
 
+## Test result bundles from Scripts/test.sh
+build/
+
 # macOS
 .DS_Store
 

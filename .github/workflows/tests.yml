@@ -1,0 +1,102 @@
+name: Tests
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  unit-tests:
+    runs-on: macos-latest
+    # A hung simulator otherwise runs until the 6-hour default. The suite itself is seconds; the
+    # rest is a cold build.
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Cache SPM
+        uses: actions/cache@v6
+        with:
+          # Pinned by Scripts/test.sh via -clonedSourcePackagesDirPath.
+          path: build/SourcePackages
+          key: spm-${{ hashFiles('DaysSince.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved') }}
+          # Both Defaults and WishKit track `main`, so Package.resolved changes on every bump.
+          # Without a prefix fallback each bump would re-clone every dependency from scratch.
+          restore-keys: spm-
+
+      - name: Unit tests
+        run: Scripts/test.sh --unit-only
+
+      - name: Upload result bundle
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: xcresult
+          path: build/TestResults
+
+  # Sharded across runners rather than across simulator clones on one runner. Four clones on a
+  # hosted runner spent 15 minutes creating devices and then managed 7 launches in 19 minutes,
+  # blowing a 45-minute timeout with ~54 launches still to go — a laptop has the cores for that
+  # and a runner does not. Each shard therefore runs serially against a single simulator, and the
+  # 9 test classes are split into 4 roughly equal groups (13/14/12/15 of the 54 tests).
+  #
+  # A new test *class* must be added to a shard below or it silently stops running here.
+  ui-tests:
+    runs-on: macos-latest
+    # Per shard, not for the matrix. The slowest observed shard is ~16 minutes including a cold
+    # build, so this is headroom for a hang rather than for a slow run.
+    timeout-minutes: 25
+    strategy:
+      # One shard failing should not cancel the rest — a partial report is what makes a UI failure
+      # diagnosable, and the shards are independent.
+      fail-fast: false
+      matrix:
+        include:
+          - name: flows
+            suites: CategoryFlowTests LaunchTests
+          - name: purchase
+            suites: PaywallTests ExportTests
+          - name: events
+            suites: EventFlowTests ThemeTests
+          - name: state
+            suites: SortingTests OnboardingTests MigrationTests
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Cache SPM
+        uses: actions/cache@v6
+        with:
+          path: build/SourcePackages
+          key: spm-${{ hashFiles('DaysSince.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved') }}
+          restore-keys: spm-
+
+      - name: UI tests (${{ matrix.name }})
+        env:
+          UI_PARALLEL: "NO"
+          UI_SUITES: ${{ matrix.suites }}
+        run: Scripts/test.sh --ui-only
+
+      - name: Upload result bundle
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          # Shards would overwrite one another under a shared name.
+          name: xcresult-ui-${{ matrix.name }}
+          path: build/TestResults
+
+  # Reports what the hosted image actually carries. Dispatch-only: it answered its original
+  # question (Xcode 26.5, iOS runtimes 26.2/26.4/26.5) and billing a second macOS runner boot on
+  # every PR for two diagnostic commands is not worth it. Run it when a destination error appears.
+  probe:
+    runs-on: macos-latest
+    if: github.event_name == 'workflow_dispatch'
+    timeout-minutes: 10
+    steps:
+      - run: xcodebuild -version
+      - run: xcrun simctl list runtimes
+      - run: ls /Applications | grep -i xcode

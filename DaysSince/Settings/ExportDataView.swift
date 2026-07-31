@@ -66,6 +66,7 @@ struct ExportDataView: View {
                             }
                         }
                         .foregroundColor(.primary)
+                        .accessibilityIdentifier("export.\(format.fileExtension)")
                     }
                 } header: {
                     Text("Choose a format")
@@ -73,6 +74,7 @@ struct ExportDataView: View {
                 } footer: {
                     Text("\(dataSyncManager.items.count) events in \(dataSyncManager.categories.count) categories")
                         .font(.system(.caption, design: .rounded))
+                        .accessibilityIdentifier("export.counts")
                 }
             }
             .navigationTitle("Export Data")
@@ -87,6 +89,7 @@ struct ExportDataView: View {
                             .foregroundColor(mainColor.opacity(0.8))
                             .accessibilityLabel("Dismiss")
                     }
+                    .accessibilityIdentifier("export.close")
                 }
             }
             .sheet(isPresented: $showShareSheet) {
@@ -132,11 +135,11 @@ struct ExportDataView: View {
         let content: String
         switch format {
         case .json:
-            content = generateJSON(items: items, categories: categories)
+            content = ExportFormatter.json(items: items, categories: categories)
         case .csv:
-            content = generateCSV(items: items)
+            content = ExportFormatter.csv(items: items)
         case .plainText:
-            content = generatePlainText(items: items, categories: categories)
+            content = ExportFormatter.plainText(items: items, categories: categories)
         }
 
         let fileName = "DaysSince_Export.\(format.fileExtension)"
@@ -152,98 +155,5 @@ struct ExportDataView: View {
         }
     }
 
-    private func generateJSON(items: [DSItem], categories: [Category]) -> String {
-        struct ExportData: Encodable {
-            let exportDate: Date
-            let categories: [Category]
-            let events: [DSItem]
-        }
-
-        let exportData = ExportData(
-            exportDate: .now,
-            categories: categories,
-            events: items
-        )
-
-        let encoder = JSONEncoder()
-        encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
-        encoder.dateEncodingStrategy = .iso8601
-
-        guard let data = try? encoder.encode(exportData),
-              let string = String(data: data, encoding: .utf8) else {
-            return "{}"
-        }
-        return string
-    }
-
-    private func generateCSV(items: [DSItem]) -> String {
-        var lines = ["Name,Category,Emoji,Date,Days Ago,Reminders,Reminder Frequency"]
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .medium
-
-        for item in items.sorted(by: { $0.category.name < $1.category.name }) {
-            let name = csvEscape(item.name)
-            let category = csvEscape(item.category.name)
-            let emoji = item.emoji
-            let date = dateFormatter.string(from: item.dateLastDone)
-            let daysAgo = "\(item.daysAgo)"
-            let reminders = item.remindersEnabled ? "Yes" : "No"
-            let frequency = item.remindersEnabled ? "\(item.reminder)" : ""
-            lines.append("\(name),\(category),\(emoji),\(date),\(daysAgo),\(reminders),\(frequency)")
-        }
-
-        return lines.joined(separator: "\n")
-    }
-
-    private func csvEscape(_ value: String) -> String {
-        if value.contains(",") || value.contains("\"") || value.contains("\n") {
-            return "\"\(value.replacingOccurrences(of: "\"", with: "\"\""))\""
-        }
-        return value
-    }
-
-    private func generatePlainText(items: [DSItem], categories: [Category]) -> String {
-        var lines: [String] = []
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .medium
-
-        lines.append("DAYS SINCE — Export")
-        lines.append("Exported on \(dateFormatter.string(from: .now))")
-        lines.append(String(repeating: "—", count: 40))
-        lines.append("")
-
-        let grouped = Dictionary(grouping: items) { $0.category.stableID }
-
-        for category in categories.sorted(by: { $0.sortOrder < $1.sortOrder }) {
-            guard let categoryItems = grouped[category.stableID], !categoryItems.isEmpty else { continue }
-
-            lines.append("\(category.emoji) \(category.name)")
-            lines.append(String(repeating: "-", count: 30))
-
-            for item in categoryItems.sorted(by: { $0.daysAgo > $1.daysAgo }) {
-                let date = dateFormatter.string(from: item.dateLastDone)
-                lines.append("  \(item.name) — \(item.daysAgo) days ago (\(date))")
-            }
-            lines.append("")
-        }
-
-        // Include uncategorized items (items whose category isn't in the categories list)
-        let knownStableIDs = Set(categories.map(\.stableID))
-        let uncategorized = items.filter { !knownStableIDs.contains($0.category.stableID) }
-        if !uncategorized.isEmpty {
-            lines.append("📋 Other")
-            lines.append(String(repeating: "-", count: 30))
-            for item in uncategorized.sorted(by: { $0.daysAgo > $1.daysAgo }) {
-                let date = dateFormatter.string(from: item.dateLastDone)
-                lines.append("  \(item.name) — \(item.daysAgo) days ago (\(date))")
-            }
-            lines.append("")
-        }
-
-        lines.append(String(repeating: "—", count: 40))
-        lines.append("\(items.count) events in \(categories.count) categories")
-
-        return lines.joined(separator: "\n")
-    }
 }
 

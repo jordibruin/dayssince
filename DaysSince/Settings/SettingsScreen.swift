@@ -60,6 +60,7 @@ struct SettingsScreen: View {
                         }
                     }
                     .foregroundColor(.primary)
+                    .accessibilityIdentifier("settings.export")
                 }
                 .sheet(isPresented: $showExport) {
                     ExportDataView()
@@ -109,6 +110,7 @@ struct SettingsScreen: View {
                             .foregroundColor(mainColor.opacity(0.8))
                             .accessibilityLabel("Dismiss")
                     }
+                    .accessibilityIdentifier("settings.close")
                 }
             })
         }
@@ -141,6 +143,7 @@ struct SettingsScreen: View {
                         .font(.caption)
                 }
             }
+            .accessibilityIdentifier("settings.pro")
         }
         .sheet(isPresented: $showPaywall) {
             PaywallScreen(isDismissable: true)
@@ -160,6 +163,7 @@ struct SettingsScreen: View {
                     Spacer()
                 }
             }
+            .accessibilityIdentifier("settings.appIcons")
             .listRowInsets(EdgeInsets(top: 6, leading: 6, bottom: 6, trailing: 16))
         }
     }

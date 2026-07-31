@@ -56,7 +56,7 @@ struct ThemeView: View {
                 alignment: .center,
                 spacing: 20
             ) {
-                ForEach(colorThemes, id: \.self) { colorTheme in
+                ForEach(colorThemes) { colorTheme in
                     ColorThemeView(
                         mainColorTemporary: colorTheme.mainColor,
                         backgroundColorTemporary: colorTheme.backgroundColor,
@@ -71,14 +71,20 @@ struct ThemeView: View {
     }
 }
 
-struct ColorTheme: Equatable, Hashable {
+struct ColorTheme: Identifiable, Equatable, Hashable {
     let id: String
     let mainColor: Color
     let backgroundColor: Color
-   
-    // Implement the equality operator
+
+    // Identity is the id alone: Color equality is unreliable for dynamic colors,
+    // and comparing on colors while hashing on id broke the Hashable contract,
+    // which crashed ForEach's duplicate-identity check.
     static func == (lhs: ColorTheme, rhs: ColorTheme) -> Bool {
-        return lhs.mainColor == rhs.mainColor && lhs.backgroundColor == rhs.backgroundColor
+        lhs.id == rhs.id
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
     }
 }
 

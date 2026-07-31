@@ -31,8 +31,10 @@ struct ContentView: View {
     @State private var justFinishedOnboarding = false
 
     init() {
-        WishKit.configure(with: "6443C4AA-4663-4A27-89E5-846598908A4E")
-        WishKit.config.statusBadge = .show
+        if !TestHooks.networkDisabled {
+            WishKit.configure(with: "6443C4AA-4663-4A27-89E5-846598908A4E")
+            WishKit.config.statusBadge = .show
+        }
     }
 
     /// Binding that reads/writes items through DataSyncManager.
@@ -44,46 +46,11 @@ struct ContentView: View {
     }
 
     var body: some View {
-        if hasSeenOnboarding {
-            if !iCloudMigrationComplete {
-                // State B: Existing user, first launch after iCloud update
-                iCloudMigrationView(iCloudMigrationComplete: $iCloudMigrationComplete)
-            } else {
-                MainScreen(items: itemsBinding,
-                           isDaysDisplayModeDetailed: $isDaysDisplayModeDetailed)
-                    .onAppear {
-                        WishKit.theme.primaryColor = mainColor
-
-                        // Legacy migration from old item format
-                        if !migratedFromOld {
-                            if !oldItems.isEmpty {
-                                let newItems = oldItems.map { oldItem in
-                                    DSItem(
-                                        id: oldItem.id,
-                                        name: oldItem.name,
-                                        category: Category.placeholderCategory(),
-                                        dateLastDone: oldItem.dateLastDone,
-                                        remindersEnabled: oldItem.remindersEnabled,
-                                        reminder: oldItem.reminder,
-                                        reminderNotificationID: oldItem.reminderNotificationID
-                                    )
-                                }
-                                dataSyncManager.saveItems(dataSyncManager.items + newItems)
-                                migratedFromOld = true
-                            }
-                        }
-
-                        // Show paywall once for all users
-                        if !hasSeenPaywall {
-                            showPaywallSheet = true
-                            hasSeenPaywall = true
-                        }
-                    }
-                    .sheet(isPresented: $showPaywallSheet) {
-                        PaywallScreen(isDismissable: !justFinishedOnboarding)
-                    }
-            }
-        } else {
+        switch AppRoute.route(
+            hasSeenOnboarding: hasSeenOnboarding,
+            iCloudMigrationComplete: iCloudMigrationComplete
+        ) {
+        case .onboarding:
             OnboardingRootView()
                 .onDisappear {
                     // When onboarding finishes, reload items from AppGroup
@@ -92,6 +59,44 @@ struct ContentView: View {
                     // Mark iCloud migration as complete for new users
                     iCloudMigrationComplete = true
                     justFinishedOnboarding = true
+                }
+
+        case .iCloudMigration:
+            iCloudMigrationView(iCloudMigrationComplete: $iCloudMigrationComplete)
+
+        case .main:
+            MainScreen(items: itemsBinding,
+                       isDaysDisplayModeDetailed: $isDaysDisplayModeDetailed)
+                .onAppear {
+                    WishKit.theme.primaryColor = mainColor
+
+                    // Legacy migration from old item format
+                    if !migratedFromOld {
+                        if !oldItems.isEmpty {
+                            let newItems = oldItems.map { oldItem in
+                                DSItem(
+                                    id: oldItem.id,
+                                    name: oldItem.name,
+                                    category: Category.placeholderCategory(),
+                                    dateLastDone: oldItem.dateLastDone,
+                                    remindersEnabled: oldItem.remindersEnabled,
+                                    reminder: oldItem.reminder,
+                                    reminderNotificationID: oldItem.reminderNotificationID
+                                )
+                            }
+                            dataSyncManager.saveItems(dataSyncManager.items + newItems)
+                            migratedFromOld = true
+                        }
+                    }
+
+                    // Offered once per install, on the first arrival at the main screen.
+                    if !TestHooks.introPaywallSuppressed, !hasSeenPaywall {
+                        showPaywallSheet = true
+                        hasSeenPaywall = true
+                    }
+                }
+                .sheet(isPresented: $showPaywallSheet) {
+                    PaywallScreen(isDismissable: !justFinishedOnboarding)
                 }
         }
     }

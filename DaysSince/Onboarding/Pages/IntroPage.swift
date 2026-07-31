@@ -51,7 +51,7 @@ struct IntroPage: View {
                 
                 Spacer()
                 
-                CustomButton(action: nextPage, label: "Get Started", color: .animalCrossingsGreen)
+                CustomButton(action: nextPage, label: "Get Started", color: .animalCrossingsGreen, identifier: "onboarding.getStarted")
             }
             .padding()
         }

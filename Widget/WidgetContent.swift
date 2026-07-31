@@ -31,9 +31,7 @@ struct WidgetContent: TimelineEntry, Identifiable {
         name = item.name
         id = item.id
         color = item.category.color.color
-
-        let daysSince = Calendar.current.numberOfDaysBetween(item.dateLastDone, and: Date.now)
-        daysNumber = abs(daysSince)
-        
+        // `daysAgo` is already the absolute day delta, so future dates show their distance.
+        daysNumber = item.daysAgo
     }
 }

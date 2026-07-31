@@ -56,6 +56,7 @@ struct CategoryFormSection: View {
                 }
                 .foregroundColor(.primary)
                 .buttonStyle(BorderlessButtonStyle())
+                .accessibilityIdentifier("form.category.\(category.name)")
             }
         }
     }
@@ -78,6 +79,7 @@ struct CategoryFormSection: View {
             .padding()
             .background(Color.primary.opacity(0.1))
             .cornerRadius(16)
+            .accessibilityIdentifier("form.addCategory")
         }
         .buttonStyle(BorderlessButtonStyle())
     }

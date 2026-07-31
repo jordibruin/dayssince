@@ -78,6 +78,28 @@ extension DSItem {
     }
 }
 
+// Widget intent resolution. This lives in DSItem.swift because the file already has app +
+// widget target membership; a separate file would have to be wired into both targets (and
+// into the test target) by hand.
+extension DSItem {
+
+    /// The event a widget intent slot points at, or nil when the slot is unset or the
+    /// event has since been deleted.
+    static func first(matching id: String?, in items: [DSItem]) -> DSItem? {
+        guard let id, !id.isEmpty else { return nil }
+        return items.first { $0.id.uuidString == id }
+    }
+
+    /// Resolves the slots of a multi-event widget: slot order is preserved, unset and
+    /// deleted events are skipped, and no more than `limit` events are returned.
+    static func matching(ids: [String?], in items: [DSItem], limit: Int = 5) -> [DSItem] {
+        ids
+            .compactMap { first(matching: $0, in: items) }
+            .prefix(limit)
+            .map { $0 }
+    }
+}
+
 struct oldDSItem: Identifiable, Codable {
     let id: UUID
 

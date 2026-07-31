@@ -8,19 +8,36 @@
 import Foundation
 import TelemetryDeck
 
-struct Analytics {
-    
-    static func send(_ option: AnalyticType, with additionalParameters: [String: String]? = nil) {
-        
+protocol AnalyticsSending {
+    func send(_ option: AnalyticType, with additionalParameters: [String: String]?)
+}
+
+struct TelemetryDeckSink: AnalyticsSending {
+    func send(_ option: AnalyticType, with additionalParameters: [String: String]?) {
         if let additionalParameters {
             TelemetryDeck.signal(option.rawValue, parameters: additionalParameters)
         } else {
             TelemetryDeck.signal(option.rawValue)
         }
-//        debugPrint("📊 \(option.rawValue) \(additionalParameters?["recipeID"] ?? "")")
-//        debugPrint(📊 \(option.rawValue) \(additionalParameters))
     }
-    
+}
+
+/// Drops every signal. Needed because `TelemetryDeck.signal` fatal-errors when the SDK was never
+/// initialized, so skipping `TelemetryDeck.initialize` is not on its own enough to go offline.
+struct NoOpAnalyticsSink: AnalyticsSending {
+    func send(_: AnalyticType, with _: [String: String]?) {}
+}
+
+struct Analytics {
+
+    static var sink: AnalyticsSending = TestHooks.networkDisabled
+        ? NoOpAnalyticsSink()
+        : TelemetryDeckSink()
+
+    static func send(_ option: AnalyticType, with additionalParameters: [String: String]? = nil) {
+        sink.send(option, with: additionalParameters)
+    }
+
 }
 
 enum AnalyticType: String, Hashable {

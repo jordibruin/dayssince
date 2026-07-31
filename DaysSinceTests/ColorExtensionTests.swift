@@ -1,11 +1,21 @@
 @testable import DaysSince
 import SwiftUI
-import XCTest
+import Testing
+import UIKit
 
-final class ColorExtensionTests: XCTestCase {
+@Suite("Color and UIColor extensions")
+struct ColorExtensionTests {
+    /// Replaces the repeated `var r/g/b/a` + `getRed` boilerplate.
+    private func rgb(_ color: UIColor) -> (r: CGFloat, g: CGFloat, b: CGFloat) {
+        var r: CGFloat = 0, g: CGFloat = 0, b: CGFloat = 0, a: CGFloat = 0
+        color.getRed(&r, green: &g, blue: &b, alpha: &a)
+        return (r, g, b)
+    }
+
     // MARK: - Named Colors Exist
 
-    func testCustomColorsExist() {
+    @Test("custom named colors resolve without crashing")
+    func customColorsExist() {
         // These should not crash when accessed
         _ = Color.workColor
         _ = Color.lifeColor
@@ -24,109 +34,91 @@ final class ColorExtensionTests: XCTestCase {
 
     // MARK: - UIColor Mix
 
-    func testMixWithWhite() {
-        let red = UIColor.red
-        let mixed = red.mix(with: .white, amount: 0.5)
-
-        var r: CGFloat = 0, g: CGFloat = 0, b: CGFloat = 0, a: CGFloat = 0
-        mixed.getRed(&r, green: &g, blue: &b, alpha: &a)
+    @Test("red mixed 50% with white")
+    func mixWithWhite() {
+        let mixed = rgb(UIColor.red.mix(with: .white, amount: 0.5))
 
         // Red mixed 50% with white should be roughly (1.0, 0.5, 0.5)
-        XCTAssertEqual(r, 1.0, accuracy: 0.01)
-        XCTAssertEqual(g, 0.5, accuracy: 0.01)
-        XCTAssertEqual(b, 0.5, accuracy: 0.01)
+        #expect(abs(mixed.r - 1.0) < 0.01)
+        #expect(abs(mixed.g - 0.5) < 0.01)
+        #expect(abs(mixed.b - 0.5) < 0.01)
     }
 
-    func testMixWithBlack() {
-        let white = UIColor.white
-        let mixed = white.mix(with: .black, amount: 0.5)
-
-        var r: CGFloat = 0, g: CGFloat = 0, b: CGFloat = 0, a: CGFloat = 0
-        mixed.getRed(&r, green: &g, blue: &b, alpha: &a)
+    @Test("white mixed 50% with black")
+    func mixWithBlack() {
+        let mixed = rgb(UIColor.white.mix(with: .black, amount: 0.5))
 
         // White mixed 50% with black should be roughly (0.5, 0.5, 0.5)
-        XCTAssertEqual(r, 0.5, accuracy: 0.01)
-        XCTAssertEqual(g, 0.5, accuracy: 0.01)
-        XCTAssertEqual(b, 0.5, accuracy: 0.01)
+        #expect(abs(mixed.r - 0.5) < 0.01)
+        #expect(abs(mixed.g - 0.5) < 0.01)
+        #expect(abs(mixed.b - 0.5) < 0.01)
     }
 
-    func testMixZeroAmount() {
-        let red = UIColor.red
-        let mixed = red.mix(with: .blue, amount: 0)
+    @Test("mix amount 0 keeps the base color")
+    func mixZeroAmount() {
+        let mixed = rgb(UIColor.red.mix(with: .blue, amount: 0))
 
-        var r: CGFloat = 0, g: CGFloat = 0, b: CGFloat = 0, a: CGFloat = 0
-        mixed.getRed(&r, green: &g, blue: &b, alpha: &a)
-
-        XCTAssertEqual(r, 1.0, accuracy: 0.01)
-        XCTAssertEqual(g, 0.0, accuracy: 0.01)
-        XCTAssertEqual(b, 0.0, accuracy: 0.01)
+        #expect(abs(mixed.r - 1.0) < 0.01)
+        #expect(abs(mixed.g - 0.0) < 0.01)
+        #expect(abs(mixed.b - 0.0) < 0.01)
     }
 
-    func testMixFullAmount() {
-        let red = UIColor.red
-        let mixed = red.mix(with: .blue, amount: 1.0)
+    @Test("mix amount 1 becomes the other color")
+    func mixFullAmount() {
+        let mixed = rgb(UIColor.red.mix(with: .blue, amount: 1.0))
 
-        var r: CGFloat = 0, g: CGFloat = 0, b: CGFloat = 0, a: CGFloat = 0
-        mixed.getRed(&r, green: &g, blue: &b, alpha: &a)
-
-        XCTAssertEqual(r, 0.0, accuracy: 0.01)
-        XCTAssertEqual(g, 0.0, accuracy: 0.01)
-        XCTAssertEqual(b, 1.0, accuracy: 0.01)
+        #expect(abs(mixed.r - 0.0) < 0.01)
+        #expect(abs(mixed.g - 0.0) < 0.01)
+        #expect(abs(mixed.b - 1.0) < 0.01)
     }
 
     // MARK: - Lighter / Darker
 
-    func testLighterMakesLighter() {
-        let original = UIColor.red
-        let lighter = original.lighter(by: 0.3)
-
-        var r1: CGFloat = 0, g1: CGFloat = 0, b1: CGFloat = 0, a1: CGFloat = 0
-        var r2: CGFloat = 0, g2: CGFloat = 0, b2: CGFloat = 0, a2: CGFloat = 0
-
-        original.getRed(&r1, green: &g1, blue: &b1, alpha: &a1)
-        lighter.getRed(&r2, green: &g2, blue: &b2, alpha: &a2)
+    @Test("lighter raises channels toward white")
+    func lighterMakesLighter() {
+        let original = rgb(UIColor.red)
+        let lighter = rgb(UIColor.red.lighter(by: 0.3))
 
         // Lighter should increase green and blue channels (mixing with white)
-        XCTAssertGreaterThanOrEqual(g2, g1)
-        XCTAssertGreaterThanOrEqual(b2, b1)
+        #expect(lighter.g >= original.g)
+        #expect(lighter.b >= original.b)
     }
 
-    func testDarkerMakesDarker() {
-        let original = UIColor.white
-        let darker = original.darker(by: 0.3)
-
-        var r1: CGFloat = 0, g1: CGFloat = 0, b1: CGFloat = 0, a1: CGFloat = 0
-        var r2: CGFloat = 0, g2: CGFloat = 0, b2: CGFloat = 0, a2: CGFloat = 0
-
-        original.getRed(&r1, green: &g1, blue: &b1, alpha: &a1)
-        darker.getRed(&r2, green: &g2, blue: &b2, alpha: &a2)
+    @Test("darker lowers all channels toward black")
+    func darkerMakesDarker() {
+        let original = rgb(UIColor.white)
+        let darker = rgb(UIColor.white.darker(by: 0.3))
 
         // Darker should decrease all channels (mixing with black)
-        XCTAssertLessThan(r2, r1)
-        XCTAssertLessThan(g2, g1)
-        XCTAssertLessThan(b2, b1)
+        #expect(darker.r < original.r)
+        #expect(darker.g < original.g)
+        #expect(darker.b < original.b)
     }
 
     // MARK: - Color Extension Lighter/Darker
 
-    func testColorLighter() {
+    @Test("Color.lighter(by:) does not crash")
+    func colorLighter() {
         let color = Color.red
         // Should not crash
         _ = color.lighter(by: 0.2)
     }
 
-    func testColorDarker() {
+    @Test("Color.darker(by:) does not crash")
+    func colorDarker() {
         let color = Color.blue
         // Should not crash
         _ = color.darker(by: 0.2)
     }
 
-    func testColorLighterDefaultAmount() {
+    @Test("Color.lighter() default amount does not crash")
+    func colorLighterDefaultAmount() {
         let color = Color.green
         _ = color.lighter()
     }
 
-    func testColorDarkerDefaultAmount() {
+    @Test("Color.darker() default amount does not crash")
+    func colorDarkerDefaultAmount() {
         let color = Color.green
         _ = color.darker()
     }

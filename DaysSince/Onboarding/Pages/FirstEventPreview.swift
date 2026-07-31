@@ -93,7 +93,8 @@ struct FirstEventPreview: View {
             CustomButton(
                 action: nextPage,
                 label: "Yay!",
-                color: .animalCrossingsGreen
+                color: .animalCrossingsGreen,
+                identifier: "onboarding.yay"
             )
             .padding(.horizontal)
             .padding(.bottom)

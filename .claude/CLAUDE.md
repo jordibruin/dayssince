@@ -14,7 +14,10 @@ DaysSince/                  # Main app target
 ├── ContentView.swift       # Routes onboarding vs iCloud migration vs main app, WishKit config, legacy migration
 ├── Analytics.swift         # Analytics wrapper (AnalyticType enum + send method)
 ├── Model/                  # DSItem, Category, CategoryColor
-├── Managers/               # DataSyncManager, CategoryManager, NotificationManager, ReviewManager
+├── Managers/               # Managers + their extracted pure logic (AppRoute, ExportFormatter,
+│                           # ReminderRequestBuilder) and DI protocols (CategoryStore,
+│                           # NotificationScheduling, PurchaseNotifying). New non-view code
+│                           # belongs here: it is a synchronized group, so no pbxproj edit.
 ├── Migration/              # iCloudMigrationView (shown to existing users on first iCloud-enabled launch)
 ├── Extensions/             # Calendar, Color, Date, Defaults, Array, Binding, UIApplication
 ├── Settings/               # SettingsScreen, ThemeView, ColorThemeView, AppIcons
@@ -103,7 +106,7 @@ WidgetIntents/              # Widget intent configuration
 - **DataSyncManager**: Central data coordinator — owns items/categories, syncs to iCloud KVS and App Group UserDefaults. Injected as `@EnvironmentObject`.
 - **CategoryManager**: Category CRUD, drag-and-drop reordering, fires analytics on add/update. Has `weak var dataSyncManager` reference for triggering iCloud sync.
 - **NotificationManager**: Schedules daily/weekly/monthly reminders at 10:00 AM. Receives items externally via `refreshNotifications(items:)`.
-- **ReviewManager**: Prompts StoreKit review once per app version
+- **ReviewManager**: Prompts StoreKit review once per app version. `presentReview` returns whether the sheet was actually shown — StoreKit declines silently without a foreground-active window scene, and `.reviewPrompt` analytics must not claim a prompt that never happened. Note the stored version advances even on a decline, which spends that version's single chance (pinned by `ReviewManagerTests`, not a fix).
 
 ## Analytics
 
@@ -196,13 +199,100 @@ Tracked events: `launchApp`, `addNewEvent`, `editEvent`, `updateCategory`, `addN
 - Color names: descriptive game/theme references (marioBlue, zeldaYellow, animalCrossingsGreen)
 
 ## Testing
-- Test target: `DaysSinceTests` (unit test bundle hosted by the app)
-- Run tests: `xcodebuild test -scheme DaysSince -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=latest' -only-testing:DaysSinceTests`
-- Or run from Xcode: Cmd+U with the DaysSince scheme
-- 12 test files covering: models (DSItem, Category, CategoryColor, DSItemReminders, AlternativeIcon), extensions (Calendar, Date, Array, Color), sorting (SortType), analytics (AnalyticType), and themes (ColorTheme)
-- 107 tests total
-- Use `DaysSince.Category` (fully qualified) in tests to avoid ambiguity with system `Category` type
-- Tests use `@testable import DaysSince` for access to internal types
+
+### Framework
+- **Swift Testing** (`import Testing`) is the standard for all tests. Do not add new XCTest files. Use `@Suite` / `@Test` / `#expect` / `try #require`, and `@Test(arguments:)` for table-driven cases.
+- XCTest remains only for UI tests (`DaysSinceUITests`), because XCUITest has no Swift Testing equivalent.
+
+### Targets
+- `DaysSinceTests` — unit tests, hosted by the app
+- `DaysSinceUITests` — XCUITest target
+- Both are `PBXFileSystemSynchronizedRootGroup`s: **files added under those folders are compiled automatically. Never hand-edit the .pbxproj to add a test file.**
+
+### Running
+- `Scripts/test.sh --unit-only` — 299 unit tests in ~5 seconds. This is the default while iterating.
+- `Scripts/test.sh --ui-only` / `Scripts/test.sh` — the UI suites cost ~20 minutes serially, which is
+  all app launches and UI settling, not test logic. Don't run them on every edit: run the one suite
+  covering what you touched (`UI_SUITES=ThemeTests Scripts/test.sh --ui-only`) and leave the full set
+  to CI, which runs **both** targets on every PR — the unit target reports in ~4 minutes and the four
+  UI shards in ~17. `probe` is the only `workflow_dispatch`-only job.
+- The script resolves the simulator udid itself; override with `DEVICE_NAME` / `OS_VERSION` / `SIMULATOR_ID`.
+- Or Cmd+U in Xcode with the DaysSince scheme
+
+### Test isolation (this is the anti-flake contract)
+Swift Testing runs tests **in parallel by default**, and this app keeps a lot of state in `UserDefaults.standard` via `Defaults[...]`, `@Default`, and `@AppStorage`. Pick a tier per suite:
+- **Pure** — models, extensions, sorting, formatting. No traits, fully parallel. Keep this tier as large as possible by extracting pure functions out of views/managers.
+- **Injected suite** — inject a per-test `UserDefaults` suite via `IsolatedDefaults`. Parallel-safe.
+- **Global** — only when a suite genuinely must touch process-global state (`.standard`, `Analytics.sink`, `SKTestSession`). Declare it nested inside `GlobalStateSuite` (`extension GlobalStateSuite { @Suite struct ... }`), which carries `.serialized`, and save/restore whatever it mutates in `init`/`deinit` (see `DataSyncManagerMergeTests`). `.serialized` does **not** serialize across sibling top-level suites — that is why the umbrella exists, so never declare a global-state suite at top level.
+
+### Shared support layer — `DaysSinceTests/Support/`
+- `IsolatedDefaults` — per-test `UserDefaults` suite that deletes its persistent domain on `deinit`. Always use this instead of creating a suite inline, or every run leaks a plist into the test host container.
+- `Fixtures` — `Fixtures.item(...)`, `Fixtures.category(...)`, fixed reference dates, `gmtCalendar`. Never build fixtures from `Date.now`: `DSItem.daysAgo` uses `Calendar.current` internally, so dates near midnight make assertions flaky.
+- `Mocks/MockKeyValueStore` — in-memory `KeyValueStoreProtocol`. Support types must **not** be declared `private` in a test file; a file-private type still occupies module scope and collides with the shared one.
+- `Mocks/SpyAnalytics` + `withAnalyticsSpy { spy in ... }` — swaps `Analytics.sink` for the duration of the closure and restores it afterwards. Production code keeps calling `Analytics.send(...)`, so no call site changes.
+- `Mocks/MockCategoryStore`, `Mocks/SpyWidgetReloader` (+ `StubUbiquityChecker`), `Mocks/MockNotificationScheduler`, `Mocks/SpyPurchaseNotifier` — doubles for the manager DI seams. `MockNotificationScheduler` fires every completion **synchronously**, so assert on the mock rather than on `NotificationManager.pendingNotifications`, which is published via `DispatchQueue.main.async`. `SpyPurchaseNotifier` keeps tests from POSTing to the live ntfy topic.
+- `LegacyPayloads` — builds legacy JSON by encoding a real model and *removing* keys, so fixtures stay honest as the models change. Don't hand-write stored-shape JSON.
+
+### StoreKit tests
+- Products come from `Configuration/DaysSince.storekit` (weekly $2.99 with a 1-week free trial, monthly $4.99, annual $19.99, one subscription group). It is a **resource of `DaysSinceTests`**, which is what lets `SKTestSession(configurationFileNamed: "DaysSince")` find it. The `DaysSince` scheme's Run action points at it too, so the paywall works when running the app locally.
+- Always construct `SubscriptionManager` with `autoStart: false` in tests, or each instance leaks a `Transaction.updates` task that outlives the test.
+- `SKTestSession` mutations reach `Transaction.currentEntitlements` **asynchronously**. Drain entitlements (poll until empty) before asserting, or the suite passes on one run and fails the next.
+- **Never assign `session.failTransactionsEnabled`.** The setter wedges the session: writing even `false` makes the next `purchase()` throw `StoreKitError.unknown`, so a test built on it passes for the wrong reason while breaking every other purchase in the process. `askToBuyEnabled` is safe to assign.
+- `expireSubscription(productIdentifier:)` and `refundTransaction(identifier:)` are silent no-ops here (the transaction keeps a future expiry and a nil revocation date). Simulate losing access with `clearTransactions()`, which is the same thing our code sees: an empty `currentEntitlements`.
+- **This suite cannot run on a GitHub-hosted runner**, so `Scripts/test.sh` passes `-skip-testing:DaysSinceTests/GlobalStateSuite/SubscriptionStoreKitTests` whenever `$CI` is set (289 tests there instead of 299). `SKTestSession` constructs, then every mutation fails with `SKInternalErrorDomain Code=3` and the following `purchase()` never returns — the job hangs rather than failing. Skipping from the invocation is the only mechanism that works: the test process inside the simulator inherits neither the shell's environment nor `TEST_RUNNER_`-prefixed settings, so a `.disabled(if:)` trait reading `$CI` does nothing (both were tried). Entitlement mirroring is still covered on CI by `SubscriptionEntitlementTests`, which needs no StoreKit.
+
+### UI tests (`DaysSinceUITests`)
+
+XCTest + page objects ("robots") under `Robots/`, shared harness in `Support/`. Every test class and robot is `@MainActor`.
+
+**Launch harness** — `TestHooks.swift` (app target) reads the flags; `UITestCase.launch(...)` passes them.
+- `-uiTest` is passed on every launch and means "this is a UI test run": wipe `UserDefaults.standard` + the App Group, swap `NSUbiquitousKeyValueStore` for an in-memory `KeyValueStoreProtocol`, skip `TelemetryDeck`/`WishKit`/ntfy, stub the notification permission prompt, suppress the StoreKit review alert, disable animations. **Never point a UI test at the real KVS** — it holds real data on the dev iCloud account, and a UI-test write would push junk into it.
+- Per-test opt-ins: `-seedDemoData` (16 events / 9 categories — mirrored in `Support/SeedData.swift`), `-showOnboarding`, `-showICloudMigration`, `-showPaywall`, `-keepState` (skip the reset, for relaunch assertions), `UITEST_SUBSCRIBED=0|1`.
+- The state reset must be the **first statement of `DaysSinceApp.init()`**: `@StateObject` property initializers run before the init body, so `dataSyncManager` has no default value and is constructed inside `init()`.
+
+**Accessibility identifiers** — `screen.element[.qualifier]`, with data-derived suffixes: `event.name.<name>`, `event.days.<name>`, `category.pill.<name>`, `sort.<SortType.rawValue>`, `theme.<id>`, `paywall.product.<productID>`.
+
+**Gotchas that cost real debugging time:**
+- A SwiftUI `Toggle` in a `Form` publishes the **whole row** as the `Switch`, so its centre is the label and `tap()` silently changes nothing. Use `XCUIElement.flipSwitch()`, which taps the trailing edge by coordinate.
+- Segmented `Picker` segments are `Button`s addressed by **label text** ("Daily"/"Weekly"/"Monthly"), and expose `isSelected`.
+- A `Form` row below the fold does not exist in the hierarchy at all — scroll to it (`app.scrollTo(_:)`), don't just wait.
+- The category strip is a `LazyHStack`: a pill past the fold genuinely doesn't exist yet. This looks exactly like a data bug. Use `MainScreenRobot.scrollToCategory(_:)`.
+- `app.scrollViews.firstMatch` is **not** the horizontal strip — the full-screen vertical event list precedes it and also contains the pills, so swiping it scrolls nothing and fails silently. Pick the strip by frame height.
+- Querying `isHittable` on an element whose frame lies outside the window **raises** ("activation point invalid") instead of returning false, so horizontal scroll loops compare `app.frame.contains(element.frame)`.
+- After a data change, `ForEach` children are replaced wholesale — re-query elements, never cache an `XCUIElement`, and poll for the expected ordering (see `SortingTests.awaitOrder`).
+- `NavigationStack` keeps earlier pages in the hierarchy, so onboarding needs per-screen identifiers rather than one shared "Continue".
+- The graphical `DatePicker` has no addressable field — set dates through the event context menu's Today/Yesterday or through seeded data.
+
+**Running** — use `Scripts/test.sh --ui-only`. Locally it runs **4 parallel simulator clones** (~8 min
+for all 54 tests, vs ~19 serial). Parallel testing is safe for the UI target despite the launch-time
+state reset: each clone is a separate device with its own app container and App Group, so nothing
+leaks between them — verified with all 54 green across 4 clones. An earlier note in this file claimed
+the opposite; it was wrong. Drop to `UI_PARALLEL=NO` only to make a failure easier to read, since
+parallel output interleaves and reports as `passed on 'Clone N of ...'` rather than `Test Case '-[...]'`.
+
+**Never use clone parallelism on a hosted runner.** `WORKER_COUNT=4` on `macos-latest` spent 15
+minutes just creating the four devices, then managed 7 app launches in 19 minutes, and blew a
+45-minute timeout with most of the 54 launches still pending — a laptop has the cores for four
+simulators and a runner does not. CI **shards across runners** instead: `ui-tests` is a 4-way matrix
+running on every PR, each shard `UI_PARALLEL=NO` with `UI_SUITES` naming its classes, so every
+machine boots one simulator (~17 min wall clock for all 54). `UI_SUITES` is a space-separated list of XCUITest class names and works locally too
+(`UI_SUITES="ThemeTests SortingTests" Scripts/test.sh --ui-only`). **When adding a UI test class, add
+it to one of the four shards in `.github/workflows/tests.yml`** or it silently stops running in CI.
+
+**Never parallelize the unit target.** `-parallel-testing-enabled` is per-invocation, not per-target,
+so the script runs the two targets as two invocations. Under a clone,
+`GlobalStateSuite/AnalyticsEnvironmentTests/isSimulatorOrTestFlightUnderTest` fails, because
+`isSimulatorOrTestFlight()` reads `Bundle.main.appStoreReceiptURL` and a clone's differs. The unit
+suite is ~5 seconds serially, so there is nothing to gain anyway.
+
+The destination is always an explicit `id=`: `name` + `OS=latest` is ambiguous with both iOS 26.0 and
+26.1 installed. Unit tests are Swift Testing, so they log `✔`/`✘` — a grep for `Test Case` silently
+matches none of them and makes a green unit run look like it never happened.
+
+### Conventions
+- Use `DaysSince.Category` (fully qualified) to avoid ambiguity with the system `Category` type
+- `@testable import DaysSince` for access to internal types
+- Items are persisted as JSON **strings**, so write test fixtures with `.set(jsonString, forKey:)` and read with `.string(forKey:)` — `.data(forKey:)` returns nil and silently produces empty results
 
 ## Build & Run
 - Xcode project (DaysSince.xcodeproj), not SPM-based
@@ -213,7 +303,7 @@ Tracked events: `launchApp`, `addNewEvent`, `editEvent`, `updateCategory`, `addN
 
 ## User Scenarios & Migration States
 
-The app handles 3 user states via `hasSeenOnboarding` and `iCloudMigrationComplete` (both `@AppStorage`):
+The app handles 3 user states via `hasSeenOnboarding` and `iCloudMigrationComplete` (both `@AppStorage`). The decision itself lives in `AppRoute.route(hasSeenOnboarding:iCloudMigrationComplete:)` (`Managers/AppRoute.swift`), which `ContentView.body` switches over — **change the table here and `RoutingTests` together, they pin each other.**
 
 | State | hasSeenOnboarding | iCloudMigrationComplete | Result |
 |-------|-------------------|-------------------------|--------|
@@ -222,6 +312,6 @@ The app handles 3 user states via `hasSeenOnboarding` and `iCloudMigrationComple
 | Reinstall (iCloud data exists) | false | true (set by startSync) | Onboarding (iCloud data already restored) |
 | Normal launch | true | true | MainScreen |
 
-**Reinstall flow**: On app deletion, UserDefaults is wiped but iCloud KVS persists. On reinstall, `startSync()` detects empty local items, restores from iCloud, and sets `iCloudMigrationComplete = true`. The user still goes through onboarding (`hasSeenOnboarding` was wiped). The onboarding CategoryPage currently overwrites `Defaults[.categories]` — this is a known issue that needs a decision on how to merge onboarding selections with iCloud-restored categories.
+**Reinstall flow**: On app deletion, UserDefaults is wiped but iCloud KVS persists. On reinstall, `startSync()` detects empty local items, restores from iCloud, and sets `iCloudMigrationComplete = true`. The user still goes through onboarding (`hasSeenOnboarding` was wiped). `CategoryPage.nextPage()` appends only the selections whose `stableID` is not already stored, so iCloud-restored categories survive — a selection matching a restored built-in is dropped rather than duplicated.
 
 **Legacy migration (`oldDSItem`)**: ContentView still declares `@AppStorage("items") var oldItems: [oldDSItem]` for migrating from the old item format (which used `CategoryDSIte` enum). This shares the same `"items"` key as current items, so it always fails to decode (logging a `typeMismatch` error) and evaluates to `[]`. The migration is guarded by `migratedFromOld` flag. This is dead code for any user who has already launched the current app version and can be removed in a future cleanup.
